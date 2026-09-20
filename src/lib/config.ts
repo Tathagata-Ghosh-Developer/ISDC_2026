@@ -50,6 +50,13 @@ export type Config = {
     enabled: boolean;
     oncePerSession: boolean;
   };
+  mahalaya: {
+    /** A file the committee has the right to host, served from /public. */
+    audioUrl: string;
+    /** Or an official upload to embed instead. A YouTube video id. */
+    youtubeId: string;
+    caption: string;
+  };
   announcement: Announcement;
   dates: Record<keyof typeof PUJA_DATES, string>;
   bank: {
@@ -113,6 +120,12 @@ export const DEFAULTS: Config = {
     campusImage: "/media/iisc/main-building-sunset.jpg",
   },
   arrival: { enabled: true, oncePerSession: true },
+  mahalaya: {
+    audioUrl: "",
+    youtubeId: "",
+    caption:
+      "The recitation is the property of All India Radio. We link to the official broadcast rather than hosting a copy.",
+  },
   announcement: {
     enabled: false,
     text: "",
@@ -156,6 +169,7 @@ export const CONFIG_GROUPS = [
   { key: "bank", label: "Bank account", form: "fields" },
   { key: "venue", label: "Venue", form: "fields" },
   { key: "arrival", label: "Arrival sequence", form: "fields" },
+  { key: "mahalaya", label: "Mahalaya broadcast", form: "fields" },
   { key: "dates", label: "Puja dates", form: "fields" },
   { key: "links", label: "External links", form: "fields" },
   { key: "committee", label: "Committee members", form: "json" },

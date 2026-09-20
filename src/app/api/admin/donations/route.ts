@@ -7,6 +7,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const ACTIONS = new Set(["verify", "reject", "pending", "receipt-sent", "note"]);
+const CATEGORIES = new Set(["student", "faculty", "alumni", "guest"]);
+const METHODS = new Set(["upi", "neft", "imps", "cash", "cheque", "other"]);
 
 async function guard(): Promise<string | null> {
   try {
@@ -112,4 +114,84 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true, donation: data });
+}
+
+/**
+ * A committee member entering a donation on someone's behalf, which
+ * is how most cash collected at the mess counters arrives. The row is
+ * created and verified in one step, so a receipt number is issued
+ * immediately and the name reaches the board.
+ */
+export async function POST(req: Request) {
+  const admin = await guard();
+  if (!admin) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  if (!dbReady) return NextResponse.json({ error: "No database." }, { status: 503 });
+
+  const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
+
+  const text = (k: string) => String(body[k] ?? "").trim();
+  const name = text("name").slice(0, 120);
+  const amount = Number(body.amount);
+  const phone = text("phone").replace(/\D/g, "").slice(-10);
+  const category = text("category") || "guest";
+  const method = text("method") || "cash";
+
+  if (name.length < 2) {
+    return NextResponse.json({ error: "Give the donor's name." }, { status: 400 });
+  }
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return NextResponse.json({ error: "Enter an amount." }, { status: 400 });
+  }
+  if (!CATEGORIES.has(category)) {
+    return NextResponse.json({ error: "Unknown category." }, { status: 400 });
+  }
+  if (!METHODS.has(method)) {
+    return NextResponse.json({ error: "Unknown payment method." }, { status: 400 });
+  }
+
+  const paidOn = text("paid_on");
+  const { data, error } = await db()
+    .from("donations")
+    .insert({
+      name,
+      email: text("email").toLowerCase().slice(0, 160) || "not given",
+      phone: phone || "0000000000",
+      category,
+      amount,
+      method,
+      sr_number: text("sr_number").slice(0, 60) || null,
+      reference: text("reference").slice(0, 80) || null,
+      paid_on: /^\d{4}-\d{2}-\d{2}$/.test(paidOn) ? paidOn : null,
+      message: text("message").slice(0, 140) || null,
+      display_name: text("display_name").slice(0, 80) || null,
+      anonymous: body.anonymous === true,
+      admin_note: `Entered by ${admin}`,
+      status: "pending",
+    })
+    .select("id")
+    .single();
+
+  if (error || !data) {
+    console.error("[admin/donations] insert", error?.message);
+    return NextResponse.json(
+      { error: error?.message ?? "Could not save that." },
+      { status: 500 },
+    );
+  }
+
+  // Verify straight away when asked, which mints the receipt number.
+  if (body.verify !== false) {
+    const { data: row, error: vErr } = await db().rpc("verify_donation", {
+      p_id: data.id,
+      p_by: admin,
+    });
+    if (vErr) {
+      return NextResponse.json({ ok: true, id: data.id, warning: vErr.message });
+    }
+    const verified = (Array.isArray(row) ? row[0] : row) as Donation;
+    void mirrorToSheet({ ...verified, amount: Number(verified.amount) });
+    return NextResponse.json({ ok: true, id: data.id, donation: verified });
+  }
+
+  return NextResponse.json({ ok: true, id: data.id });
 }

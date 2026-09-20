@@ -179,6 +179,7 @@ export const NAV = [
   { href: "/utsab", label: "Utsab", bangla: "উৎসব" },
   { href: "/itihash", label: "Itihash", bangla: "ইতিহাস" },
   { href: "/shilpa", label: "Shilpa", bangla: "শিল্প" },
+  { href: "/mahalaya", label: "Mahalaya", bangla: "মহালয়া" },
   { href: "/gaan", label: "Gaan", bangla: "গান" },
   { href: "/probash", label: "Probash", bangla: "প্রবাস" },
   { href: "/gallery", label: "Chhobi", bangla: "ছবি" },
@@ -272,6 +273,43 @@ export const SPONSOR_TIERS = [
       "Logo on the sponsor strip",
       "Acknowledgement on social media",
     ],
+  },
+] as const;
+
+/**
+ * The printed receipt. Modelled on the committee's own bill book, down
+ * to the wording. Drop scanned signatures into public/media/signatures
+ * and name them here when the treasurers provide them.
+ */
+export const RECEIPT = {
+  heading: "Indian Institute of Science, Bengaluru 560012",
+  towards: "Sharodiya Durgotsab 2026",
+  note: "Received with thanks. This contribution is voluntary and carries no consideration in return. No payment gateway was used, so the full amount reaches the committee account.",
+  signatories: [
+    { name: "Sayak Maji", role: "Treasurer", image: "" },
+    { name: "Ayan Das", role: "Treasurer", image: "" },
+  ],
+} as const;
+
+/** Back issues of Probash, readable in the browser. */
+export const MAGAZINES = [
+  {
+    id: "probash-2025",
+    year: "2025",
+    title: "Probash 2025",
+    bangla: "প্রবাস ২০২৫",
+    file: "/media/magazine/probash-2025.pdf",
+    pages: 70,
+    note: "The full issue, as it was printed and handed out at the pandal.",
+  },
+  {
+    id: "probash-2024",
+    year: "2024",
+    title: "Probash 2024",
+    bangla: "প্রবাস ২০২৪",
+    file: "/media/magazine/probash-2024.pdf",
+    pages: 89,
+    note: "The online edition, the longest issue the committee has produced.",
   },
 ] as const;
 

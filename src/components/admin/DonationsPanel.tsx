@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { WhatsappIcon } from "@/components/BrandIcons";
+import AddDonor from "./AddDonor";
 import type { Donation } from "@/lib/db";
 import { formatINR, formatDate, formatDateTime } from "@/lib/format";
 
@@ -92,6 +93,8 @@ export default function DonationsPanel({ origin }: { origin: string }) {
 
   return (
     <div>
+      <AddDonor onAdded={() => void load()} />
+
       {/* ---- summary ---- */}
       <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-4">
         <Cell label="Rows shown" value={String(totals.count)} />

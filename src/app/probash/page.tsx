@@ -3,6 +3,8 @@ import { ArrowUpRight, PenLine, Palette } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import { getConfig } from "@/lib/config";
+import { MAGAZINES } from "@/lib/site";
+import MagazineShelf from "@/components/MagazineShelf";
 
 export const metadata: Metadata = {
   title: "Probash",
@@ -52,6 +54,20 @@ export default async function ProbashPage() {
                 </footer>
               </blockquote>
             </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="!pt-[2.618rem]">
+        <Container>
+          <SectionHeading
+            eyebrow="পড়ুন Read it"
+            title="The back issues, open on the table"
+            bangla="আগের সংখ্যা"
+            lede="Both previous issues, page by page, turning the way paper turns. Nothing to install and nothing to sign into."
+          />
+          <div className="mt-[2.618rem]">
+            <MagazineShelf issues={MAGAZINES.map((m) => ({ ...m }))} />
           </div>
         </Container>
       </Section>
