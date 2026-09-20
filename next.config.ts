@@ -59,6 +59,21 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        /*
+          The media never changes once published, and the magazines are
+          the heaviest thing here by far. Caching them for a year means
+          a second reader on the same device costs no bandwidth at all,
+          which is what keeps this inside a free tier during a festival.
+        */
+        source: "/media/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
         source: "/admin/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
