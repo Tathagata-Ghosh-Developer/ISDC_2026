@@ -54,15 +54,7 @@ export default function Countdown({
     >
       {UNITS.map((u, i) => (
         <div key={u.key} className="flex items-stretch">
-          {i > 0 && (
-            <span
-              className="mx-1 self-center text-[1.4rem] font-light text-gold/40 sm:mx-2"
-              aria-hidden
-            >
-              ·
-            </span>
-          )}
-          <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
+                    <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
             <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">
               {left === null
                 ? "––"

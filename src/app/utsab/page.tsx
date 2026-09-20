@@ -22,10 +22,10 @@ export default async function UtsabPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="উৎসব · The days"
+            eyebrow="উৎসব The days"
             title="Four days, and the two that frame them"
             bangla="বোধন থেকে বিসর্জন"
-            lede="Timings below are the committee's working plan. Ritual timings that depend on the tithi — Sandhi Puja above all — are confirmed by the priest closer to the day and announced on WhatsApp and Instagram."
+            lede="Timings below are the committee's working plan. Ritual timings that depend on the tithi, Sandhi Puja above all, are confirmed by the priest closer to the day and announced on WhatsApp and Instagram."
           />
 
           <Reveal className="mt-[2.618rem]">
@@ -66,7 +66,7 @@ export default async function UtsabPage() {
                         {day.tithi}
                       </p>
                       <p className="mt-1 text-[0.8rem] text-ink-soft">
-                        {day.date} · {day.weekday}
+                        {day.date} {day.weekday}
                       </p>
                     </div>
 
@@ -148,13 +148,13 @@ export default async function UtsabPage() {
               </h2>
               <dl className="mt-6 divide-y divide-line border-y border-line">
                 {[
-                  ["বোধন · Bodhon", "Waking the goddess, out of her proper season."],
-                  ["অঞ্জলি · Anjali", "Flowers offered from cupped palms, with the priest leading the verses."],
-                  ["সন্ধিপূজা · Sandhi Puja", "The forty-eight minutes across the Ashtami-Navami seam. A hundred and eight lamps."],
-                  ["ভোগ · Bhog", "Food offered to the goddess, then served to everyone present."],
-                  ["ধুনুচি · Dhunuchi", "An earthen censer of burning resin, danced with at arati."],
-                  ["সিঁদুরখেলা · Sindoor Khela", "Vermilion on Dashami, as she is about to leave."],
-                  ["বিসর্জন · Bisarjan", "Immersion. The clay goes back to the water it came from."],
+                  ["বোধন Bodhon", "Waking the goddess, out of her proper season."],
+                  ["অঞ্জলি Anjali", "Flowers offered from cupped palms, with the priest leading the verses."],
+                  ["সন্ধিপূজা Sandhi Puja", "The forty-eight minutes across the Ashtami-Navami seam. A hundred and eight lamps."],
+                  ["ভোগ Bhog", "Food offered to the goddess, then served to everyone present."],
+                  ["ধুনুচি Dhunuchi", "An earthen censer of burning resin, danced with at arati."],
+                  ["সিঁদুরখেলা Sindoor Khela", "Vermilion on Dashami, as she is about to leave."],
+                  ["বিসর্জন Bisarjan", "Immersion. The clay goes back to the water it came from."],
                 ].map(([term, meaning]) => (
                   <div key={term} className="py-4">
                     <dt className="bangla text-[0.95rem] text-ink">{term}</dt>

@@ -18,7 +18,7 @@ export default function ShilpaPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="শিল্প · Art forms"
+            eyebrow="শিল্প Art forms"
             title="The festival is a commission"
             bangla="বাংলার শিল্পের মরশুম"
             lede="Four days of ritual are the visible end of a year of work by potters, foil-beaters, pith-carvers, scroll painters, drummers, bamboo riggers and lighting engineers. Most of it is seasonal. Some of it is disappearing. Every entry below names someone still doing it."
@@ -47,7 +47,7 @@ export default function ShilpaPage() {
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="সংকট · At risk"
+            eyebrow="সংকট At risk"
             title="What is actually disappearing"
             lede="These are not nostalgia. They are trades with a shrinking number of working hands, usually because a cheaper industrial substitute exists and the skill takes a decade to learn."
           />

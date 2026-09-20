@@ -12,7 +12,7 @@ type Petal = {
 };
 
 /**
- * Kash phool and shiuli drifting up through the hero — autumn in Bengal,
+ * Kash phool and shiuli drifting up through the hero, autumn in Bengal,
  * the signal that Ma is on her way. Pure CSS transforms, so it stays
  * on the compositor and never touches layout.
  */

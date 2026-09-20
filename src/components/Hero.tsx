@@ -38,7 +38,7 @@ export default function Hero({
       ref={ref}
       className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-24"
     >
-      {/* Layer 1 — the campus, sunk into the paper */}
+      {/* Layer 1, the campus, sunk into the paper */}
       <motion.div
         style={reduce ? undefined : { y: campusY }}
         className="absolute inset-0 -z-30"
@@ -53,7 +53,7 @@ export default function Hero({
         />
       </motion.div>
 
-      {/* Layer 2 — paper wash and vignette */}
+      {/* Layer 2, paper wash and vignette */}
       <div
         className="absolute inset-0 -z-20"
         style={{
@@ -62,7 +62,7 @@ export default function Hero({
         }}
       />
 
-      {/* Layer 3 — the goddess, framed in a chalchitra arch */}
+      {/* Layer 3, the goddess, framed in a chalchitra arch */}
       <motion.div
         style={reduce ? undefined : { y: idolY }}
         className="pointer-events-none absolute left-1/2 top-[8%] -z-10 w-[min(62vw,30rem)] -translate-x-1/2 sm:top-[6%]"
@@ -88,7 +88,7 @@ export default function Hero({
 
       <Kash count={20} />
 
-      {/* Layer 4 — the words */}
+      {/* Layer 4, the words */}
       <motion.div
         style={reduce ? undefined : { y: textY, opacity: fade }}
         className="relative z-10 flex w-full max-w-[1180px] flex-col items-center px-5 text-center md:px-8"

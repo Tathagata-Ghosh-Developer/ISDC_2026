@@ -62,7 +62,7 @@ export default function GalleryPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="ছবি · Gallery"
+            eyebrow="ছবি Gallery"
             title="Four days, kept"
             bangla="স্মৃতির অ্যালবাম"
             lede="Photographs from previous years on this campus, the Institute itself, and the paintings that fixed how Bengal imagines the goddess. Send us yours and they go up here."

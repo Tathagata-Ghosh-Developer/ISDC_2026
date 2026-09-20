@@ -2,7 +2,7 @@
 
 import { Printer } from "lucide-react";
 
-/** Print, or save as PDF — the browser's own dialog does both. */
+/** Print, or save as PDF, the browser's own dialog does both. */
 export default function PrintButton() {
   return (
     <button onClick={() => window.print()} className="btn btn-primary">

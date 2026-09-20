@@ -160,7 +160,7 @@ export default async function ReceiptPage({
             <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
               <div className="text-[0.68rem] leading-relaxed text-ink-faint">
                 <p>Bank: {config.bank.bank}, {config.bank.branch}</p>
-                <p>Account: {config.bank.accountNumber} · IFSC {config.bank.ifsc}</p>
+                <p>Account: {config.bank.accountNumber} IFSC {config.bank.ifsc}</p>
                 {donation.verified_by && (
                   <p className="mt-1">
                     Verified by {donation.verified_by} on{" "}
@@ -179,7 +179,7 @@ export default async function ReceiptPage({
 
           <p className="mt-8 border-t border-line pt-4 text-[0.6rem] leading-relaxed text-ink-faint">
             This receipt is computer generated and valid without a physical
-            signature. Verify it at {SITE.url}/receipt/{donation.id} — the
+            signature. Verify it at {SITE.url}/receipt/{donation.id}, the
             reference is unique to this donation. The committee is not
             registered under section 80G, so this contribution is not tax
             deductible.

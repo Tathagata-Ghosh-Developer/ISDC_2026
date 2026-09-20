@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MapPin, Mail } from "lucide-react";
 import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
 import { SITE, LINKS, CONTACTS, NAV } from "@/lib/site";
+import Logo from "./Logo";
 
 const SOCIALS = [
   { href: LINKS.instagram, label: "Instagram", Icon: InstagramIcon },
@@ -27,13 +28,14 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-[1180px] px-5 py-[4.236rem] md:px-8">
         <div className="grid gap-[2.618rem] md:grid-cols-[1.618fr_1fr_1fr]">
           <div>
+            <Logo size={72} className="mb-6" />
             <p className="bangla-display text-[1.618rem] leading-relaxed text-ink">
               সর্বমঙ্গলমঙ্গল্যে শিবে সর্বার্থসাধিকে।
               <br />
               শরণ্যে ত্র্যম্বকে গৌরি নারায়ণি নমোহস্তুতে॥
             </p>
             <p className="lede mt-4 max-w-[44ch] text-[0.9rem]">
-              O Narayani, auspicious one who fulfils all wishes — we take refuge
+              O Narayani, auspicious one who fulfils all wishes, we take refuge
               in you, O Gauri.
             </p>
 
@@ -127,7 +129,7 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="rule-alpona my-[2.618rem]" />
+        <div className="my-[2.618rem] h-px w-full bg-line" />
 
         <div className="flex flex-col gap-3 text-[0.75rem] text-ink-faint sm:flex-row sm:items-center sm:justify-between">
           <p>

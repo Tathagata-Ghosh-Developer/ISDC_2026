@@ -16,7 +16,7 @@ function bad(message: string, status = 400) {
 
 /**
  * Records a donor's declaration that they have transferred money.
- * It does not move money — the transfer happens in the donor's own
+ * It does not move money, the transfer happens in the donor's own
  * banking app, and the treasurer verifies it against the statement.
  */
 export async function POST(req: Request) {

@@ -219,7 +219,7 @@ export default function ExpensesPanel() {
                     )}
                     <p className="mt-1 text-[0.68rem] uppercase tracking-[0.16em] text-ink-faint">
                       {formatDate(e.spent_on)}
-                      {e.vendor ? ` · ${e.vendor}` : ""}
+                      {e.vendor ? ` ${e.vendor}` : ""}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">

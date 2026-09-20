@@ -193,11 +193,11 @@ export default function DonationsPanel({ origin }: { origin: string }) {
 
                   <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-[0.78rem] sm:grid-cols-2 lg:grid-cols-3">
                     <Item label="Category" value={d.category} />
-                    <Item label="SR" value={d.sr_number ?? "—"} />
+                    <Item label="SR" value={d.sr_number ?? "not given"} />
                     <Item label="Email" value={d.email} />
                     <Item label="WhatsApp" value={`+91 ${d.phone}`} />
                     <Item label="Mode" value={d.method.toUpperCase()} />
-                    <Item label="Reference" value={d.reference ?? "—"} />
+                    <Item label="Reference" value={d.reference ?? "not given"} />
                     <Item label="Paid on" value={formatDate(d.paid_on)} />
                     <Item label="Declared" value={formatDateTime(d.created_at)} />
                     {d.verified_by && (
@@ -303,7 +303,7 @@ function whatsappLink(d: Donation, origin: string): string {
     "",
     "Your name is now on the public donation board. Thank you, and Shubho Sharodiya.",
     "",
-    "— IISc Sharodiya Durgotsab Committee",
+    "IISc Sharodiya Durgotsab Committee",
   ].join("\n");
 
   return `https://wa.me/91${d.phone}?text=${encodeURIComponent(text)}`;

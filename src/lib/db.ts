@@ -68,7 +68,7 @@ export function db(): SupabaseClient {
 }
 
 /* ---------------------------------------------------------------
-   Public reads — used by the donation board and the ledger
+   Public reads, used by the donation board and the ledger
    --------------------------------------------------------------- */
 
 export type BoardEntry = {

@@ -320,7 +320,7 @@ export default function DonateForm({ suggested, note }: Props) {
               <Loader2 size={15} className="animate-spin" /> Recording
             </>
           ) : (
-            "I have transferred — record it"
+            "I have transferred, record it"
           )}
         </button>
 

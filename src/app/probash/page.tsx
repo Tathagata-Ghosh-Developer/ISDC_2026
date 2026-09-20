@@ -21,7 +21,7 @@ export default async function ProbashPage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-end">
             <Reveal>
-              <p className="eyebrow">প্রবাস · The magazine</p>
+              <p className="eyebrow">প্রবাস The magazine</p>
               <h1 className="bangla-display mt-4 text-[3.33rem] leading-tight text-ink sm:text-[4.236rem]">
                 প্রবাস
               </h1>
@@ -44,7 +44,7 @@ export default async function ProbashPage() {
             <Reveal delay={0.12}>
               <blockquote className="border-l-2 border-gold pl-6">
                 <p className="bangla text-[1.272rem] leading-loose text-ink">
-                  পুজো মানে ঘর — ঘরের আরেক রূপ। অচেনা মুখগুলোর মধ্যেও নিজের
+                  পুজো মানে ঘর, ঘরের আরেক রূপ। অচেনা মুখগুলোর মধ্যেও নিজের
                   মানুষকে খুঁজে নেওয়া।
                 </p>
                 <footer className="mt-4 text-[0.75rem] uppercase tracking-[0.2em] text-ink-faint">
@@ -92,9 +92,9 @@ export default async function ProbashPage() {
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="কেন · Why bother"
+            eyebrow="কেন Why bother"
             title="A Puja magazine is not an afterthought"
-            lede="Bengal invented the Sharadiya number — the fat annual literary issue published for the Puja — and it is where a great deal of the language's best writing first appeared. Serialised novels, debut poems, arguments that ran for years. Probash is a very small member of a very old tradition."
+            lede="Bengal invented the Sharadiya number, the fat annual literary issue published for the Puja, and it is where a great deal of the language's best writing first appeared. Serialised novels, debut poems, arguments that ran for years. Probash is a very small member of a very old tradition."
           />
           <Reveal className="mt-[2.618rem]">
             <div className="grid gap-4 sm:grid-cols-3">

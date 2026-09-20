@@ -9,6 +9,7 @@ import {
   CONTACTS,
   COMMITTEE,
   GATES,
+  SPONSOR_TIERS,
   VOLUNTEER_ROLES,
 } from "./site";
 import { SCHEDULE, type PujaDay } from "./content/schedule";
@@ -54,11 +55,11 @@ export type Config = {
   bank: {
     accountName: string;
     accountNumber: string;
-    accountType: string;
     ifsc: string;
     bank: string;
     branch: string;
     upiId: string;
+    merchantName: string;
     qrImage: string;
   };
   donation: {
@@ -80,6 +81,14 @@ export type Config = {
   }[];
   schedule: PujaDay[];
   sponsors: Sponsor[];
+  sponsorTiers: {
+    id: string;
+    name: string;
+    bangla: string;
+    amount: number;
+    headline: string;
+    benefits: string[];
+  }[];
   venue: {
     address: string;
     short: string;
@@ -93,11 +102,11 @@ export type Config = {
 
 export const DEFAULTS: Config = {
   hero: {
-    eyebrow: "Indian Institute of Science · Bengaluru",
+    eyebrow: "Indian Institute of Science Bengaluru",
     titleBangla: "শারদীয়া দুর্গোৎসব",
     titleRoman: `IISc ${SITE.year}`,
     subtitle:
-      "From the banks of the Ganga to the river of knowledge — four days when a campus becomes a home.",
+      "From the banks of the Ganga to the river of knowledge, four days when a campus becomes a home.",
     ctaPrimary: { label: "Donate to the Puja", href: "/daan" },
     ctaSecondary: { label: "Four days, hour by hour", href: "/utsab" },
     image: "/media/art/nandalal-bose-durga.jpg",
@@ -118,7 +127,7 @@ export const DEFAULTS: Config = {
     showGoal: false,
     note: "There is no minimum. Give what feels right; every rupee is listed publicly.",
     noteBangla:
-      "কোনও ন্যূনতম অঙ্ক নেই। যা মন চায় দিন — প্রতিটি টাকার হিসেব প্রকাশ্যে থাকবে।",
+      "কোনও ন্যূনতম অঙ্ক নেই। যা মন চায় দিন, প্রতিটি টাকার হিসেব প্রকাশ্যে থাকবে।",
     suggested: [251, 501, 1001, 2100, 5001],
   },
   links: { ...LINKS },
@@ -127,6 +136,7 @@ export const DEFAULTS: Config = {
   gates: GATES.map((g) => ({ ...g })),
   schedule: SCHEDULE,
   sponsors: [],
+  sponsorTiers: SPONSOR_TIERS.map((t) => ({ ...t, benefits: [...t.benefits] })),
   venue: {
     address: SITE.venue,
     short: SITE.venueShort,
@@ -153,6 +163,7 @@ export const CONFIG_GROUPS = [
   { key: "contacts", label: "Contacts", form: "json" },
   { key: "schedule", label: "Day-by-day schedule", form: "json" },
   { key: "sponsors", label: "Sponsors", form: "json" },
+  { key: "sponsorTiers", label: "Sponsorship tiers", form: "json" },
 ] as const;
 
 export type ConfigGroup = (typeof CONFIG_GROUPS)[number]["key"];

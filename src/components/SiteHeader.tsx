@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { NAV, SITE } from "@/lib/site";
+import { NAV } from "@/lib/site";
+import { Wordmark } from "./Logo";
 
 function ThemeToggle({ className = "" }: { className?: string }) {
   const [theme, setTheme] = useState<"light" | "dark" | null>(null);
@@ -73,50 +74,12 @@ export default function SiteHeader() {
       >
         <nav className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-5 py-3 md:px-8">
           <Link href="/" className="group flex items-center gap-3">
-            <span className="relative grid h-10 w-10 shrink-0 place-items-center">
-              <svg viewBox="0 0 40 40" className="h-10 w-10" aria-hidden>
-                <circle
-                  cx="20"
-                  cy="20"
-                  r="18.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="0.75"
-                  className="text-gold"
-                />
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <line
-                    key={i}
-                    x1="20"
-                    y1="20"
-                    x2={20 + 16 * Math.cos((i * Math.PI) / 5 - Math.PI / 2)}
-                    y2={20 + 16 * Math.sin((i * Math.PI) / 5 - Math.PI / 2)}
-                    stroke="currentColor"
-                    strokeWidth="0.6"
-                    className="text-sindoor origin-center transition-transform duration-[1200ms] group-hover:rotate-[36deg]"
-                    style={{ transformBox: "fill-box" }}
-                  />
-                ))}
-                <circle cx="20" cy="20" r="4.2" className="fill-sindoor" />
-                <circle cx="20" cy="20" r="1.6" className="fill-paper" />
-              </svg>
-            </span>
-            <span className="leading-none">
-              <span className="block font-display text-[1.05rem] font-semibold tracking-tight text-ink">
-                Sharodiya Durgotsab
-              </span>
-              <span className="bangla-display block text-[0.78rem] tracking-[0.2em] text-gold">
-                আইআইএসসি · {SITE.year}
-              </span>
-            </span>
+            <Wordmark size={38} />
           </Link>
 
           <div className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(item.href);
+              const active = pathname?.startsWith(item.href) ?? false;
               return (
                 <Link
                   key={item.href}

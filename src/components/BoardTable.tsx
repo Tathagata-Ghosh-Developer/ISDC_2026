@@ -112,7 +112,7 @@ export default function BoardTable({ entries }: { entries: BoardEntry[] }) {
                 </p>
               )}
               <p className="mt-0.5 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint">
-                {e.category} · {formatDate(e.verified_at)}
+                {e.category} {formatDate(e.verified_at)}
               </p>
             </div>
             <span className="shrink-0 font-display text-[1.1rem] tabular-nums text-sindoor">

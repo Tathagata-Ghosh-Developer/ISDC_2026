@@ -16,7 +16,10 @@ export type PujaDay = {
   rituals: Ritual[];
 };
 
-/** Defaults. The committee overrides these from the admin console. */
+/**
+ * Taken from the committee's own 2026 schedule sheet.
+ * Editable from the admin console without touching this file.
+ */
 export const SCHEDULE: PujaDay[] = [
   {
     id: "mahalaya",
@@ -24,46 +27,68 @@ export const SCHEDULE: PujaDay[] = [
     tithiBangla: "মহালয়া",
     date: "10 October 2026",
     weekday: "Saturday",
-    headline: "The fortnight of the ancestors ends; the fortnight of the goddess begins",
+    headline: "The fortnight of the ancestors ends and the fortnight of the goddess begins",
     story:
-      "Before dawn, Bengal turns on the radio for a recitation first broadcast in 1931. On the same day the idol receives its eyes, and the countdown that has run since Rath Yatra finally becomes visible to everyone else.",
+      "Before dawn, Bengal turns on the radio for a recitation first broadcast in 1931. On the same day the idol receives its eyes, and the count that has run quietly since Rath Yatra becomes visible to everyone else.",
     rituals: [
-      { time: "04:00", title: "Mahishasuramardini on air", bangla: "মহিষাসুরমর্দিনী" },
+      {
+        time: "04:00",
+        title: "Mahishasuramardini on air",
+        bangla: "মহিষাসুরমর্দিনী",
+        note: "Birendra Krishna Bhadra's recitation, as it has opened the season for close to a century.",
+      },
       { time: "Morning", title: "Tarpan for the ancestors", bangla: "তর্পণ" },
-      { time: "Day", title: "Chokkhu Daan — the giving of eyes", bangla: "চক্ষুদান" },
+      { time: "Day", title: "Chokkhu Daan, the giving of eyes", bangla: "চক্ষুদান" },
     ],
   },
   {
     id: "shashthi",
     tithi: "Maha Shashthi",
     tithiBangla: "মহাষষ্ঠী",
-    date: "17 October 2026",
-    weekday: "Saturday",
-    headline: "Bodhon — the goddess is woken out of season",
+    date: "16 October 2026",
+    weekday: "Friday",
+    headline: "Bodhon, when the goddess is woken out of season",
     story:
-      "The face of the idol is uncovered. Bodhon, Amantran and Adhibas follow in order: she is woken, invited, and made welcome. The dhak sounds for the first time and the campus stops being a campus.",
+      "The face of the idol is uncovered. Bodhon, Astradan, Amantran and Adhibas follow in order, so she is woken, armed, invited and made welcome. The dhak sounds for the first time and the ground stops being a ground.",
     rituals: [
-      { time: "17:30", title: "Bodhon — the awakening", bangla: "বোধন" },
-      { time: "18:15", title: "Amantran and Adhibas", bangla: "আমন্ত্রণ ও অধিবাস" },
-      { time: "19:30", title: "Sandhya Arati", bangla: "সন্ধ্যারতি" },
-      { time: "20:30", title: "Opening cultural evening", bangla: "উদ্বোধনী অনুষ্ঠান" },
+      {
+        time: "by 8:30 AM",
+        title: "Bodhon, Astradan, Amantran and Adhibas",
+        bangla: "বোধন, অস্ত্রদান, আমন্ত্রণ ও অধিবাস",
+        note: "At the TMC ground.",
+      },
+      {
+        time: "6:30 PM",
+        title: "Puja inauguration and Sandhya Arati",
+        bangla: "পুজো উদ্বোধন, সন্ধ্যারতি",
+      },
     ],
   },
   {
     id: "saptami",
     tithi: "Maha Saptami",
     tithiBangla: "মহাসপ্তমী",
-    date: "18 October 2026",
-    weekday: "Sunday",
-    headline: "Nabapatrika is bathed at first light",
+    date: "17 and 18 October 2026",
+    weekday: "Saturday and Sunday",
+    headline: "Nabapatrika is installed on one day and worshipped on the next",
     story:
-      "Nine plants are bound together, bathed in the river and dressed in a bordered sari. She is not Ganesh's wife, whatever the campus insists — she is Durga in her oldest, green, pre-iconic form.",
+      "Nine plants are bound together, bathed and dressed in a bordered sari. She is not Ganesh's wife, whatever the campus insists. She is Durga in her oldest green form, from before anyone thought to give her a face.",
     rituals: [
-      { time: "06:00", title: "Nabapatrika Snan", bangla: "নবপত্রিকা স্নান" },
-      { time: "09:00", title: "Saptami Puja and Pushpanjali", bangla: "সপ্তমী পূজা ও পুষ্পাঞ্জলি" },
-      { time: "13:00", title: "Khichuri Bhog", bangla: "খিচুড়ি ভোগ" },
-      { time: "19:00", title: "Sandhya Arati and Dhunuchi Naach", bangla: "সন্ধ্যারতি ও ধুনুচি নাচ" },
-      { time: "20:30", title: "Cultural programme", bangla: "সাংস্কৃতিক অনুষ্ঠান" },
+      {
+        time: "17 Oct, 7:00 AM",
+        title: "Nabapatrika Sthapan and Prabesh",
+        bangla: "নবপত্রিকা স্নান ও প্রবেশ",
+      },
+      {
+        time: "18 Oct, by 5:53 AM",
+        title: "Saptami Puja",
+        bangla: "সপ্তমী পূজা",
+      },
+      {
+        time: "6:30 PM",
+        title: "Sandhya Arati and cultural evening",
+        bangla: "সন্ধ্যারতি, সাংস্কৃতিক অনুষ্ঠান",
+      },
     ],
   },
   {
@@ -72,55 +97,76 @@ export const SCHEDULE: PujaDay[] = [
     tithiBangla: "মহাষ্টমী",
     date: "19 October 2026",
     weekday: "Monday",
-    headline: "The longest queue, the loudest dhak, the forty-eight minutes",
+    headline: "The longest queue, the loudest dhak, and the forty eight minutes",
     story:
-      "Anjali in new clothes, Kumari Puja at midday, and then the seam between Ashtami and Navami when a hundred and eight lamps are lit and nobody speaks. Sandhi Puja is the still centre of four loud days.",
+      "Anjali in new clothes in the morning, and then the seam between Ashtami and Navami when the lamps are lit and nobody speaks. Sandhi Puja is the still centre of five loud days.",
     rituals: [
-      { time: "08:30", title: "Ashtami Puja", bangla: "অষ্টমী পূজা" },
-      { time: "10:00", title: "Pushpanjali, in batches", bangla: "পুষ্পাঞ্জলি" },
-      { time: "12:00", title: "Kumari Puja", bangla: "কুমারী পূজা" },
-      { time: "13:00", title: "Bhog", bangla: "ভোগ" },
       {
-        time: "Evening",
-        title: "Sandhi Puja",
-        bangla: "সন্ধিপূজা",
-        note: "Last 24 minutes of Ashtami and first 24 of Navami. Exact time confirmed by the priest closer to the day.",
+        time: "6:00 AM",
+        title: "Maha Ashtami Puja and Pushpanjali",
+        bangla: "মহাষ্টমী পূজো, পুষ্পাঞ্জলি",
       },
-      { time: "21:00", title: "Cultural night", bangla: "সাংস্কৃতিক সন্ধ্যা" },
+      {
+        time: "7:26 to 8:14 AM",
+        title: "Sandhi Puja",
+        bangla: "সন্ধি পূজো",
+        note: "The last twenty four minutes of Ashtami and the first twenty four of Navami.",
+      },
+      {
+        time: "6:30 PM",
+        title: "Sandhya Arati and cultural evening",
+        bangla: "সন্ধ্যারতি, সাংস্কৃতিক অনুষ্ঠান",
+      },
     ],
   },
   {
-    id: "navami",
-    tithi: "Maha Navami",
+    id: "nabami",
+    tithi: "Maha Nabami",
     tithiBangla: "মহানবমী",
     date: "20 October 2026",
     weekday: "Tuesday",
     headline: "The day everyone pretends tomorrow is not coming",
     story:
-      "Homa in the morning, the biggest bhog of the four days at noon, and an evening that runs long because no one wants to be the first to leave.",
+      "Homa in the morning, the largest bhog of the five days at noon, and an evening that runs long because nobody wants to be the first to leave.",
     rituals: [
-      { time: "08:00", title: "Navami Homa", bangla: "নবমী হোম" },
-      { time: "10:00", title: "Pushpanjali", bangla: "পুষ্পাঞ্জলি" },
-      { time: "13:00", title: "Mahabhog", bangla: "মহাভোগ" },
-      { time: "19:00", title: "Arati and Dhunuchi", bangla: "আরতি ও ধুনুচি" },
-      { time: "20:30", title: "Grand cultural evening", bangla: "বিশেষ সাংস্কৃতিক সন্ধ্যা" },
+      {
+        time: "8:30 AM",
+        title: "Nabami Puja and Homa",
+        bangla: "নবমী পূজো ও হোম",
+      },
+      {
+        time: "6:30 PM",
+        title: "Sandhya Arati and cultural evening",
+        bangla: "সন্ধ্যারতি, সাংস্কৃতিক অনুষ্ঠান",
+      },
     ],
   },
   {
     id: "dashami",
-    tithi: "Vijaya Dashami",
+    tithi: "Bijoya Dashami",
     tithiBangla: "বিজয়া দশমী",
     date: "21 October 2026",
     weekday: "Wednesday",
-    headline: "Darpan Bisarjan, sindoor, and the walk back",
+    headline: "Debi Boron, vermilion, and the walk back",
     story:
-      "The priest watches her leave in a mirror so that no one has to watch it directly. Then vermilion, sweets, embraces, and the year-long wait that Bengalis pretend not to be counting.",
+      "She is welcomed one last time before she goes, given sweets and sent off. Then vermilion, embraces, and the year long wait that Bengalis pretend not to be counting.",
     rituals: [
-      { time: "09:00", title: "Dashami Puja", bangla: "দশমী পূজা" },
-      { time: "11:00", title: "Darpan Bisarjan", bangla: "দর্পণ বিসর্জন" },
-      { time: "12:00", title: "Sindoor Khela, open to all", bangla: "সিঁদুরখেলা" },
-      { time: "16:00", title: "Bisarjan procession", bangla: "বিসর্জন শোভাযাত্রা" },
-      { time: "18:30", title: "Bijoya Sammilani and Kolakuli", bangla: "বিজয়া সম্মিলনী" },
+      {
+        time: "by 8:31 AM",
+        title: "Dashami Puja",
+        bangla: "বিজয়া দশমী পূজো",
+      },
+      {
+        time: "12:00 PM",
+        title: "Debi Boron and Sindur Khela",
+        bangla: "দেবী বরণ ও সিঁদুর খেলা",
+        note: "Open to everyone who wants to take part.",
+      },
+      {
+        time: "6:00 PM",
+        title: "Visarjan",
+        bangla: "প্রতিমা নিরঞ্জন",
+      },
     ],
   },
 ];

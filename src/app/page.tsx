@@ -7,14 +7,11 @@ import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import { FactMarquee, FactGrid } from "@/components/Facts";
 import { getConfig } from "@/lib/config";
-import { getBoard } from "@/lib/db";
 import { ART_FORMS } from "@/lib/content/artforms";
-import { formatINR } from "@/lib/format";
 import TitleCard from "@/components/TitleCard";
 
 export default async function Home() {
   const config = await getConfig();
-  const board = await getBoard();
 
   const bodhon = config.schedule.find((d) => d.id === "shashthi");
 
@@ -23,20 +20,20 @@ export default async function Home() {
       <Hero
         hero={config.hero}
         countdownTo={config.dates.countdownTo}
-        bodhonLabel={`until Bodhon · ${bodhon?.date ?? "17 October 2026"}`}
+        bodhonLabel={`until Bodhon ${bodhon?.date ?? "17 October 2026"}`}
       />
 
       {/* ============================================================
-          Ahwan — the invitation
+          Ahwan, the invitation
           ============================================================ */}
       <Section id="ahwan">
         <Container>
           <div className="grid items-center gap-[2.618rem] lg:grid-cols-[1.618fr_1fr]">
             <Reveal>
-              <p className="eyebrow">আহ্বান · The invitation</p>
+              <p className="eyebrow">আহ্বান The invitation</p>
               <blockquote className="bangla mt-6 text-[1.272rem] leading-[2] text-ink sm:text-[1.5rem]">
                 সেমেস্টার আর গবেষণার ব্যস্ত জীবন থেকে একটু সময় বার করে ক্ষণিকের
-                জন্য চোখ দুটো বন্ধ করো, আর একটা গভীর শ্বাস নিয়ে দেখো — চোখের
+                জন্য চোখ দুটো বন্ধ করো, আর একটা গভীর শ্বাস নিয়ে দেখো, চোখের
                 সামনে যেন ভেসে উঠছে শুভ্র শিউলি আর কাশফুল।
               </blockquote>
               <p className="lede mt-6 max-w-[58ch]">
@@ -48,7 +45,7 @@ export default async function Home() {
               <p className="lede mt-4 max-w-[58ch]">
                 But you are far from home. That is the whole point. For four
                 days this campus stops being an institute and becomes the
-                courtyard of a house — one where nobody is a stranger, the
+                courtyard of a house, one where nobody is a stranger, the
                 khichuri is free, and the queue for anjali is the friendliest
                 queue in Bengaluru.
               </p>
@@ -74,7 +71,7 @@ export default async function Home() {
                 <div className="vignette absolute inset-0" />
               </div>
               <p className="mt-3 text-[0.68rem] uppercase tracking-[0.22em] text-ink-faint">
-                A Puja at night, Calcutta · nineteenth century
+                A Puja at night, Calcutta nineteenth century
               </p>
             </Reveal>
           </div>
@@ -89,7 +86,7 @@ export default async function Home() {
       <Section>
         <Container>
           <SectionHeading
-            eyebrow="উৎসব · The days"
+            eyebrow="উৎসব The days"
             title="Six tithis, one long exhale"
             bangla="ষষ্ঠী থেকে দশমী"
             lede="From the waking of the goddess out of season to the mirror in which she is watched leaving. Timings firm up closer to the day; the shape does not change."
@@ -160,7 +157,7 @@ export default async function Home() {
             </Reveal>
 
             <Reveal delay={0.12} className="order-1 lg:order-2">
-              <p className="eyebrow">দুই নদী · Two rivers</p>
+              <p className="eyebrow">দুই নদী Two rivers</p>
               <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
                 One carries silt. One carries questions.
               </h2>
@@ -183,7 +180,7 @@ export default async function Home() {
                 The campus was always a mixed inheritance. Its founder was a
                 Parsi, its land came from a Hindu Maharaja, and the Tata
                 Memorial that faces the Main Building carries an Avestan
-                inscription — good thought, good word, good deed — at an
+                inscription, good thought, good word, good deed, at an
                 institute whose motto is a line from the Gita.
               </p>
               <p className="lede mt-4 max-w-[56ch]">
@@ -212,7 +209,7 @@ export default async function Home() {
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="শিল্প · The crafts"
+            eyebrow="শিল্প The crafts"
             title="A festival is a commission"
             bangla="বাংলার শিল্পের মরশুম"
             lede="Behind four days of ritual sit a dozen trades, most of them seasonal, several of them endangered. These are the hands the Puja hires."
@@ -269,7 +266,7 @@ export default async function Home() {
             />
             <div className="relative grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr]">
               <Reveal>
-                <p className="eyebrow">দান · Give</p>
+                <p className="eyebrow">দান Give</p>
                 <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
                   Funded entirely by the people who show up
                 </h2>
@@ -298,27 +295,17 @@ export default async function Home() {
 
               <Reveal delay={0.12}>
                 <div className="flex h-full flex-col justify-center gap-5 border-line lg:border-l lg:pl-[2.618rem]">
-                  <Figure
-                    label="Raised so far"
-                    bangla="সংগৃহীত"
-                    value={board.ready ? formatINR(board.total) : "—"}
-                  />
-                  <Figure
-                    label="Donors"
-                    bangla="দাতা"
-                    value={board.ready ? String(board.count) : "—"}
-                  />
-                  <Figure
-                    label="Spent and published"
-                    bangla="ব্যয়"
-                    value={board.ready ? formatINR(board.spent) : "—"}
-                  />
-                  {!board.ready && (
-                    <p className="text-[0.7rem] leading-relaxed text-ink-faint">
-                      The ledger goes live the moment the committee connects the
-                      database. Nothing here is a placeholder figure.
-                    </p>
-                  )}
+                  <p className="bangla-display text-[1.618rem] leading-relaxed text-ink">
+                    যা মন চায়, তাই দিন
+                  </p>
+                  <p className="text-[0.88rem] leading-relaxed text-ink-soft">
+                    There is no minimum and no suggested minimum. A hundred
+                    rupees from a first year and twenty thousand from an alumnus
+                    sit on the same board, under the same rules.
+                  </p>
+                  <Link href="/daan/board" className="btn btn-ghost">
+                    See the board
+                  </Link>
                 </div>
               </Reveal>
             </div>
@@ -332,7 +319,7 @@ export default async function Home() {
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="জানা-অজানা · Did you know"
+            eyebrow="জানা-অজানা Did you know"
             title="Things the Puja has quietly forgotten"
             lede="Scattered through this site are facts with sources attached. Here are three to start with."
           />
@@ -351,7 +338,7 @@ export default async function Home() {
       <Section>
         <Container>
           <SectionHeading
-            eyebrow="যোগাযোগ · Stay close"
+            eyebrow="যোগাযোগ Stay close"
             title="Come stand in the courtyard"
             bangla="আমাদের সঙ্গে থাকুন"
             align="center"
@@ -407,24 +394,3 @@ export default async function Home() {
   );
 }
 
-function Figure({
-  label,
-  bangla,
-  value,
-}: {
-  label: string;
-  bangla: string;
-  value: string;
-}) {
-  return (
-    <div>
-      <span className="font-display block text-[2.058rem] font-normal leading-none tabular-nums text-sindoor">
-        {value}
-      </span>
-      <span className="mt-2 block text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint">
-        {label}
-      </span>
-      <span className="bangla block text-[0.72rem] text-gold/80">{bangla}</span>
-    </div>
-  );
-}

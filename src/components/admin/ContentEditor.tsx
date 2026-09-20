@@ -67,7 +67,7 @@ function GroupCard({
       } catch (err) {
         setState("error");
         setMessage(
-          err instanceof Error ? `Not valid JSON — ${err.message}` : "Not valid JSON.",
+          err instanceof Error ? `Not valid JSON, ${err.message}` : "Not valid JSON.",
         );
         return;
       }
@@ -115,7 +115,7 @@ function GroupCard({
           <span className="block text-[1rem] text-ink">{group.label}</span>
           <span className="block text-[0.62rem] uppercase tracking-[0.2em] text-ink-faint">
             {group.key}
-            {group.form === "json" ? " · raw JSON" : ""}
+            {group.form === "json" ? " raw JSON" : ""}
           </span>
         </span>
         <span className="text-[0.7rem] uppercase tracking-[0.2em] text-gold">
@@ -260,7 +260,7 @@ function Fields({
         if (Array.isArray(v) && v.every((x) => typeof x === "number")) {
           return (
             <label key={k} className="block">
-              <Lbl>{humanise(k)} — comma separated</Lbl>
+              <Lbl>{humanise(k)}, comma separated</Lbl>
               <input
                 value={v.join(", ")}
                 onChange={(e) =>

@@ -44,7 +44,7 @@ export default async function ThikanaPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="ঠিকানা · Finding us"
+            eyebrow="ঠিকানা Finding us"
             title="The pandal stands on the TMC ground"
             bangla="টিএমসি মাঠ, এসবিআই-এর উল্টোদিকে"
             lede="Tata Memorial Club ground, directly opposite the State Bank of India branch on campus. On the Institute's own map it is grid F3, building 126. If you are already inside the campus, walk towards the bank and you will hear it before you see it."
@@ -133,7 +133,7 @@ export default async function ThikanaPage() {
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="ফটক · From every gate"
+            eyebrow="ফটক From every gate"
             title="Whichever gate you come through"
             lede="The campus has several entrances and they are far apart. Pick the one you are walking in by; each link opens walking directions to the pandal. Security at any gate will also point you towards the bank."
           />
@@ -262,7 +262,7 @@ export default async function ThikanaPage() {
       <Section id="committee" className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="কমিটি · The committee"
+            eyebrow="কমিটি The committee"
             title="Who is running it this year"
             bangla="২০২৬-এর কার্যকরী সমিতি"
             lede="Elected by the general body on 19 July 2026. Seven people, most of them still meant to be finishing a thesis."

@@ -7,7 +7,7 @@ import { getConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Sponsors",
   description:
-    "Partner with the IISc Sharodiya Durgotsab — the only full-scale campus Durga Puja in Bengaluru, reaching students, faculty, alumni and the wider city.",
+    "Partner with the IISc Sharodiya Durgotsab, the only full-scale campus Durga Puja in Bengaluru, reaching students, faculty, alumni and the wider city.",
 };
 
 export const revalidate = 600;
@@ -20,7 +20,7 @@ export default async function SponsorsPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="পৃষ্ঠপোষকতা · Sponsorship"
+            eyebrow="পৃষ্ঠপোষকতা Sponsorship"
             title="Stand with a Puja the city comes to"
             lede="A student-run festival on the campus of the Indian Institute of Science, open to the public across four days, drawing students, faculty, alumni, families and visitors from across Bengaluru."
           />
@@ -112,7 +112,7 @@ export default async function SponsorsPage() {
         <Section className="bg-paper-2/40">
           <Container>
             <SectionHeading
-              eyebrow="ধন্যবাদ · With thanks"
+              eyebrow="ধন্যবাদ With thanks"
               title="This year's partners"
               align="center"
             />

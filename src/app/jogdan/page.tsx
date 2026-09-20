@@ -9,7 +9,7 @@ import { VOLUNTEER_ROLES } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Join Us",
   description:
-    "Volunteer for the IISc Sharodiya Durgotsab. Eight teams, no prior experience needed — decoration, puja arrangements, bhog, logistics, sponsorship, content, fundraising and the magazine.",
+    "Volunteer for the IISc Sharodiya Durgotsab. Eight teams, no prior experience needed, decoration, puja arrangements, bhog, logistics, sponsorship, content, fundraising and the magazine.",
 };
 
 export const revalidate = 600;
@@ -22,7 +22,7 @@ export default async function JogdanPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="যোগদান · Join us"
+            eyebrow="যোগদান Join us"
             title="A Puja was never one person's work"
             bangla="পুজো হয় সবার মিলিত প্রার্থনায়"
             lede="Eight teams, and not one of them asks for experience. What is actually required is time in October and the willingness to be told what to do by someone two years junior to you."
@@ -84,7 +84,7 @@ export default async function JogdanPage() {
               </p>
               <p className="bangla mt-5 max-w-[58ch] text-[1.05rem] leading-loose text-ink">
                 কোনো পূর্ব অভিজ্ঞতার দরকার নেই। শুধু পুজোর প্রতি ভালোবাসা আর
-                সেই চেনা বুকের টান — &ldquo;এই সময়ে বাড়িতে থাকলে ভালো হতো&rdquo; —
+                সেই চেনা বুকের টান, &ldquo;এই সময়ে বাড়িতে থাকলে ভালো হতো&rdquo;,
                 সেটুকুই যথেষ্ট।
               </p>
 

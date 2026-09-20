@@ -9,20 +9,17 @@ import Reveal from "@/components/Reveal";
 import DonateForm from "@/components/DonateForm";
 import CopyField from "@/components/CopyField";
 import { getConfig } from "@/lib/config";
-import { getBoard } from "@/lib/db";
-import { formatINR } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Donate",
   description:
-    "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account — no payment gateway, no fees, and every rupee listed publicly.",
+    "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account, no payment gateway, no fees, and every rupee listed publicly.",
 };
 
 export const revalidate = 120;
 
 export default async function DonatePage() {
   const config = await getConfig();
-  const board = await getBoard();
 
   // The QR is dropped in by the committee when the bank issues it.
   const qrExists = fs.existsSync(
@@ -34,25 +31,12 @@ export default async function DonatePage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="দান · Donate"
+            eyebrow="দান Donate"
             title="Every rupee, on the record"
             bangla="স্বচ্ছ হিসেব, প্রকাশ্য খাতা"
             lede="There is no payment gateway here, which means no percentage disappears into processing fees. You transfer straight into the committee's bank account. We check it against the statement, send you a numbered receipt on WhatsApp, and publish your name and amount on the donation board."
           />
 
-          {board.ready && (
-            <Reveal className="mt-[2.618rem]">
-              <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-3">
-                <Stat label="Raised" bangla="সংগৃহীত" value={formatINR(board.total)} />
-                <Stat label="Donors" bangla="দাতা" value={String(board.count)} />
-                <Stat
-                  label="Published spend"
-                  bangla="প্রকাশিত ব্যয়"
-                  value={formatINR(board.spent)}
-                />
-              </div>
-            </Reveal>
-          )}
         </Container>
       </Section>
 
@@ -64,7 +48,7 @@ export default async function DonatePage() {
               <div className="surface p-6 sm:p-7">
                 <h2 className="font-display flex items-center gap-2 text-[1.272rem] text-ink">
                   <Building2 size={17} className="text-gold" />
-                  Step one — transfer
+                  Step one, transfer
                 </h2>
                 <p className="mt-2 text-[0.8rem] leading-relaxed text-ink-soft">
                   Use your own banking app. Add your name in the remarks so the
@@ -83,10 +67,10 @@ export default async function DonatePage() {
                     label="Bank"
                     value={`${config.bank.bank}, ${config.bank.branch}`}
                   />
-                  <CopyField label="Account type" value={config.bank.accountType} />
                   {config.bank.upiId && (
                     <CopyField label="UPI ID" value={config.bank.upiId} mono />
                   )}
+                  <CopyField label="Merchant name" value={config.bank.merchantName} />
                 </dl>
 
                 <div className="mt-7 border-t border-line pt-6">
@@ -95,20 +79,20 @@ export default async function DonatePage() {
                     Scan to pay
                   </h3>
                   {qrExists ? (
-                    <div className="mt-4 w-full max-w-[15rem] bg-white p-3">
+                    <div className="mt-4 w-full max-w-[17rem] bg-white p-2">
                       <Image
                         src={config.bank.qrImage}
-                        alt="UPI QR code for the committee account"
-                        width={480}
-                        height={480}
+                        alt="Bank issued UPI QR code for the committee account"
+                        width={976}
+                        height={1280}
                         className="h-auto w-full"
                       />
                     </div>
                   ) : (
-                    <p className="mt-3 border border-dashed border-line p-4 text-[0.78rem] leading-relaxed text-ink-faint">
+                    <p className="mt-3 border border-solid border-line p-4 text-[0.78rem] leading-relaxed text-ink-faint">
                       The QR code is being issued by the bank and will appear
-                      here. Until then, please use the account details above —
-                      they reach the same account.
+                      here. Until then, please use the account details above,
+                      which reach the same account.
                     </p>
                   )}
                 </div>
@@ -136,7 +120,7 @@ export default async function DonatePage() {
             <div>
               <Reveal>
                 <h2 className="font-display text-[1.618rem] font-normal text-ink">
-                  Step two — tell us about it
+                  Step two, tell us about it
                 </h2>
                 <p className="lede mt-2 max-w-[56ch] text-[0.95rem]">
                   This is how your receipt finds you. Nothing here charges your
@@ -203,24 +187,3 @@ export default async function DonatePage() {
   );
 }
 
-function Stat({
-  label,
-  bangla,
-  value,
-}: {
-  label: string;
-  bangla: string;
-  value: string;
-}) {
-  return (
-    <div className="bg-paper p-6">
-      <span className="font-display block text-[2.058rem] font-normal leading-none tabular-nums text-sindoor">
-        {value}
-      </span>
-      <span className="mt-2 block text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint">
-        {label}
-      </span>
-      <span className="bangla block text-[0.72rem] text-gold/80">{bangla}</span>
-    </div>
-  );
-}

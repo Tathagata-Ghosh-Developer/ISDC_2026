@@ -42,7 +42,7 @@ async function buildContext(): Promise<string> {
     .join("\n");
 
   const facts = FACTS.map(
-    (f) => `${f.year ? f.year + " — " : ""}${f.title}: ${f.fact}`,
+    (f) => `${f.year ? f.year + ", " : ""}${f.title}: ${f.fact}`,
   ).join("\n");
 
   const arts = ART_FORMS.map(
@@ -167,7 +167,7 @@ function fallback(question: string, context: string): string {
     .slice(0, 3);
 
   if (scored.length === 0) {
-    return "I could not find that on this site. The pages in the menu cover the history, the art forms, the four days and the donation details — or message a student convenor from the footer.";
+    return "I could not find that on this site. The pages in the menu cover the history, the art forms, the four days and the donation details, or message a student convenor from the footer.";
   }
 
   return (

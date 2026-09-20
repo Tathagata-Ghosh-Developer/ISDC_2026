@@ -29,7 +29,7 @@ const BLOCKS: EraBlock[] = [
     prose: [
       "The text every Bengali household still reads at Mahalaya is not an independent scripture. The Devi Mahatmya is chapters 81 to 93 of the Markandeya Purana, inserted into a much older work somewhere between 400 and 600 CE. It is the first Sanskrit text to argue that the Goddess is not a consort or an attendant but the ground of reality itself, and it makes the argument through three battle narratives rather than through philosophy.",
       "The buffalo demon is older than the text. Terracottas from Nagar in Rajasthan show a goddess killing a buffalo in the first century BCE or thereabouts, and a dated inscription places a Mahishasuramardini image at Udayagiri Cave 6 in 401 CE. What the Devi Mahatmya adds is the theology: each god surrenders his weapon, and out of that collective disarmament a single figure is assembled who can do what none of them could.",
-      "Bengal's own oldest Durgas are Pala and Sena stone, and they are not the goddess Bengalis now picture. The family group, the painted arch, the clay, the four-day calendar — all of that is still centuries away.",
+      "Bengal's own oldest Durgas are Pala and Sena stone, and they are not the goddess Bengalis now picture. The family group, the painted arch, the clay, the four-day calendar, all of that is still centuries away.",
     ],
     image: {
       src: "/media/art/durga-manuscript.jpg",
@@ -40,10 +40,10 @@ const BLOCKS: EraBlock[] = [
   {
     era: "Medieval",
     bangla: "মধ্যযুগ",
-    span: "1200 – 1757",
+    span: "1200, 1757",
     title: "Autumn, out of season and on purpose",
     prose: [
-      "The story that explains why Bengal worships in autumn is a Bengali addition. In Krittibas Ojha's fifteenth-century Bengali Ramayana, Rama wakes the goddess out of season to ask for help against Ravana — akalbodhan, the untimely awakening. It is not in Valmiki's Sanskrit original. By the texts, Durga's proper season is spring, and Basanti Puja is the older rite. The exception swallowed the rule.",
+      "The story that explains why Bengal worships in autumn is a Bengali addition. In Krittibas Ojha's fifteenth-century Bengali Ramayana, Rama wakes the goddess out of season to ask for help against Ravana, akalbodhan, the untimely awakening. It is not in Valmiki's Sanskrit original. By the texts, Durga's proper season is spring, and Basanti Puja is the older rite. The exception swallowed the rule.",
       "The ritual manuals that make a four-day festival possible arrive in the same centuries: the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
       "Who held the first grand household Puja is genuinely contested. Raja Kangshanarayan of Taherpur around 1580 and Bhabananda Majumdar of Nadia are both named; the Sabarna Roy Choudhury family's Puja at Barisha, begun in 1610, has the strongest claim to unbroken continuity, and predates the city of Calcutta itself.",
     ],
@@ -51,12 +51,12 @@ const BLOCKS: EraBlock[] = [
   {
     era: "Colonial",
     bangla: "ঔপনিবেশিক",
-    span: "1757 – 1900",
+    span: "1757, 1900",
     title: "The Puja becomes a party, then a subscription",
     prose: [
       "In eighteenth-century Calcutta the Puja turned into the chief instrument of social competition among the new Bengali merchant elite. Households hired nautch troupes, laid on English food and drink, and invited Company officials. The story that Robert Clive attended Nabakrishna Deb's Puja in 1757 is repeated everywhere and rests on almost nothing: Deb became Clive's munshi after the battle, and the evidence is a single anonymous painting. By 1840 the Company was uneasy enough to forbid its own servants from attending.",
       "The scale was industrial. By 1839 Calcutta was producing something in the order of seven thousand idols a year. The lion beneath the goddess had a horse's face for most of this period, because the artisans making it had never seen a lion; the face changed only after real lions reached the Calcutta zoo in the 1880s.",
-      "Then the money democratised. Twelve friends turned away from a household Puja at Guptipara in Hooghly pooled subscriptions and ran their own — baro-yari, twelve friends, the word that still means community Puja. Sources put it at 1761 or 1790. Either way it is the hinge: the festival stops belonging to families who can afford it.",
+      "Then the money democratised. Twelve friends turned away from a household Puja at Guptipara in Hooghly pooled subscriptions and ran their own, baro-yari, twelve friends, the word that still means community Puja. Sources put it at 1761 or 1790. Either way it is the hinge: the festival stops belonging to families who can afford it.",
       "Not everyone approved. Debendranath Tagore abolished Durga Puja at Jorasanko on Brahmo principle, which is why the most famous Bengali family of the century kept no idol.",
     ],
     image: {
@@ -68,10 +68,10 @@ const BLOCKS: EraBlock[] = [
   {
     era: "Modern",
     bangla: "আধুনিক",
-    span: "1900 – 1990",
+    span: "1900, 1990",
     title: "Everyone's goddess, and a voice on the radio",
     prose: [
-      "The baroyari Puja became the sarbojanin — of all people — in the first decades of the twentieth century. Bhowanipore's Sanatan Dharmotsahini Sabha ran a subscription Puja from 1909 or 1910; Baghbazar from 1919 is the one usually credited with fixing the modern civic form. The nationalist movement found the iconography ready-made, and Durga and Bharat Mata became difficult to tell apart on a poster.",
+      "The baroyari Puja became the sarbojanin, of all people, in the first decades of the twentieth century. Bhowanipore's Sanatan Dharmotsahini Sabha ran a subscription Puja from 1909 or 1910; Baghbazar from 1919 is the one usually credited with fixing the modern civic form. The nationalist movement found the iconography ready-made, and Durga and Bharat Mata became difficult to tell apart on a poster.",
       "In 1931 All India Radio broadcast Mahishasuramardini before dawn on Mahalaya, with Birendra Krishna Bhadra reciting the Chandi. It has opened the season almost every year since. In 1976 the station replaced it with a new production fronted by the film star Uttam Kumar. Listeners were so angry that AIR offices were stoned, and the original recording was restored within the same season.",
       "Craft changed under pressure. A fire in Kumartuli in the late 1930s destroyed the workshops days before the Puja, and Gopeshwar Pal rebuilt by breaking the single ekchala frame into separate figures that could be made fast and in parallel. The split family group that now looks traditional was an emergency measure.",
     ],
@@ -84,7 +84,7 @@ const BLOCKS: EraBlock[] = [
   {
     era: "Contemporary",
     bangla: "সমকালীন",
-    span: "1990 – now",
+    span: "1990, now",
     title: "An art biennale that happens to be a religious rite",
     prose: [
       "The turn came when pandals stopped imitating temples and started commissioning artists. Meera Mukherjee's 1990 Durga for Bakul Bagan, dressed in a Santhal sari, is the serious precedent; Bosepukur Sitala Mandir's breakthrough around the turn of the millennium is when the idea became a citywide competition. A pandal may now be built of jute, terracotta, bicycle parts or discarded plastic, and the bamboo scaffolding underneath is unchanged from a century ago.",
@@ -106,7 +106,7 @@ export default function ItihashPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
-            eyebrow="ইতিহাস · History"
+            eyebrow="ইতিহাস History"
             title="Fifteen centuries, and the parts that got lost"
             bangla="হারিয়ে যাওয়া ইতিহাস"
             lede="Durga Puja is often described as timeless, which is the one thing it has never been. Almost everything a Bengali now thinks is ancient about it was invented, argued over, or improvised under pressure at a datable moment. Ninety facts follow, each with its source, including the several that contradict what the festival tells itself."
@@ -206,12 +206,12 @@ export default function ItihashPage() {
       })}
 
       {/* ============================================================
-          Ray — why this site is lettered the way it is
+          Ray, why this site is lettered the way it is
           ============================================================ */}
       <Section className="bg-paper-2/40">
         <Container>
           <SectionHeading
-            eyebrow="রায় · A note on the lettering"
+            eyebrow="রায় A note on the lettering"
             title="The man who drew the letters"
             bangla="সত্যজিৎ রায়"
             lede="Before Pather Panchali, Satyajit Ray spent thirteen years at an advertising agency in Calcutta as a visualiser. He designed book jackets, laid out the children's magazine his grandfather had founded, and lettered the title cards of his own films by hand."
@@ -224,7 +224,7 @@ export default function ItihashPage() {
                   He joined D. J. Keymer in April 1943 and stayed until the
                   success of Pather Panchali made him a film-maker full time.
                   Typography never left. He drew four Latin typefaces, and two
-                  of them — Ray Roman and Ray Bizarre — won an international
+                  of them, Ray Roman and Ray Bizarre, won an international
                   competition in 1971. His Bengali lettering was brushwork: a
                   loaded stroke, tight counters, letters sized for a cinema
                   screen rather than a page.
@@ -287,9 +287,9 @@ export default function ItihashPage() {
               </h2>
               <p className="lede mt-4 max-w-[68ch] text-[0.92rem]">
                 Every one of the {FACTS.length} facts on this page carries the
-                source it came from. Where accounts conflict — the date of the
+                source it came from. Where accounts conflict, the date of the
                 Guptipara baroyari, who held the first grand household Puja,
-                whether Clive attended anything at all — the conflict is stated
+                whether Clive attended anything at all, the conflict is stated
                 rather than resolved in favour of the better story.
               </p>
               <p className="lede mt-3 max-w-[68ch] text-[0.92rem]">

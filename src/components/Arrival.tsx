@@ -6,7 +6,7 @@ import { SHLOKAS, ARRIVAL_LINES } from "@/lib/content/shlokas";
 import { FACTS } from "@/lib/content/facts";
 
 /* ================================================================
-   পুতুল নাচ — the arrival, as a rod-puppet show.
+   পুতুল নাচ, the arrival, as a rod-puppet show.
 
    Bengal's putul naach works with figures on bamboo rods, jointed at
    the shoulder, worked from behind a cloth. This borrows that stage
@@ -909,7 +909,6 @@ function Durga({
             fill="none"
             stroke={C.gold}
             strokeWidth="0.8"
-            strokeDasharray="2 6"
             opacity="0.6"
           />
         </motion.g>
@@ -1145,7 +1144,7 @@ function Ticker({ facts, act }: { facts: typeof FACTS; act: number }) {
           style={{ color: "rgba(246,234,210,0.6)" }}
         >
           <span style={{ color: C.lamp }}>
-            {f.year ? `${f.year} — ` : ""}
+            {f.year ? `${f.year}, ` : ""}
             {f.title}.{" "}
           </span>
           {f.fact}

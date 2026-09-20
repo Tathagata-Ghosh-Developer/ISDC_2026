@@ -13,6 +13,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PujoGuide from "@/components/PujoGuide";
 import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import ShlokaBand from "@/components/ShlokaBand";
 import { getConfig } from "@/lib/config";
 
 /**
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: `${SITE.name} ${SITE.year}`,
-    template: `%s · ${SITE.name}`,
+    template: `%s ${SITE.name}`,
   },
   description: SITE.description,
   keywords: [
@@ -87,6 +88,10 @@ export const metadata: Metadata = {
     images: [{ url: "/media/puja/puja-1.jpg", width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },
+  icons: {
+    icon: [{ url: SITE.icon, type: "image/png" }],
+    apple: [{ url: SITE.icon }],
+  },
   robots: { index: true, follow: true },
 };
 
@@ -128,6 +133,7 @@ export default async function RootLayout({
         <AnnouncementBar announcement={config.announcement} />
         <SiteHeader />
         <main id="main">{children}</main>
+        <ShlokaBand />
         <SiteFooter />
         <PujoGuide />
       </body>

@@ -122,7 +122,7 @@ export default function Lightbox({
                 />
               </div>
               <figcaption className="mt-3 text-center text-[0.72rem] uppercase tracking-[0.2em] text-[#f0dcc0]/55">
-                {shots[index].alt} · {index + 1} of {shots.length}
+                {shots[index].alt} {index + 1} of {shots.length}
               </figcaption>
             </motion.figure>
 
