@@ -243,7 +243,7 @@ export default function ItihashPage() {
                   headings are set in a brush face, the roman display carries
                   the high stroke contrast of Ray Roman, and the rules and ticks
                   are drawn rather than ruled. It is an homage, not a
-                  reproduction: none of Ray's own typefaces are freely
+                  reproduction. None of Ray&apos;s own typefaces are freely
                   licensed, so nothing here is his.
                 </p>
               </div>

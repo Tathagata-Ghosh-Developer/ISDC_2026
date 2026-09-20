@@ -26,16 +26,19 @@ export default function Countdown({
   target?: string;
 }) {
   const [left, setLeft] = useState<ReturnType<typeof split> | null>(null);
+  const [done, setDone] = useState(false);
   const at = new Date(target).getTime();
 
   useEffect(() => {
-    const tick = () => setLeft(split(at - Date.now()));
+    const tick = () => {
+      const remaining = at - Date.now();
+      setLeft(split(remaining));
+      setDone(remaining <= 0);
+    };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [at]);
-
-  const done = left !== null && at - Date.now() <= 0;
 
   if (done) {
     return (
@@ -50,9 +53,9 @@ export default function Countdown({
       className="flex items-stretch justify-center gap-0"
       role="timer"
       aria-live="off"
-      aria-label="Time remaining until Bodhon"
+      aria-label="Time remaining"
     >
-      {UNITS.map((u, i) => (
+      {UNITS.map((u) => (
         <div key={u.key} className="flex items-stretch">
                     <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
             <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">

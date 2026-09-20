@@ -156,7 +156,7 @@ export default async function MahalayaPage() {
               </h2>
               <div className="mt-6 space-y-4">
                 <p className="lede text-[0.96rem]">
-                  Tarpan, on the riverbank. Water offered to the dead of one's
+                  Tarpan, on the riverbank. Water offered to the dead of one&apos;s
                   own family, and then to everyone who has no one left to offer
                   it for them. In Kolkata the ghats fill before dawn; in
                   Bengaluru people find whatever water there is.
