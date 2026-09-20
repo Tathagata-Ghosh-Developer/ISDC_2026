@@ -85,6 +85,14 @@ export default function SiteFooter() {
                   Sponsors
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/thikana#committee"
+                  className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
+                >
+                  The committee
+                </Link>
+              </li>
             </ul>
           </nav>
 
@@ -93,14 +101,9 @@ export default function SiteFooter() {
             <ul className="mt-5 space-y-3 text-[0.92rem] text-ink-soft">
               <li className="flex gap-2">
                 <MapPin size={15} className="mt-1 shrink-0 text-gold" />
-                <a
-                  href={SITE.venueMapUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="hover:text-sindoor"
-                >
+                <Link href="/thikana" className="hover:text-sindoor">
                   {SITE.venue}
-                </a>
+                </Link>
               </li>
               {CONTACTS.map((c) => (
                 <li key={c.phone} className="flex gap-2">

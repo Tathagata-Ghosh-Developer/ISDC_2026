@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import {
   Bodoni_Moda,
   Galada,
+  Baloo_Da_2,
   Noto_Serif_Bengali,
   Inter,
 } from "next/font/google";
@@ -35,6 +36,14 @@ const banglaDisplay = Galada({
   subsets: ["bengali", "latin"],
   weight: ["400"],
   variable: "--f-bangla-display",
+  display: "swap",
+});
+
+/** The heavy poster weight, for title cards and the arrival sequence. */
+const banglaPoster = Baloo_Da_2({
+  subsets: ["bengali", "latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--f-bangla-poster",
   display: "swap",
 });
 
@@ -105,7 +114,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
       <body
-        className={`${display.variable} ${banglaDisplay.variable} ${bangla.variable} ${body.variable} min-h-dvh antialiased`}
+        className={`${display.variable} ${banglaDisplay.variable} ${banglaPoster.variable} ${bangla.variable} ${body.variable} min-h-dvh antialiased`}
       >
         <a
           href="#main"

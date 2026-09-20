@@ -1,7 +1,16 @@
 import "server-only";
 import { cache } from "react";
 import { db, dbReady } from "./db";
-import { SITE, PUJA_DATES, BANK, LINKS, CONTACTS, VOLUNTEER_ROLES } from "./site";
+import {
+  SITE,
+  PUJA_DATES,
+  BANK,
+  LINKS,
+  CONTACTS,
+  COMMITTEE,
+  GATES,
+  VOLUNTEER_ROLES,
+} from "./site";
 import { SCHEDULE, type PujaDay } from "./content/schedule";
 
 /* ================================================================
@@ -61,9 +70,25 @@ export type Config = {
   };
   links: Record<keyof typeof LINKS, string>;
   contacts: { name: string; role: string; phone: string }[];
+  committee: { name: string; role: string; bangla: string; phone: string }[];
+  gates: {
+    id: string;
+    name: string;
+    bangla: string;
+    note: string;
+    origin: string;
+  }[];
   schedule: PujaDay[];
   sponsors: Sponsor[];
-  venue: { address: string; short: string; mapUrl: string };
+  venue: {
+    address: string;
+    short: string;
+    mapRef: string;
+    mapUrl: string;
+    directionsUrl: string;
+    campusMapPdf: string;
+    campusMapSource: string;
+  };
 };
 
 export const DEFAULTS: Config = {
@@ -98,12 +123,18 @@ export const DEFAULTS: Config = {
   },
   links: { ...LINKS },
   contacts: CONTACTS.map((c) => ({ ...c })),
+  committee: COMMITTEE.map((c) => ({ ...c })),
+  gates: GATES.map((g) => ({ ...g })),
   schedule: SCHEDULE,
   sponsors: [],
   venue: {
     address: SITE.venue,
     short: SITE.venueShort,
+    mapRef: SITE.venueMapRef,
     mapUrl: SITE.venueMapUrl,
+    directionsUrl: SITE.venueDirectionsUrl,
+    campusMapPdf: SITE.campusMapPdf,
+    campusMapSource: SITE.campusMapSource,
   },
 };
 
@@ -117,6 +148,8 @@ export const CONFIG_GROUPS = [
   { key: "arrival", label: "Arrival sequence", form: "fields" },
   { key: "dates", label: "Puja dates", form: "fields" },
   { key: "links", label: "External links", form: "fields" },
+  { key: "committee", label: "Committee members", form: "json" },
+  { key: "gates", label: "Campus gates", form: "json" },
   { key: "contacts", label: "Contacts", form: "json" },
   { key: "schedule", label: "Day-by-day schedule", form: "json" },
   { key: "sponsors", label: "Sponsors", form: "json" },

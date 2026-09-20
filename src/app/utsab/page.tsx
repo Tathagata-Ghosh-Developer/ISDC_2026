@@ -32,15 +32,13 @@ export default async function UtsabPage() {
             <div className="surface p-6 sm:p-8">
               <Countdown target={config.dates.countdownTo} />
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.78rem] text-ink-soft">
-                <a
-                  href={config.venue.mapUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
+                <Link
+                  href="/thikana"
                   className="inline-flex items-center gap-1.5 hover:text-sindoor"
                 >
                   <MapPin size={14} className="text-gold" />
                   {config.venue.address}
-                </a>
+                </Link>
               </div>
             </div>
           </Reveal>

@@ -12,9 +12,17 @@ export const SITE = {
   description:
     "The Durga Puja of the Indian Institute of Science, Bengaluru. Four days of ritual, art and homecoming on a campus built for the pursuit of knowledge.",
   url: "https://iisc-durgotsab.vercel.app",
-  venue: "Ground opposite SBI Bank, Indian Institute of Science, Bengaluru 560012",
-  venueShort: "SBI Ground, IISc Campus",
-  venueMapUrl: "https://maps.app.goo.gl/6zbSMtnPLbLPGLRt5",
+  venue:
+    "Tata Memorial Club (TMC) Ground, opposite the SBI branch, Indian Institute of Science, Bengaluru 560012",
+  venueShort: "TMC Ground, opposite SBI",
+  /** Grid F3, building 126 on the official IISc campus map. */
+  venueMapRef: "F3 · 126 on the IISc campus map",
+  venueMapUrl:
+    "https://www.google.com/maps/search/?api=1&query=Tata+Memorial+Club+Indian+Institute+of+Science+Bengaluru",
+  venueDirectionsUrl:
+    "https://www.google.com/maps/dir/?api=1&destination=Tata+Memorial+Club+Indian+Institute+of+Science+Bengaluru&travelmode=walking",
+  campusMapPdf: "/media/map/iisc-campus-map.pdf",
+  campusMapSource: "https://iisc.ac.in/wp-content/uploads/2016/02/New-IISc-Map.pdf",
   established: 2023,
 } as const;
 
@@ -59,21 +67,102 @@ export const LINKS = {
     "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=l80Vb6f240Gyxa1Bk5dkdkZ2DdxWoepPjQfwChrWnjxUNkhGVDdBR0FUTFdYWlpNQTM5M1NUNzVKSi4u",
 } as const;
 
-export const CONTACTS = [
+/**
+ * The executive committee elected at the General Body Meeting of
+ * 19 July 2026, as recorded in the charge-transfer resolution.
+ * Phone numbers appear only where the committee has published them.
+ */
+export const COMMITTEE = [
+  {
+    name: "Dr. Tapajyoti Das Gupta",
+    role: "Faculty Advisor",
+    bangla: "উপদেষ্টা",
+    phone: "",
+  },
+  {
+    name: "Tathagata Ghosh",
+    role: "General Secretary",
+    bangla: "সাধারণ সম্পাদক",
+    phone: "",
+  },
+  {
+    name: "Arnab Ghosh",
+    role: "General Secretary",
+    bangla: "সাধারণ সম্পাদক",
+    phone: "",
+  },
   {
     name: "Devraj Karmakar",
-    role: "Student Convenor",
+    role: "Convenor",
+    bangla: "আহ্বায়ক",
     phone: "7384859512",
   },
   {
     name: "Sirshendu Pathak",
-    role: "Student Convenor",
+    role: "Convenor",
+    bangla: "আহ্বায়ক",
     phone: "7001453229",
   },
   {
-    name: "Sayanta Goswami",
-    role: "Sponsorship",
-    phone: "7319388191",
+    name: "Sayak Maji",
+    role: "Treasurer",
+    bangla: "কোষাধ্যক্ষ",
+    phone: "",
+  },
+  {
+    name: "Ayan Das",
+    role: "Treasurer",
+    bangla: "কোষাধ্যক্ষ",
+    phone: "",
+  },
+] as const;
+
+/** Whoever a visitor should actually ring. */
+export const CONTACTS = COMMITTEE.filter((m) => m.phone !== "").map((m) => ({
+  name: m.name,
+  role: m.role,
+  phone: m.phone,
+}));
+
+/**
+ * Gates of the main campus, named as IISc names them.
+ * Source: iisc.ac.in gate directory.
+ */
+export const GATES = [
+  {
+    id: "main-gate",
+    name: "Main Gate",
+    bangla: "প্রধান ফটক",
+    note: "The gate most visitors use, off Prof. C. N. R. Rao Circle. Auto and cab drivers know it as the Tata Institute gate.",
+    origin: "IISc Main Gate, Bengaluru",
+  },
+  {
+    id: "d-gate",
+    name: "D Gate",
+    bangla: "ডি গেট",
+    note: "The quieter pedestrian entrance on the Malleswaram side.",
+    origin: "D Gate, Indian Institute of Science, Bengaluru",
+  },
+  {
+    id: "new-bel-road-gate",
+    name: "New BEL Road Gate",
+    bangla: "নিউ বেল রোড গেট",
+    note: "Opens onto New BEL Road, closest if you are coming from Sadashivanagar or RMV.",
+    origin: "IISc New BEL Road Gate, Bengaluru",
+  },
+  {
+    id: "new-hostel-gate",
+    name: "New Hostel Complex Gate",
+    bangla: "নতুন হস্টেল গেট",
+    note: "The gate nearest the new hostel blocks, for residents walking across.",
+    origin: "IISc New Hostel Complex Gate, Bengaluru",
+  },
+  {
+    id: "central-school-gate",
+    name: "Central School Gate",
+    bangla: "কেন্দ্রীয় বিদ্যালয় গেট",
+    note: "Beside Kendriya Vidyalaya, on the Yeshwantpur side of campus.",
+    origin: "Kendriya Vidyalaya IISc Gate, Bengaluru",
   },
 ] as const;
 
@@ -85,6 +174,7 @@ export const NAV = [
   { href: "/probash", label: "Probash", bangla: "প্রবাস" },
   { href: "/gallery", label: "Chhobi", bangla: "ছবি" },
   { href: "/daan", label: "Daan", bangla: "দান" },
+  { href: "/thikana", label: "Thikana", bangla: "ঠিকানা" },
   { href: "/jogdan", label: "Join Us", bangla: "যোগদান" },
 ] as const;
 

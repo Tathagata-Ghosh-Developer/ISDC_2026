@@ -6,29 +6,50 @@ import { SHLOKAS, ARRIVAL_LINES } from "@/lib/content/shlokas";
 import { FACTS } from "@/lib/content/facts";
 
 /* ================================================================
-   The arrival sequence.
+   পুতুল নাচ — the arrival, as a rod-puppet show.
 
-   Four movements, told in SVG rather than video so it weighs a few
-   kilobytes and stays sharp on any screen:
+   Bengal's putul naach works with figures on bamboo rods, jointed at
+   the shoulder, worked from behind a cloth. This borrows that stage
+   and draws the family in a miniature, cel-shaded register: large
+   heads, larger eyes, flat colour with one shadow tone.
 
-     1  Alpona   — a mandala draws itself, a shloka settles
-     2  Agomon   — the boat crosses the river, Ma and four children
-     3  Mardini  — ten arms open, the trishul falls, the asura breaks
-     4  Bodhon   — the title, then the doors part
+   Four movements:
+     1  প্রস্তুতি   the lamps are lit, the curtain still down
+     2  আগমন      the curtain parts, five puppets come down on rods
+     3  মর্দিনী    the asura rises, the trishul swings, he is pulled under
+     4  বোধন      the banner unrolls and the stage opens onto the site
 
-   Plays once per browser session. Skippable at any point. Collapses
-   to a single fade when the visitor asks for reduced motion.
+   Plays once per browser session, skippable, and collapses to a
+   single still frame when the visitor asks for reduced motion.
    ================================================================ */
 
-const ACTS = [1400, 1500, 2200, 1200] as const;
+const ACTS = [1400, 2100, 2000, 1300] as const;
 const TOTAL = ACTS.reduce((a, b) => a + b, 0);
 const EASE = [0.22, 1, 0.36, 1] as const;
-const SESSION_KEY = "isdc-arrived";
+const SPRING = [0.34, 1.56, 0.64, 1] as const;
+/* Bumped when the sequence changes, so returning visitors see the new one. */
+const SESSION_KEY = "isdc-arrived-putul";
 
-type Props = {
-  /** Set false to show the sequence on every navigation, for previewing. */
-  oncePerSession?: boolean;
-};
+/* ---------------- palette, kept close to a real pratima ---------------- */
+const C = {
+  night: "#0b0709",
+  lamp: "#efb44a",
+  gold: "#d8a13a",
+  goldDark: "#9d6d1f",
+  cream: "#f6ead2",
+  sindoor: "#c0271a",
+  alta: "#8d1810",
+  skinDurga: "#f3c669",
+  skinFair: "#f6dcae",
+  skinPink: "#f0a99a",
+  green: "#3f6b4a",
+  blue: "#33608f",
+  hair: "#241611",
+  asura: "#4a4038",
+  wood: "#7a5a3a",
+} as const;
+
+type Props = { oncePerSession?: boolean };
 
 export default function Arrival({ oncePerSession = true }: Props) {
   const reduce = useReducedMotion();
@@ -43,16 +64,18 @@ export default function Arrival({ oncePerSession = true }: Props) {
   );
   const tickerFacts = useMemo(() => {
     const start = Math.floor(Math.random() * FACTS.length);
-    return Array.from({ length: 4 }, (_, i) => FACTS[(start + i * 5) % FACTS.length]);
+    return Array.from(
+      { length: 4 },
+      (_, i) => FACTS[(start + i * 5) % FACTS.length],
+    );
   }, []);
 
-  /* --- decide whether to play at all --- */
   useEffect(() => {
     let seen = false;
     try {
       seen = oncePerSession && sessionStorage.getItem(SESSION_KEY) === "1";
     } catch {
-      /* private mode: just play it */
+      /* private window: just play it */
     }
     if (seen) return;
 
@@ -60,7 +83,7 @@ export default function Arrival({ oncePerSession = true }: Props) {
     document.body.style.overflow = "hidden";
 
     if (reduce) {
-      timers.current.push(setTimeout(finish, 700));
+      timers.current.push(setTimeout(finish, 900));
       return cleanup;
     }
 
@@ -74,14 +97,15 @@ export default function Arrival({ oncePerSession = true }: Props) {
     timers.current.push(setTimeout(finish, TOTAL));
 
     const started = performance.now();
+    let frame = 0;
     const raf = () => {
       const p = Math.min(1, (performance.now() - started) / TOTAL);
       setProgress(p);
       if (p < 1) frame = requestAnimationFrame(raf);
     };
-    let frame = requestAnimationFrame(raf);
+    frame = requestAnimationFrame(raf);
     timers.current.push(
-      setTimeout(() => cancelAnimationFrame(frame), TOTAL + 100),
+      setTimeout(() => cancelAnimationFrame(frame), TOTAL + 120),
     );
 
     return cleanup;
@@ -118,89 +142,81 @@ export default function Arrival({ oncePerSession = true }: Props) {
         <motion.div
           key="arrival"
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: "#0b0709" }}
+          style={{ background: C.night }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: EASE }}
+          transition={{ duration: 0.7, ease: EASE }}
           role="status"
-          aria-label="Welcome sequence"
+          aria-label="Welcome sequence: a puppet show"
         >
-          {/* lamp glow */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(224,138,44,0.18), transparent 70%)",
+                "radial-gradient(ellipse 70% 52% at 50% 56%, rgba(239,180,74,0.16), transparent 72%)",
             }}
           />
 
-          {/* ---------- doors, act 4 ---------- */}
-          <AnimatePresence>
-            {act >= 3 && !reduce && (
-              <>
-                <motion.div
-                  key="door-l"
-                  className="absolute inset-y-0 left-0 z-30 w-1/2 origin-left"
-                  style={{ background: "#0b0709" }}
-                  initial={{ x: 0 }}
-                  animate={{ x: "-100%" }}
-                  transition={{ duration: 1.1, delay: 0.45, ease: EASE }}
-                />
-                <motion.div
-                  key="door-r"
-                  className="absolute inset-y-0 right-0 z-30 w-1/2 origin-right"
-                  style={{ background: "#0b0709" }}
-                  initial={{ x: 0 }}
-                  animate={{ x: "100%" }}
-                  transition={{ duration: 1.1, delay: 0.45, ease: EASE }}
-                />
-              </>
-            )}
-          </AnimatePresence>
+          <div className="relative z-20 flex w-full max-w-[44rem] flex-1 flex-col items-center justify-center px-5">
+            <Stage act={act} reduce={Boolean(reduce)} />
 
-          {/* ---------- the stage ---------- */}
-          <div className="relative z-20 flex w-full max-w-[42rem] flex-1 flex-col items-center justify-center px-6">
             <AnimatePresence mode="wait">
-              {reduce ? (
-                <motion.div key="reduced" className="text-center">
-                  <Mandala drawn />
-                  <p className="bangla-display mt-6 text-[1.8rem] text-[#f0dcc0]">
-                    শারদীয়া দুর্গোৎসব
-                  </p>
-                </motion.div>
-              ) : act === 0 ? (
-                <ActAlpona key="a0" shloka={shloka} />
-              ) : act === 1 ? (
-                <ActAgomon key="a1" />
-              ) : act === 2 ? (
-                <ActMardini key="a2" />
-              ) : (
-                <ActBodhon key="a3" />
-              )}
+              <motion.div
+                key={act}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.5, ease: EASE }}
+                className="mt-7 max-w-[38ch] text-center"
+              >
+                {act === 0 ? (
+                  <>
+                    <p
+                      className="bangla-display whitespace-pre-line text-[0.95rem] leading-[1.95] sm:text-[1.05rem]"
+                      style={{ color: C.cream }}
+                    >
+                      {shloka.sanskrit}
+                    </p>
+                    <p
+                      className="mt-2.5 text-[0.7rem] italic leading-relaxed"
+                      style={{ color: "rgba(246,234,210,0.45)" }}
+                    >
+                      {shloka.meaning}
+                    </p>
+                  </>
+                ) : (
+                  <Caption index={act} />
+                )}
+              </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* ---------- ticker and progress ---------- */}
           {!reduce && (
-            <div className="relative z-20 w-full max-w-[42rem] px-6 pb-8">
-              <TickerLine facts={tickerFacts} act={act} />
-              <div className="mt-4 h-px w-full bg-[#f0dcc0]/12">
+            <div className="relative z-20 w-full max-w-[44rem] px-5 pb-7">
+              <Ticker facts={tickerFacts} act={act} />
+              <div
+                className="mt-4 h-px w-full"
+                style={{ background: "rgba(246,234,210,0.12)" }}
+              >
                 <motion.div
                   className="h-px"
                   style={{
                     width: `${progress * 100}%`,
-                    background:
-                      "linear-gradient(90deg, #a8842f, #efb44a, #fbf3e4)",
+                    background: `linear-gradient(90deg, ${C.goldDark}, ${C.lamp}, ${C.cream})`,
                   }}
                 />
               </div>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-[0.6rem] uppercase tracking-[0.3em] text-[#f0dcc0]/40">
-                  {["Alpona", "Agomon", "Mardini", "Bodhon"][act]}
+                <span
+                  className="bangla-display text-[0.78rem]"
+                  style={{ color: "rgba(246,234,210,0.42)" }}
+                >
+                  {["প্রস্তুতি", "আগমন", "মর্দিনী", "বোধন"][act]}
                 </span>
                 <button
                   onClick={finish}
-                  className="text-[0.6rem] uppercase tracking-[0.3em] text-[#f0dcc0]/55 transition-colors hover:text-[#efb44a]"
+                  className="text-[0.6rem] uppercase tracking-[0.3em] transition-colors"
+                  style={{ color: "rgba(246,234,210,0.55)" }}
                 >
                   Skip
                 </button>
@@ -214,643 +230,907 @@ export default function Arrival({ oncePerSession = true }: Props) {
 }
 
 /* ================================================================
-   Act 1 — Alpona
+   The stage
    ================================================================ */
 
-function ActAlpona({ shloka }: { shloka: (typeof SHLOKAS)[number] }) {
-  return (
-    <motion.div
-      className="flex flex-col items-center text-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.5, ease: EASE }}
-    >
-      <Mandala />
-      <motion.p
-        className="bangla mt-7 whitespace-pre-line text-[0.95rem] leading-[1.9] text-[#f0dcc0] sm:text-[1.1rem]"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
-      >
-        {shloka.sanskrit}
-      </motion.p>
-      <motion.p
-        className="mt-3 max-w-[40ch] text-[0.72rem] italic leading-relaxed text-[#f0dcc0]/50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, delay: 0.85 }}
-      >
-        {shloka.meaning}
-      </motion.p>
-    </motion.div>
-  );
-}
+function Stage({ act, reduce }: { act: number; reduce: boolean }) {
+  const open = act >= 1;
+  const strike = act >= 2;
+  const finale = act >= 3;
 
-function Mandala({ drawn = false }: { drawn?: boolean }) {
-  const petals = 8;
   return (
-    <svg viewBox="0 0 200 200" className="h-[8.5rem] w-[8.5rem] sm:h-[11rem] sm:w-[11rem]">
-      <g
-        fill="none"
-        stroke="#c9871f"
-        strokeWidth="0.9"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {[86, 68, 44, 24].map((r, i) => (
-          <motion.circle
-            key={r}
-            cx="100"
-            cy="100"
-            r={r}
-            pathLength={1}
-            initial={drawn ? false : { pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 1.1, delay: i * 0.1, ease: EASE }}
-          />
-        ))}
-        {Array.from({ length: petals }).map((_, i) => {
-          const a = (i * 360) / petals;
-          return (
-            <motion.path
-              key={i}
-              d="M100,24 C118,48 118,72 100,92 C82,72 82,48 100,24 Z"
-              transform={`rotate(${a} 100 100)`}
-              pathLength={1}
-              initial={drawn ? false : { pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.25 + i * 0.05, ease: EASE }}
-            />
-          );
-        })}
-        {Array.from({ length: 16 }).map((_, i) => {
-          const a = ((i * 360) / 16) * (Math.PI / 180);
-          return (
-            <motion.line
-              key={i}
-              x1={100 + 88 * Math.cos(a)}
-              y1={100 + 88 * Math.sin(a)}
-              x2={100 + 96 * Math.cos(a)}
-              y2={100 + 96 * Math.sin(a)}
-              pathLength={1}
-              initial={drawn ? false : { pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 + i * 0.02 }}
-            />
-          );
-        })}
+    <svg
+      viewBox="0 0 420 300"
+      className="w-full max-w-[30rem]"
+      role="img"
+      aria-label="A rod-puppet stage with Durga and her four children"
+    >
+      <defs>
+        <linearGradient id="sari" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={C.sindoor} />
+          <stop offset="100%" stopColor={C.alta} />
+        </linearGradient>
+        <radialGradient id="footlight" cx="50%" cy="100%" r="80%">
+          <stop offset="0%" stopColor={C.lamp} stopOpacity="0.5" />
+          <stop offset="100%" stopColor={C.lamp} stopOpacity="0" />
+        </radialGradient>
+        <clipPath id="stageClip">
+          <rect x="26" y="26" width="368" height="212" />
+        </clipPath>
+      </defs>
+
+      {/* ---- bamboo frame ---- */}
+      <g stroke={C.wood} strokeWidth="5" strokeLinecap="round" fill="none">
+        <line x1="26" y1="18" x2="26" y2="250" />
+        <line x1="394" y1="18" x2="394" y2="250" />
+        <line x1="18" y1="22" x2="402" y2="22" />
       </g>
-      <motion.circle
-        cx="100"
-        cy="100"
-        r="7"
-        fill="#b3261e"
-        initial={drawn ? false : { scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.7, delay: 0.9, ease: [0.34, 1.56, 0.64, 1] }}
-        style={{ transformOrigin: "100px 100px" }}
-      />
+      {/* lashing at the joints, the way a pandal frame is tied */}
+      {[
+        [26, 22],
+        [394, 22],
+      ].map(([x, y]) => (
+        <g key={x} stroke={C.gold} strokeWidth="1.4" opacity="0.8">
+          <line x1={x - 7} y1={y - 4} x2={x + 7} y2={y + 4} />
+          <line x1={x - 7} y1={y + 4} x2={x + 7} y2={y - 4} />
+        </g>
+      ))}
+
+      {/* ---- the stage interior ---- */}
+      <g clipPath="url(#stageClip)">
+        <rect x="26" y="26" width="368" height="212" fill="#160f12" />
+
+        {/* back cloth with an alpona motif */}
+        <motion.g
+          opacity={open ? 0.5 : 0}
+          initial={false}
+          animate={{ opacity: open ? 0.5 : 0 }}
+          transition={{ duration: 1 }}
+        >
+          {[70, 140, 210, 280, 350].map((x) => (
+            <g key={x} stroke={C.goldDark} strokeWidth="0.7" fill="none">
+              <circle cx={x} cy="96" r="17" />
+              <circle cx={x} cy="96" r="9" />
+              {[0, 45, 90, 135].map((a) => (
+                <line
+                  key={a}
+                  x1={x - 20 * Math.cos((a * Math.PI) / 180)}
+                  y1={96 - 20 * Math.sin((a * Math.PI) / 180)}
+                  x2={x + 20 * Math.cos((a * Math.PI) / 180)}
+                  y2={96 + 20 * Math.sin((a * Math.PI) / 180)}
+                />
+              ))}
+            </g>
+          ))}
+        </motion.g>
+
+        {/* the boards */}
+        <rect x="26" y="228" width="368" height="10" fill={C.wood} />
+        <rect x="26" y="228" width="368" height="2" fill={C.gold} opacity="0.5" />
+        <ellipse cx="210" cy="238" rx="150" ry="40" fill="url(#footlight)" />
+
+        {/* ---- the family, on rods ---- */}
+        <AnimatePresence>
+          {open && (
+            <g key="family">
+              <Puppet
+                x={78}
+                y={186}
+                scale={0.62}
+                delay={0.5}
+                kind="ganesh"
+                reduce={reduce}
+                dance={finale}
+              />
+              <Puppet
+                x={140}
+                y={190}
+                scale={0.7}
+                delay={0.32}
+                kind="lakshmi"
+                reduce={reduce}
+                dance={finale}
+              />
+              <Puppet
+                x={280}
+                y={190}
+                scale={0.7}
+                delay={0.4}
+                kind="saraswati"
+                reduce={reduce}
+                dance={finale}
+              />
+              <Puppet
+                x={342}
+                y={186}
+                scale={0.62}
+                delay={0.58}
+                kind="kartik"
+                reduce={reduce}
+                dance={finale}
+              />
+              <Durga
+                x={210}
+                y={196}
+                delay={0.12}
+                strike={strike}
+                reduce={reduce}
+                dance={finale}
+              />
+            </g>
+          )}
+        </AnimatePresence>
+
+        {/* ---- the asura ---- */}
+        <AnimatePresence>
+          {act === 2 && <Asura key="asura" reduce={reduce} />}
+        </AnimatePresence>
+
+        {/* ---- the banner ---- */}
+        <AnimatePresence>
+          {finale && (
+            <motion.g
+              key="banner"
+              initial={{ y: -90, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.85, ease: SPRING }}
+            >
+              <rect x="96" y="40" width="228" height="46" fill={C.sindoor} />
+              <rect x="96" y="40" width="228" height="3" fill={C.gold} />
+              <rect x="96" y="83" width="228" height="3" fill={C.gold} />
+              <text
+                x="210"
+                y="71"
+                textAnchor="middle"
+                className="bangla-poster"
+                fontSize="25"
+                fill={C.cream}
+              >
+                শারদীয়া দুর্গোৎসব
+              </text>
+              {/* the cords it hangs from */}
+              <line x1="120" y1="22" x2="120" y2="40" stroke={C.gold} strokeWidth="1" />
+              <line x1="300" y1="22" x2="300" y2="40" stroke={C.gold} strokeWidth="1" />
+            </motion.g>
+          )}
+        </AnimatePresence>
+
+        {/* ---- curtains ---- */}
+        <Curtain side="left" open={open} />
+        <Curtain side="right" open={open} />
+      </g>
+
+      {/* ---- footlights: little earthen lamps along the lip ---- */}
+      {[56, 108, 160, 212, 264, 316, 368].map((x, i) => (
+        <Lamp key={x} x={x} delay={i * 0.09} reduce={reduce} />
+      ))}
     </svg>
   );
 }
 
-/* ================================================================
-   Act 2 — Agomon, the crossing
-   ================================================================ */
+function Curtain({ side, open }: { side: "left" | "right"; open: boolean }) {
+  const isLeft = side === "left";
+  const width = 186;
+  const x = isLeft ? 26 : 208;
 
-function ActAgomon() {
   return (
-    <motion.div
-      className="flex w-full flex-col items-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: EASE }}
+    <motion.g
+      initial={false}
+      animate={{ x: open ? (isLeft ? -width : width) : 0 }}
+      transition={{ duration: 1.15, ease: EASE }}
     >
-      <svg viewBox="0 0 360 160" className="w-full max-w-[26rem]">
-        {/* moon */}
-        <motion.circle
-          cx="300"
-          cy="34"
-          r="13"
-          fill="#f0dcc0"
-          opacity="0.75"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.75 }}
-          transition={{ duration: 1, ease: EASE }}
-          style={{ transformOrigin: "300px 34px" }}
+      <rect x={x} y="26" width={width} height="212" fill={C.alta} />
+      {/* folds */}
+      {Array.from({ length: 7 }).map((_, i) => (
+        <rect
+          key={i}
+          x={x + 6 + i * 26}
+          y="26"
+          width="11"
+          height="212"
+          fill="#000"
+          opacity="0.16"
         />
-
-        {/* far bank: a skyline of temple finials */}
-        <motion.path
-          d="M0,104 L18,104 L22,92 L26,104 L52,104 L56,86 L60,104 L96,104 L100,96 L104,104 L150,104"
-          fill="none"
-          stroke="#6b4a2f"
-          strokeWidth="1.1"
-          pathLength={1}
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.1, ease: EASE }}
-        />
-
-        {/* river */}
-        {[112, 122, 132, 142].map((y, i) => (
-          <motion.path
-            key={y}
-            d={`M-20,${y} q 30,-5 60,0 t 60,0 t 60,0 t 60,0 t 60,0 t 60,0`}
-            fill="none"
-            stroke="#1e3a5f"
-            strokeOpacity={0.75 - i * 0.12}
-            strokeWidth="1.2"
-            initial={{ x: 0 }}
-            animate={{ x: [0, -120] }}
-            transition={{
-              duration: 5 - i * 0.7,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
+      ))}
+      {/* a gold hem, and the scallop a pandal curtain always has */}
+      <rect x={x} y="26" width={width} height="5" fill={C.gold} />
+      <g fill={C.gold} opacity="0.85">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <circle key={i} cx={x + 12 + i * 24} cy="42" r="4.5" />
         ))}
+      </g>
+    </motion.g>
+  );
+}
 
-        {/* the boat, carrying five */}
-        <motion.g
-          initial={{ x: -150 }}
-          animate={{ x: 190 }}
-          transition={{ duration: 2.6, ease: [0.4, 0, 0.3, 1] }}
-        >
-          <motion.g
-            animate={{ y: [0, -2.5, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {/* hull */}
-            <path
-              d="M40,120 L120,120 L112,132 L48,132 Z"
-              fill="#2a1a10"
-              stroke="#c9871f"
-              strokeWidth="0.8"
-            />
-            {/* sail */}
-            <path d="M80,120 L80,80 L104,112 Z" fill="#f0dcc0" opacity="0.85" />
-            <line x1="80" y1="78" x2="80" y2="121" stroke="#c9871f" strokeWidth="1" />
-
-            {/* Ma, taller, ten arms hinted as a fan */}
-            <g stroke="#c9871f" strokeWidth="0.7" fill="none">
-              {Array.from({ length: 10 }).map((_, i) => {
-                const a = (-165 + i * 16.5) * (Math.PI / 180);
-                return (
-                  <line
-                    key={i}
-                    x1="62"
-                    y1="106"
-                    x2={62 + 11 * Math.cos(a)}
-                    y2={106 + 11 * Math.sin(a)}
-                  />
-                );
-              })}
-            </g>
-            <ellipse cx="62" cy="102" rx="3.4" ry="4" fill="#b3261e" />
-            <path d="M58.6,106 L65.4,106 L67,120 L57,120 Z" fill="#b3261e" />
-
-            {/* four children */}
-            {[
-              { x: 50, h: 9, c: "#a8842f" },
-              { x: 56, h: 8, c: "#4f6b4a" },
-              { x: 96, h: 8, c: "#1e3a5f" },
-              { x: 103, h: 9, c: "#a9613c" },
-            ].map((k) => (
-              <g key={k.x}>
-                <circle cx={k.x} cy={120 - k.h - 2.4} r="2.2" fill={k.c} />
-                <path
-                  d={`M${k.x - 2.4},${120 - k.h} L${k.x + 2.4},${120 - k.h} L${k.x + 3},120 L${k.x - 3},120 Z`}
-                  fill={k.c}
-                />
-              </g>
-            ))}
-          </motion.g>
-        </motion.g>
-
-        {/* kash reeds in the foreground */}
-        {Array.from({ length: 22 }).map((_, i) => {
-          const x = 6 + i * 16.4;
-          const h = 20 + ((i * 37) % 16);
-          return (
-            <motion.g
-              key={i}
-              style={{ transformOrigin: `${x}px 158px` }}
-              animate={{ rotate: [-2.5, 2.5, -2.5] }}
-              transition={{
-                duration: 3 + (i % 4) * 0.4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.05,
-              }}
-            >
-              <line
-                x1={x}
-                y1="158"
-                x2={x}
-                y2={158 - h}
-                stroke="#6b4a2f"
-                strokeWidth="0.8"
-              />
-              <ellipse
-                cx={x}
-                cy={158 - h - 3}
-                rx="2.4"
-                ry="4.6"
-                fill="#f0dcc0"
-                opacity="0.8"
-              />
-            </motion.g>
-          );
-        })}
-      </svg>
-
-      <ArrivalCaption index={1} />
-    </motion.div>
+function Lamp({
+  x,
+  delay,
+  reduce,
+}: {
+  x: number;
+  delay: number;
+  reduce: boolean;
+}) {
+  return (
+    <g>
+      <path
+        d={`M${x - 7},244 Q${x},252 ${x + 7},244 Z`}
+        fill={C.wood}
+        stroke={C.goldDark}
+        strokeWidth="0.6"
+      />
+      <motion.ellipse
+        cx={x}
+        cy="241"
+        rx="3"
+        ry="5"
+        fill={C.lamp}
+        initial={{ opacity: 0, scaleY: 0.2 }}
+        animate={
+          reduce
+            ? { opacity: 1, scaleY: 1 }
+            : { opacity: [0, 1, 0.82, 1], scaleY: [0.2, 1, 0.9, 1] }
+        }
+        transition={{
+          duration: reduce ? 0.3 : 2.2,
+          delay,
+          repeat: reduce ? 0 : Infinity,
+          repeatType: "mirror",
+        }}
+        style={{ transformBox: "fill-box", transformOrigin: "50% 100%" }}
+      />
+      <motion.circle
+        cx={x}
+        cy="240"
+        r="9"
+        fill={C.lamp}
+        opacity="0.16"
+        animate={reduce ? undefined : { opacity: [0.1, 0.22, 0.1] }}
+        transition={{ duration: 2.4, delay, repeat: Infinity }}
+      />
+    </g>
   );
 }
 
 /* ================================================================
-   Act 3 — Mahishasura Mardini
+   Puppets
    ================================================================ */
 
-const WEAPONS = [
-  "trishul",
-  "chakra",
-  "shankha",
-  "gada",
-  "padma",
-  "khadga",
-  "dhanu",
-  "bajra",
-  "ghanta",
-  "sarpa",
-] as const;
+type Kind = "lakshmi" | "saraswati" | "kartik" | "ganesh";
 
-function Weapon({ kind, size = 9 }: { kind: string; size?: number }) {
-  const s = size;
-  switch (kind) {
-    case "trishul":
-      return (
-        <g stroke="#efb44a" strokeWidth="1" fill="none" strokeLinecap="round">
-          <line x1="0" y1={s} x2="0" y2={-s} />
-          <path d={`M${-s * 0.5},${-s * 0.3} L${-s * 0.5},${-s} M${s * 0.5},${-s * 0.3} L${s * 0.5},${-s}`} />
-          <line x1={-s * 0.5} y1={-s * 0.3} x2={s * 0.5} y2={-s * 0.3} />
-        </g>
-      );
-    case "chakra":
-      return (
-        <g stroke="#efb44a" strokeWidth="0.9" fill="none">
-          <circle cx="0" cy="0" r={s * 0.7} />
-          {Array.from({ length: 6 }).map((_, i) => {
-            const a = (i * Math.PI) / 3;
-            return (
-              <line
-                key={i}
-                x1={0}
-                y1={0}
-                x2={s * 0.7 * Math.cos(a)}
-                y2={s * 0.7 * Math.sin(a)}
-              />
-            );
-          })}
-        </g>
-      );
-    case "shankha":
-      return (
-        <path
-          d={`M0,${s * 0.7} C${-s * 0.6},${s * 0.2} ${-s * 0.3},${-s * 0.7} 0,${-s * 0.7} C${s * 0.45},${-s * 0.7} ${s * 0.5},${s * 0.1} 0,${s * 0.7} Z`}
-          fill="#f0dcc0"
-          opacity="0.9"
+const KINDS: Record<
+  Kind,
+  { skin: string; robe: string; accent: string; bangla: string }
+> = {
+  lakshmi: { skin: C.skinFair, robe: C.sindoor, accent: C.gold, bangla: "লক্ষ্মী" },
+  saraswati: { skin: C.skinFair, robe: C.cream, accent: C.blue, bangla: "সরস্বতী" },
+  kartik: { skin: C.skinFair, robe: C.blue, accent: C.green, bangla: "কার্তিক" },
+  ganesh: { skin: C.skinPink, robe: C.green, accent: C.gold, bangla: "গণেশ" },
+};
+
+/** Big eyes, one highlight, and a blink on a loop. Cel shading, no gradients. */
+function Eyes({
+  cx,
+  cy,
+  gap = 5.4,
+  r = 3.1,
+  reduce,
+  delay = 0,
+}: {
+  cx: number;
+  cy: number;
+  gap?: number;
+  r?: number;
+  reduce: boolean;
+  delay?: number;
+}) {
+  return (
+    <g>
+      {[-gap, gap].map((dx) => (
+        <motion.g
+          key={dx}
+          animate={reduce ? undefined : { scaleY: [1, 1, 0.12, 1] }}
+          transition={{
+            duration: 3.6,
+            times: [0, 0.82, 0.87, 0.92],
+            repeat: Infinity,
+            delay: delay + (dx > 0 ? 0.02 : 0),
+          }}
+          style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
+        >
+          <ellipse cx={cx + dx} cy={cy} rx={r} ry={r * 1.2} fill="#fff" />
+          <ellipse cx={cx + dx} cy={cy + 0.3} rx={r * 0.62} ry={r * 0.8} fill={C.hair} />
+          <circle cx={cx + dx - r * 0.28} cy={cy - r * 0.42} r={r * 0.28} fill="#fff" />
+        </motion.g>
+      ))}
+      {/* kohl line, the way a pratima's eyes are drawn */}
+      <path
+        d={`M${cx - gap - r - 0.8},${cy - r * 0.9} q${r},-1.4 ${r * 1.9},0`}
+        stroke={C.hair}
+        strokeWidth="0.7"
+        fill="none"
+      />
+      <path
+        d={`M${cx + gap - r + 0.8},${cy - r * 0.9} q${r},-1.4 ${r * 1.9},0`}
+        stroke={C.hair}
+        strokeWidth="0.7"
+        fill="none"
+      />
+    </g>
+  );
+}
+
+/** The control rod, drawn from above the stage down to the puppet's head. */
+function Rod({ height = 170 }: { height?: number }) {
+  return (
+    <g>
+      <line
+        x1="0"
+        y1={-height}
+        x2="0"
+        y2="-34"
+        stroke={C.wood}
+        strokeWidth="1.6"
+        opacity="0.75"
+      />
+      <circle cx="0" cy="-34" r="1.8" fill={C.gold} opacity="0.9" />
+    </g>
+  );
+}
+
+/** A jointed arm: rotates about its own shoulder, with a visible pin. */
+function Arm({
+  x,
+  y,
+  length = 16,
+  angle,
+  swing,
+  colour,
+  reduce,
+  delay = 0,
+  width = 3.4,
+}: {
+  x: number;
+  y: number;
+  length?: number;
+  angle: number;
+  swing?: number[];
+  colour: string;
+  reduce: boolean;
+  delay?: number;
+  width?: number;
+}) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <motion.g
+        initial={{ rotate: angle }}
+        animate={reduce || !swing ? { rotate: angle } : { rotate: swing }}
+        transition={
+          reduce || !swing
+            ? { duration: 0 }
+            : { duration: 2.8, repeat: Infinity, repeatType: "mirror", delay }
+        }
+        style={{ transformOrigin: "0px 0px" }}
+      >
+        <rect
+          x={-width / 2}
+          y="0"
+          width={width}
+          height={length}
+          rx={width / 2}
+          fill={colour}
         />
-      );
-    case "padma":
-      return (
-        <g fill="#b3261e" opacity="0.9">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <ellipse
-              key={i}
-              cx="0"
-              cy={-s * 0.35}
-              rx={s * 0.18}
-              ry={s * 0.45}
-              transform={`rotate(${i * 60})`}
+        <circle cx="0" cy={length} r={width * 0.55} fill={colour} />
+      </motion.g>
+      {/* the joint pin */}
+      <circle cx="0" cy="0" r="1.5" fill={C.wood} stroke={C.gold} strokeWidth="0.5" />
+    </g>
+  );
+}
+
+function Puppet({
+  x,
+  y,
+  scale,
+  delay,
+  kind,
+  reduce,
+  dance,
+}: {
+  x: number;
+  y: number;
+  scale: number;
+  delay: number;
+  kind: Kind;
+  reduce: boolean;
+  dance: boolean;
+}) {
+  const k = KINDS[kind];
+  const bob = dance ? [0, -5, 0] : [0, -2.2, 0];
+
+  return (
+    <motion.g
+      initial={{ y: -150, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.9, delay, ease: SPRING }}
+    >
+      <motion.g
+        transform={`translate(${x} ${y}) scale(${scale})`}
+        animate={reduce ? undefined : { y: bob }}
+        transition={{
+          duration: dance ? 0.62 : 2.6,
+          repeat: Infinity,
+          repeatType: "mirror",
+          delay,
+          ease: "easeInOut",
+        }}
+      >
+        <Rod />
+
+        {/* skirt */}
+        <path d="M-15,42 L15,42 L11,0 L-11,0 Z" fill={k.robe} />
+        <path d="M-15,42 L-4,42 L-6,0 L-11,0 Z" fill="#000" opacity="0.12" />
+        <rect x="-15" y="38" width="30" height="4" fill={k.accent} />
+
+        {/* torso */}
+        <path d="M-9,2 L9,2 L7,-18 L-7,-18 Z" fill={k.robe} />
+        <rect x="-8" y="-19" width="16" height="3" fill={k.accent} />
+
+        {/* arms */}
+        <Arm
+          x={-8}
+          y={-15}
+          angle={38}
+          swing={[30, 48]}
+          colour={k.skin}
+          reduce={reduce}
+          delay={delay}
+        />
+        <Arm
+          x={8}
+          y={-15}
+          angle={-38}
+          swing={[-48, -30]}
+          colour={k.skin}
+          reduce={reduce}
+          delay={delay + 0.3}
+        />
+
+        {/* head */}
+        {kind === "ganesh" ? (
+          <GaneshHead reduce={reduce} delay={delay} />
+        ) : (
+          <g>
+            <circle cx="0" cy="-30" r="11.5" fill={k.skin} />
+            {/* hair */}
+            <path
+              d="M-11.5,-31 a11.5,11.5 0 0 1 23,0 q-4,-7 -11.5,-7 q-7.5,0 -11.5,7 Z"
+              fill={C.hair}
             />
-          ))}
-        </g>
-      );
-    case "khadga":
-      return (
-        <g stroke="#efb44a" strokeWidth="1.1" strokeLinecap="round">
-          <line x1="0" y1={s * 0.7} x2="0" y2={-s * 0.8} />
-          <line x1={-s * 0.35} y1={s * 0.35} x2={s * 0.35} y2={s * 0.35} />
-        </g>
-      );
-    case "dhanu":
-      return (
-        <g stroke="#efb44a" strokeWidth="0.9" fill="none">
-          <path d={`M${-s * 0.5},${-s * 0.7} Q${s * 0.6},0 ${-s * 0.5},${s * 0.7}`} />
-          <line x1={-s * 0.5} y1={-s * 0.7} x2={-s * 0.5} y2={s * 0.7} />
-        </g>
-      );
-    case "gada":
-      return (
-        <g stroke="#efb44a" strokeWidth="1" fill="#efb44a">
-          <line x1="0" y1={s * 0.8} x2="0" y2={-s * 0.3} />
-          <circle cx="0" cy={-s * 0.6} r={s * 0.34} />
-        </g>
-      );
-    case "bajra":
-      return (
-        <g stroke="#efb44a" strokeWidth="0.9" fill="none" strokeLinecap="round">
-          <line x1="0" y1={-s * 0.8} x2="0" y2={s * 0.8} />
-          <path d={`M${-s * 0.4},${-s * 0.8} L0,${-s * 0.4} L${s * 0.4},${-s * 0.8}`} />
-          <path d={`M${-s * 0.4},${s * 0.8} L0,${s * 0.4} L${s * 0.4},${s * 0.8}`} />
-        </g>
-      );
-    case "ghanta":
-      return (
+            {kind !== "kartik" && (
+              <path
+                d="M-11,-28 q-4,10 -1,17 q3,-9 2,-17 Z M11,-28 q4,10 1,17 q-3,-9 -2,-17 Z"
+                fill={C.hair}
+              />
+            )}
+            <Eyes cx={0} cy={-29} reduce={reduce} delay={delay} />
+            <path
+              d="M-3,-23.5 q3,2.6 6,0"
+              stroke={C.alta}
+              strokeWidth="0.9"
+              fill="none"
+              strokeLinecap="round"
+            />
+            {/* sindoor tika */}
+            <circle cx="0" cy="-37" r="1.5" fill={C.sindoor} />
+            {/* crown */}
+            <path
+              d="M-9,-39 L-6,-49 L-3,-42 L0,-53 L3,-42 L6,-49 L9,-39 Z"
+              fill={C.gold}
+            />
+          </g>
+        )}
+
+        {/* what each one carries */}
+        {kind === "saraswati" && (
+          <g transform="translate(15 -12) rotate(18)">
+            <rect x="-1.2" y="-18" width="2.4" height="34" rx="1.2" fill={C.wood} />
+            <ellipse cx="0" cy="17" rx="6" ry="7.5" fill={C.wood} />
+            <ellipse cx="0" cy="17" rx="2" ry="2.4" fill={C.night} />
+          </g>
+        )}
+        {kind === "kartik" && (
+          <g transform="translate(-16 -10)">
+            <path
+              d="M0,-16 q9,16 0,32"
+              stroke={C.gold}
+              strokeWidth="1.6"
+              fill="none"
+            />
+            <line x1="0" y1="-16" x2="0" y2="16" stroke={C.cream} strokeWidth="0.7" />
+          </g>
+        )}
+        {kind === "lakshmi" && (
+          <g transform="translate(15 -8)">
+            <ellipse cx="0" cy="0" rx="5" ry="6" fill={C.gold} />
+            <ellipse cx="0" cy="-1" rx="2.6" ry="3" fill={C.goldDark} />
+          </g>
+        )}
+
+        {/* the vahana, small at the feet */}
+        <Vahana kind={kind} reduce={reduce} />
+
+        {/* name, in the puppeteer's hand-lettered way */}
+        <text
+          y="56"
+          textAnchor="middle"
+          className="bangla-display"
+          fontSize="11"
+          fill={C.gold}
+          opacity="0.75"
+        >
+          {k.bangla}
+        </text>
+      </motion.g>
+    </motion.g>
+  );
+}
+
+function GaneshHead({ reduce, delay }: { reduce: boolean; delay: number }) {
+  return (
+    <g>
+      <circle cx="0" cy="-30" r="12" fill={C.skinPink} />
+      {/* ears */}
+      <ellipse cx="-13" cy="-31" rx="6" ry="9" fill={C.skinPink} />
+      <ellipse cx="13" cy="-31" rx="6" ry="9" fill={C.skinPink} />
+      <ellipse cx="-13" cy="-31" rx="3.4" ry="5.6" fill={C.alta} opacity="0.35" />
+      <ellipse cx="13" cy="-31" rx="3.4" ry="5.6" fill={C.alta} opacity="0.35" />
+      {/* trunk, curling and swaying */}
+      <motion.path
+        d="M0,-26 q-1.5,9 -5,13 q-4,4 -1,7"
+        stroke={C.skinPink}
+        strokeWidth="4.4"
+        strokeLinecap="round"
+        fill="none"
+        animate={reduce ? undefined : { rotate: [-4, 4, -4] }}
+        transition={{ duration: 3, repeat: Infinity, delay }}
+        style={{ transformBox: "fill-box", transformOrigin: "50% 0%" }}
+      />
+      {/* tusks */}
+      <path d="M-6,-22 l-3,4" stroke={C.cream} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M6,-22 l3,4" stroke={C.cream} strokeWidth="1.8" strokeLinecap="round" />
+      <Eyes cx={0} cy={-31} gap={6} r={2.7} reduce={reduce} delay={delay} />
+      <circle cx="0" cy="-39" r="1.4" fill={C.sindoor} />
+      <path d="M-8,-40 L-5,-48 L-2,-42 L0,-51 L2,-42 L5,-48 L8,-40 Z" fill={C.gold} />
+    </g>
+  );
+}
+
+function Vahana({ kind, reduce }: { kind: Kind; reduce: boolean }) {
+  const common = { opacity: 0.95 };
+  if (kind === "lakshmi")
+    return (
+      <g transform="translate(-17 36)" {...common}>
+        <ellipse cx="0" cy="0" rx="6" ry="5" fill="#b08a55" />
+        <circle cx="0" cy="-4" r="4.4" fill="#c9a06a" />
+        <circle cx="-1.6" cy="-4.6" r="1.1" fill={C.hair} />
+        <circle cx="1.6" cy="-4.6" r="1.1" fill={C.hair} />
+        <path d="M-1,-2.6 L1,-2.6 L0,-1 Z" fill={C.gold} />
+      </g>
+    );
+  if (kind === "saraswati")
+    return (
+      <g transform="translate(-18 36)" {...common}>
+        <ellipse cx="0" cy="0" rx="7" ry="4.4" fill={C.cream} />
+        <path d="M2,-3 q4,-6 -1,-8 q-4,-1 -2,3 q1,3 1,5 Z" fill={C.cream} />
+        <circle cx="-0.6" cy="-9.4" r="0.9" fill={C.hair} />
+        <path d="M-2.4,-9.6 l-2.6,1.2 l2.6,1.2 Z" fill={C.lamp} />
+      </g>
+    );
+  if (kind === "kartik")
+    return (
+      <g transform="translate(16 34)" {...common}>
+        <ellipse cx="0" cy="2" rx="6" ry="4" fill={C.blue} />
+        <path d="M4,0 q10,-4 12,-14 q-2,12 -10,17 Z" fill={C.green} />
+        <circle cx="-3" cy="-3" r="3.4" fill={C.blue} />
+        <path d="M-3,-7 l0,-3" stroke={C.green} strokeWidth="1" />
+        <circle cx="-4.2" cy="-3.4" r="0.8" fill={C.cream} />
+      </g>
+    );
+  return (
+    <g transform="translate(16 38)" {...common}>
+      <ellipse cx="0" cy="0" rx="6" ry="3.6" fill="#8a7a6a" />
+      <circle cx="-5" cy="-1.6" r="2.8" fill="#8a7a6a" />
+      <circle cx="-6" cy="-3.6" r="1.6" fill="#a4948a" />
+      <motion.path
+        d="M6,0 q7,1 8,-5"
+        stroke="#8a7a6a"
+        strokeWidth="1.2"
+        fill="none"
+        animate={reduce ? undefined : { rotate: [-8, 8, -8] }}
+        transition={{ duration: 2.2, repeat: Infinity }}
+        style={{ transformBox: "fill-box", transformOrigin: "0% 100%" }}
+      />
+      <circle cx="-6.4" cy="-1.8" r="0.8" fill={C.hair} />
+    </g>
+  );
+}
+
+/* ---------------- Durga herself ---------------- */
+
+function Durga({
+  x,
+  y,
+  delay,
+  strike,
+  reduce,
+  dance,
+}: {
+  x: number;
+  y: number;
+  delay: number;
+  strike: boolean;
+  reduce: boolean;
+  dance: boolean;
+}) {
+  /* ten arms, fanned, the trishul arm last on the right */
+  const leftArms = [22, 42, 62, 82, 102];
+  const rightArms = [-22, -42, -62, -82, -102];
+
+  return (
+    <motion.g
+      initial={{ y: -180, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay, ease: SPRING }}
+    >
+      <motion.g
+        transform={`translate(${x} ${y}) scale(0.95)`}
+        animate={reduce ? undefined : { y: dance ? [0, -6, 0] : [0, -2.6, 0] }}
+        transition={{
+          duration: dance ? 0.62 : 2.8,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+        }}
+      >
+        <Rod height={190} />
+
+        {/* halo */}
+        <motion.g
+          animate={reduce ? undefined : { rotate: 360 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: "0px -34px" }}
+        >
+          <circle
+            cx="0"
+            cy="-34"
+            r="34"
+            fill="none"
+            stroke={C.gold}
+            strokeWidth="0.8"
+            strokeDasharray="2 6"
+            opacity="0.6"
+          />
+        </motion.g>
+
+        {/* the ten arms, behind the body */}
+        {[...leftArms, ...rightArms].map((a, i) => (
+          <Arm
+            key={a}
+            x={a > 0 ? -9 : 9}
+            y={-18}
+            length={19}
+            angle={a}
+            swing={reduce ? undefined : [a - 5, a + 5]}
+            colour={C.skinDurga}
+            reduce={reduce}
+            delay={i * 0.07}
+            width={3}
+          />
+        ))}
+
+        {/* trishul, in the topmost right hand */}
+        <motion.g
+          transform="translate(9 -18)"
+          initial={{ rotate: -102 }}
+          animate={
+            strike && !reduce
+              ? { rotate: [-102, -150, -30, -102] }
+              : { rotate: -102 }
+          }
+          transition={{ duration: 0.9, times: [0, 0.3, 0.52, 1], ease: EASE }}
+          style={{ transformOrigin: "0px 0px" }}
+        >
+          <line x1="0" y1="0" x2="0" y2="34" stroke={C.wood} strokeWidth="1.8" />
+          <path
+            d="M-4,34 L-4,42 M0,34 L0,45 M4,34 L4,42"
+            stroke={C.gold}
+            strokeWidth="1.6"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <line x1="-5" y1="34" x2="5" y2="34" stroke={C.gold} strokeWidth="1.4" />
+        </motion.g>
+
+        {/* skirt and torso */}
+        <path d="M-18,48 L18,48 L13,0 L-13,0 Z" fill="url(#sari)" />
+        <path d="M-18,48 L-5,48 L-7,0 L-13,0 Z" fill="#000" opacity="0.12" />
+        <rect x="-18" y="43" width="36" height="5" fill={C.gold} />
+        <path d="M-11,2 L11,2 L9,-20 L-9,-20 Z" fill="url(#sari)" />
+        <rect x="-10" y="-21" width="20" height="3.4" fill={C.gold} />
+
+        {/* head */}
+        <circle cx="0" cy="-34" r="13" fill={C.skinDurga} />
         <path
-          d={`M${-s * 0.4},${s * 0.4} Q${-s * 0.4},${-s * 0.5} 0,${-s * 0.6} Q${s * 0.4},${-s * 0.5} ${s * 0.4},${s * 0.4} Z`}
-          fill="#efb44a"
-          opacity="0.85"
+          d="M-13,-35 a13,13 0 0 1 26,0 q-5,-8 -13,-8 q-8,0 -13,8 Z"
+          fill={C.hair}
         />
-      );
-    default:
-      return (
         <path
-          d={`M${-s * 0.5},${s * 0.5} Q0,0 ${-s * 0.3},${-s * 0.5} Q${s * 0.4},${-s * 0.2} ${s * 0.4},${s * 0.4}`}
-          stroke="#efb44a"
-          strokeWidth="0.9"
+          d="M-12.5,-32 q-5,12 -1,20 q3,-10 2.5,-20 Z M12.5,-32 q5,12 1,20 q-3,-10 -2.5,-20 Z"
+          fill={C.hair}
+        />
+        <Eyes cx={0} cy={-33} gap={6} r={3.4} reduce={reduce} />
+        {/* the third eye */}
+        <motion.ellipse
+          cx="0"
+          cy="-40"
+          rx="1.5"
+          ry="3"
+          fill={C.sindoor}
+          animate={reduce ? undefined : { opacity: [0.65, 1, 0.65] }}
+          transition={{ duration: 1.6, repeat: Infinity }}
+        />
+        <path
+          d="M-3.4,-27 q3.4,3 6.8,0"
+          stroke={C.alta}
+          strokeWidth="1"
           fill="none"
           strokeLinecap="round"
         />
-      );
-  }
+        {/* mukut */}
+        <path
+          d="M-11,-44 L-7,-57 L-3.5,-48 L0,-62 L3.5,-48 L7,-57 L11,-44 Z"
+          fill={C.gold}
+        />
+        <circle cx="0" cy="-62" r="2" fill={C.sindoor} />
+
+        {/* the lion, small and cross at her feet */}
+        <g transform="translate(-26 40)">
+          <ellipse cx="0" cy="0" rx="11" ry="6.4" fill="#c68a3c" />
+          <circle cx="-9" cy="-3" r="6.6" fill={C.gold} />
+          <circle cx="-9" cy="-3" r="3.8" fill="#c68a3c" />
+          <circle cx="-10.6" cy="-3.6" r="0.9" fill={C.hair} />
+          <circle cx="-7.4" cy="-3.6" r="0.9" fill={C.hair} />
+          <path d="M-10,-1.6 L-8,-1.6 L-9,-0.4 Z" fill={C.alta} />
+        </g>
+
+        <text
+          y="62"
+          textAnchor="middle"
+          className="bangla-display"
+          fontSize="13"
+          fill={C.lamp}
+        >
+          দুর্গা
+        </text>
+      </motion.g>
+    </motion.g>
+  );
 }
 
-function ActMardini() {
-  const shards = useMemo(
-    () =>
-      Array.from({ length: 26 }, (_, i) => {
-        const a = (i / 26) * Math.PI * 2;
-        const d = 40 + ((i * 53) % 60);
-        return { x: Math.cos(a) * d, y: Math.sin(a) * d * 0.7, r: 1 + (i % 3) };
-      }),
-    [],
-  );
+/* ---------------- the asura ---------------- */
+
+function Asura({ reduce }: { reduce: boolean }) {
+  const shards = Array.from({ length: 16 }, (_, i) => {
+    const a = (i / 16) * Math.PI * 2;
+    return { x: Math.cos(a) * (26 + (i % 4) * 8), y: Math.sin(a) * 16 };
+  });
 
   return (
-    <motion.div
-      className="flex w-full flex-col items-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <motion.g
+      initial={{ y: 70, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: EASE }}
+      transition={{ duration: 0.55, ease: EASE }}
     >
-      <svg viewBox="0 0 240 220" className="w-full max-w-[19rem]">
-        {/* halo */}
-        <motion.g
-          style={{ transformOrigin: "120px 92px" }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-        >
-          <circle
-            cx="120"
-            cy="92"
-            r="74"
-            fill="none"
-            stroke="#c9871f"
-            strokeOpacity="0.35"
-            strokeWidth="0.7"
-            strokeDasharray="2 7"
-          />
-          <circle
-            cx="120"
-            cy="92"
-            r="82"
-            fill="none"
-            stroke="#c9871f"
-            strokeOpacity="0.2"
-            strokeWidth="0.6"
-            strokeDasharray="1 11"
-          />
-        </motion.g>
-
-        {/* ten arms opening */}
-        {WEAPONS.map((w, i) => {
-          const deg = -172 + i * 16;
-          const rad = (deg * Math.PI) / 180;
-          const len = 62;
-          const tx = 120 + len * Math.cos(rad);
-          const ty = 92 + len * Math.sin(rad);
-          return (
-            <motion.g
-              key={w}
-              initial={{ opacity: 0, scale: 0.2 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.55,
-                delay: 0.1 + i * 0.045,
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
-              style={{ transformOrigin: "120px 92px" }}
-            >
-              <line
-                x1="120"
-                y1="92"
-                x2={tx}
-                y2={ty}
-                stroke="#b3261e"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-              />
-              <g transform={`translate(${tx} ${ty})`}>
-                <Weapon kind={w} />
-              </g>
-            </motion.g>
-          );
-        })}
-
-        {/* the goddess: face, third eye, body */}
-        <motion.g
-          initial={{ scale: 0.6, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
-          style={{ transformOrigin: "120px 92px" }}
-        >
-          <ellipse cx="120" cy="82" rx="15" ry="18" fill="#f0dcc0" />
-          <path d="M105,74 Q120,56 135,74 Q120,66 105,74 Z" fill="#2a1a10" />
-          <circle cx="114" cy="83" r="1.9" fill="#2a1a10" />
-          <circle cx="126" cy="83" r="1.9" fill="#2a1a10" />
-          <motion.ellipse
-            cx="120"
-            cy="76"
-            rx="1.5"
-            ry="2.8"
-            fill="#b3261e"
-            animate={{ opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 1.4, repeat: Infinity }}
-          />
-          {/* crown */}
-          <path
-            d="M104,68 L108,54 L114,64 L120,48 L126,64 L132,54 L136,68 Z"
-            fill="#efb44a"
-          />
-          <path d="M108,100 L132,100 L140,142 L100,142 Z" fill="#b3261e" />
-        </motion.g>
-
-        {/* the lion */}
-        <motion.g
-          initial={{ x: -26, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
-        >
-          <ellipse cx="86" cy="152" rx="24" ry="13" fill="#a9613c" />
-          <circle cx="66" cy="146" r="11" fill="#c9871f" />
-          <circle cx="66" cy="146" r="6.5" fill="#a9613c" />
-        </motion.g>
-
-        {/* trishul falling */}
-        <motion.g
-          initial={{ y: -180, opacity: 0, rotate: -8 }}
-          animate={{ y: 0, opacity: 1, rotate: 0 }}
-          transition={{ duration: 0.5, delay: 0.85, ease: [0.6, 0, 0.9, 1] }}
-          style={{ transformOrigin: "156px 100px" }}
-        >
-          <line
-            x1="156"
-            y1="96"
-            x2="156"
-            y2="176"
-            stroke="#efb44a"
-            strokeWidth="2.6"
-            strokeLinecap="round"
-          />
-          <path
-            d="M146,104 L146,84 M156,100 L156,78 M166,104 L166,84"
-            stroke="#efb44a"
-            strokeWidth="2.2"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <line x1="144" y1="104" x2="168" y2="104" stroke="#efb44a" strokeWidth="2" />
-        </motion.g>
-
-        {/* the asura, and his breaking */}
-        <motion.path
-          d="M156,196 C144,196 136,188 136,178 C136,170 140,164 146,161 L142,154 C136,152 130,146 130,140 C136,140 142,144 146,150 L150,158 C152,157 154,156 156,156 C158,156 160,157 162,158 L166,150 C170,144 176,140 182,140 C182,146 176,152 170,154 L166,161 C172,164 176,170 176,178 C176,188 168,196 156,196 Z"
-          fill="#2a1a10"
-          stroke="#6b4a2f"
-          strokeWidth="0.8"
-          initial={{ opacity: 1, scale: 1 }}
-          animate={{ opacity: [1, 1, 0], scale: [1, 1.08, 0.5] }}
-          transition={{ duration: 0.9, delay: 1.05, times: [0, 0.22, 1], ease: EASE }}
-          style={{ transformOrigin: "156px 172px" }}
+      <motion.g
+        transform="translate(252 208)"
+        animate={
+          reduce
+            ? undefined
+            : { rotate: [0, 0, 74], y: [0, 0, 26], opacity: [1, 1, 0] }
+        }
+        transition={{ duration: 1.5, times: [0, 0.55, 1], ease: EASE, delay: 0.5 }}
+        style={{ transformOrigin: "0px 18px" }}
+      >
+        <Rod height={150} />
+        {/* body */}
+        <path d="M-11,18 L11,18 L8,-8 L-8,-8 Z" fill={C.asura} />
+        {/* buffalo head */}
+        <ellipse cx="0" cy="-16" rx="9.5" ry="8" fill="#3a322c" />
+        <path
+          d="M-9,-20 q-9,-3 -11,-11 q7,1 11,6 Z M9,-20 q9,-3 11,-11 q-7,1 -11,6 Z"
+          fill="#d8cfc2"
         />
+        <ellipse cx="-3.4" cy="-15" rx="1.7" ry="2" fill={C.sindoor} />
+        <ellipse cx="3.4" cy="-15" rx="1.7" ry="2" fill={C.sindoor} />
+        <path d="M-3,-10 q3,2 6,0" stroke="#d8cfc2" strokeWidth="0.9" fill="none" />
+        <circle cx="0" cy="18" r="1.6" fill={C.wood} />
+      </motion.g>
 
-        {/* impact flash */}
-        <motion.circle
-          cx="156"
-          cy="172"
-          r="4"
-          fill="none"
-          stroke="#fbf3e4"
-          strokeWidth="2"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: [0, 9], opacity: [0, 0.9, 0] }}
-          transition={{ duration: 0.75, delay: 1.3, ease: "easeOut" }}
-          style={{ transformOrigin: "156px 172px" }}
-        />
-
-        {/* shards */}
-        {shards.map((s, i) => (
+      {/* the strike: speed lines, then a flash and shards */}
+      {!reduce && (
+        <>
+          {[0, 1, 2, 3].map((i) => (
+            <motion.line
+              key={i}
+              x1={236 + i * 9}
+              y1={120}
+              x2={236 + i * 9}
+              y2={186}
+              stroke={C.cream}
+              strokeWidth="1.4"
+              initial={{ opacity: 0, pathLength: 0 }}
+              animate={{ opacity: [0, 0.85, 0], pathLength: [0, 1, 1] }}
+              transition={{ duration: 0.4, delay: 0.42 + i * 0.03 }}
+            />
+          ))}
           <motion.circle
-            key={i}
-            cx="156"
-            cy="172"
-            r={s.r}
-            fill={i % 3 === 0 ? "#b3261e" : "#c9871f"}
-            initial={{ opacity: 0, x: 0, y: 0 }}
-            animate={{ opacity: [0, 1, 0], x: s.x, y: s.y }}
-            transition={{ duration: 1, delay: 1.32, ease: "easeOut" }}
+            cx="252"
+            cy="196"
+            r="6"
+            fill="none"
+            stroke={C.cream}
+            strokeWidth="2.4"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: [0, 6], opacity: [0, 0.9, 0] }}
+            transition={{ duration: 0.6, delay: 0.55, ease: "easeOut" }}
+            style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
           />
-        ))}
-      </svg>
-
-      <ArrivalCaption index={3} />
-    </motion.div>
+          {shards.map((s, i) => (
+            <motion.circle
+              key={i}
+              cx="252"
+              cy="196"
+              r={i % 3 === 0 ? 2.2 : 1.4}
+              fill={i % 2 === 0 ? C.lamp : C.sindoor}
+              initial={{ opacity: 0, x: 0, y: 0 }}
+              animate={{ opacity: [0, 1, 0], x: s.x, y: s.y }}
+              transition={{ duration: 0.85, delay: 0.56, ease: "easeOut" }}
+            />
+          ))}
+        </>
+      )}
+    </motion.g>
   );
 }
 
 /* ================================================================
-   Act 4 — Bodhon
+   Words
    ================================================================ */
 
-function ActBodhon() {
-  return (
-    <motion.div
-      className="flex flex-col items-center text-center"
-      initial={{ opacity: 0, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.7, ease: EASE }}
-    >
-      <motion.div
-        animate={{ scale: [1, 1.06, 1] }}
-        transition={{ duration: 0.62, repeat: 2, ease: "easeInOut" }}
-      >
-        <Mandala drawn />
-      </motion.div>
-      <motion.h1
-        className="bangla-display mt-6 text-[2.2rem] leading-tight text-[#f0dcc0] sm:text-[3.1rem]"
-        initial={{ opacity: 0, y: 16, letterSpacing: "0.3em" }}
-        animate={{ opacity: 1, y: 0, letterSpacing: "0em" }}
-        transition={{ duration: 0.9, ease: EASE }}
-      >
-        শারদীয়া দুর্গোৎসব
-      </motion.h1>
-      <motion.p
-        className="mt-2 text-[0.7rem] uppercase tracking-[0.45em] text-[#c9871f]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.25 }}
-      >
-        IISc · 2026
-      </motion.p>
-    </motion.div>
-  );
-}
-
-/* ================================================================
-   Shared bits
-   ================================================================ */
-
-function ArrivalCaption({ index }: { index: number }) {
+function Caption({ index }: { index: number }) {
   const line = ARRIVAL_LINES[index % ARRIVAL_LINES.length];
   return (
-    <motion.div
-      className="mt-7 max-w-[34ch] text-center"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
-    >
-      <p className="bangla-display text-[1.15rem] text-[#f0dcc0] sm:text-[1.35rem]">
+    <>
+      <p
+        className="bangla-display text-[1.15rem] sm:text-[1.35rem]"
+        style={{ color: C.cream }}
+      >
         {line.bn}
       </p>
-      <p className="mt-1.5 text-[0.68rem] italic text-[#f0dcc0]/45">{line.en}</p>
-    </motion.div>
+      <p
+        className="mt-1.5 text-[0.68rem] italic"
+        style={{ color: "rgba(246,234,210,0.45)" }}
+      >
+        {line.en}
+      </p>
+    </>
   );
 }
 
-function TickerLine({
-  facts,
-  act,
-}: {
-  facts: typeof FACTS;
-  act: number;
-}) {
+function Ticker({ facts, act }: { facts: typeof FACTS; act: number }) {
   const f = facts[Math.min(act, facts.length - 1)];
   return (
     <div className="h-[3.2rem] overflow-hidden">
@@ -861,9 +1141,10 @@ function TickerLine({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.45, ease: EASE }}
-          className="text-[0.7rem] leading-relaxed text-[#f0dcc0]/60"
+          className="text-[0.7rem] leading-relaxed"
+          style={{ color: "rgba(246,234,210,0.6)" }}
         >
-          <span className="text-[#efb44a]">
+          <span style={{ color: C.lamp }}>
             {f.year ? `${f.year} — ` : ""}
             {f.title}.{" "}
           </span>

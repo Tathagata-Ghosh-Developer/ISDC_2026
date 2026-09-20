@@ -33,6 +33,7 @@
   /* --- Fonts (wired up in layout.tsx via next/font) --- */
   --font-display: var(--f-display), "Bodoni Moda", Didot, Georgia, serif;
   --font-bangla-display: var(--f-bangla-display), var(--f-bangla), serif;
+  --font-bangla-poster: var(--f-bangla-poster), var(--f-bangla), sans-serif;
   --font-bangla: var(--f-bangla), "Noto Serif Bengali", serif;
   --font-body: var(--f-body), "Inter", system-ui, sans-serif;
 
@@ -196,6 +197,15 @@ body::before {
   font-weight: 400;
   line-height: 1.32;
   letter-spacing: 0.005em;
+}
+
+/*  Poster weight: the block lettering of a Puja hoarding or a
+    Sharadiya cover, set tight and heavy.  */
+.bangla-poster {
+  font-family: var(--font-bangla-poster);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.005em;
 }
 
 /*  A film title card: flat field, oversized lettering, hard edges.  */
