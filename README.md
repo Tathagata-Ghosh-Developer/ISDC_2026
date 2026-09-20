@@ -30,8 +30,8 @@ no percentage of any donation is lost to fees.
   sent. The form never charges anyone.
 - A numbered receipt, viewable and printable, sent to the donor over
   WhatsApp once the treasurer has matched the payment.
-- A public board showing every verified donation and every published
-  expense side by side.
+- A public board showing everyone who gave, ranked by amount. Totals are
+  deliberately not published.
 
 **For the committee**
 
@@ -125,17 +125,16 @@ Every push to `main` deploys automatically after that.
 
 Receipt numbers are minted inside a database function, so two people
 verifying at the same moment cannot produce the same number. They run in
-an unbroken sequence, which means a missing number would be visible to
-anyone checking the board.
+an unbroken sequence, so a gap is visible to anyone auditing the export.
 
 If a payment cannot be found, use **Not found in statement** rather than
 deleting the row. Nothing is ever silently removed.
 
 ### Recording what was spent
 
-Under **Expenses**, add each payment with its head, vendor and date.
-Published lines appear on the public board immediately. This is the half
-of transparency that most Pujas skip.
+Under **Expenses**, add each payment with its head, vendor and date. These
+are recorded for the committee's own accounts and the CSV export. They
+are not currently published on the public site.
 
 ### Changing the site
 
@@ -180,6 +179,18 @@ No developer is needed for any of that.
 - The browser never holds a database key. Every read and write goes
   through a server route, which is why the tables carry row level
   security with no permissive policy.
+
+### Privacy
+
+A receipt is reachable by its own `receipt_token`, never by the row id,
+and the public board sends the browser no identifier at all. That
+separation is deliberate: an earlier version put the row id in the
+board's HTML, which turned a public page into an index of every donor's
+name, email, phone and SR number, anonymous donors included. If you
+change the board, do not reintroduce an id into `BoardEntry`.
+
+Receipts and the console are excluded from search engines in
+`src/app/robots.ts` and by an `X-Robots-Tag` header in `next.config.ts`.
 
 ### Design
 

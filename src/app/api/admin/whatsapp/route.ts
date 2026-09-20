@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     name: donation.name,
     amount: formatINR(donation.amount),
     receiptNo: donation.receipt_no,
-    url: `${origin}/receipt/${donation.id}`,
+    url: `${origin}/receipt/${donation.receipt_token}`,
   };
 
   if (!whatsappReady()) {

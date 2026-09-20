@@ -100,9 +100,13 @@ export default async function DonatePage() {
                 <div className="mt-7 flex gap-2 border-t border-line pt-6 text-[0.75rem] leading-relaxed text-ink-soft">
                   <ShieldCheck size={15} className="mt-0.5 shrink-0 text-leaf" />
                   <p>
-                    This is the registered committee account, operated jointly
-                    by the Faculty Advisor and the Student General Secretary.
-                    Nobody on the committee can move money alone.
+                    The account is operated jointly, so no single committee
+                    member can move money alone. Before you send anything,
+                    check these details against the ones posted on our
+                    Instagram or ask a convenor on WhatsApp. A page telling you
+                    it is trustworthy is not evidence that it is, and you
+                    should hold any site asking for money to that standard,
+                    including this one.
                   </p>
                 </div>
               </div>

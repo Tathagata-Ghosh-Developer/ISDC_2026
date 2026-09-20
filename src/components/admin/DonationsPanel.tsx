@@ -282,7 +282,7 @@ export default function DonationsPanel() {
                 {d.status === "verified" && (
                   <>
                     <a
-                      href={`/receipt/${d.id}`}
+                      href={`/receipt/${d.receipt_token}`}
                       target="_blank"
                       rel="noreferrer"
                       className="btn btn-ghost !py-1.5 !text-[0.65rem]"

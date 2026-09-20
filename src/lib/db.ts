@@ -13,6 +13,7 @@ export type DonationStatus = "pending" | "verified" | "rejected";
 
 export type Donation = {
   id: string;
+  receipt_token: string;
   receipt_no: string | null;
   sr_number: string | null;
   name: string;
@@ -71,13 +72,21 @@ export function db(): SupabaseClient {
    Public reads, used by the donation board and the ledger
    --------------------------------------------------------------- */
 
+/**
+ * What the public board is allowed to know.
+ *
+ * Deliberately carries no identifier of any kind. An earlier version
+ * sent the row id, which the browser then had in its HTML, and since a
+ * receipt could be fetched by that id the board became an index into
+ * every donor's name, email, phone and SR number, including the donors
+ * who had asked to stay anonymous. Nothing here can be turned into a
+ * lookup.
+ */
 export type BoardEntry = {
-  id: string;
   name: string;
   category: Donation["category"];
   amount: number;
   message: string | null;
-  verified_at: string | null;
 };
 
 export type BoardData = {
@@ -106,9 +115,7 @@ export async function getBoard(): Promise<BoardData> {
   const [donationsRes, expensesRes] = await Promise.all([
     db()
       .from("donations")
-      .select(
-        "id,name,display_name,anonymous,category,amount,message,verified_at",
-      )
+      .select("name,display_name,anonymous,category,amount,message,verified_at")
       .eq("status", "verified")
       .order("verified_at", { ascending: false })
       .limit(2000),
@@ -125,7 +132,6 @@ export async function getBoard(): Promise<BoardData> {
   }
 
   type Row = {
-    id: string;
     name: string;
     display_name: string | null;
     anonymous: boolean;
@@ -138,14 +144,14 @@ export async function getBoard(): Promise<BoardData> {
   const rows = (donationsRes.data ?? []) as Row[];
 
   const entries: BoardEntry[] = rows.map((r) => ({
-    id: r.id,
     name: r.anonymous
       ? "Anonymous well-wisher"
       : (r.display_name?.trim() || r.name),
     category: r.category,
+    // An anonymous donor's own words could identify them just as well
+    // as their name, so those are withheld too.
+    message: r.anonymous ? null : r.message,
     amount: Number(r.amount),
-    message: r.message,
-    verified_at: r.verified_at,
   }));
 
   const byCategory: BoardData["byCategory"] = {};
@@ -174,6 +180,23 @@ export async function getBoard(): Promise<BoardData> {
   };
 }
 
+/** Looked up by the receipt token, which only the donor is ever sent. */
+export async function getDonationByToken(
+  token: string,
+): Promise<Donation | null> {
+  if (!dbReady) return null;
+  if (!/^[0-9a-f-]{32,36}$/i.test(token)) return null;
+
+  const { data, error } = await db()
+    .from("donations")
+    .select("*")
+    .eq("receipt_token", token)
+    .maybeSingle();
+  if (error || !data) return null;
+  return { ...(data as Donation), amount: Number((data as Donation).amount) };
+}
+
+/** By primary key. Server side only, for the committee console. */
 export async function getDonation(id: string): Promise<Donation | null> {
   if (!dbReady) return null;
   const { data, error } = await db()

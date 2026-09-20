@@ -134,6 +134,30 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+
+  /*
+    Everything on this site is sized in rem off the golden-ratio scale,
+    so moving the root size moves the whole design together. This makes
+    it continuous rather than stepping at breakpoints, which is what
+    keeps a 360px phone and a 27 inch monitor both looking deliberate.
+  */
+  font-size: clamp(15px, 13.6px + 0.35vw, 19px);
+}
+
+/* Nothing is allowed to push the page sideways. */
+img,
+svg,
+video,
+canvas,
+iframe,
+table {
+  max-width: 100%;
+}
+
+/* Respect the notch and the home indicator. */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 body {
@@ -494,5 +518,32 @@ body::before {
     border: 1px solid #999 !important;
     box-shadow: none !important;
     background: #fff !important;
+  }
+}
+
+/* ============================================================
+   Small screens
+   ============================================================ */
+
+@media (max-width: 420px) {
+  .eyebrow {
+    letter-spacing: 0.22em;
+  }
+
+  .btn {
+    padding: 0.7rem 1.1rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* a phone should never need two taps to read a heading */
+  .font-display {
+    letter-spacing: 0;
+  }
+}
+
+/* Very tall, narrow screens: give the hero room rather than cropping. */
+@media (max-aspect-ratio: 9 / 18) and (max-width: 500px) {
+  .arch {
+    border-radius: 50% 50% 0.5rem 0.5rem / 30% 30% 0.5rem 0.5rem;
   }
 }

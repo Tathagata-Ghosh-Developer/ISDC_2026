@@ -10,6 +10,9 @@ create extension if not exists "pgcrypto";
 -- ------------------------------------------------------------
 create table if not exists donations (
   id               uuid primary key default gen_random_uuid(),
+  -- The public receipt link uses this, never the primary key, so that
+  -- anything the board exposes can never be turned into a lookup.
+  receipt_token    uuid not null unique default gen_random_uuid(),
   receipt_no       text unique,
   sr_number        text,
   name             text not null,
@@ -38,6 +41,11 @@ create table if not exists donations (
 create index if not exists donations_status_idx  on donations (status, created_at desc);
 create index if not exists donations_created_idx on donations (created_at desc);
 create index if not exists donations_ref_idx     on donations (reference);
+create unique index if not exists donations_token_idx on donations (receipt_token);
+
+-- Existing installations: add the column and backfill.
+alter table donations
+  add column if not exists receipt_token uuid not null default gen_random_uuid();
 
 -- Sequential, human-readable receipt numbers: ISDC/2026/0001
 create sequence if not exists receipt_seq start 1;

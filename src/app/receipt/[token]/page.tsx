@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDonation } from "@/lib/db";
+import { getDonationByToken } from "@/lib/db";
 import { getConfig } from "@/lib/config";
 import { formatINR, formatDate, formatDateTime } from "@/lib/format";
 import PrintButton from "@/components/PrintButton";
@@ -60,10 +60,10 @@ function inWords(amount: number): string {
 export default async function ReceiptPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ token: string }>;
 }) {
-  const { id } = await params;
-  const donation = await getDonation(id);
+  const { token } = await params;
+  const donation = await getDonationByToken(token);
   const config = await getConfig();
 
   if (!donation) notFound();
@@ -223,7 +223,7 @@ export default async function ReceiptPage({
 
             <p className="mt-9 border-t border-line pt-4 text-[0.6rem] leading-relaxed text-ink-faint">
               Computer generated and valid without a physical signature. Check it
-              at {SITE.url}/receipt/{donation.id}, a reference unique to this
+              at {SITE.url}/receipt/{donation.receipt_token}, a reference unique to this
               donation. The committee is not registered under section 80G, so
               this contribution is not tax deductible.
             </p>

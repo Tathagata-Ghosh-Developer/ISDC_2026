@@ -94,10 +94,6 @@ export default function DonateForm({ suggested, note }: Props) {
           a numbered receipt reaches your WhatsApp and your name appears on the
           donation board.
         </p>
-        <p className="mt-5 text-[0.72rem] uppercase tracking-[0.2em] text-ink-faint">
-          Reference&nbsp;
-          <span className="text-gold">{state.id.slice(0, 8)}</span>
-        </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link href="/daan/board" className="btn btn-ghost">
             See the board
@@ -264,7 +260,14 @@ export default function DonateForm({ suggested, note }: Props) {
         {/* board */}
         <div className="border-t border-line pt-5">
           <Label>On the public donation board</Label>
-          <label className="mt-3 flex items-start gap-3 text-[0.82rem] text-ink-soft">
+          <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-faint">
+            The board is a public page. Anyone can open it, and your name, the
+            amount and any line you write will be visible to them. It is not
+            indexed by search engines, but it is not private either. Your
+            email, phone number and SR number are never shown there.
+          </p>
+
+          <label className="mt-4 flex items-start gap-3 text-[0.82rem] text-ink-soft">
             <input
               type="checkbox"
               name="anonymous"
@@ -273,8 +276,8 @@ export default function DonateForm({ suggested, note }: Props) {
               className="mt-1 accent-[var(--c-sindoor)]"
             />
             <span>
-              List me as an anonymous well-wisher. The amount still appears, so
-              the totals stay honest.
+              Keep me off the board. The amount is still counted in the
+              committee&apos;s accounts, and your receipt is unaffected.
             </span>
           </label>
 
@@ -324,11 +327,21 @@ export default function DonateForm({ suggested, note }: Props) {
           )}
         </button>
 
-        <p className="text-[0.7rem] leading-relaxed text-ink-faint">
-          Submitting this form records your declaration. It does not move money.
-          Make the transfer first using the account details alongside, then tell
-          us about it here.
-        </p>
+        <div className="space-y-2 border-t border-line pt-5 text-[0.7rem] leading-relaxed text-ink-faint">
+          <p>
+            Submitting this form records your declaration. It does not move
+            money and it does not charge anything. Make the transfer first
+            using the account details alongside, then tell us about it here.
+          </p>
+          <p>
+            What we do with it. Your name, email, phone number and SR number go
+            to the committee treasurer so the payment can be matched and a
+            receipt sent. A screenshot, if you upload one, is stored privately
+            and is visible only to the committee. Nothing is sold, shared or
+            used for anything else, and you can ask a convenor to remove your
+            entry at any time.
+          </p>
+        </div>
       </fieldset>
     </form>
   );

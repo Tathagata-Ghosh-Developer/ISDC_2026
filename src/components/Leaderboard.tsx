@@ -23,15 +23,21 @@ export default function Leaderboard({ entries }: { entries: BoardEntry[] }) {
     [entries],
   );
 
+  /** Rank is position on the whole board, not within the filter. */
+  const withRank = useMemo(
+    () => ranked.map((e, i) => ({ ...e, rank: i + 1 })),
+    [ranked],
+  );
+
   const rows = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    if (!needle) return ranked;
-    return ranked.filter(
+    if (!needle) return withRank;
+    return withRank.filter(
       (e) =>
         e.name.toLowerCase().includes(needle) ||
         (e.message ?? "").toLowerCase().includes(needle),
     );
-  }, [ranked, q]);
+  }, [withRank, q]);
 
   if (entries.length === 0) {
     return (
@@ -40,9 +46,6 @@ export default function Leaderboard({ entries }: { entries: BoardEntry[] }) {
       </p>
     );
   }
-
-  /** Rank is by amount across the whole board, not within the filter. */
-  const rankOf = (id: string) => ranked.findIndex((e) => e.id === id) + 1;
 
   return (
     <div>
@@ -69,11 +72,11 @@ export default function Leaderboard({ entries }: { entries: BoardEntry[] }) {
 
       <ol className="mt-5 divide-y divide-line border-y border-line">
         {rows.slice(0, shown).map((e, i) => {
-          const rank = rankOf(e.id);
+          const rank = e.rank;
           const top = rank <= 3;
           return (
             <motion.li
-              key={e.id}
+              key={`${rank}-${e.name}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
