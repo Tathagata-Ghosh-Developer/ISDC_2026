@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Pause, Play, RotateCcw, Volume2 } from "lucide-react";
+import { Pause, Play, RotateCcw, Share2, Volume2 } from "lucide-react";
 import type { AmbienceLayer } from "@/lib/content/music";
 
 /* ================================================================
@@ -49,12 +49,65 @@ const PRESETS: { id: string; bangla: string; roman: string; mix: Record<string, 
   },
 ];
 
+const STORE_KEY = "isdc-mix";
+
+/** A mix packs into a URL as id:level pairs, so it can be shared. */
+function encodeMix(levels: Record<string, number>): string {
+  return Object.entries(levels)
+    .filter(([, v]) => v > 0.01)
+    .map(([k, v]) => `${k}:${Math.round(v * 100)}`)
+    .join(",");
+}
+
+function decodeMix(raw: string): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const part of raw.split(",")) {
+    const [id, value] = part.split(":");
+    const n = Number(value);
+    if (id && Number.isFinite(n)) out[id] = Math.min(1, Math.max(0, n / 100));
+  }
+  return out;
+}
+
 export default function SoundDesk({ layers }: Props) {
   const [levels, setLevels] = useState<Record<string, number>>({});
   const [playing, setPlaying] = useState(false);
   const [master, setMaster] = useState(0.8);
   const [failed, setFailed] = useState<Record<string, boolean>>({});
+  const [copied, setCopied] = useState(false);
   const elements = useRef<Record<string, HTMLAudioElement>>({});
+  const fades = useRef<Record<string, number>>({});
+
+  /* ---- a shared link wins, otherwise the last mix on this device ---- */
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get("mix");
+    if (fromUrl) {
+      setLevels(decodeMix(fromUrl));
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(STORE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as {
+          levels?: Record<string, number>;
+          master?: number;
+        };
+        if (parsed.levels) setLevels(parsed.levels);
+        if (typeof parsed.master === "number") setMaster(parsed.master);
+      }
+    } catch {
+      /* private browsing, or a stale shape */
+    }
+  }, []);
+
+  /* ---- remember it, so a return visit sounds the same ---- */
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify({ levels, master }));
+    } catch {
+      /* not important enough to complain about */
+    }
+  }, [levels, master]);
 
   /* ---- keep the elements in step with the state ---- */
   useEffect(() => {
@@ -81,8 +134,23 @@ export default function SoundDesk({ layers }: Props) {
       }
 
       const a = elements.current[layer.id];
-      a.volume = Math.min(1, Math.max(0, level * master));
+      const target = Math.min(1, Math.max(0, level * master));
+
+      // Ease to the new level rather than jumping. A hard cut on a
+      // looping field recording is audible and cheap sounding.
+      window.clearInterval(fades.current[layer.id]);
+      fades.current[layer.id] = window.setInterval(() => {
+        const step = 0.06;
+        if (Math.abs(a.volume - target) <= step) {
+          a.volume = target;
+          window.clearInterval(fades.current[layer.id]);
+          return;
+        }
+        a.volume += a.volume < target ? step : -step;
+      }, 40);
+
       if (a.paused) {
+        a.volume = 0;
         void a.play().catch(() => setFailed((f) => ({ ...f, [layer.id]: true })));
       }
     }
@@ -91,13 +159,42 @@ export default function SoundDesk({ layers }: Props) {
   /* ---- stop everything when the page goes away ---- */
   useEffect(() => {
     const els = elements.current;
+    const timers = fades.current;
     return () => {
+      for (const t of Object.values(timers)) window.clearInterval(t);
       for (const a of Object.values(els)) {
         a.pause();
         a.src = "";
       }
     };
   }, []);
+
+  /* ---- space to play, arrows for the master ---- */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        setPlaying((p) => !p);
+      }
+      if (e.code === "ArrowUp") setMaster((m) => Math.min(1, m + 0.05));
+      if (e.code === "ArrowDown") setMaster((m) => Math.max(0, m - 0.05));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  async function share() {
+    const url = `${window.location.origin}${window.location.pathname}?mix=${encodeMix(levels)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt("Copy this link", url);
+    }
+  }
 
   const applyPreset = useCallback((mix: Record<string, number>) => {
     setLevels(mix);
@@ -127,6 +224,14 @@ export default function SoundDesk({ layers }: Props) {
           className="btn btn-ghost !py-2 !text-[0.68rem]"
         >
           <RotateCcw size={13} /> Clear
+        </button>
+
+        <button
+          onClick={share}
+          disabled={!anyOn}
+          className="btn btn-ghost !py-2 !text-[0.68rem] disabled:opacity-40"
+        >
+          <Share2 size={13} /> {copied ? "Link copied" : "Share this mix"}
         </button>
 
         <label className="ml-auto flex min-w-[10rem] flex-1 items-center gap-3 sm:max-w-[16rem]">
