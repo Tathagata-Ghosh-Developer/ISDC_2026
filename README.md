@@ -13,8 +13,13 @@ no percentage of any donation is lost to fees.
 
 **For visitors**
 
-- An arrival sequence in four movements, drawn in SVG, playing once per
-  browser session and skippable at any point.
+- An arrival sequence as a rod-puppet show, drawn in SVG, playing once
+  per browser session and skippable at any point.
+- Two countdowns, because there are two arrivals. The home page counts
+  to the sixteenth of October, when she reaches this campus. The
+  Mahalaya page counts to the broadcast on the tenth.
+- A listening room with a mixing desk of freely licensed ambient
+  recordings and eighty nine Bengali songs, embedded never hosted.
 - The history of Durga Puja across five eras, with ninety facts, each
   carrying the source it came from and a Bengali rendering.
 - Twenty-four art forms the festival commissions every year, each naming
@@ -26,10 +31,12 @@ no percentage of any donation is lost to fees.
 
 **For donors**
 
-- Bank details and a QR code to pay with, then a form recording what was
-  sent. The form never charges anyone.
+- Bank details and the bank's own QR to pay with, then a form recording
+  what was sent. The form never charges anyone.
 - A numbered receipt, viewable and printable, sent to the donor over
-  WhatsApp once the treasurer has matched the payment.
+  WhatsApp and, when they gave an address, by email as well.
+- Email is required only from students, whose institute address lets
+  the committee match them against the roll.
 - A public board showing everyone who gave, ranked by amount. Totals are
   deliberately not published.
 
@@ -89,6 +96,11 @@ Optional:
 | `SHEETS_WEBHOOK_URL` | Mirrors every donation into a Google Sheet |
 | `GROQ_API_KEY` | Prose answers from the guide, free tier |
 | `GEMINI_API_KEY` | Alternative provider for the same |
+| `RESEND_API_KEY` | Emails the receipt as well, 100 a day free |
+| `BREVO_API_KEY` | The same, 300 a day free. Set one, not both |
+| `MAIL_FROM` | Sender address, on a domain verified with that provider |
+| `WHATSAPP_TOKEN` | Sends the receipt from the server instead of by hand |
+| `WHATSAPP_PHONE_ID` | The number id from Meta, paired with the token |
 
 ### 3. Running it
 
@@ -152,8 +164,24 @@ so they appear without any code change.
 
 ### Adding the payment QR
 
-Save the bank's QR image as `public/media/qr/upi-qr.png`. The donation
-page shows it automatically and hides the placeholder note.
+The bank's QR is already at `public/media/qr/upi-qr.jpg`. If the bank
+reissues it, replace that file. The UPI address printed on it is
+`iiscsdc@sbi`; override with `NEXT_PUBLIC_UPI_ID` if that ever changes.
+
+### The listening room
+
+`npm run fetch:audio` downloads local copies of the ambient layers so
+they are served from this site rather than from wherever they were
+published. Some networks block the source host, in which case those
+layers stream instead and the page says how many are local.
+
+Every layer is CC0 or CC BY and its attribution is rendered beside its
+fader. That attribution is a licence condition, not decoration. Do not
+remove it.
+
+The songs are embedded from the rights holder's own upload and must
+never be downloaded and hosted here. Re-check the video ids before each
+festival; uploads get removed and embed permission gets revoked.
 
 ---
 
