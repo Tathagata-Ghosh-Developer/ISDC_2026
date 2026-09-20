@@ -18,7 +18,7 @@ const csp = [
   "form-action 'self'",
   "frame-ancestors 'none'",
   "img-src 'self' data: blob: https:",
-  "media-src 'self' blob:",
+  "media-src 'self' blob: https://cdn.freesound.org https://upload.wikimedia.org",
   "font-src 'self' https://fonts.gstatic.com data:",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",

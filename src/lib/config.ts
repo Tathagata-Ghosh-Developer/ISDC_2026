@@ -122,9 +122,12 @@ export const DEFAULTS: Config = {
   arrival: { enabled: true, oncePerSession: true },
   mahalaya: {
     audioUrl: "",
-    youtubeId: "",
+    // Saregama Bengali's own upload of the full programme, checked to
+    // permit embedding. The recording is not in the public domain, so
+    // it is embedded from the rights holder and never hosted here.
+    youtubeId: "YQyo8QeoYhc",
     caption:
-      "The recitation is the property of All India Radio. We link to the official broadcast rather than hosting a copy.",
+      "Mahishasuramardini. The broadcast belongs to Prasar Bharati and the 1966 recording to Saregama India Ltd, so it plays here from Saregama's own upload rather than from a copy of ours. Script by Bani Kumar, music by Pankaj Kumar Mullick, recitation by Birendra Krishna Bhadra.",
   },
   announcement: {
     enabled: false,
