@@ -1,0 +1,226 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import fs from "node:fs";
+import path from "node:path";
+import { Building2, QrCode, ShieldCheck } from "lucide-react";
+import { Container, Section, SectionHeading } from "@/components/Section";
+import Reveal from "@/components/Reveal";
+import DonateForm from "@/components/DonateForm";
+import CopyField from "@/components/CopyField";
+import { getConfig } from "@/lib/config";
+import { getBoard } from "@/lib/db";
+import { formatINR } from "@/lib/format";
+
+export const metadata: Metadata = {
+  title: "Donate",
+  description:
+    "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account — no payment gateway, no fees, and every rupee listed publicly.",
+};
+
+export const revalidate = 120;
+
+export default async function DonatePage() {
+  const config = await getConfig();
+  const board = await getBoard();
+
+  // The QR is dropped in by the committee when the bank issues it.
+  const qrExists = fs.existsSync(
+    path.join(process.cwd(), "public", config.bank.qrImage.replace(/^\//, "")),
+  );
+
+  return (
+    <>
+      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+        <Container>
+          <SectionHeading
+            eyebrow="দান · Donate"
+            title="Every rupee, on the record"
+            bangla="স্বচ্ছ হিসেব, প্রকাশ্য খাতা"
+            lede="There is no payment gateway here, which means no percentage disappears into processing fees. You transfer straight into the committee's bank account. We check it against the statement, send you a numbered receipt on WhatsApp, and publish your name and amount on the donation board."
+          />
+
+          {board.ready && (
+            <Reveal className="mt-[2.618rem]">
+              <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-3">
+                <Stat label="Raised" bangla="সংগৃহীত" value={formatINR(board.total)} />
+                <Stat label="Donors" bangla="দাতা" value={String(board.count)} />
+                <Stat
+                  label="Published spend"
+                  bangla="প্রকাশিত ব্যয়"
+                  value={formatINR(board.spent)}
+                />
+              </div>
+            </Reveal>
+          )}
+        </Container>
+      </Section>
+
+      <Section className="!pt-0">
+        <Container>
+          <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
+            {/* -------- how to pay -------- */}
+            <Reveal className="lg:sticky lg:top-24">
+              <div className="surface p-6 sm:p-7">
+                <h2 className="font-display flex items-center gap-2 text-[1.272rem] text-ink">
+                  <Building2 size={17} className="text-gold" />
+                  Step one — transfer
+                </h2>
+                <p className="mt-2 text-[0.8rem] leading-relaxed text-ink-soft">
+                  Use your own banking app. Add your name in the remarks so the
+                  treasurer can match it quickly.
+                </p>
+
+                <dl className="mt-6 space-y-3">
+                  <CopyField label="Account name" value={config.bank.accountName} />
+                  <CopyField
+                    label="Account number"
+                    value={config.bank.accountNumber}
+                    mono
+                  />
+                  <CopyField label="IFSC" value={config.bank.ifsc} mono />
+                  <CopyField
+                    label="Bank"
+                    value={`${config.bank.bank}, ${config.bank.branch}`}
+                  />
+                  <CopyField label="Account type" value={config.bank.accountType} />
+                  {config.bank.upiId && (
+                    <CopyField label="UPI ID" value={config.bank.upiId} mono />
+                  )}
+                </dl>
+
+                <div className="mt-7 border-t border-line pt-6">
+                  <h3 className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.22em] text-ink-soft">
+                    <QrCode size={14} className="text-gold" />
+                    Scan to pay
+                  </h3>
+                  {qrExists ? (
+                    <div className="mt-4 w-full max-w-[15rem] bg-white p-3">
+                      <Image
+                        src={config.bank.qrImage}
+                        alt="UPI QR code for the committee account"
+                        width={480}
+                        height={480}
+                        className="h-auto w-full"
+                      />
+                    </div>
+                  ) : (
+                    <p className="mt-3 border border-dashed border-line p-4 text-[0.78rem] leading-relaxed text-ink-faint">
+                      The QR code is being issued by the bank and will appear
+                      here. Until then, please use the account details above —
+                      they reach the same account.
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-7 flex gap-2 border-t border-line pt-6 text-[0.75rem] leading-relaxed text-ink-soft">
+                  <ShieldCheck size={15} className="mt-0.5 shrink-0 text-leaf" />
+                  <p>
+                    This is the registered committee account, operated jointly
+                    by the Faculty Advisor and the Student General Secretary.
+                    Nobody on the committee can move money alone.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 text-[0.75rem] leading-relaxed text-ink-faint">
+                <p>
+                  Prefer to give cash? Find a fundraising volunteer at the mess
+                  counters, or any committee member at the pandal. They will
+                  record it under your name and you will get the same receipt.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* -------- tell us -------- */}
+            <div>
+              <Reveal>
+                <h2 className="font-display text-[1.618rem] font-light text-ink">
+                  Step two — tell us about it
+                </h2>
+                <p className="lede mt-2 max-w-[56ch] text-[0.95rem]">
+                  This is how your receipt finds you. Nothing here charges your
+                  card; the form only records what you have already sent.
+                </p>
+              </Reveal>
+
+              <div className="mt-6">
+                <DonateForm
+                  suggested={[...config.donation.suggested]}
+                  note={config.donation.note}
+                />
+              </div>
+
+              <Reveal className="mt-8">
+                <div className="surface p-6">
+                  <h3 className="eyebrow">What happens next</h3>
+                  <ol className="mt-5 space-y-4">
+                    {[
+                      {
+                        n: "01",
+                        t: "The treasurer matches your entry to the bank statement.",
+                        d: "Usually within a day. A transaction reference makes it immediate.",
+                      },
+                      {
+                        n: "02",
+                        t: "A numbered receipt is issued.",
+                        d: "Receipt numbers run in sequence, so gaps would be visible to anyone checking.",
+                      },
+                      {
+                        n: "03",
+                        t: "It reaches your WhatsApp.",
+                        d: "A link to your receipt, which you can print or save as PDF.",
+                      },
+                      {
+                        n: "04",
+                        t: "Your name goes up on the board.",
+                        d: "Unless you asked to stay anonymous, in which case only the amount appears.",
+                      },
+                    ].map((s) => (
+                      <li key={s.n} className="flex gap-4">
+                        <span className="font-display shrink-0 text-[1.272rem] font-light text-gold">
+                          {s.n}
+                        </span>
+                        <span>
+                          <span className="block text-[0.88rem] text-ink">{s.t}</span>
+                          <span className="mt-0.5 block text-[0.78rem] text-ink-faint">
+                            {s.d}
+                          </span>
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                  <Link href="/daan/board" className="btn btn-ghost mt-7 w-full">
+                    See the public ledger
+                  </Link>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
+  );
+}
+
+function Stat({
+  label,
+  bangla,
+  value,
+}: {
+  label: string;
+  bangla: string;
+  value: string;
+}) {
+  return (
+    <div className="bg-paper p-6">
+      <span className="font-display block text-[2.058rem] font-light leading-none tabular-nums text-sindoor">
+        {value}
+      </span>
+      <span className="mt-2 block text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint">
+        {label}
+      </span>
+      <span className="bangla block text-[0.72rem] text-gold/80">{bangla}</span>
+    </div>
+  );
+}

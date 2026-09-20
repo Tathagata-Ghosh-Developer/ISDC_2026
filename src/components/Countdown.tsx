@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { PUJA_DATES } from "@/lib/site";
 
-const TARGET = new Date(PUJA_DATES.countdownTo).getTime();
-
 const UNITS = [
   { key: "days", label: "Days", bangla: "দিন" },
   { key: "hours", label: "Hours", bangla: "ঘণ্টা" },
@@ -22,17 +20,22 @@ function split(ms: number) {
   };
 }
 
-export default function Countdown() {
+export default function Countdown({
+  target = PUJA_DATES.countdownTo,
+}: {
+  target?: string;
+}) {
   const [left, setLeft] = useState<ReturnType<typeof split> | null>(null);
+  const at = new Date(target).getTime();
 
   useEffect(() => {
-    const tick = () => setLeft(split(TARGET - Date.now()));
+    const tick = () => setLeft(split(at - Date.now()));
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [at]);
 
-  const done = left !== null && TARGET - Date.now() <= 0;
+  const done = left !== null && at - Date.now() <= 0;
 
   if (done) {
     return (

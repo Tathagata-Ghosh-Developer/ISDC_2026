@@ -5,6 +5,9 @@ import { SITE } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PujoGuide from "@/components/PujoGuide";
+import Arrival from "@/components/Arrival";
+import AnnouncementBar from "@/components/AnnouncementBar";
+import { getConfig } from "@/lib/config";
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
@@ -70,9 +73,11 @@ export const viewport: Viewport = {
 /** Applies the stored theme before first paint so nothing flashes. */
 const THEME_BOOT = `(function(){try{var t=localStorage.getItem('isdc-theme');if(t){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const config = await getConfig();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -87,6 +92,10 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        {config.arrival.enabled && (
+          <Arrival oncePerSession={config.arrival.oncePerSession} />
+        )}
+        <AnnouncementBar announcement={config.announcement} />
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />

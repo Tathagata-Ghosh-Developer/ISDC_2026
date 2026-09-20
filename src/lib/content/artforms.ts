@@ -1,0 +1,340 @@
+/**
+ * Twenty-four art forms that Durga Puja commissions every year, from
+ * idol making to the Puja-release record. Each entry names a living
+ * practitioner or institution a reader can go and look up.
+ *
+ * Generated from research/artforms.json.
+ */
+
+export type ArtCategory =
+  | "Sculpture"
+  | "Painting"
+  | "Music"
+  | "Craft"
+  | "Performance"
+  | "Architecture"
+  | "Light"
+  | "Textile"
+  | "Contemporary";
+
+export type ArtStatus = "Thriving" | "Evolving" | "Endangered";
+
+export type ArtForm = {
+  id: string;
+  name: string;
+  bangla: string;
+  category: ArtCategory;
+  origin: string;
+  blurb: string;
+  technique: string;
+  status: ArtStatus;
+  practitioner: string;
+  didYouKnow: string;
+};
+
+export const ART_CATEGORIES: ArtCategory[] = [
+  "Sculpture",
+  "Painting",
+  "Craft",
+  "Music",
+  "Performance",
+  "Architecture",
+  "Light",
+  "Textile",
+  "Contemporary",
+];
+
+export const ART_FORMS: ArtForm[] = [
+  {
+    id: "pratima-shilpa",
+    name: "Pratima Shilpa (Idol Making)",
+    bangla: "প্রতিমা শিল্প",
+    category: "Sculpture",
+    origin: "Kumartuli, north Kolkata; potters' quarter established c. early 1700s",
+    blurb: "Every autumn in Kumartuli, Kolkata's three-hundred-year-old potters' quarter, the goddess is built from the ground up. A bamboo-and-wood frame, often the very one recovered from last year's immersion, is bound tight with rice straw, then packed with sticky river clay and rice husk, coat over coat, until a body emerges from a bundle of sticks. The work begins not in autumn but on Rath Yatra in midsummer, when the bare frame itself is worshipped. Heads are moulded separately and joined. Colour goes on last, and then, traditionally at dawn on Mahalaya, the most senior artisan in the workshop paints the eyes. Until that stroke she is clay. After it, she can be seen, and can see.",
+    technique: "Rice straw bound onto a bamboo and wood kathamo, then two clay coats — ek-mete of sticky entel mati mixed with rice husk, and do-mete of fine sandy bele mati — finished with Hooghly silt, chalk primer, paint and an organic varnish.",
+    status: "Thriving",
+    practitioner: "China Pal and Mala Pal, Kumartuli, Kolkata — two of the first women to run their own idol workshops",
+    didYouKnow: "The idol-maker's year begins on Rath Yatra, when the previous year's bamboo frame is worshipped and reused. At many old family pujas the same kathamo has carried the goddess for over a century — the skeleton persists, only the skin is remade.",
+  },
+  {
+    id: "krishnanagar-putul",
+    name: "Krishnanagar Clay Dolls",
+    bangla: "কৃষ্ণনগরের মাটির পুতুল",
+    category: "Sculpture",
+    origin: "Ghurni, Krishnanagar, Nadia district; from 1728 under Maharaja Krishna Chandra Roy",
+    blurb: "In 1728 the Maharaja of Krishnanagar settled potter families brought from Dhaka and Natore in a quarter called Ghurni, and asked them to make something nobody in Bengal had made before: not gods, but people. What came out was a tradition of astonishing realism — a fisherwoman with her catch, a cobbler bent over a shoe, a snake charmer mid-breath — modelled in fine Ganga silt with visible veins, slack skin and individually rendered hair. European collectors bought them by the crate through the nineteenth century. The workshops are still open, still family-run, and still modelling the unglamorous. Every hyper-real, human-faced theme idol in a modern Kolkata pandal is descended from this village.",
+    technique: "Fine deltaic clay from the Ganga bed, hand-modelled part by part over bamboo or wire armatures, sun-dried, kiln-fired and painted with natural pigments — never fully mould-cast, so each figure differs.",
+    status: "Evolving",
+    practitioner: "The Ghurni artisan cluster, Krishnanagar (Nadia) — open studios; documented by the Rural Craft and Cultural Hubs (RCCH) Bengal programme",
+    didYouKnow: "The craft has just won a Geographical Indication as the Krishnagar Clay Doll, after decades in which the name was borrowed by mass-produced imitations. Over 300 people in Ghurni now work in clay.",
+  },
+  {
+    id: "daker-saj",
+    name: "Daker Saj",
+    bangla: "ডাকের সাজ",
+    category: "Craft",
+    origin: "Zamindari Bengal, 18th-19th century; centred on Kumartuli and Hooghly",
+    blurb: "The most traditional-looking ornament on a Bengali Durga idol is named after the colonial postal system. In the great household pujas of the eighteenth and nineteenth centuries, the goddess was dressed in beaten silver and tin foil imported from Germany, which arrived by post — dak — and so the style became daker saj, the ornament that came by mail. Foil is cut, embossed with a stylus, crimped and pasted over a sholapith core to build crowns, haloes, breastplates, arm bands and the lion's caparison. It is deliberately mirror-bright, designed for oil lamps in a dark thakurdalan rather than floodlights. German foil stopped coming long ago; the name, and the glitter, stayed.",
+    technique: "Silver and tin foil, plus coloured metallic sheet, cut and embossed by hand and pasted in layers over a sholapith or paper armature to form the crown, halo and body ornament.",
+    status: "Endangered",
+    practitioner: "The Malakar decorator families of Kumartuli's saj-para, Kolkata (approach via Kumartuli Mritshilpi Samiti)",
+    didYouKnow: "Daker saj is one of the few Indian craft names that is an accidental fossil of global trade: it records a supply chain running from a German foil mill to a Calcutta post office to a potter's lane.",
+  },
+  {
+    id: "sholar-saj",
+    name: "Sholar Saj (Sholapith)",
+    bangla: "শোলার সাজ",
+    category: "Craft",
+    origin: "Wetland Bengal — Bardhaman, Murshidabad, Birbhum, Nadia, Hooghly, Malda",
+    blurb: "Shola is the milk-white pith inside the stem of a marsh plant, Aeschynomene aspera, cut from Bengal's wetlands in the monsoon and peeled into ribbons thinner than paper with one curved knife. It is often called Indian cork; it is better described as a vegetable ivory. The Malakar caste — garland-makers, one of Bengal's nine artisan castes — curl, layer and paste it into the goddess's crown, her halo, the moon-garland behind her, and the white armour that dresses the whole family. No moulds, no lathe, no templates: everything is cut freehand. It is also completely biodegradable, which makes its cheap replacement, thermocol, one of the quietest ecological reversals in the festival.",
+    technique: "Spongewood pith is soaked, peeled into thin sheets with a single curved blade, then cut, curled and layered freehand, joined with tamarind-seed glue and sometimes foiled.",
+    status: "Endangered",
+    practitioner: "Sandip Biswas (National Awardee, Murshidabad); Ananta Malakar (Birbhum, National Awardee); Samir Saha (President's Awardee)",
+    didYouKnow: "The same craft dresses both ends of a Bengali life: the shola topor and mukut worn by a bride and groom at a wedding, and the white ornament that goes into the river with the goddess.",
+  },
+  {
+    id: "chalchitra",
+    name: "Chalchitra (Painted Backdrop)",
+    bangla: "চালচিত্র",
+    category: "Painting",
+    origin: "Bengal, documented for roughly three centuries; Nabadwip, Krishnanagar, Kolkata",
+    blurb: "Behind the traditional Durga group rises a great painted arch — the chalchitra, from chal, a covering or roof. It was never mere decoration. Its curve gives the five-figure ek-chala composition its proportion and its ceiling, and its horizontal registers carry the story: Shiva and Durga, the ten avatars, Rama and Ravana, the whole Shakta pantheon painted in chalk white, indigo, red ochre and lampblack on cloth stretched over bamboo. It is painted by patuas, not by the idol-maker, which means the backdrop is a scroll painting that has become architecture. For decades printed vinyl replaced it and the painting families nearly vanished. Heritage pujas have begun, belatedly, to commission the real thing again.",
+    technique: "Cloth or paper stretched over a bamboo-and-shola arch, drawn in charcoal and painted with earth and vegetable pigments bound in tamarind or bel gum.",
+    status: "Endangered",
+    practitioner: "Reba Pal, Krishnanagar (Nadia) — in her eighties and still painting chalchitra; also the Chitrataru patua cooperative, Naya, Pingla",
+    didYouKnow: "The chalchitra has escaped the idol. Theme pujas now hire patuas to paint chalchitra logic across an entire pandal — walls, ceiling and corridor — so visitors walk inside the backdrop instead of looking at it.",
+  },
+  {
+    id: "patachitra",
+    name: "Patachitra and Pater Gaan",
+    bangla: "পটচিত্র ও পটের গান",
+    category: "Painting",
+    origin: "Bengal, practised since at least the 13th century; living centre at Naya, Pingla, Paschim Medinipur",
+    blurb: "A patua unrolls a scroll twenty feet long, frame by frame, and sings the story as it goes — a song she wrote herself, to a tune she composed, about a painting she made. Painter, lyricist and singer are the same person; the scroll is a storyboard and the song is its soundtrack. It is, functionally, cinema four centuries early. The pigments come out of the kitchen and the hedgerow: soot for black, kusum flowers for red, turmeric for yellow, indigo for blue, bel-fruit gum to bind them. The subjects run from the Chandi and the Ramayana to the tsunami, the pandemic and girls' education. Patachitra has always been journalism as much as scripture.",
+    technique: "Paper panels pasted with tamarind glue onto old sari cloth to make a vertical scroll, painted in sequential frames with entirely natural pigments and performed aloud as narrative song.",
+    status: "Thriving",
+    practitioner: "Swarna Chitrakar and Anwar Chitrakar, Naya village, Pingla — both internationally exhibited; the Chitrataru cooperative",
+    didYouKnow: "The patuas of Naya are Muslim by faith and bear the title Chitrakar, and they paint and sing Hindu mythology for a living. Bengal Patachitra received its Geographical Indication on 28 March 2018.",
+  },
+  {
+    id: "alpona",
+    name: "Alpona (Ritual Floor Art)",
+    bangla: "আলপনা",
+    category: "Painting",
+    origin: "Rural Bengal, ancient; codified as an art form at Kala Bhavan, Santiniketan, from c. 1919",
+    blurb: "Alpona is drawn with the fingers, in rice ground to a thin white slurry, on a swept floor. Its root is not decoration but brata — the vows undertaken by girls and women, where the diagram is the instrument of the vow and the motifs are frankly magical: paddy sheaves, the owl that carries Lakshmi, fish, lotuses, and the goddess's footprints, always drawn walking into the house. Rice paste is used because rice is the wealth being asked for, and the drawing is meant to be walked on and erased. Then, at Santiniketan, Sukumari Devi brought the East Bengal idiom to Kala Bhavan, Nandalal Bose watched her work, and a women's household rite was promoted into fine art.",
+    technique: "Sun-dried atap rice is soaked, ground to a thin paste and applied freehand with the fingertips or a cloth swab directly onto floor or wall — wet, monochrome white, and deliberately impermanent.",
+    status: "Thriving",
+    practitioner: "Kala Bhavan, Visva-Bharati, Santiniketan — where the Sukumari Devi and Nandalal Bose alpona is still taught and executed annually",
+    didYouKnow: "Alpona is not rangoli. Rangoli is dry, coloured powder on a grid of dots; alpona is wet, white and freehand. In 2019 a 1.4 km alpona along Lake Road in south Kolkata was billed as the world's longest street-art installation.",
+  },
+  {
+    id: "dhaker-badyi",
+    name: "Dhak, Dhol and Kansar",
+    bangla: "ঢাকের বাদ্যি",
+    category: "Music",
+    origin: "Bengal and Assam, medieval; players drawn from Bardhaman, Murshidabad, Birbhum, Nadia and the 24 Parganas",
+    blurb: "The dhak is a barrel drum carved from mango or neem, slung high from the shoulder so it hangs against the player's chest, struck with two thin canes, and crowned with a spray of white feathers. It is worn that way for a reason: the dhaki has to dance. The dhol, smaller and played on both heads, stays low at the waist and keeps time; the kansar, a bell-metal plate, cuts the top. Together they are the puja orchestra, and what they play is not improvisation but liturgy — fixed patterns for the goddess's arrival, for the evening lamp, for sandhi puja, for the immersion. For four days a year, drummers who farm the rest of the year own the city's soundtrack.",
+    technique: "A large double-headed wooden drum with hide heads laced under cane tension, the left head weighted with tuning paste, played one-sided with two canes while slung from the neck.",
+    status: "Thriving",
+    practitioner: "Gokul Chandra Das, North 24 Parganas — in 2025 the first dhaki ever awarded the Padma Shri; he has trained over 150 women as professional dhakis",
+    didYouKnow: "Every autumn, dhakis mass on the platforms of Sealdah and Howrah stations and are hired off the concourse by puja committees — an open-air annual labour market for a hereditary art form.",
+  },
+  {
+    id: "dhunuchi-naach",
+    name: "Dhunuchi Naach",
+    bangla: "ধুনুচি নাচ",
+    category: "Performance",
+    origin: "Bengal; performed at Durga Puja, most intensely on Maha Ashtami and Bijoya Dashami",
+    blurb: "A dhunuchi is a flared earthen cup on a stem. Burning coal at the bottom sets alight a packed layer of dried coconut husk; resin and camphor are thrown on top; and out of it pours thick sweet white smoke. The dancer takes one in each hand — the show-offs take a third between their teeth — and swings them in long arcs to the dhak, spinning, crouching, trailing smoke through the crowd. Tradition says that when Durga fought Mahishasura for nine days, her devotees danced with fire to lend her strength, so it is framed as energy given to the goddess rather than a performance. Every community puja from Kolkata to Bengaluru to New Jersey now runs a competition.",
+    technique: "Live coal, dried coconut husk and dhuno resin burned in a stemmed terracotta censer, swung in both hands to the dhak's rhythm; the earthenware keeps the stem cool enough to grip.",
+    status: "Thriving",
+    practitioner: "The competition circuits run by major community pujas — for example Sarathi Socio Cultural Trust, Koramangala, Bengaluru, which runs formal dhunuchi, conch and dhak contests",
+    didYouKnow: "The dance has no single master and no lineage of gurus — which is precisely why it is healthy. It is transmitted entirely by imitation, in public, once a year.",
+  },
+  {
+    id: "agomoni-gaan",
+    name: "Agomoni and Bijoya Songs",
+    bangla: "আগমনী ও বিজয়ার গান",
+    category: "Music",
+    origin: "Shakta Padavali of Bengal, 18th century; Ramprasad Sen and Kamalakanta Bhattacharya",
+    blurb: "The Agomoni songs are not about a battle. They are about a family. Menaka dreams of her daughter Uma, married off to an ash-smeared, homeless, intoxicated Shiva in distant Kailash, and begs her husband to fetch the girl home. Uma arrives on Saptami; the house is full for four days; on Dashami she must go back. The Bijoya songs are the songs of that leaving. This is why Durga Puja feels the way it does to Bengalis — it is not primarily a victory festival but a ghare phera festival, a daughter's homecoming, with all of Bengal cast as her mother. Ramprasad Sen gave the form its voice in the eighteenth century; Kamalakanta carried it on.",
+    technique: "Bengali devotional song-poetry in the Shakta Padavali tradition, sung in a style called Ramprasadi that blends Baul folk melody with classical raga and kirtan.",
+    status: "Evolving",
+    practitioner: "Swagatalakshmi Dasgupta (recorded Agomoni gaan); Aditi Munshi, Bengal's leading contemporary devotional and kirtan vocalist",
+    didYouKnow: "Every visible ritual of the Bengali Puja follows from this one domestic story — the five-day stay, the feeding, the sweets pressed on her at immersion, and Sindoor Khela, in which married women send the goddess off exactly as they would a daughter leaving home.",
+  },
+  {
+    id: "chandipath",
+    name: "Chandipath and Mahishasuramardini",
+    bangla: "চণ্ডীপাঠ ও মহিষাসুরমর্দিনী",
+    category: "Performance",
+    origin: "Devi Mahatmya, c. 5th-6th century CE, in the Markandeya Purana; the radio version from Akashvani Calcutta, 1931",
+    blurb: "The Chandi is 700 Sanskrit verses in thirteen chapters, and in Bengal it is never read silently. It is recited aloud in a fixed cadence and pitch contour, learned from a teacher, performed to a listening room, and judged as a style. Its greatest performance is a radio programme. Since 1931, at four in the morning on Mahalaya, Akashvani has broadcast Mahishasuramardini — Bani Kumar's script, Pankaj Mullick's music, and Birendra Krishna Bhadra's ninety minutes of narration and scriptural recitation. It is the sound that starts the Bengali festival season. When the station tried to replace Bhadra with a film star in 1976, the public revolt was so complete that the original was restored and never touched again.",
+    technique: "Sanskrit stotra recitation with prescribed cadence, pitch and tempo, interleaved in the radio version with Bengali narration and newly composed devotional songs.",
+    status: "Thriving",
+    practitioner: "Akashvani (All India Radio) Kolkata, which has broadcast Mahishasuramardini every Mahalaya since 1931; for live Chandipath, Bengal's growing cohort of women purohits",
+    didYouKnow: "It is a rare documented case of an audience defending a recording as heritage: the 1976 replacement cast Uttam Kumar, Bengal's biggest film star, and the listeners rejected it outright.",
+  },
+  {
+    id: "pandal-shilpa",
+    name: "Pandal Shilpa (Bamboo Architecture)",
+    bangla: "প্যান্ডেল শিল্প / বাঁশের কাঠামো",
+    category: "Architecture",
+    origin: "Bengal; decorator teams drawn chiefly from Purba and Paschim Medinipur, Nadia and the 24 Parganas",
+    blurb: "A pandal is a temple a hundred feet tall, built in a street in six weeks, occupied for five days, and then taken apart. Its primary structure contains no nails and no welds: it is bamboo lashed with coir rope at every joint. That is not primitive, it is clever — a lashed joint is semi-rigid, so the whole frame flexes under monsoon wind and crowd load instead of shearing. Construction opens with khuti puja, in which a ceremonial post is consecrated to Vishwakarma and planted where the pandal will stand. The men who build them are farmers for the other eleven months, and the knots are taught the way folk songs are, by watching a father's hands.",
+    technique: "Bamboo poles lashed with coir rope into a semi-rigid space frame, clad in cloth, plywood, jute, cane or whatever the theme demands; no nails in the primary structure.",
+    status: "Thriving",
+    practitioner: "The decorator firms of Medinipur and Nadia — family businesses, often four generations deep, that supply Kolkata's 3,000-plus community pujas",
+    didYouKnow: "Kolkata accounts for about 15 percent of West Bengal's pandal-making industry by value, and the art-and-decoration segment of Durga Puja alone was valued at 860 crore rupees in a British Council study.",
+  },
+  {
+    id: "theme-pujo",
+    name: "Theme Pujo and the Eco-Puja Movement",
+    bangla: "থিম পুজো",
+    category: "Contemporary",
+    origin: "Kolkata, from the late 1990s",
+    blurb: "Until the 1990s the pandal was a decorated enclosure and the art was the idol. Then Kolkata's competitive pujas began hiring fine artists to design pandal, idol, light and sound as a single installation, with a title, a concept and a curatorial statement — and the festival became the largest open-access public art exhibition on earth. What follows is, in effect, an annual materials research programme. Pandals have been built from jute, terracotta pots, coconut coir, paddy straw, bell-metal utensils, tea cups, bicycle parts, machine scrap, glass bangles, cassette tape and packaging waste. One year it is eight thousand living plants; the next it is upcycled metal salvage; the next it is a courtyard about seed sovereignty.",
+    technique: "Fine-art installation practice applied to a temporary public structure — concept, drawings and material prototyping by a named artist, executed by traditional bamboo decorators and Kumartuli sculptors.",
+    status: "Thriving",
+    practitioner: "Bhabatosh Sutar (over fifty original theme pujas in 25 years) and Sanatan Dinda (born in Kumartuli, internationally exhibited painter)",
+    didYouKnow: "UNESCO's 2021 citation named this exact shift, describing Durga Puja as a thriving ground for collaborative artists and designers — the first time a festival's art direction, rather than its ritual, was the grounds for inscription.",
+  },
+  {
+    id: "chandannagar-alo",
+    name: "Chandannagar Illumination",
+    bangla: "চন্দননগরের আলোকসজ্জা",
+    category: "Light",
+    origin: "Chandannagar (Chandernagore), a former French colony on the Hooghly; from the 19th century",
+    blurb: "Chandannagar's light artisans invented moving pictures out of light bulbs. They build vast flat panels of thousands of tiny bulbs, each one wrapped by hand in coloured paper, and then sequence them with rotating drum-and-contact switches so that the image animates: a deer runs, a dancer turns, Durga's spear descends into Mahishasura. All of this was achieved mechanically, decades before any of it could be programmed. Sridhar Das, who began experimenting as a student in the early 1950s, turned festival lighting into an art form and in 2003 floated a seven-metre peacock boat made of 130,000 bulbs down the Thames. LEDs have since arrived, brighter and cheaper, and the craft is arguing with itself about what was lost.",
+    technique: "Tens of thousands of low-wattage bulbs, historically 6.2-watt toony lamps individually wrapped in coloured paper, wired into flat tableaux and animated by sequenced electrical switching; increasingly LED.",
+    status: "Evolving",
+    practitioner: "Babu Pal, Sukumar Biswas and Ashim De, Chandannagar; the Chandannagar Light Owners' Association and AALO, The Light Hub",
+    didYouKnow: "Chandannagar's own festival is Jagaddhatri Puja, not Durga Puja — the town lights its neighbour's festival for a living and saves its best work for its own, in November.",
+  },
+  {
+    id: "bishnupur-terracotta",
+    name: "Bishnupur Terracotta and the Bankura Horse",
+    bangla: "বিষ্ণুপুরের পোড়ামাটির কাজ",
+    category: "Craft",
+    origin: "Bishnupur and Panchmura, Bankura district; Malla dynasty temples, 17th-18th century",
+    blurb: "There is no stone in the Bengal delta. So when the Malla kings of Bishnupur built their temples, they built them in brick and clad every surface in moulded, carved, fired clay — battle scenes, hunts, the Ramayana, Krishna among the cowherds, all of it in red-brown baked mud. It is narrative architecture made from the only material the floodplain had. Nearby, the potters of Panchmura make the Bankura horse: long-necked, ears pricked, radically abstracted, and now the national symbol of Indian handicrafts. Around seventy families still throw and fire it. In Kolkata, terracotta is the cheapest and most eloquent way a pandal can say the word Bengal, and it is used every single year.",
+    technique: "Local alluvial clay moulded or carved into panels and figures, assembled in sections for large pieces, and wood-fired to a red-brown; the Bankura horse is built from thrown and joined cylinders.",
+    status: "Evolving",
+    practitioner: "The Panchmura Kumbhakar potters' cluster, Bankura — GI-registered as Bankura Panchmura Terracotta Craft since 2018",
+    didYouKnow: "The narrative panels of Bishnupur's temples were copied into silk: the figurative pallu of the Baluchari sari was inspired directly by them, making it one of the rare textiles that quotes a building.",
+  },
+  {
+    id: "dokra",
+    name: "Dokra Metalcraft",
+    bangla: "ডোকরা",
+    category: "Craft",
+    origin: "Bikna (Bankura) and Dariapur (Bardhaman), West Bengal; technique over four thousand years old",
+    blurb: "Dokra is cast by the lost-wax method, and the trick is that the wax is not smooth. The artisan builds a clay core, then winds fine threads of beeswax around it in coils and spirals — so the wax pattern is itself the finished decoration. The whole thing is packed in clay, baked until the wax runs out, and molten brass is poured into the void left behind. Then the mould is broken. Because the mould must be destroyed to release the casting, every Dokra object in the world is unique by construction; there is no second copy. The technique descends from the same tradition that produced the Dancing Girl of Mohenjo-daro, four thousand years ago.",
+    technique: "Cire perdue casting: a clay core wound with beeswax threads, encased in clay, fired to drain the wax, filled with molten brass or bronze, then broken open.",
+    status: "Evolving",
+    practitioner: "The Bikna Dokra cluster, Bankura, and the Dariapur cluster, Bardhaman — Bengal Dokra holds a Geographical Indication",
+    didYouKnow: "The Dokra surface you touch is a fossil of a wax thread. Every ridge and coil on a finished brass figure is the exact shape of a strand the artisan wound by hand before the metal existed.",
+  },
+  {
+    id: "kantha",
+    name: "Kantha and Nakshi Kantha",
+    bangla: "কাঁথা ও নকশি কাঁথা",
+    category: "Textile",
+    origin: "Rural Bengal, both West Bengal and Bangladesh; a domestic tradition of unknown antiquity",
+    blurb: "Kantha began as thrift. Worn-out saris and dhotis were layered and quilted together with the simplest stitch there is — a running stitch — using thread pulled from the borders of the same old cloth. Nothing was bought and nothing was wasted. Over generations that utilitarian stitch turned into a language: lotuses, the tree of life, fish, elephants, sun and moon, whole narrative scenes, worked freehand without a frame by women making things for their own households, for a newborn, for a daughter to take away with her. The ripple the stitch leaves across the layers is the signature. It is the most purely domestic of Bengal's arts and now one of its largest rural employers.",
+    technique: "Layers of old cotton cloth quilted together with a plain running stitch worked freehand, the embroidery built entirely from that single stitch in different densities and directions.",
+    status: "Thriving",
+    practitioner: "Shamlu Dudeja and the SHE Foundation, Kolkata — the kantha revival organisation, which supports over 80,000 women artisans in rural Bengal",
+    didYouKnow: "Nakshi Kantha holds a West Bengal GI tag, but its real scale is social: what began as a way of not throwing away a sari is now a household income for tens of thousands of rural women.",
+  },
+  {
+    id: "bangla-bastra",
+    name: "Baluchari, Tant and Jamdani",
+    bangla: "বালুচরি, তাঁত ও জামদানি",
+    category: "Textile",
+    origin: "Baluchar (Murshidabad) and Bishnupur; Shantipur, Phulia and Dhaniakhali; Dhaka",
+    blurb: "Durga Puja is Bengal's fashion season, with a calendar of its own: collections arrive around Rath Yatra in midsummer and the rush peaks in the fortnight before Mahalaya. Three cloths carry it. Baluchari, a Bishnupur silk brocade whose pallu is woven with figurative panels of the Ramayana, court life and colonial officers, copied from the terracotta temples down the road. Tant, Bengal's crisp everyday handloom cotton — and the red-bordered white tant sari of Ashtami morning is, after the idol itself, the most recognisable image of the festival. And Jamdani, supplementary-weft figured muslin in which every motif is inserted by hand, thread by thread, with no jacquard and no shortcut.",
+    technique: "Baluchari: jacquard-figured silk with a narrative pallu. Tant: plain-weave handloom cotton, starched crisp. Jamdani: discontinuous supplementary weft inserted by hand on the loom, motif by motif.",
+    status: "Evolving",
+    practitioner: "Amitava Pal, Bishnupur — weaver leading the revival of old-style Baluchari; and the Phulia and Shantipur weaver clusters in Nadia",
+    didYouKnow: "A top-end Baluchari can take a weaver a week and sell for around 1.5 lakh rupees, yet Bishnupur's silk artisans remain among the poorest craftspeople in Bengal — one of the sharpest value gaps in Indian handloom.",
+  },
+  {
+    id: "jatra",
+    name: "Jatra (Folk Opera)",
+    bangla: "যাত্রা",
+    category: "Performance",
+    origin: "Bengal; rooted in Vaishnava processional performance, secularised from the 19th century; industry centred on Chitpur Road, Kolkata",
+    blurb: "Jatra means journey, and the form travels — a company arrives in a village, builds a square stage with the audience on all four sides, and performs until dawn. There is no proscenium and no naturalism. Delivery is pitched to carry across a field; the orchestra sits at the stage edge in full view; songs interrupt the action; and a stock character called Bibek, meaning Conscience, walks on unannounced to sing what the audience should be thinking. Its season opens around Durga Puja and runs through winter. In 2001 more than three hundred companies employed over twenty thousand people. Today about twenty companies remain on Chitpur Road, and a hit plays a hundred nights instead of three hundred.",
+    technique: "Open-air theatre in the round with a live onstage orchestra, declamatory acting, interpolated song, and the allegorical chorus-figure Bibek.",
+    status: "Endangered",
+    practitioner: "The surviving jatra companies of Chitpur Road, Kolkata; the state-sponsored Biswa Bangla Jatra Utsav",
+    didYouKnow: "Jatra's stagecraft is the direct ancestor of Bengal's rod puppetry — Danger Putul Naach copies jatra in costume, script, music and enactment, so the puppets are literally miniature jatra actors.",
+  },
+  {
+    id: "putul-naach",
+    name: "Putul Naach (Rod Puppetry)",
+    bangla: "পুতুল নাচ",
+    category: "Performance",
+    origin: "West Bengal, traced to roughly the 14th century; now surviving mainly in South 24 Parganas",
+    blurb: "In Danger Putul Naach, the rod-puppet theatre of Bengal, the puppeteer straps a three-foot puppet to his own waist and walks with it behind a curtain, so the doll moves with a human gait. Bengal has three traditional forms — rod, glove and string — and the rod form is the oldest and the grandest, a miniature of jatra in costume, script, music and gesture. Troupes toured village to village through the festival season, playing the melas that attached themselves to Durga Puja and the autumn fairs, and most puppeteers came from communities with nothing else to sell. The form is now described as being on the verge of extinction, surviving almost entirely in one district.",
+    technique: "Large rod puppets strapped at the puppeteer's waist and manipulated from below behind a curtain, performed to live song and percussion in the jatra manner.",
+    status: "Endangered",
+    practitioner: "Jadunath Haldar Putul Natch Opera, the oldest active rod-puppet group in West Bengal; and Bangopootool, a non-profit reviving the form in schools",
+    didYouKnow: "Modern Bengali puppetry has a Moscow accent: Suresh Dutta trained at the Obraztsov Puppet Theatre in Moscow and came home to found the Calcutta Puppet Theatre, where a whole generation learned Russian-style rod technique.",
+  },
+  {
+    id: "baul",
+    name: "Baul Gaan",
+    bangla: "বাউল গান",
+    category: "Music",
+    origin: "Bengal; a syncretic Vaishnava-Sahajiya, Sufi and Tantric mendicant tradition",
+    blurb: "The Baul is a wandering singer-ascetic in ochre or patchwork robes, with an ektara in one hand and ankle bells on, singing about the moner manush — the person of the heart, the divine sought inside the human body rather than in any temple. Bauls reject caste, scripture and institution, which is exactly why they were tolerated at the edges of every fair and festival in Bengal, including the melas that grow around Durga Puja. Their music is inside the Puja in a deeper way too: Ramprasad Sen built Shyama Sangeet, the song tradition that gave Bengal its Agomoni repertoire, by blending Baul folk melody with classical raga and kirtan.",
+    technique: "Solo voice with ektara drone-lute, dotara, duggi, khamak and ankle bells, sung while dancing; transmitted guru to disciple with no notation.",
+    status: "Thriving",
+    practitioner: "Parvathy Baul — the most internationally celebrated woman Baul performer, trained under Sanatan Das Baul, and founder of the Ektara Baul Sangeetha Kalari school",
+    didYouKnow: "Baul song was proclaimed a UNESCO Masterpiece of the Oral and Intangible Heritage of Humanity in 2005, sixteen years before Durga Puja itself was inscribed.",
+  },
+  {
+    id: "bioscope",
+    name: "Bioscope (The Peep-Show Box)",
+    bangla: "বায়োস্কোপ",
+    category: "Performance",
+    origin: "Bengal and across South Asia; the Indian form of the European raree show, 19th to mid-20th century",
+    blurb: "A painted wooden box on a shoulder strap, a row of round glass eyeholes, a hand crank, and a reel of pictures inside. The bioscope-wala walked into a fairground in bright motley, set his box down, and cranked the reel while singing a rhymed commentary — the Taj Mahal, the Kumbh Mela, a king, a war — and children queued to press their eyes against the glass and see somewhere else. It was the first moving image most Bengali villagers ever saw, and it was a direct forerunner of cinema, which then destroyed it. It survives now only in memory, in a handful of documented last practitioners, and as a motif in pandals that stage it like a funeral.",
+    technique: "A hand-cranked reel of painted or printed images inside a decorated wooden cabinet, viewed through magnifying eyepieces and narrated aloud in rhymed song by the operator.",
+    status: "Endangered",
+    practitioner: "No reliably documented living hereditary practitioner in West Bengal; see the Gurusaday Museum, Joka, and the Daricha Foundation archive, and the 2006 documentary The Bioscopewallah",
+    didYouKnow: "The trade has vanished so completely that in Bangladesh, where the last operators are periodically filmed, the national arts academy has never even formally recognised bioscope as a traditional performing art.",
+  },
+  {
+    id: "pujor-gaan",
+    name: "Pujor Gaan and the Puja Release",
+    bangla: "পুজোর গান",
+    category: "Contemporary",
+    origin: "Calcutta; the HMV / Gramophone Company Puja slate, c. 1930s to 1990s",
+    blurb: "For half a century, the most important date in the Bengali music calendar was the Puja release. Every autumn HMV issued a slate of brand-new Bengali songs — not film songs, songs written and recorded specifically for the festival — by Hemanta Mukhopadhyay, Shyamal Mitra, Manna Dey, Sandhya Mukhopadhyay, Kishore Kumar, Lata Mangeshkar. The company even printed the year's lyrics in a magazine called Sharod Arghya so that people could learn them. Records were bought in the weeks before Puja and then played round the clock at the pandals for four days. A whole national repertoire was released, learned and consumed inside one week. The films now do the same thing: Durga Puja is Bengali cinema's biggest window of the year.",
+    technique: "A commissioned annual slate of non-film Bengali songs released on 78rpm, then vinyl, cassette and CD before the festival; now streaming singles, YouTube premieres and sponsored videos.",
+    status: "Evolving",
+    practitioner: "Saregama India, successor to HMV and custodian of the Puja song archive; and SVF Entertainment, Kolkata's dominant Puja-release film studio",
+    didYouKnow: "In 2024 three Bengali films opened the day before Puja and outgrossed the two Bollywood releases of the same week — the first time in recent years that the Bengali industry took its own festival window outright.",
+  },
+  {
+    id: "pujo-media",
+    name: "Sharadiya Publishing and Pujo Parikrama",
+    bangla: "শারদীয়া সংখ্যা ও পুজো পরিক্রমা",
+    category: "Contemporary",
+    origin: "Kolkata; the Puja annual from the early 20th century, the broadcast parikrama from the late 20th",
+    blurb: "Bengal answers a festival with a book. Every autumn the Sharadiya Sankhya appear — fat special issues of Anandabazar, Desh, Anandamela, Shuktara, Sananda — carrying entire new novels, novellas and poems commissioned for the occasion. Most of Feluda and most of Byomkesh were first published in one. It is probably the largest simultaneous fiction release in any Indian language, and its covers sustain a continuous illustration tradition running from Satyajit Ray onward. The other half of the same impulse is pandal-hopping made into media: the Pujo Parikrama broadcast touring pandals live, the Sharad Shamman awards ranking them, the photographers, and now the vertical reel, which has quietly begun to change how pandals are designed.",
+    technique: "Annual commissioned print anthologies with designed covers and line illustration; live multi-day broadcast and streamed pandal tours; awards juries; and an enormous amateur photography and short-video culture.",
+    status: "Thriving",
+    practitioner: "ABP Pvt Ltd, publisher of Sharadiya Anandabazar Patrika, Desh and Anandamela; and the Asian Paints Sharad Shamman, the oldest of the puja awards",
+    didYouKnow: "Reels have started to shape the architecture. Theme artists now build corridor-first, one-way, video-legible pandals with a deliberate reveal moment, because they know exactly how the space will be filmed and scrolled.",
+  },
+];
+
+export function artsByCategory(c: ArtCategory): ArtForm[] {
+  return ART_FORMS.filter((a) => a.category === c);
+}

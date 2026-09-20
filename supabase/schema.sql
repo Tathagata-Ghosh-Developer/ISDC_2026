@@ -112,3 +112,16 @@ drop policy if exists "no anon access" on expenses;
 insert into storage.buckets (id, name, public)
 values ('proofs', 'proofs', false)
 on conflict (id) do nothing;
+
+-- ------------------------------------------------------------
+-- Settings — every committee-editable piece of the public site.
+-- One row per top-level group; the app merges these over the
+-- defaults compiled into the code.
+-- ------------------------------------------------------------
+create table if not exists settings (
+  key        text primary key,
+  value      jsonb not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table settings enable row level security;

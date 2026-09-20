@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { Instagram, Youtube, MessageCircle, MapPin, Mail } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
+import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
 import { SITE, LINKS, CONTACTS, NAV } from "@/lib/site";
 
 const SOCIALS = [
-  { href: LINKS.instagram, label: "Instagram", Icon: Instagram },
-  { href: LINKS.youtube, label: "YouTube", Icon: Youtube },
-  { href: LINKS.whatsappGroup, label: "WhatsApp group", Icon: MessageCircle },
+  { href: LINKS.instagram, label: "Instagram", Icon: InstagramIcon },
+  { href: LINKS.youtube, label: "YouTube", Icon: YoutubeIcon },
+  { href: LINKS.whatsappGroup, label: "WhatsApp group", Icon: WhatsappIcon },
 ];
 
 export default function SiteFooter() {
