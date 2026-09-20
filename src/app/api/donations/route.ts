@@ -69,7 +69,17 @@ export async function POST(req: Request) {
   const method = text("method") || "upi";
 
   if (name.length < 2) return bad("Please give the name for the receipt.");
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return bad("That email does not look right.");
+
+  // Students are asked for an institute address so the committee can
+  // match them against the roll. Everyone else may leave it blank, and
+  // gets the receipt on WhatsApp alone.
+  const emailLooksRight = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  if (category === "student" && !emailLooksRight) {
+    return bad("Students, please give your email so we can match the SR number.");
+  }
+  if (email.length > 0 && !emailLooksRight) {
+    return bad("That email does not look right. Leave it blank if you prefer.");
+  }
   if (phone.length !== 10) return bad("The WhatsApp number needs ten digits.");
   if (!Number.isFinite(amount) || amount <= 0) return bad("Enter the amount you transferred.");
   if (amount > 10_000_000) return bad("That amount looks like a typo. Please contact the treasurer.");
@@ -109,7 +119,7 @@ export async function POST(req: Request) {
 
   const row = {
     name,
-    email,
+    email: email || "not given",
     phone,
     category,
     amount,

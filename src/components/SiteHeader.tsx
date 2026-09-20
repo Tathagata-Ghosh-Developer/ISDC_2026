@@ -142,11 +142,16 @@ export default function SiteHeader() {
                 transitionDelay: `${open ? 60 + i * 45 : 0}ms`,
               }}
             >
-              <span className="font-display text-[1.9rem] font-normal text-ink group-hover:text-sindoor">
+              <span className="font-display text-[1.7rem] font-normal text-ink group-hover:text-sindoor">
                 {item.label}
               </span>
-              <span className="bangla-display text-[1.05rem] text-gold">
-                {item.bangla}
+              <span className="text-right">
+                <span className="bangla-display block text-[1.15rem] text-gold">
+                  {item.bangla}
+                </span>
+                <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-ink-faint">
+                  {item.roman}
+                </span>
               </span>
             </Link>
           ))}

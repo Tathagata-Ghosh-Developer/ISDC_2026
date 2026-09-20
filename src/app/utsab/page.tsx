@@ -30,7 +30,7 @@ export default async function UtsabPage() {
 
           <Reveal className="mt-[2.618rem]">
             <div className="surface p-6 sm:p-8">
-              <Countdown target={config.dates.countdownTo} />
+              <Countdown target={config.dates.arrival} />
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.78rem] text-ink-soft">
                 <Link
                   href="/thikana"

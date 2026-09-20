@@ -19,8 +19,8 @@ export default async function Home() {
     <>
       <Hero
         hero={config.hero}
-        countdownTo={config.dates.countdownTo}
-        bodhonLabel={`until Bodhon ${bodhon?.date ?? "17 October 2026"}`}
+        countdownTo={config.dates.arrival}
+        bodhonLabel={`until Ma reaches the campus, ${bodhon?.date ?? "16 October 2026"}`}
       />
 
       {/* ============================================================

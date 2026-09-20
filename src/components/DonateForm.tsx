@@ -167,13 +167,23 @@ export default function DonateForm({ suggested, note }: Props) {
             />
           </Field>
 
-          <Field label="Email" required>
+          <Field
+            label="Email"
+            required={category === "student"}
+            hint={
+              category === "student"
+                ? "Your institute address. The receipt reaches your inbox as well as WhatsApp."
+                : "Optional. Give one and the receipt reaches your inbox too."
+            }
+          >
             <input
               name="email"
               type="email"
-              required
+              required={category === "student"}
               className="field"
-              placeholder="you@iisc.ac.in"
+              placeholder={
+                category === "student" ? "you@iisc.ac.in" : "Optional"
+              }
               autoComplete="email"
             />
           </Field>

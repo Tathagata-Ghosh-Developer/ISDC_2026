@@ -89,7 +89,7 @@ export default function DonationsPanel() {
     setWorking(d.id);
     setError(null);
 
-    const res = await fetch("/api/admin/whatsapp", {
+    const res = await fetch("/api/admin/receipt", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ id: d.id }),
@@ -99,9 +99,14 @@ export default function DonationsPanel() {
       ? ((await res.json().catch(() => ({}))) as {
           ok?: boolean;
           link?: string;
+          emailed?: string | null;
           error?: string;
         })
       : {};
+
+    if (data.emailed && data.emailed.startsWith("failed")) {
+      setError(`Email ${data.emailed}`);
+    }
 
     if (data.link) {
       window.open(data.link, "_blank", "noopener");

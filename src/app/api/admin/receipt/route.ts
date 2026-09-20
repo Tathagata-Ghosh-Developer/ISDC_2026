@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { requireAdmin } from "@/lib/auth";
 import { db, dbReady, getDonation } from "@/lib/db";
 import { sendReceipt, waLink, whatsappReady } from "@/lib/whatsapp";
+import { sendReceiptEmail, emailReady } from "@/lib/email";
 import { formatINR } from "@/lib/format";
 import { SITE } from "@/lib/site";
 
@@ -10,9 +11,12 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Sends a verified donor their receipt. Uses the Cloud API when the
- * committee has set it up, and otherwise hands back a wa.me link for
- * the admin to press, which is the path that costs nothing.
+ * Sends a verified donor their receipt.
+ *
+ * Email goes first and silently, whenever the donor gave an address
+ * and a provider is configured. WhatsApp follows: through the Cloud
+ * API if the committee set it up, otherwise by handing back a wa.me
+ * link for the admin to press, which is the path that costs nothing.
  */
 export async function POST(req: Request) {
   let admin: string;
@@ -52,10 +56,30 @@ export async function POST(req: Request) {
     url: `${origin}/receipt/${donation.receipt_token}`,
   };
 
+  /* ---- the inbox ---- */
+  let emailed: string | null = null;
+  const hasEmail =
+    donation.email && donation.email !== "not given" && donation.email.includes("@");
+
+  if (hasEmail && emailReady()) {
+    const sent = await sendReceiptEmail({
+      to: donation.email,
+      name: donation.name,
+      amount: message.amount,
+      receiptNo: message.receiptNo,
+      url: message.url,
+    });
+    emailed = sent.ok ? donation.email : `failed, ${sent.error}`;
+  } else if (hasEmail) {
+    emailed = "skipped, no mail provider configured";
+  }
+
+  /* ---- and WhatsApp ---- */
   if (!whatsappReady()) {
     return NextResponse.json({
       ok: false,
       configured: false,
+      emailed,
       link: waLink(message),
       error: "Open WhatsApp and press send.",
     });
@@ -67,6 +91,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: false,
       configured: true,
+      emailed,
       link: result.fallback,
       error: result.error,
     });
@@ -80,5 +105,5 @@ export async function POST(req: Request) {
     })
     .eq("id", id);
 
-  return NextResponse.json({ ok: true, configured: true, id: result.id });
+  return NextResponse.json({ ok: true, configured: true, emailed, id: result.id });
 }

@@ -40,8 +40,13 @@ export const PUJA_DATES = {
   ashtami: "2026-10-19T06:00:00+05:30",
   navami: "2026-10-20T08:30:00+05:30",
   dashami: "2026-10-21T08:31:00+05:30",
-  /** The countdown runs to Mahalaya, when the recitation goes on air. */
+  /**
+   * Two counts, because there are two arrivals. Mahalaya is when the
+   * season opens on the radio. Shashthi is when she reaches this
+   * campus and we go out to meet her.
+   */
   countdownTo: "2026-10-10T04:00:00+05:30",
+  arrival: "2026-10-16T08:30:00+05:30",
 } as const;
 
 /**
@@ -175,16 +180,22 @@ export const GATES = [
   },
 ] as const;
 
+/**
+ * The menu reads in English so a visitor who does not read Bengali can
+ * navigate it. The Bengali name and its romanisation travel with each
+ * entry and appear on the page itself, which is where a name is worth
+ * teaching rather than guessing at.
+ */
 export const NAV = [
-  { href: "/utsab", label: "Utsab", bangla: "উৎসব" },
-  { href: "/itihash", label: "Itihash", bangla: "ইতিহাস" },
-  { href: "/shilpa", label: "Shilpa", bangla: "শিল্প" },
-  { href: "/mahalaya", label: "Mahalaya", bangla: "মহালয়া" },
-  { href: "/gaan", label: "Gaan", bangla: "গান" },
-  { href: "/probash", label: "Probash", bangla: "প্রবাস" },
-  { href: "/gallery", label: "Chhobi", bangla: "ছবি" },
-  { href: "/thikana", label: "Thikana", bangla: "ঠিকানা" },
-  { href: "/jogdan", label: "Jogdan", bangla: "যোগদান" },
+  { href: "/utsab", label: "The Festival", bangla: "উৎসব", roman: "Utsab" },
+  { href: "/mahalaya", label: "Mahalaya", bangla: "মহালয়া", roman: "Mahalaya" },
+  { href: "/itihash", label: "History", bangla: "ইতিহাস", roman: "Itihash" },
+  { href: "/shilpa", label: "Art Forms", bangla: "শিল্প", roman: "Shilpa" },
+  { href: "/gaan", label: "Music", bangla: "গান", roman: "Gaan" },
+  { href: "/probash", label: "Magazine", bangla: "প্রবাস", roman: "Probash" },
+  { href: "/gallery", label: "Photographs", bangla: "ছবি", roman: "Chhobi" },
+  { href: "/thikana", label: "Find Us", bangla: "ঠিকানা", roman: "Thikana" },
+  { href: "/jogdan", label: "Join Us", bangla: "যোগদান", roman: "Jogdan" },
 ] as const;
 
 /** Sponsorship tiers, taken from the committee's own deck. */
