@@ -50,7 +50,7 @@ export default async function JogdanPage() {
                   <span className="text-[1.5rem] leading-none" aria-hidden>
                     {role.icon}
                   </span>
-                  <h2 className="bangla mt-4 text-[1.272rem] font-semibold text-ink">
+                  <h2 className="bangla-display mt-4 text-[1.4rem] text-ink">
                     {role.bn}
                   </h2>
                   <p className="font-display text-[1.05rem] text-ink-soft">
@@ -73,7 +73,7 @@ export default async function JogdanPage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr]">
             <Reveal>
-              <h2 className="font-display text-[1.618rem] font-light leading-snug text-ink sm:text-[2.058rem]">
+              <h2 className="font-display text-[1.618rem] font-normal leading-snug text-ink sm:text-[2.058rem]">
                 No prior experience needed across any role
               </h2>
               <p className="lede mt-5 max-w-[58ch]">

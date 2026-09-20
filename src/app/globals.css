@@ -31,7 +31,8 @@
   --spacing-phi-8: 11.089rem;
 
   /* --- Fonts (wired up in layout.tsx via next/font) --- */
-  --font-display: var(--f-display), "Cormorant Garamond", Georgia, serif;
+  --font-display: var(--f-display), "Bodoni Moda", Didot, Georgia, serif;
+  --font-bangla-display: var(--f-bangla-display), var(--f-bangla), serif;
   --font-bangla: var(--f-bangla), "Noto Serif Bengali", serif;
   --font-body: var(--f-body), "Inter", system-ui, sans-serif;
 
@@ -59,13 +60,13 @@
 
 /* ---------- Light: aged paper, noon pandal ---------- */
 :root {
-  --c-paper: #f4e9d6;
-  --c-paper-2: #ecdcc1;
-  --c-paper-3: #fbf6ec;
-  --c-ink: #2a1a10;
-  --c-ink-soft: #5c4634;
+  --c-paper: #f2e7d2;
+  --c-paper-2: #e8d8bc;
+  --c-paper-3: #fbf6ea;
+  --c-ink: #17110c;
+  --c-ink-soft: #4d3a2a;
   --c-ink-faint: #8a7360;
-  --c-sindoor: #b3261e;
+  --c-sindoor: #c0271a;
   --c-alta: #7e1a12;
   --c-haldi: #c9871f;
   --c-gold: #a8842f;
@@ -105,17 +106,17 @@
   --c-paper: #120d10;
   --c-paper-2: #1b1419;
   --c-paper-3: #241a1e;
-  --c-ink: #f2e5d0;
-  --c-ink-soft: #c9b295;
+  --c-ink: #f4e7d2;
+  --c-ink-soft: #cbb496;
   --c-ink-faint: #93806c;
-  --c-sindoor: #e35b43;
+  --c-sindoor: #e8634a;
   --c-alta: #b8402e;
   --c-haldi: #efb44a;
   --c-gold: #d8b45e;
   --c-indigo: #90b6dd;
   --c-terracotta: #cc8257;
   --c-leaf: #83a97a;
-  --c-line: rgba(242, 229, 208, 0.16);
+  --c-line: rgba(244, 231, 210, 0.16);
   --c-glow: rgba(239, 180, 74, 0.28);
   --grain-opacity: 0.22;
   color-scheme: dark;
@@ -184,8 +185,36 @@ body::before {
 
 .font-display {
   font-family: var(--font-display);
-  font-weight: 300;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/*  Ray drew his title cards with a brush: heavy, tightly set, and
+    always larger than the layout strictly needed.  */
+.bangla-display {
+  font-family: var(--font-bangla-display);
+  font-weight: 400;
+  line-height: 1.32;
+  letter-spacing: 0.005em;
+}
+
+/*  A film title card: flat field, oversized lettering, hard edges.  */
+.title-card {
+  position: relative;
+  background: var(--c-ink);
+  color: var(--c-paper-3);
+  overflow: hidden;
+}
+
+.title-card .gilt {
+  background: linear-gradient(
+    100deg,
+    var(--c-haldi) 0%,
+    #f6e3a8 40%,
+    var(--c-haldi) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .smallcaps {

@@ -106,7 +106,7 @@ export default function Hero({
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.28, ease: EASE }}
-          className="bangla mt-5 text-[2.618rem] font-semibold leading-[1.12] text-ink sm:text-[4.236rem] lg:text-[5.388rem]"
+          className="bangla-display mt-5 text-[2.618rem] leading-[1.18] text-ink sm:text-[4.236rem] lg:text-[5.388rem]"
         >
           <HeroTitle text={hero.titleBangla} />
         </motion.h1>
@@ -115,7 +115,7 @@ export default function Hero({
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.42, ease: EASE }}
-          className="font-display mt-1 text-[1.272rem] font-light uppercase tracking-[0.42em] text-ink-soft sm:text-[1.618rem]"
+          className="font-display mt-3 text-[1.1rem] font-medium uppercase tracking-[0.46em] text-ink-soft sm:text-[1.272rem]"
         >
           {hero.titleRoman}
         </motion.p>
@@ -124,7 +124,7 @@ export default function Hero({
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.55, ease: EASE }}
-          className="font-display mt-8 max-w-[34ch] text-[1.272rem] font-light italic leading-snug text-ink-soft sm:max-w-[42ch] sm:text-[1.618rem]"
+          className="font-display mt-8 max-w-[34ch] text-[1.272rem] font-normal italic leading-snug text-ink-soft sm:max-w-[42ch] sm:text-[1.618rem]"
         >
           {hero.subtitle}
         </motion.p>

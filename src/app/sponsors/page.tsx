@@ -31,7 +31,7 @@ export default async function SponsorsPage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-start">
             <Reveal>
-              <h2 className="font-display text-[1.618rem] font-light text-ink">
+              <h2 className="font-display text-[1.618rem] font-normal text-ink">
                 What a partner gets
               </h2>
               <ul className="mt-6 divide-y divide-line border-y border-line">

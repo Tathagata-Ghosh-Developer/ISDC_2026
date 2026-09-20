@@ -27,7 +27,7 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-[1180px] px-5 py-[4.236rem] md:px-8">
         <div className="grid gap-[2.618rem] md:grid-cols-[1.618fr_1fr_1fr]">
           <div>
-            <p className="bangla text-[1.5rem] leading-snug text-ink">
+            <p className="bangla-display text-[1.618rem] leading-relaxed text-ink">
               সর্বমঙ্গলমঙ্গল্যে শিবে সর্বার্থসাধিকে।
               <br />
               শরণ্যে ত্র্যম্বকে গৌরি নারায়ণি নমোহস্তুতে॥

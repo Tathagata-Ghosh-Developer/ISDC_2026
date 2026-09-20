@@ -93,7 +93,7 @@ export default async function ReceiptPage({
 
           <header className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
             <div>
-              <p className="bangla text-[1.272rem] font-semibold text-ink">
+              <p className="bangla-display text-[1.4rem] text-ink">
                 {SITE.nameBangla}
               </p>
               <h1 className="font-display text-[1.272rem] font-medium text-ink">
@@ -138,7 +138,7 @@ export default async function ReceiptPage({
             <p className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-faint">
               Amount received
             </p>
-            <p className="font-display mt-1 text-[2.618rem] font-light leading-none tabular-nums text-sindoor">
+            <p className="font-display mt-1 text-[2.618rem] font-normal leading-none tabular-nums text-sindoor">
               {formatINR(donation.amount)}
             </p>
             <p className="mt-2 text-[0.8rem] italic text-ink-soft">

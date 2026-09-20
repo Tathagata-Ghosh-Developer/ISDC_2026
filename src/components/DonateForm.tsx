@@ -82,7 +82,7 @@ export default function DonateForm({ suggested, note }: Props) {
         <div className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-gold text-gold">
           <Check size={22} />
         </div>
-        <h3 className="font-display mt-6 text-[1.618rem] font-light text-ink">
+        <h3 className="font-display mt-6 text-[1.618rem] font-normal text-ink">
           Recorded. Thank you.
         </h3>
         <p className="bangla mt-2 text-[1.1rem] text-sindoor">

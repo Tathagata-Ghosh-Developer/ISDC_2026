@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Noto_Serif_Bengali, Inter } from "next/font/google";
+import {
+  Bodoni_Moda,
+  Galada,
+  Noto_Serif_Bengali,
+  Inter,
+} from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
@@ -9,11 +14,27 @@ import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import { getConfig } from "@/lib/config";
 
-const display = Cormorant_Garamond({
+/**
+ * Satyajit Ray spent thirteen years as a visualiser at D. J. Keymer
+ * before Pather Panchali, drew the lettering on his own title cards,
+ * and designed four Latin typefaces. Two of them, Ray Roman and Ray
+ * Bizarre, won an international competition in 1971.
+ *
+ * Bodoni Moda stands in for the high stroke contrast of Ray Roman.
+ * Galada carries the brush weight of his hand-drawn Bengali titles.
+ */
+const display = Bodoni_Moda({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
   variable: "--f-display",
+  display: "swap",
+});
+
+const banglaDisplay = Galada({
+  subsets: ["bengali", "latin"],
+  weight: ["400"],
+  variable: "--f-bangla-display",
   display: "swap",
 });
 
@@ -84,7 +105,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
       <body
-        className={`${display.variable} ${bangla.variable} ${body.variable} min-h-dvh antialiased`}
+        className={`${display.variable} ${banglaDisplay.variable} ${bangla.variable} ${body.variable} min-h-dvh antialiased`}
       >
         <a
           href="#main"

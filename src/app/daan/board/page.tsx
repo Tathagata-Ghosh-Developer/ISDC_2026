@@ -72,7 +72,7 @@ export default async function BoardPage() {
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-start">
             <div>
               <Reveal>
-                <h2 className="font-display text-[1.618rem] font-light text-ink">
+                <h2 className="font-display text-[1.618rem] font-normal text-ink">
                   Who gave
                 </h2>
                 <p className="lede mt-2 text-[0.9rem]">
@@ -262,7 +262,7 @@ function Stat({
   return (
     <div className="bg-paper p-6">
       <span
-        className={`font-display block text-[2.058rem] font-light leading-none tabular-nums ${colour}`}
+        className={`font-display block text-[2.058rem] font-normal leading-none tabular-nums ${colour}`}
       >
         {value}
       </span>

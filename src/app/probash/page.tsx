@@ -22,10 +22,10 @@ export default async function ProbashPage() {
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-end">
             <Reveal>
               <p className="eyebrow">প্রবাস · The magazine</p>
-              <h1 className="bangla mt-4 text-[3.33rem] font-semibold leading-none text-ink sm:text-[4.236rem]">
+              <h1 className="bangla-display mt-4 text-[3.33rem] leading-tight text-ink sm:text-[4.236rem]">
                 প্রবাস
               </h1>
-              <p className="font-display mt-2 text-[1.618rem] font-light italic text-ink-soft">
+              <p className="font-display mt-2 text-[1.618rem] font-normal italic text-ink-soft">
                 Probash
               </p>
               <p className="lede mt-6 max-w-[56ch]">
@@ -153,10 +153,10 @@ function SubmitCard({
             {eyebrow}
           </span>
         </div>
-        <h2 className="font-display mt-5 text-[1.618rem] font-light leading-snug text-ink">
+        <h2 className="font-display mt-5 text-[1.618rem] font-normal leading-snug text-ink">
           {title}
         </h2>
-        <p className="bangla mt-1 text-[1.1rem] text-sindoor">{bangla}</p>
+        <p className="bangla-display mt-1 text-[1.2rem] text-sindoor">{bangla}</p>
         <p className="mt-4 text-[0.88rem] leading-relaxed text-ink-soft">{body}</p>
         <ul className="mt-5 space-y-2">
           {points.map((p) => (

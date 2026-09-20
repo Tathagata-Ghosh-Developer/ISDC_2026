@@ -164,7 +164,7 @@ export default function Arrival({ oncePerSession = true }: Props) {
               {reduce ? (
                 <motion.div key="reduced" className="text-center">
                   <Mandala drawn />
-                  <p className="bangla mt-6 text-[1.6rem] text-[#f0dcc0]">
+                  <p className="bangla-display mt-6 text-[1.8rem] text-[#f0dcc0]">
                     শারদীয়া দুর্গোৎসব
                   </p>
                 </motion.div>
@@ -804,7 +804,7 @@ function ActBodhon() {
         <Mandala drawn />
       </motion.div>
       <motion.h1
-        className="bangla mt-6 text-[2rem] font-semibold leading-tight text-[#f0dcc0] sm:text-[2.8rem]"
+        className="bangla-display mt-6 text-[2.2rem] leading-tight text-[#f0dcc0] sm:text-[3.1rem]"
         initial={{ opacity: 0, y: 16, letterSpacing: "0.3em" }}
         animate={{ opacity: 1, y: 0, letterSpacing: "0em" }}
         transition={{ duration: 0.9, ease: EASE }}
@@ -836,7 +836,7 @@ function ArrivalCaption({ index }: { index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
     >
-      <p className="bangla text-[1rem] text-[#f0dcc0] sm:text-[1.15rem]">
+      <p className="bangla-display text-[1.15rem] text-[#f0dcc0] sm:text-[1.35rem]">
         {line.bn}
       </p>
       <p className="mt-1.5 text-[0.68rem] italic text-[#f0dcc0]/45">{line.en}</p>

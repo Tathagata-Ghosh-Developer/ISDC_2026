@@ -183,11 +183,21 @@ No developer is needed for any of that.
 
 ### Design
 
-Type and spacing run on powers of the golden ratio. The palette is drawn
-from aged paper, Company-school watercolour and Nandalal Bose, and
-inverts into a night-pandal dark theme through a single set of tokens.
-Bengali is set in Noto Serif Bengali against Cormorant Garamond, so mixed
-script headings sit correctly on one baseline.
+The visual language is Satyajit Ray's. Before Pather Panchali he spent
+thirteen years as a visualiser at D. J. Keymer, lettered his own title
+cards by hand, and drew four Latin typefaces — two of which, Ray Roman
+and Ray Bizarre, won an international competition in 1971.
+
+So: Bengali headings in a brush face, roman display with the high stroke
+contrast of Ray Roman, rules and ticks drawn rather than ruled, and flat
+unmodelled fields of scarlet and turmeric placed off-centre the way he
+placed them on posters and Sandesh covers. None of Ray's own typefaces
+are freely licensed, so nothing here is his; Bodoni Moda and Galada
+stand in.
+
+Type and spacing run on powers of the golden ratio. The palette inverts
+into a night-pandal dark theme through a single set of tokens, so there
+are no `dark:` variants scattered through the markup.
 
 Everything respects `prefers-reduced-motion`: the arrival sequence
 collapses to a single fade, and parallax and drift stop.

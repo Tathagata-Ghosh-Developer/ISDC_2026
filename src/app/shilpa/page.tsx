@@ -56,7 +56,7 @@ export default function ShilpaPage() {
               <Reveal key={a.id} delay={i * 0.05}>
                 <div className="surface flex flex-col gap-4 p-6 sm:flex-row sm:items-baseline sm:justify-between">
                   <div className="min-w-0">
-                    <h3 className="bangla text-[1.272rem] font-semibold text-ink">
+                    <h3 className="bangla-display text-[1.4rem] text-ink">
                       {a.bangla}
                     </h3>
                     <p className="font-display text-[1rem] text-ink-soft">{a.name}</p>
@@ -89,7 +89,7 @@ function Stat({
   return (
     <div className="bg-paper p-6">
       <span
-        className={`font-display block text-[2.058rem] font-light leading-none tabular-nums ${
+        className={`font-display block text-[2.058rem] font-normal leading-none tabular-nums ${
           tone === "sindoor" ? "text-sindoor" : "text-ink"
         }`}
       >

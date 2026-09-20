@@ -61,7 +61,7 @@ export default async function UtsabPage() {
                       <p className="font-display text-[0.8rem] tabular-nums text-gold">
                         {String(i + 1).padStart(2, "0")}
                       </p>
-                      <h2 className="bangla mt-2 text-[2.058rem] font-semibold leading-none text-sindoor">
+                      <h2 className="bangla-display mt-2 text-[2.058rem] leading-tight text-sindoor">
                         {day.tithiBangla}
                       </h2>
                       <p className="font-display mt-2 text-[1.272rem] text-ink">
@@ -73,7 +73,7 @@ export default async function UtsabPage() {
                     </div>
 
                     <div>
-                      <h3 className="font-display text-[1.272rem] font-light leading-snug text-ink sm:text-[1.618rem]">
+                      <h3 className="font-display text-[1.272rem] font-normal leading-snug text-ink sm:text-[1.618rem]">
                         {day.headline}
                       </h3>
                       <p className="lede mt-4 max-w-[64ch] text-[0.95rem]">
@@ -117,7 +117,7 @@ export default async function UtsabPage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-2">
             <Reveal>
-              <h2 className="font-display text-[1.618rem] font-light text-ink">
+              <h2 className="font-display text-[1.618rem] font-normal text-ink">
                 Coming for the first time?
               </h2>
               <ul className="mt-6 space-y-4 text-[0.9rem] leading-relaxed text-ink-soft">
@@ -145,7 +145,7 @@ export default async function UtsabPage() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <h2 className="font-display text-[1.618rem] font-light text-ink">
+              <h2 className="font-display text-[1.618rem] font-normal text-ink">
                 Words you will hear
               </h2>
               <dl className="mt-6 divide-y divide-line border-y border-line">

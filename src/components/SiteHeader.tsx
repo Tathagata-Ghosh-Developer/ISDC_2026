@@ -105,7 +105,7 @@ export default function SiteHeader() {
               <span className="block font-display text-[1.05rem] font-semibold tracking-tight text-ink">
                 Sharodiya Durgotsab
               </span>
-              <span className="bangla block text-[0.68rem] tracking-[0.24em] text-gold">
+              <span className="bangla-display block text-[0.78rem] tracking-[0.2em] text-gold">
                 আইআইএসসি · {SITE.year}
               </span>
             </span>
@@ -179,10 +179,10 @@ export default function SiteHeader() {
                 transitionDelay: `${open ? 60 + i * 45 : 0}ms`,
               }}
             >
-              <span className="font-display text-[1.9rem] font-light text-ink group-hover:text-sindoor">
+              <span className="font-display text-[1.9rem] font-normal text-ink group-hover:text-sindoor">
                 {item.label}
               </span>
-              <span className="bangla text-[0.95rem] text-gold">
+              <span className="bangla-display text-[1.05rem] text-gold">
                 {item.bangla}
               </span>
             </Link>

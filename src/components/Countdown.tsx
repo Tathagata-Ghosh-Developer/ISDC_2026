@@ -63,7 +63,7 @@ export default function Countdown({
             </span>
           )}
           <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
-            <span className="block font-display text-[2.058rem] font-light leading-none tabular-nums text-ink sm:text-[2.618rem]">
+            <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">
               {left === null
                 ? "––"
                 : String(left[u.key]).padStart(2, "0")}

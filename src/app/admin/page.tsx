@@ -15,7 +15,7 @@ export default async function AdminDonationsPage() {
   return (
     <div>
       <div className="mb-7">
-        <h1 className="font-display text-[1.618rem] font-light text-ink">
+        <h1 className="font-display text-[1.618rem] font-normal text-ink">
           Donations
         </h1>
         <p className="mt-1 max-w-[70ch] text-[0.85rem] leading-relaxed text-ink-soft">

@@ -135,7 +135,7 @@ export default async function DonatePage() {
             {/* -------- tell us -------- */}
             <div>
               <Reveal>
-                <h2 className="font-display text-[1.618rem] font-light text-ink">
+                <h2 className="font-display text-[1.618rem] font-normal text-ink">
                   Step two — tell us about it
                 </h2>
                 <p className="lede mt-2 max-w-[56ch] text-[0.95rem]">
@@ -178,7 +178,7 @@ export default async function DonatePage() {
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">
-                        <span className="font-display shrink-0 text-[1.272rem] font-light text-gold">
+                        <span className="font-display shrink-0 text-[1.272rem] font-normal text-gold">
                           {s.n}
                         </span>
                         <span>
@@ -214,7 +214,7 @@ function Stat({
 }) {
   return (
     <div className="bg-paper p-6">
-      <span className="font-display block text-[2.058rem] font-light leading-none tabular-nums text-sindoor">
+      <span className="font-display block text-[2.058rem] font-normal leading-none tabular-nums text-sindoor">
         {value}
       </span>
       <span className="mt-2 block text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint">

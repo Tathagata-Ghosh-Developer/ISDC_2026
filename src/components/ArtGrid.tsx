@@ -69,7 +69,7 @@ export default function ArtGrid({
                     <p className="text-[0.6rem] uppercase tracking-[0.24em] text-gold">
                       {a.category}
                     </p>
-                    <h2 className="bangla mt-2 text-[1.272rem] font-semibold leading-tight text-ink">
+                    <h2 className="bangla-display mt-2 text-[1.4rem] leading-tight text-ink">
                       {a.bangla}
                     </h2>
                     <p className="font-display text-[1.05rem] text-ink-soft">

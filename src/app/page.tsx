@@ -10,6 +10,7 @@ import { getConfig } from "@/lib/config";
 import { getBoard } from "@/lib/db";
 import { ART_FORMS } from "@/lib/content/artforms";
 import { formatINR } from "@/lib/format";
+import TitleCard from "@/components/TitleCard";
 
 export default async function Home() {
   const config = await getConfig();
@@ -160,7 +161,7 @@ export default async function Home() {
 
             <Reveal delay={0.12} className="order-1 lg:order-2">
               <p className="eyebrow">দুই নদী · Two rivers</p>
-              <h2 className="font-display mt-3 text-[2.058rem] font-light leading-[1.1] text-ink sm:text-[2.618rem]">
+              <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
                 One carries silt. One carries questions.
               </h2>
               <p className="lede mt-6 max-w-[56ch]">
@@ -198,6 +199,12 @@ export default async function Home() {
           </div>
         </Container>
       </Section>
+
+      <TitleCard
+        bangla="মৃন্ময়ী হয়ে ওঠেন চিন্ময়ী"
+        roman="Clay becomes consciousness"
+        caption="The idol is river clay on a bamboo frame. What changes it is the eyes, painted last, on Mahalaya, by an artisan who has fasted for it."
+      />
 
       {/* ============================================================
           Art forms
@@ -263,7 +270,7 @@ export default async function Home() {
             <div className="relative grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr]">
               <Reveal>
                 <p className="eyebrow">দান · Give</p>
-                <h2 className="font-display mt-3 text-[2.058rem] font-light leading-[1.1] text-ink sm:text-[2.618rem]">
+                <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
                   Funded entirely by the people who show up
                 </h2>
                 <p className="lede mt-6 max-w-[54ch]">
@@ -411,7 +418,7 @@ function Figure({
 }) {
   return (
     <div>
-      <span className="font-display block text-[2.058rem] font-light leading-none tabular-nums text-sindoor">
+      <span className="font-display block text-[2.058rem] font-normal leading-none tabular-nums text-sindoor">
         {value}
       </span>
       <span className="mt-2 block text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint">

@@ -127,7 +127,7 @@ export default function ItihashPage() {
             <Container>
               <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
                 <Reveal className="lg:sticky lg:top-24">
-                  <p className="bangla text-[2.058rem] font-semibold leading-none text-sindoor">
+                  <p className="bangla-display text-[2.618rem] leading-tight text-sindoor">
                     {block.bangla}
                   </p>
                   <p className="font-display mt-2 text-[1.272rem] text-ink">
@@ -161,7 +161,7 @@ export default function ItihashPage() {
 
                 <div>
                   <Reveal>
-                    <h2 className="font-display text-[1.618rem] font-light leading-snug text-ink sm:text-[2.058rem]">
+                    <h2 className="font-display text-[1.618rem] font-normal leading-snug text-ink sm:text-[2.058rem]">
                       {block.title}
                     </h2>
                     <div className="mt-6 space-y-4">
@@ -205,11 +205,84 @@ export default function ItihashPage() {
         );
       })}
 
+      {/* ============================================================
+          Ray — why this site is lettered the way it is
+          ============================================================ */}
+      <Section className="bg-paper-2/40">
+        <Container>
+          <SectionHeading
+            eyebrow="রায় · A note on the lettering"
+            title="The man who drew the letters"
+            bangla="সত্যজিৎ রায়"
+            lede="Before Pather Panchali, Satyajit Ray spent thirteen years at an advertising agency in Calcutta as a visualiser. He designed book jackets, laid out the children's magazine his grandfather had founded, and lettered the title cards of his own films by hand."
+          />
+
+          <div className="mt-[2.618rem] grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-start">
+            <Reveal>
+              <div className="space-y-4">
+                <p className="lede text-[0.98rem]">
+                  He joined D. J. Keymer in April 1943 and stayed until the
+                  success of Pather Panchali made him a film-maker full time.
+                  Typography never left. He drew four Latin typefaces, and two
+                  of them — Ray Roman and Ray Bizarre — won an international
+                  competition in 1971. His Bengali lettering was brushwork: a
+                  loaded stroke, tight counters, letters sized for a cinema
+                  screen rather than a page.
+                </p>
+                <p className="lede text-[0.98rem]">
+                  The goddess turns up in his work more than once. Devi, made in
+                  1960, is about a young woman whose father-in-law dreams she is
+                  an incarnation of the goddess, and about what that conviction
+                  does to her. Joi Baba Felunath, from 1979, sends his detective
+                  to Varanasi during Durga Puja, and the rite runs underneath
+                  the whole mystery.
+                </p>
+                <p className="lede text-[0.98rem]">
+                  This site is lettered in that direction on purpose. Bengali
+                  headings are set in a brush face, the roman display carries
+                  the high stroke contrast of Ray Roman, and the rules and ticks
+                  are drawn rather than ruled. It is an homage, not a
+                  reproduction: none of Ray's own typefaces are freely
+                  licensed, so nothing here is his.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.12}>
+              <div className="surface p-6">
+                <h3 className="eyebrow">In this palette</h3>
+                <ul className="mt-5 space-y-4 text-[0.85rem] leading-relaxed text-ink-soft">
+                  <li>
+                    <span className="block text-ink">Brush Bengali</span>
+                    For headings, the way a title card is lettered rather than
+                    typeset.
+                  </li>
+                  <li>
+                    <span className="block text-ink">High-contrast roman</span>
+                    Thick stems, hairline joins, in the register of Ray Roman.
+                  </li>
+                  <li>
+                    <span className="block text-ink">Flat fields of colour</span>
+                    Scarlet, turmeric and near-black, placed off-centre and left
+                    unmodelled, as on his posters and Sandesh covers.
+                  </li>
+                  <li>
+                    <span className="block text-ink">Aged paper</span>
+                    The stock everything in Bengal was printed on, including the
+                    Puja annuals this site owes its facts to.
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
       <Section>
         <Container>
           <Reveal>
             <div className="surface p-7 sm:p-[2.618rem]">
-              <h2 className="font-display text-[1.618rem] font-light text-ink">
+              <h2 className="font-display text-[1.618rem] font-normal text-ink">
                 On sources
               </h2>
               <p className="lede mt-4 max-w-[68ch] text-[0.92rem]">

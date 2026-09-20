@@ -264,7 +264,7 @@ function Cell({
   return (
     <div className="bg-paper p-5">
       <span
-        className={`font-display block text-[1.618rem] font-light leading-none tabular-nums ${
+        className={`font-display block text-[1.618rem] font-normal leading-none tabular-nums ${
           tone === "sindoor" ? "text-sindoor" : "text-ink"
         }`}
       >

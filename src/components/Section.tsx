@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
+import { BrushUnderline } from "./Brush";
 
 export function Container({
   children,
@@ -36,11 +37,11 @@ export function SectionHeading({
   return (
     <Reveal className={centred ? "text-center" : ""}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2 className="font-display mt-3 text-[2.058rem] font-light leading-[1.08] tracking-tight text-ink sm:text-[2.618rem] lg:text-[3.33rem]">
+      <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.08] tracking-tight text-ink sm:text-[2.618rem] lg:text-[3.33rem]">
         {title}
       </h2>
       {bangla && (
-        <p className="bangla mt-2 text-[1.272rem] font-medium text-sindoor sm:text-[1.618rem]">
+        <p className="bangla-display mt-3 text-[1.618rem] text-sindoor sm:text-[2.058rem]">
           {bangla}
         </p>
       )}
@@ -51,8 +52,8 @@ export function SectionHeading({
           {lede}
         </p>
       )}
-      <div
-        className={`mt-7 h-px w-[4.236rem] bg-gold ${centred ? "mx-auto" : ""}`}
+      <BrushUnderline
+        className={`mt-6 h-[0.7rem] w-[5.4rem] text-gold ${centred ? "mx-auto" : ""}`}
       />
     </Reveal>
   );

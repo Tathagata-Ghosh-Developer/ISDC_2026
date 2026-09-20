@@ -112,7 +112,7 @@ export default function PujoGuide() {
             <header className="flex items-center justify-between border-b border-line px-4 py-3">
               <div>
                 <p className="font-display text-[1rem] text-ink">Pujo Guide</p>
-                <p className="bangla text-[0.68rem] text-gold">পুজোর সহায়ক</p>
+                <p className="bangla-display text-[0.8rem] text-gold">পুজোর সহায়ক</p>
               </div>
               <span className="text-[0.55rem] uppercase tracking-[0.2em] text-ink-faint">
                 Answers from this site

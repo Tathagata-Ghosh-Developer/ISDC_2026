@@ -46,10 +46,10 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
         <span className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-gold/50 text-gold">
           <Lock size={18} />
         </span>
-        <h1 className="font-display mt-5 text-[1.618rem] font-light text-ink">
+        <h1 className="font-display mt-5 text-[1.618rem] font-normal text-ink">
           Committee console
         </h1>
-        <p className="bangla mt-1 text-[0.95rem] text-gold">কমিটির প্রবেশপথ</p>
+        <p className="bangla-display mt-1 text-[1.05rem] text-gold">কমিটির প্রবেশপথ</p>
       </div>
 
       {!configured ? (
