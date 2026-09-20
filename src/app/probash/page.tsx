@@ -94,7 +94,7 @@ export default async function ProbashPage() {
               title="Design the cover"
               bangla="প্রচ্ছদ প্রতিযোগিতা"
               href={config.links.coverCompetition}
-              body="One cover is chosen for the printed magazine and credited on it. Any medium: painting, digital illustration, photography, collage, alpona, linocut. The only constraint is that it should survive being printed at magazine size."
+              body="One cover is chosen for the printed magazine and credited on it. Any medium, painting, digital illustration, photography, collage, alpona, linocut. The only constraint is that it should survive being printed at magazine size."
               points={[
                 "Portrait orientation, high resolution",
                 "Your own work, made for this",

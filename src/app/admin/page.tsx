@@ -1,17 +1,8 @@
-import { headers } from "next/headers";
 import DonationsPanel from "@/components/admin/DonationsPanel";
-import { SITE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDonationsPage() {
-  // The receipt link in the WhatsApp message must point at whichever
-  // host the console is being used from, not a hardcoded domain.
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const origin = host ? `${proto}://${host}` : SITE.url;
-
+export default function AdminDonationsPage() {
   return (
     <div>
       <div className="mb-7">
@@ -24,7 +15,7 @@ export default async function AdminDonationsPage() {
           receipt number in sequence and publishes the entry on the board.
         </p>
       </div>
-      <DonationsPanel origin={origin} />
+      <DonationsPanel />
     </div>
   );
 }

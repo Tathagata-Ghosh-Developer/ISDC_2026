@@ -147,7 +147,7 @@ export default function Arrival({ oncePerSession = true }: Props) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: EASE }}
           role="status"
-          aria-label="Welcome sequence: a puppet show"
+          aria-label="Welcome sequence, a puppet show"
         >
           <div
             className="pointer-events-none absolute inset-0"

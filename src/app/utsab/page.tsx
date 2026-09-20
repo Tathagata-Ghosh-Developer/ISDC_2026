@@ -9,7 +9,7 @@ import { getConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Utsab",
   description:
-    "The four days of the IISc Sharodiya Durgotsab, hour by hour: Bodhon, Nabapatrika Snan, Anjali, Sandhi Puja, Kumari Puja, Bhog, Sindoor Khela and Bisarjan.",
+    "The four days of the IISc Sharodiya Durgotsab, hour by hour, Bodhon, Nabapatrika Snan, Anjali, Sandhi Puja, Kumari Puja, Bhog, Sindoor Khela and Bisarjan.",
 };
 
 export const revalidate = 300;

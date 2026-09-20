@@ -78,7 +78,7 @@ export default async function JogdanPage() {
             eyebrow="নিমন্ত্রণ The invitation"
             title="The gate is open, and we mean it"
             bangla="সবার জন্য খোলা"
-            lede="A Puja that only its own campus attends is a private party with incense. These are the neighbours we would like in the queue for bhog: the research institutions around us, and the Bengali organisations who have been keeping this city's Pujo going far longer than we have."
+            lede="A Puja that only its own campus attends is a private party with incense. These are the neighbours we would like in the queue for bhog, the research institutions around us, and the Bengali organisations who have been keeping this city's Pujo going far longer than we have."
           />
 
           <div className="mt-[2.618rem]">

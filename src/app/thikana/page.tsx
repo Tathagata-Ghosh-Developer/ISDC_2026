@@ -16,7 +16,7 @@ import { getConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Thikana",
   description:
-    "How to find the IISc Sharodiya Durgotsab pandal: the Tata Memorial Club ground opposite the SBI branch, with walking directions from every gate of the campus.",
+    "How to find the IISc Sharodiya Durgotsab pandal, the Tata Memorial Club ground opposite the SBI branch, with walking directions from every gate of the campus.",
 };
 
 export const revalidate = 600;

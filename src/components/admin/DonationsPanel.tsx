@@ -25,7 +25,7 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: "all", label: "Everything" },
 ];
 
-export default function DonationsPanel({ origin }: { origin: string }) {
+export default function DonationsPanel() {
   const [rows, setRows] = useState<Donation[]>([]);
   const [filter, setFilter] = useState<Filter>("pending");
   const [q, setQ] = useState("");
@@ -79,6 +79,40 @@ export default function DonationsPanel({ origin }: { origin: string }) {
     }
     setWorking(null);
     if (filter !== "all") void load();
+  }
+
+  /**
+   * Sends through the Cloud API when the committee has configured it,
+   * and otherwise opens WhatsApp with the message already written.
+   */
+  async function sendReceipt(d: Donation) {
+    setWorking(d.id);
+    setError(null);
+
+    const res = await fetch("/api/admin/whatsapp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id: d.id }),
+    }).catch(() => null);
+
+    const data = res
+      ? ((await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          link?: string;
+          error?: string;
+        })
+      : {};
+
+    if (data.link) {
+      window.open(data.link, "_blank", "noopener");
+      await act(d.id, "receipt-sent");
+      setWorking(null);
+      return;
+    }
+
+    if (!data.ok) setError(data.error ?? "Could not send that.");
+    setWorking(null);
+    void load();
   }
 
   const totals = useMemo(() => {
@@ -255,15 +289,13 @@ export default function DonationsPanel({ origin }: { origin: string }) {
                     >
                       Open receipt
                     </a>
-                    <a
-                      href={whatsappLink(d, origin)}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      onClick={() => act(d.id, "receipt-sent")}
+                    <button
+                      onClick={() => sendReceipt(d)}
+                      disabled={working === d.id}
                       className="btn btn-ghost !py-1.5 !text-[0.65rem] !border-leaf !text-leaf"
                     >
-                      <WhatsappIcon size={12} /> Send on WhatsApp
-                    </a>
+                      <WhatsappIcon size={12} /> Send the receipt
+                    </button>
                   </>
                 )}
 
@@ -295,22 +327,6 @@ export default function DonationsPanel({ origin }: { origin: string }) {
   );
 }
 
-/** Opens WhatsApp with the receipt link already written out. */
-function whatsappLink(d: Donation, origin: string): string {
-  const text = [
-    `Namaskar ${d.name},`,
-    "",
-    `Your contribution of ${formatINR(Number(d.amount))} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
-    "",
-    `Receipt ${d.receipt_no ?? ""}: ${origin}/receipt/${d.id}`,
-    "",
-    "Your name is now on the public donation board. Thank you, and Shubho Sharodiya.",
-    "",
-    "IISc Sharodiya Durgotsab Committee",
-  ].join("\n");
-
-  return `https://wa.me/91${d.phone}?text=${encodeURIComponent(text)}`;
-}
 
 function StatusPill({ status }: { status: Donation["status"] }) {
   const map = {

@@ -8,7 +8,7 @@ import EraRail from "@/components/EraRail";
 export const metadata: Metadata = {
   title: "Itihash",
   description:
-    "The history of Durga Puja from the Devi Mahatmya to the UNESCO inscription: ninety sourced facts across fifteen centuries, including the ones the festival has quietly forgotten.",
+    "The history of Durga Puja from the Devi Mahatmya to the UNESCO inscription, ninety sourced facts across fifteen centuries, including the ones the festival has quietly forgotten.",
 };
 
 type EraBlock = {
@@ -28,7 +28,7 @@ const BLOCKS: EraBlock[] = [
     title: "A goddess assembled out of everyone else's weapons",
     prose: [
       "The text every Bengali household still reads at Mahalaya is not an independent scripture. The Devi Mahatmya is chapters 81 to 93 of the Markandeya Purana, inserted into a much older work somewhere between 400 and 600 CE. It is the first Sanskrit text to argue that the Goddess is not a consort or an attendant but the ground of reality itself, and it makes the argument through three battle narratives rather than through philosophy.",
-      "The buffalo demon is older than the text. Terracottas from Nagar in Rajasthan show a goddess killing a buffalo in the first century BCE or thereabouts, and a dated inscription places a Mahishasuramardini image at Udayagiri Cave 6 in 401 CE. What the Devi Mahatmya adds is the theology: each god surrenders his weapon, and out of that collective disarmament a single figure is assembled who can do what none of them could.",
+      "The buffalo demon is older than the text. Terracottas from Nagar in Rajasthan show a goddess killing a buffalo in the first century BCE or thereabouts, and a dated inscription places a Mahishasuramardini image at Udayagiri Cave 6 in 401 CE. What the Devi Mahatmya adds is the theology, each god surrenders his weapon, and out of that collective disarmament a single figure is assembled who can do what none of them could.",
       "Bengal's own oldest Durgas are Pala and Sena stone, and they are not the goddess Bengalis now picture. The family group, the painted arch, the clay, the four-day calendar, all of that is still centuries away.",
     ],
     image: {
@@ -44,7 +44,7 @@ const BLOCKS: EraBlock[] = [
     title: "Autumn, out of season and on purpose",
     prose: [
       "The story that explains why Bengal worships in autumn is a Bengali addition. In Krittibas Ojha's fifteenth-century Bengali Ramayana, Rama wakes the goddess out of season to ask for help against Ravana, akalbodhan, the untimely awakening. It is not in Valmiki's Sanskrit original. By the texts, Durga's proper season is spring, and Basanti Puja is the older rite. The exception swallowed the rule.",
-      "The ritual manuals that make a four-day festival possible arrive in the same centuries: the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
+      "The ritual manuals that make a four-day festival possible arrive in the same centuries, the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
       "Who held the first grand household Puja is genuinely contested. Raja Kangshanarayan of Taherpur around 1580 and Bhabananda Majumdar of Nadia are both named; the Sabarna Roy Choudhury family's Puja at Barisha, begun in 1610, has the strongest claim to unbroken continuity, and predates the city of Calcutta itself.",
     ],
   },
@@ -54,9 +54,9 @@ const BLOCKS: EraBlock[] = [
     span: "1757, 1900",
     title: "The Puja becomes a party, then a subscription",
     prose: [
-      "In eighteenth-century Calcutta the Puja turned into the chief instrument of social competition among the new Bengali merchant elite. Households hired nautch troupes, laid on English food and drink, and invited Company officials. The story that Robert Clive attended Nabakrishna Deb's Puja in 1757 is repeated everywhere and rests on almost nothing: Deb became Clive's munshi after the battle, and the evidence is a single anonymous painting. By 1840 the Company was uneasy enough to forbid its own servants from attending.",
+      "In eighteenth-century Calcutta the Puja turned into the chief instrument of social competition among the new Bengali merchant elite. Households hired nautch troupes, laid on English food and drink, and invited Company officials. The story that Robert Clive attended Nabakrishna Deb's Puja in 1757 is repeated everywhere and rests on almost nothing, Deb became Clive's munshi after the battle, and the evidence is a single anonymous painting. By 1840 the Company was uneasy enough to forbid its own servants from attending.",
       "The scale was industrial. By 1839 Calcutta was producing something in the order of seven thousand idols a year. The lion beneath the goddess had a horse's face for most of this period, because the artisans making it had never seen a lion; the face changed only after real lions reached the Calcutta zoo in the 1880s.",
-      "Then the money democratised. Twelve friends turned away from a household Puja at Guptipara in Hooghly pooled subscriptions and ran their own, baro-yari, twelve friends, the word that still means community Puja. Sources put it at 1761 or 1790. Either way it is the hinge: the festival stops belonging to families who can afford it.",
+      "Then the money democratised. Twelve friends turned away from a household Puja at Guptipara in Hooghly pooled subscriptions and ran their own, baro-yari, twelve friends, the word that still means community Puja. Sources put it at 1761 or 1790. Either way it is the hinge, the festival stops belonging to families who can afford it.",
       "Not everyone approved. Debendranath Tagore abolished Durga Puja at Jorasanko on Brahmo principle, which is why the most famous Bengali family of the century kept no idol.",
     ],
     image: {
@@ -91,6 +91,7 @@ const BLOCKS: EraBlock[] = [
       "The economics are not a side effect. A British Council study with Queen Mary University of London and IIT Kharagpur, from 2019 fieldwork, valued the creative economy around Durga Puja at ₹32,377 crore, about 2.58 per cent of West Bengal's gross domestic product.",
       "In December 2021 UNESCO inscribed the festival on the Representative List of the Intangible Cultural Heritage of Humanity. The title is Durga Puja in Kolkata, not of India, because the nominating team argued that the specific civic form of the city was what deserved recognition.",
       "And the rite keeps moving. In 2021 a Kolkata Puja was conducted start to finish by a team of women priests. Sindoor khela has opened at many pandals to widows, single and transgender women. The festival has always been argued about; that argument is the tradition.",
+      "A local footnote, and not a small one. Bengaluru's first Sarbajanin Durga Puja was held in 1950, and the Bengalee Association's own history records that it took place under the initiative and tutelage of a few professors of the Indian Institute of Science. The association itself was registered nine years later, in 1959. The Puja on this campus is three years old. The Puja that came out of this campus is seventy six.",
     ],
     image: {
       src: "/media/puja/archive-1.jpg",
@@ -225,7 +226,7 @@ export default function ItihashPage() {
                   success of Pather Panchali made him a film-maker full time.
                   Typography never left. He drew four Latin typefaces, and two
                   of them, Ray Roman and Ray Bizarre, won an international
-                  competition in 1971. His Bengali lettering was brushwork: a
+                  competition in 1971. His Bengali lettering was brushwork, a
                   loaded stroke, tight counters, letters sized for a cinema
                   screen rather than a page.
                 </p>

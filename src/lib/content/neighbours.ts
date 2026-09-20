@@ -93,17 +93,17 @@ export const INSTITUTES: Institute[] = [
     blurb: "A small, intense mathematics centre for the kind of equations that describe real things - fluids, waves, control systems, the shape of an optimal solution.",
     campus: "P.B. No. 6503, Sharada Nagar, Chikkabommasandra, Yelahanka, Bengaluru 560065",
     url: "https://www.math.tifrbng.res.in/",
-    iiscLink: "Direct and structural. TIFR-CAM is the descendant of the TIFR Centre founded inside the IISc campus in the 1970s; it moved out to Yelahanka in 2007 and took its present name. Founding of the parent TIFR Centre: 1970s; 2007 is the year of the move and renaming.",
+    iiscLink: "Direct and structural. TIFR-CAM is the descendant of the TIFR Centre founded inside the IISc campus in the 1970s; it moved out to Yelahanka in 2007 and took its present name. Founding of the parent TIFR Centre, 1970s; 2007 is the year of the move and renaming.",
   },
   {
     id: "blisc",
     name: "Bangalore Life Science Cluster",
     short: "BLiSC",
     founded: "",
-    blurb: "Four institutes sharing one fence, one set of microscopes and one canteen: fundamental biology, stem-cell medicine, a start-up incubator and a genetics-for-society institute, all on the same north-Bengaluru field.",
+    blurb: "Four institutes sharing one fence, one set of microscopes and one canteen, fundamental biology, stem-cell medicine, a start-up incubator and a genetics-for-society institute, all on the same north-Bengaluru field.",
     campus: "GKVK Campus, Bellary Road, Bengaluru 560065 - the NCBS site",
     url: "https://instem.res.in/blisc/",
-    iiscLink: "Through NCBS's origins on the IISc campus. Members: NCBS (1991), inStem (2009), C-CAMP (2009) and TIGS (2017). No formation year for the cluster itself is published on its own pages.",
+    iiscLink: "Through NCBS's origins on the IISc campus. Members, NCBS (1991), inStem (2009), C-CAMP (2009) and TIGS (2017). No formation year for the cluster itself is published on its own pages.",
   },
   {
     id: "instem",
@@ -143,7 +143,7 @@ export const INSTITUTES: Institute[] = [
     blurb: "The building where India's satellites are actually screwed together - more than a hundred of them so far, for communications, navigation, weather, Earth observation and trips to the Moon and Mars.",
     campus: "Old Airport Road, Vimanapura Post, Bengaluru 560017",
     url: "https://www.ursc.gov.in/",
-    iiscLink: "No institutional link, but the shared history is worth knowing: Prof Satish Dhawan was Director of IISc from January 1963 to July 1981 and simultaneously Chairman of ISRO for much of that period. Founded 1972 as the Indian Scientific Satellite Project, later the ISRO Satellite Centre, renamed U R Rao Satellite Centre with effect from 2 April 2018. ISRO's headquarters is also in Bengaluru, at Antariksh Bhavan, New BEL Road 560094.",
+    iiscLink: "No institutional link, but the shared history is worth knowing, Prof Satish Dhawan was Director of IISc from January 1963 to July 1981 and simultaneously Chairman of ISRO for much of that period. Founded 1972 as the Indian Scientific Satellite Project, later the ISRO Satellite Centre, renamed U R Rao Satellite Centre with effect from 2 April 2018. ISRO's headquarters is also in Bengaluru, at Antariksh Bhavan, New BEL Road 560094.",
   },
   {
     id: "csir-nal",
@@ -153,7 +153,7 @@ export const INSTITUTES: Institute[] = [
     blurb: "India's only civilian aerospace laboratory - home of the Saras and Hansa aircraft, and of wind tunnels big enough to walk into, where everything from a fighter's wing to a bridge deck gets put in front of a very large fan.",
     campus: "HAL Airport Road, Kodihalli, Bengaluru 560017; second campus at Belur",
     url: "https://nal.res.in/",
-    iiscLink: "None institutional. A constituent laboratory of CSIR, working alongside HAL, DRDO and ISRO. Note: www.nal.res.in did not resolve on test - use the bare domain.",
+    iiscLink: "None institutional. A constituent laboratory of CSIR, working alongside HAL, DRDO and ISRO. Note, www.nal.res.in did not resolve on test - use the bare domain.",
   },
   {
     id: "iiitb",
@@ -184,7 +184,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "Puja from 1950; association registered 16 September 1959",
     area: "Tagore Cultural Centre, 1/A Assaye Road, Sivanchetti Gardens, Ulsoor, Bengaluru 560042",
     url: "https://thebengaleeassociation.com/",
-    note: "The city's oldest Bengali association, and the one that matters most to us: its first Sarbajanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. Use 1950 for the Puja and 1959 for the association; do NOT print the '70th year' figure circulating on listicles, which contradicts the association's own #75years in 2025.",
+    note: "The city's oldest Bengali association, and the one that matters most to us, its first Sarbajanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. Use 1950 for the Puja and 1959 for the association; do NOT print the '70th year' figure circulating on listicles, which contradicts the association's own #75years in 2025.",
   },
   {
     id: "jayamahal-cultural-association",
@@ -205,7 +205,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
   {
     id: "socio-cultural-association-indiranagar",
     name: "Socio Cultural Association, Indiranagar (SCA)",
-    founded: "Conflicting: c. 1967 (its own 2025 '58 years' claim) or c. 1970 (Citykemp 2015, '45 years old')",
+    founded: "Conflicting, c. 1967 (its own 2025 '58 years' claim) or c. 1970 (Citykemp 2015, '45 years old')",
     area: "Sishu Griha and Poorna Prajna School Grounds, HAL III Stage / New Thippasandra, Indiranagar",
     url: "https://www.facebook.com/SCAIndiranagar/",
     note: "Indiranagar's long-running Puja, started by Bengali residents of Indiranagar, Domlur and Ulsoor on the initiative of the late Dilu Sen, then a manager at Tata Steel. Also runs Lakshmi, Kali and Saraswati Puja and Poila Boishakh. The domain scaindiranagar.com no longer resolves - do not publish it. Organisation verified active; founding year NOT resolved.",
@@ -216,7 +216,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "First Puja 2003; formally registered 2006",
     area: "Mangala Kalyana Mantapa, 80 ft Road near Forum Mall, KHB 7th Block, Koramangala",
     url: "https://sarathionline.org/",
-    note: "The city's largest-footfall Puja, claiming 1.5-2 lakh visitors; its five-day cultural festival is branded 'Sammad'. Won the Senco Sharod Samman 2018 for ambience and crowd management. Caution: a separate 'Sarathi Cultural Association' with a different Koramangala venue also exists - do not merge the two.",
+    note: "The city's largest-footfall Puja, claiming 1.5-2 lakh visitors; its five-day cultural festival is branded 'Sammad'. Won the Senco Sharod Samman 2018 for ambience and crowd management. Caution, a separate 'Sarathi Cultural Association' with a different Koramangala venue also exists - do not merge the two.",
   },
   {
     id: "kolaj-koramangala",
@@ -269,7 +269,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
   {
     id: "anandadhara",
     name: "Anandadhara Bangalore",
-    founded: "Conflicting: founded 2011 (Citykemp 2015) or registered 2012 (other sources)",
+    founded: "Conflicting, founded 2011 (Citykemp 2015) or registered 2012 (other sources)",
     area: "JP Nagar, South Bengaluru",
     url: "https://www.facebook.com/anandadhara/",
     note: "Explicitly themed around rural Bengal rather than urban spectacle. No official website found. Organisation verified; YEAR CONFLICTING - most likely founded 2011 and registered 2012, but not confirmed from a primary source.",
@@ -304,7 +304,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "2004",
     area: "Durgotsav at Chandrodaya Convention Centre, Dairy Circle; registered office at WorkFlo, Ranka Junction, Dooravani Nagar, Bengaluru 560016",
     url: "https://www.bengaliinbangalore.org/",
-    note: "Started as an online Bengali community and is unusually broad: BinB Sports (badminton, table tennis, a football league, gully cricket), BinB JobMart, and Kannada Rajyotsava alongside the Bengali calendar. Deccan Herald covered its 15th Durgotsav, honouring Tagore. The 2004 date is on its membership page, not its homepage.",
+    note: "Started as an online Bengali community and is unusually broad, BinB Sports (badminton, table tennis, a football league, gully cricket), BinB JobMart, and Kannada Rajyotsava alongside the Bengali calendar. Deccan Herald covered its 15th Durgotsav, honouring Tagore. The 2004 date is on its membership page, not its homepage.",
   },
   {
     id: "jbca-kr-puram",
@@ -359,12 +359,6 @@ export const IISC_FIGURES: Figure[] = [
     value: "Joint 201-250 band; India's highest-placed institution",
     year: "THE WUR 2026",
     source: "https://www.timeshighereducation.com/world-university-rankings/indian-institute-science",
-  },
-  {
-    label: "QS World University Rankings",
-    value: "219th, overall score 54.2",
-    year: "QS WUR 2026",
-    source: "Secondary reporting only - QS's own page returned HTTP 403 and could not be read; a conflicting '=221 in QS 2027' claim was also seen. Re-check at https://www.topuniversities.com/universities/indian-institute-science-iisc-bangalore before publishing.",
   },
   {
     label: "Institution of Eminence",

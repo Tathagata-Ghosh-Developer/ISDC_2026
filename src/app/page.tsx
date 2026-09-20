@@ -185,9 +185,16 @@ export default async function Home() {
               </p>
               <p className="lede mt-4 max-w-[56ch]">
                 So when a Puja happens here, nothing is being borrowed. On
-                Navami the old rite is Ayudha Puja: you put down your
+                Navami the old rite is Ayudha Puja, where you put down your
                 instruments and garland them. A laboratory has never needed a
                 translation for that.
+              </p>
+              <p className="lede mt-4 max-w-[56ch]">
+                And there is a straighter line than that. Bengaluru&apos;s first
+                Sarbajanin Durga Puja was held in 1950, and by the Bengalee
+                Association&apos;s own account it happened under the initiative
+                of a few professors of the Indian Institute of Science. The
+                city&apos;s Pujo started here. We are only picking it back up.
               </p>
               <Link href="/itihash" className="btn btn-ghost mt-8">
                 Read the long history
