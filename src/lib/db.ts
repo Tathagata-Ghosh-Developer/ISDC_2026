@@ -109,16 +109,35 @@ const EMPTY_BOARD: BoardData = {
   ready: false,
 };
 
+/**
+ * PostgREST caps a single response, so a board with more donors than
+ * that cap would silently lose its oldest entries. Paging until the
+ * rows run out keeps the list complete however large it grows.
+ */
+const PAGE_SIZE = 1000;
+
 export async function getBoard(): Promise<BoardData> {
   if (!dbReady) return EMPTY_BOARD;
 
+  async function allVerified() {
+    const rows: unknown[] = [];
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await db()
+        .from("donations")
+        .select("name,display_name,anonymous,category,amount,message,verified_at")
+        .eq("status", "verified")
+        .order("verified_at", { ascending: false })
+        .range(from, from + PAGE_SIZE - 1);
+      if (error) return { data: null, error };
+      rows.push(...(data ?? []));
+      if (!data || data.length < PAGE_SIZE) break;
+      if (rows.length > 100_000) break;
+    }
+    return { data: rows, error: null };
+  }
+
   const [donationsRes, expensesRes] = await Promise.all([
-    db()
-      .from("donations")
-      .select("name,display_name,anonymous,category,amount,message,verified_at")
-      .eq("status", "verified")
-      .order("verified_at", { ascending: false })
-      .limit(2000),
+    allVerified(),
     db()
       .from("expenses")
       .select("*")

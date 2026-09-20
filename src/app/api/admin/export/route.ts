@@ -87,16 +87,25 @@ export async function GET(req: Request) {
   }
 
   const status = new URL(req.url).searchParams.get("status");
-  let query = db()
-    .from("donations")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (status && status !== "all") query = query.eq("status", status);
 
-  const { data, error } = await query;
-  if (error) return new Response(error.message, { status: 500 });
+  // An audit file that silently stops at the first page is worse than
+  // no audit file, so page until the rows run out.
+  const all: Donation[] = [];
+  for (let from = 0; ; from += 1000) {
+    let query = db()
+      .from("donations")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(from, from + 999);
+    if (status && status !== "all") query = query.eq("status", status);
 
-  const rows = (data as Donation[]).map((d) => ({
+    const { data, error } = await query;
+    if (error) return new Response(error.message, { status: 500 });
+    all.push(...((data ?? []) as Donation[]));
+    if (!data || data.length < 1000) break;
+  }
+
+  const rows = all.map((d) => ({
     ...d,
     amount: Number(d.amount).toFixed(2),
   }));

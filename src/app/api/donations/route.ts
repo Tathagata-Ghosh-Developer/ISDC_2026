@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db, dbReady } from "@/lib/db";
 import { normalisePhone } from "@/lib/format";
 import { mirrorToSheet } from "@/lib/sheets";
+import { clientKey, rateLimit } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +10,14 @@ export const dynamic = "force-dynamic";
 const CATEGORIES = new Set(["student", "faculty", "alumni", "guest"]);
 const METHODS = new Set(["upi", "neft", "imps", "cash", "cheque", "other"]);
 const MAX_PROOF_BYTES = 5 * 1024 * 1024;
+const PROOF_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+  "application/pdf",
+]);
 
 function bad(message: string, status = 400) {
   return NextResponse.json({ ok: false, error: message }, { status });
@@ -20,6 +29,22 @@ function bad(message: string, status = 400) {
  * banking app, and the treasurer verifies it against the statement.
  */
 export async function POST(req: Request) {
+  // Unauthenticated and it writes a row and accepts a file, so it is
+  // the one endpoint worth throttling hardest.
+  const limit = rateLimit(clientKey(req, "donate"), {
+    max: 5,
+    windowMs: 10 * 60_000,
+  });
+  if (!limit.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "That is several submissions in a row. Wait a few minutes.",
+      },
+      { status: 429, headers: { "retry-after": String(limit.retryAfter) } },
+    );
+  }
+
   if (!dbReady) {
     return bad(
       "Donations are not open yet. The committee is still connecting the ledger.",
@@ -60,6 +85,9 @@ export async function POST(req: Request) {
   if (proof instanceof File && proof.size > 0) {
     if (proof.size > MAX_PROOF_BYTES) {
       return bad("That screenshot is over 5 MB. Please compress it.");
+    }
+    if (!PROOF_TYPES.has(proof.type)) {
+      return bad("Upload an image or a PDF.");
     }
     const ext = (proof.name.split(".").pop() ?? "jpg")
       .toLowerCase()

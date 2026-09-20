@@ -33,9 +33,15 @@ export function whatsappReady(): boolean {
   return Boolean(process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_ID);
 }
 
+/** The name is donor supplied and ends up in a message sent from a
+ *  volunteer's own account, so newlines and length are clamped. */
+function clean(s: string): string {
+  return s.replace(/\s+/g, " ").trim().slice(0, 80);
+}
+
 export function receiptText(m: ReceiptMessage): string {
   return [
-    `Namaskar ${m.name},`,
+    `Namaskar ${clean(m.name)},`,
     "",
     `Your contribution of ${m.amount} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
     "",

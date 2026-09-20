@@ -30,6 +30,24 @@ import "server-only";
 
 export type SheetRow = Record<string, unknown> & { id: string };
 
+/**
+ * Google Sheets evaluates a cell beginning with = + - or @, so a donor
+ * name of =IMPORTXML(...) would exfiltrate the sheet the moment the
+ * treasurer opened it. The CSV export guards the same way.
+ */
+const RISKY_FIRST = new Set(["=", "+", "-", "@", "\t", "\r", "\n"]);
+
+function defuse(value: unknown): unknown {
+  if (typeof value !== "string" || value.length === 0) return value;
+  return RISKY_FIRST.has(value[0]) ? "'" + value : value;
+}
+
+function defuseRow(row: SheetRow): SheetRow {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(row)) out[k] = defuse(v);
+  return out as SheetRow;
+}
+
 export async function mirrorToSheet(donation: SheetRow): Promise<void> {
   const url = process.env.SHEETS_WEBHOOK_URL;
   if (!url) return;
@@ -42,7 +60,7 @@ export async function mirrorToSheet(donation: SheetRow): Promise<void> {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         secret: process.env.SHEETS_WEBHOOK_SECRET ?? "",
-        donation,
+        donation: defuseRow(donation),
       }),
       signal: controller.signal,
     });

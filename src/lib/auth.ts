@@ -93,6 +93,11 @@ export async function requireAdmin(): Promise<string> {
 }
 
 /** True when the committee has configured at least one login. */
+/**
+ * A secret shorter than 32 characters makes secret() throw, which used
+ * to surface as an unexplained 500 on the login form. Check the length
+ * here so the console shows the setup instructions instead.
+ */
 export function authConfigured(): boolean {
-  return Boolean(process.env.AUTH_SECRET) && adminTable().size > 0;
+  return (process.env.AUTH_SECRET?.length ?? 0) >= 32 && adminTable().size > 0;
 }
