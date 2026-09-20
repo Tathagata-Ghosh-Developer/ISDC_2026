@@ -1,26 +1,459 @@
 @import "tailwindcss";
 
+/* ============================================================
+   IISc Sharodiya Durgotsab — Design System
+   Palette: aged paper, Company-school watercolour, Nandalal Bose
+   Scale:   golden ratio (phi = 1.618) for type and space
+   ============================================================ */
+
+@theme {
+  /* --- Golden-ratio type scale (rem) --- */
+  --text-xs: 0.618rem;
+  --text-sm: 0.786rem;
+  --text-base: 1rem;
+  --text-md: 1.272rem;
+  --text-lg: 1.618rem;
+  --text-xl: 2.058rem;
+  --text-2xl: 2.618rem;
+  --text-3xl: 3.33rem;
+  --text-4xl: 4.236rem;
+  --text-5xl: 5.388rem;
+  --text-6xl: 6.854rem;
+
+  /* --- Golden-ratio spacing scale --- */
+  --spacing-phi-1: 0.382rem;
+  --spacing-phi-2: 0.618rem;
+  --spacing-phi-3: 1rem;
+  --spacing-phi-4: 1.618rem;
+  --spacing-phi-5: 2.618rem;
+  --spacing-phi-6: 4.236rem;
+  --spacing-phi-7: 6.854rem;
+  --spacing-phi-8: 11.089rem;
+
+  /* --- Fonts (wired up in layout.tsx via next/font) --- */
+  --font-display: var(--f-display), "Cormorant Garamond", Georgia, serif;
+  --font-bangla: var(--f-bangla), "Noto Serif Bengali", serif;
+  --font-body: var(--f-body), "Inter", system-ui, sans-serif;
+
+  /* --- Semantic colours, bound to runtime tokens --- */
+  --color-paper: var(--c-paper);
+  --color-paper-2: var(--c-paper-2);
+  --color-paper-3: var(--c-paper-3);
+  --color-ink: var(--c-ink);
+  --color-ink-soft: var(--c-ink-soft);
+  --color-ink-faint: var(--c-ink-faint);
+  --color-sindoor: var(--c-sindoor);
+  --color-alta: var(--c-alta);
+  --color-haldi: var(--c-haldi);
+  --color-gold: var(--c-gold);
+  --color-indigo: var(--c-indigo);
+  --color-terracotta: var(--c-terracotta);
+  --color-leaf: var(--c-leaf);
+  --color-line: var(--c-line);
+  --color-glow: var(--c-glow);
+
+  /* --- Motion --- */
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-dhak: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Light: aged paper, noon pandal ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --c-paper: #f4e9d6;
+  --c-paper-2: #ecdcc1;
+  --c-paper-3: #fbf6ec;
+  --c-ink: #2a1a10;
+  --c-ink-soft: #5c4634;
+  --c-ink-faint: #8a7360;
+  --c-sindoor: #b3261e;
+  --c-alta: #7e1a12;
+  --c-haldi: #c9871f;
+  --c-gold: #a8842f;
+  --c-indigo: #1e3a5f;
+  --c-terracotta: #a9613c;
+  --c-leaf: #4f6b4a;
+  --c-line: rgba(42, 26, 16, 0.16);
+  --c-glow: rgba(201, 135, 31, 0.25);
+  --grain-opacity: 0.35;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ---------- Dark: night pandal, lamp glow ---------- */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --c-paper: #120d10;
+    --c-paper-2: #1b1419;
+    --c-paper-3: #241a1e;
+    --c-ink: #f2e5d0;
+    --c-ink-soft: #c9b295;
+    --c-ink-faint: #93806c;
+    --c-sindoor: #e35b43;
+    --c-alta: #b8402e;
+    --c-haldi: #efb44a;
+    --c-gold: #d8b45e;
+    --c-indigo: #90b6dd;
+    --c-terracotta: #cc8257;
+    --c-leaf: #83a97a;
+    --c-line: rgba(242, 229, 208, 0.16);
+    --c-glow: rgba(239, 180, 74, 0.28);
+    --grain-opacity: 0.22;
+    color-scheme: dark;
   }
 }
 
+:root[data-theme="dark"] {
+  --c-paper: #120d10;
+  --c-paper-2: #1b1419;
+  --c-paper-3: #241a1e;
+  --c-ink: #f2e5d0;
+  --c-ink-soft: #c9b295;
+  --c-ink-faint: #93806c;
+  --c-sindoor: #e35b43;
+  --c-alta: #b8402e;
+  --c-haldi: #efb44a;
+  --c-gold: #d8b45e;
+  --c-indigo: #90b6dd;
+  --c-terracotta: #cc8257;
+  --c-leaf: #83a97a;
+  --c-line: rgba(242, 229, 208, 0.16);
+  --c-glow: rgba(239, 180, 74, 0.28);
+  --grain-opacity: 0.22;
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+* {
+  border-color: var(--c-line);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Paper grain — one fixed layer, no per-element cost */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="dark"] body::before {
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body::before {
+    mix-blend-mode: overlay;
+  }
+}
+
+::selection {
+  background: var(--c-sindoor);
+  color: var(--c-paper-3);
+}
+
+/* Bengali glyphs always fall through to the Bengali face */
+:lang(bn),
+.bangla {
+  font-family: var(--font-bangla);
+  line-height: 1.75;
+}
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+}
+
+.smallcaps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.18em;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--c-gold);
+  font-weight: 500;
+}
+
+.lede {
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--c-ink-soft);
+}
+
+/* Gold-leaf text, used sparingly on display headings */
+.gilt {
+  background: linear-gradient(
+    100deg,
+    var(--c-gold) 0%,
+    var(--c-haldi) 22%,
+    #f6e3a8 42%,
+    var(--c-haldi) 60%,
+    var(--c-gold) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gilt-drift 9s var(--ease-silk) infinite alternate;
+}
+
+@keyframes gilt-drift {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* ============================================================
+   Ornaments
+   ============================================================ */
+
+/* Alpona-style hairline divider with a centre lozenge */
+.rule-alpona {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--c-line) 18%,
+    var(--c-gold) 50%,
+    var(--c-line) 82%,
+    transparent
+  );
+}
+
+.rule-alpona::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  translate: -50% -50%;
+  rotate: 45deg;
+  background: var(--c-gold);
+}
+
+/* Chalchitra arch — the semicircular backdrop behind an idol */
+.arch {
+  border-radius: 50% 50% 0.5rem 0.5rem / 38% 38% 0.5rem 0.5rem;
+  overflow: hidden;
+}
+
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 42%,
+    transparent 38%,
+    rgba(20, 10, 6, 0.55) 100%
+  );
+}
+
+/* Aged-photograph treatment for archive imagery */
+.sepia-plate {
+  filter: sepia(0.42) contrast(1.06) saturate(0.82) brightness(0.98);
+  transition: filter 900ms var(--ease-silk);
+}
+
+.sepia-plate:hover {
+  filter: sepia(0.08) contrast(1.02) saturate(1) brightness(1.02);
+}
+
+/* Lamp glow behind hero art */
+.lamp {
+  box-shadow:
+    0 0 var(--spacing-phi-6) var(--c-glow),
+    0 0 var(--spacing-phi-8) var(--c-glow);
+}
+
+/* ============================================================
+   Components
+   ============================================================ */
+
+.surface {
+  background: color-mix(in srgb, var(--c-paper-3) 72%, transparent);
+  border: 1px solid var(--c-line);
+  backdrop-filter: blur(8px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.618rem;
+  padding: 0.786rem 1.618rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 420ms var(--ease-silk),
+    background-color 420ms var(--ease-silk),
+    color 420ms var(--ease-silk),
+    box-shadow 420ms var(--ease-silk);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn-primary {
+  background: var(--c-sindoor);
+  color: #fdf6e8;
+}
+
+.btn-primary:hover {
+  background: var(--c-alta);
+  box-shadow: 0 0.618rem 1.618rem -0.4rem var(--c-glow);
+}
+
+.btn-ghost {
+  border-color: var(--c-line);
+  color: var(--c-ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--c-gold);
+  color: var(--c-gold);
+}
+
+.field {
+  width: 100%;
+  background: color-mix(in srgb, var(--c-paper-3) 60%, transparent);
+  border: 1px solid var(--c-line);
+  padding: 0.786rem 1rem;
+  font-size: var(--text-base);
+  color: var(--c-ink);
+  transition: border-color 300ms var(--ease-silk);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--c-gold);
+  box-shadow: 0 0 0 3px var(--c-glow);
+}
+
+.field::placeholder {
+  color: var(--c-ink-faint);
+}
+
+/* ============================================================
+   Motion primitives
+   ============================================================ */
+
+@keyframes drift-up {
+  from {
+    transform: translate3d(0, 110vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10%,
+  80% {
+    opacity: 0.7;
+  }
+  to {
+    transform: translate3d(var(--dx, 4vw), -12vh, 0) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.86; }
+  55% { opacity: 0.96; }
+}
+
+.flicker {
+  animation: flicker 4.2s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 48s) linear infinite;
+}
+
+.marquee-host:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--c-paper-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-gold);
+  border-radius: 9px;
+}
+
+/* ============================================================
+   Print — the e-receipt must print clean on any printer
+   ============================================================ */
+
+@media print {
+  body::before { display: none; }
+  body { background: #fff; color: #000; }
+  .no-print { display: none !important; }
+  .print-plate {
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
 }
