@@ -5,6 +5,7 @@ import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
 import { VOLUNTEER_ROLES } from "@/lib/site";
+import { INSTITUTES, BENGALI_ORGS } from "@/lib/content/neighbours";
 
 export const metadata: Metadata = {
   title: "Join Us",
@@ -66,6 +67,94 @@ export default async function JogdanPage() {
               </StaggerItem>
             ))}
           </Stagger>
+        </Container>
+      </Section>
+
+
+      {/* ---------------- the open invitation ---------------- */}
+      <Section id="nimontron">
+        <Container>
+          <SectionHeading
+            eyebrow="নিমন্ত্রণ The invitation"
+            title="The gate is open, and we mean it"
+            bangla="সবার জন্য খোলা"
+            lede="A Puja that only its own campus attends is a private party with incense. These are the neighbours we would like in the queue for bhog: the research institutions around us, and the Bengali organisations who have been keeping this city's Pujo going far longer than we have."
+          />
+
+          <div className="mt-[2.618rem]">
+            <h3 className="eyebrow">Research institutions nearby</h3>
+            <Stagger className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {INSTITUTES.map((inst) => (
+                <StaggerItem key={inst.id}>
+                  <a
+                    href={inst.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="group surface flex h-full flex-col p-6 transition-all duration-500 hover:-translate-y-1 hover:border-gold"
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span className="font-display text-[1.272rem] text-ink">
+                        {inst.short}
+                      </span>
+                      <span className="text-[0.62rem] uppercase tracking-[0.2em] text-gold">
+                        {inst.founded}
+                      </span>
+                    </div>
+                    <span className="mt-1 text-[0.78rem] leading-snug text-ink-soft">
+                      {inst.name}
+                    </span>
+                    <p className="mt-4 flex-1 text-[0.82rem] leading-relaxed text-ink-soft">
+                      {inst.blurb}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink-faint transition-colors group-hover:text-gold">
+                      {inst.campus} <ArrowUpRight size={12} />
+                    </span>
+                  </a>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+
+          <div className="mt-[4.236rem]">
+            <h3 className="eyebrow">Bengali Bengaluru</h3>
+            <p className="lede mt-4 max-w-[64ch] text-[0.95rem]">
+              The Bengalee Association held this city&apos;s first Sarbajanin
+              Durga Puja in 1950. Our Puja is three years old. We are the
+              youngest people in this room and we know it.
+            </p>
+            <Stagger className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {BENGALI_ORGS.map((org) => (
+                <StaggerItem key={org.id}>
+                  <a
+                    href={org.url || "#"}
+                    target={org.url ? "_blank" : undefined}
+                    rel="noreferrer noopener"
+                    className="group surface flex h-full flex-col p-5 transition-all duration-500 hover:border-gold"
+                  >
+                    <span className="text-[0.95rem] leading-snug text-ink">
+                      {org.name}
+                    </span>
+                    <span className="mt-1 text-[0.62rem] uppercase tracking-[0.18em] text-gold">
+                      {org.founded}
+                    </span>
+                    <p className="mt-3 flex-1 text-[0.78rem] leading-relaxed text-ink-soft">
+                      {org.note}
+                    </p>
+                    {org.area && (
+                      <span className="mt-3 text-[0.7rem] leading-relaxed text-ink-faint">
+                        {org.area}
+                      </span>
+                    )}
+                  </a>
+                </StaggerItem>
+              ))}
+            </Stagger>
+            <p className="mt-6 max-w-[70ch] text-[0.78rem] leading-relaxed text-ink-faint">
+              If your association or Puja belongs on this list and is not here,
+              tell a convenor and it goes up. We only list organisations whose
+              details we could actually verify.
+            </p>
+          </div>
         </Container>
       </Section>
 

@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight, Download, Mail } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/Section";
-import Reveal from "@/components/Reveal";
+import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
+import { WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
+import { SPONSOR_CONTACT, SITE } from "@/lib/site";
+import { IISC_FIGURES } from "@/lib/content/neighbours";
+import { formatINR } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Sponsors",
   description:
-    "Partner with the IISc Sharodiya Durgotsab, the only full-scale campus Durga Puja in Bengaluru, reaching students, faculty, alumni and the wider city.",
+    "Partner with the IISc Sharodiya Durgotsab, the campus Durga Puja of the Indian Institute of Science, and reach Bengaluru's academic and professional community across five days.",
 };
 
 export const revalidate = 600;
 
 export default async function SponsorsPage() {
   const config = await getConfig();
+  const tiers = config.sponsorTiers;
 
   return (
     <>
@@ -21,62 +27,196 @@ export default async function SponsorsPage() {
         <Container>
           <SectionHeading
             eyebrow="পৃষ্ঠপোষকতা Sponsorship"
-            title="Stand with a Puja the city comes to"
-            lede="A student-run festival on the campus of the Indian Institute of Science, open to the public across four days, drawing students, faculty, alumni, families and visitors from across Bengaluru."
+            title="Five days, ten thousand people, one campus"
+            bangla="আমাদের সঙ্গে থাকুন"
+            lede="Sharodiya Durgotsab at IISc blends Bengal's cultural heritage with the working life of India's leading research institution. It is the only full scale campus Durga Puja in Bengaluru, and it is open to the city."
           />
+
+          <Reveal className="mt-8 flex flex-wrap gap-3">
+            <a
+              href={SPONSOR_CONTACT.deck}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="btn btn-primary"
+            >
+              <Download size={14} /> The sponsorship deck
+            </a>
+            <a
+              href={`mailto:${SPONSOR_CONTACT.emails[0]}`}
+              className="btn btn-ghost"
+            >
+              <Mail size={14} /> Write to us
+            </a>
+          </Reveal>
         </Container>
       </Section>
 
+      {/* ---------------- why ---------------- */}
       <Section className="!pt-0">
+        <Container>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                t: "Reach the right audience",
+                d: "Students, researchers, faculty, alumni and professionals from IISc and the institutes around it, with a combined footfall of over ten thousand.",
+              },
+              {
+                t: "Strengthen your brand",
+                d: "Association with an event that holds academic seriousness and cultural heritage in the same hand, on a campus the city already respects.",
+              },
+              {
+                t: "Be visible for weeks, not days",
+                d: "On ground branding, official recognition, and promotion across our channels before, during and after the festival.",
+              },
+            ].map((c, i) => (
+              <Reveal key={c.t} delay={i * 0.06}>
+                <div className="surface h-full p-6">
+                  <h2 className="font-display text-[1.1rem] text-ink">{c.t}</h2>
+                  <p className="mt-3 text-[0.85rem] leading-relaxed text-ink-soft">
+                    {c.d}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* ---------------- the institute ---------------- */}
+      <Section className="bg-paper-2/40">
+        <Container>
+          <SectionHeading
+            eyebrow="প্রেক্ষাপট The setting"
+            title="Where the Puja happens"
+            lede="Every figure below is the Institute's own published number, with the year and the source attached, because a sponsor deserves to check rather than take our word for it."
+          />
+
+          <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {IISC_FIGURES.slice(0, 9).map((f) => (
+              <StaggerItem key={f.label}>
+                <article className="surface flex h-full flex-col p-6">
+                  <span className="font-display text-[1.272rem] leading-snug text-sindoor">
+                    {f.value}
+                  </span>
+                  <span className="mt-2 text-[0.85rem] text-ink">{f.label}</span>
+                  <span className="mt-auto pt-4 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint">
+                    {f.year}
+                  </span>
+                </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </Container>
+      </Section>
+
+      {/* ---------------- tiers ---------------- */}
+      <Section>
+        <Container>
+          <SectionHeading
+            eyebrow="স্তর The tiers"
+            title="What each level carries"
+            lede="Six levels, and room to build something that does not appear on this list. The deck has the full detail; terms apply to the LED display slots."
+          />
+
+          <div className="mt-[2.618rem] grid gap-4 lg:grid-cols-2">
+            {tiers.map((tier, i) => (
+              <Reveal key={tier.id} delay={i * 0.04}>
+                <article
+                  className={`surface flex h-full flex-col p-6 sm:p-8 ${
+                    i === 0 ? "border-gold lg:col-span-2" : ""
+                  }`}
+                >
+                  <div className="flex flex-wrap items-baseline justify-between gap-3">
+                    <div>
+                      <span className="bangla-display block text-[1.272rem] text-gold">
+                        {tier.bangla}
+                      </span>
+                      <h3 className="font-display text-[1.618rem] font-normal text-ink">
+                        {tier.name}
+                      </h3>
+                    </div>
+                    <span className="font-display text-[1.618rem] tabular-nums text-sindoor">
+                      {formatINR(tier.amount)}
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-[0.9rem] italic text-ink-soft">
+                    {tier.headline}
+                  </p>
+
+                  <ul className="mt-5 space-y-2.5">
+                    {tier.benefits.map((b) => (
+                      <li
+                        key={b}
+                        className="flex gap-2.5 text-[0.84rem] leading-relaxed text-ink-soft"
+                      >
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rotate-45 bg-gold" />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal className="mt-8">
+            <p className="max-w-[70ch] text-[0.82rem] leading-relaxed text-ink-faint">
+              Other arrangements are possible, including in kind support, stall
+              only partnerships and support for a single evening. Every
+              sponsorship received is entered in the same ledger as individual
+              donations and acknowledged by name.
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ---------------- contact ---------------- */}
+      <Section className="bg-paper-2/40">
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-start">
             <Reveal>
               <h2 className="font-display text-[1.618rem] font-normal text-ink">
-                What a partner gets
+                Talk to us
               </h2>
-              <ul className="mt-6 divide-y divide-line border-y border-line">
-                {[
-                  {
-                    t: "A specific audience, not a broad one",
-                    d: "Postgraduate and doctoral researchers, faculty, and an alumni network that reaches well beyond the campus gate.",
-                  },
-                  {
-                    t: "Presence on the ground",
-                    d: "Stalls, sampling and branding across the venue for the full run of the festival, in a space people stay in for hours rather than pass through.",
-                  },
-                  {
-                    t: "The printed magazine",
-                    d: "Probash is produced once a year, kept, and read long after the pandal comes down.",
-                  },
-                  {
-                    t: "Digital reach",
-                    d: "Instagram and YouTube through the build-up, the four days and the aftermath, plus acknowledgement on this site.",
-                  },
-                  {
-                    t: "Community initiatives",
-                    d: "Blood donation drives, cultural programmes and outreach that a corporate social responsibility team can point at honestly.",
-                  },
-                ].map((item) => (
-                  <li key={item.t} className="py-5">
-                    <h3 className="text-[1rem] text-ink">{item.t}</h3>
-                    <p className="mt-1.5 max-w-[60ch] text-[0.86rem] leading-relaxed text-ink-soft">
-                      {item.d}
-                    </p>
+              <p className="lede mt-4 max-w-[56ch] text-[0.95rem]">
+                A conversation is usually quicker than a proposal. Tell us what
+                you want out of it and we will tell you honestly whether this
+                festival can deliver it.
+              </p>
+
+              <ul className="mt-7 space-y-2">
+                {SPONSOR_CONTACT.emails.map((e) => (
+                  <li key={e}>
+                    <a
+                      href={`mailto:${e}`}
+                      className="inline-flex items-center gap-2 text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
+                    >
+                      <Mail size={14} className="text-gold" />
+                      {e}
+                    </a>
                   </li>
                 ))}
               </ul>
 
-              <p className="mt-8 text-[0.78rem] leading-relaxed text-ink-faint">
-                Sponsorship tiers, deliverables and previous-year figures are in
-                the brochure, which a convenor will send on request. Every
-                sponsorship received is entered in the same public ledger as
-                individual donations.
-              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={SPONSOR_CONTACT.deck}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn btn-primary"
+                >
+                  <Download size={14} /> Download the deck
+                </a>
+                <Link href="/thikana#committee" className="btn btn-ghost">
+                  The committee
+                </Link>
+              </div>
             </Reveal>
 
             <Reveal delay={0.1}>
               <div className="surface p-6">
-                <h3 className="eyebrow">Talk to us</h3>
+                <h3 className="eyebrow">Direct lines</h3>
                 <ul className="mt-5 space-y-4">
                   {config.contacts.map((c) => (
                     <li key={c.phone}>
@@ -92,16 +232,18 @@ export default async function SponsorsPage() {
                         <span className="block text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
                           {c.role}
                         </span>
-                        <span className="mt-0.5 block text-[0.8rem] tabular-nums text-gold">
-                          +91 {c.phone}
+                        <span className="mt-0.5 inline-flex items-center gap-1.5 text-[0.8rem] tabular-nums text-gold">
+                          <WhatsappIcon size={12} /> +91 {c.phone}
                         </span>
                       </a>
                     </li>
                   ))}
                 </ul>
-                <Link href="/daan/board" className="btn btn-ghost mt-7 w-full">
-                  See how funds are accounted for
-                </Link>
+                <p className="mt-6 border-t border-line pt-5 text-[0.72rem] leading-relaxed text-ink-faint">
+                  {SITE.name} is a registered student committee of the Institute.
+                  It is not the Institute itself, and sponsorship of this
+                  festival is not an endorsement by IISc.
+                </p>
               </div>
             </Reveal>
           </div>
@@ -109,7 +251,7 @@ export default async function SponsorsPage() {
       </Section>
 
       {config.sponsors.length > 0 && (
-        <Section className="bg-paper-2/40">
+        <Section>
           <Container>
             <SectionHeading
               eyebrow="ধন্যবাদ With thanks"
@@ -131,6 +273,9 @@ export default async function SponsorsPage() {
                     <span className="mt-1 text-[0.6rem] uppercase tracking-[0.24em] text-gold">
                       {s.tier}
                     </span>
+                    {s.url && (
+                      <ArrowUpRight size={13} className="mt-2 text-ink-faint" />
+                    )}
                   </a>
                 </Reveal>
               ))}
