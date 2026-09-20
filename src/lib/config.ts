@@ -55,7 +55,11 @@ export type Config = {
     audioUrl: string;
     /** Or an official upload to embed instead. A YouTube video id. */
     youtubeId: string;
+    /** Seconds to skip, so the programme starts rather than a logo sting. */
+    startSeconds: number;
     caption: string;
+    /** Only true once AIR gives written permission to relay the stream. */
+    allowInPageStream: boolean;
   };
   announcement: Announcement;
   dates: Record<keyof typeof PUJA_DATES, string>;
@@ -126,6 +130,12 @@ export const DEFAULTS: Config = {
     // permit embedding. The recording is not in the public domain, so
     // it is embedded from the rights holder and never hosted here.
     youtubeId: "YQyo8QeoYhc",
+    // Measured, not guessed: a label sting runs to 4.45s, then about
+    // 1.4s of digital silence, then the programme fades in near 5.95s.
+    // Six rather than five because YouTube seeks to the keyframe at or
+    // before the second you ask for.
+    startSeconds: 6,
+    allowInPageStream: false,
     caption:
       "Mahishasuramardini. The broadcast belongs to Prasar Bharati and the 1966 recording to Saregama India Ltd, so it plays here from Saregama's own upload rather than from a copy of ours. Script by Bani Kumar, music by Pankaj Kumar Mullick, recitation by Birendra Krishna Bhadra.",
   },

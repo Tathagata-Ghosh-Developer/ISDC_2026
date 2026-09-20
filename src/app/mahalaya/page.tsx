@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Radio } from "lucide-react";
+import { Radio as RadioIcon } from "lucide-react";
+import RadioSet, { type Station } from "@/components/Radio";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import Countdown from "@/components/Countdown";
@@ -15,11 +16,64 @@ export const metadata: Metadata = {
 
 export const revalidate = 600;
 
+/**
+ * Akashvani's Kolkata stations, taken from Prasar Bharati's own live
+ * player registry and each checked to respond. The stream URLs are
+ * carried here but are not played from this page by default: the
+ * broadcast is theirs and their terms restrict redistribution.
+ */
+const STATIONS: Station[] = [
+  {
+    id: "kolkata-a",
+    name: "Kolkata A",
+    bangla: "গীতাঞ্জলি",
+    frequency: "657 kHz",
+    dial: 0.2,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    streamUrl:
+      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio055/hlspbaudio055_Auto.m3u8",
+    note: "Geetanjali, the primary channel, and the one that originates Mahishasuramardini.",
+  },
+  {
+    id: "kolkata-b",
+    name: "Kolkata B",
+    bangla: "সঞ্চয়িতা",
+    frequency: "1008 kHz",
+    dial: 0.42,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    streamUrl:
+      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio056/hlspbaudio056_Auto.m3u8",
+    note: "Sanchayita, the second Kolkata channel.",
+  },
+  {
+    id: "rainbow",
+    name: "FM Rainbow",
+    bangla: "এফএম রেনবো",
+    frequency: "107.0 MHz",
+    dial: 0.66,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    streamUrl:
+      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio058/hlspbaudio058_Auto.m3u8",
+    note: "The city's FM service.",
+  },
+  {
+    id: "bangla",
+    name: "Akashvani Bangla",
+    bangla: "আকাশবাণী বাংলা",
+    frequency: "National",
+    dial: 0.88,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    streamUrl:
+      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio137/hlspbaudio137_Auto.m3u8",
+    note: "The Bengali language national channel.",
+  },
+];
+
 const TIMELINE = [
   {
-    year: "1931",
+    year: "The 1930s",
     title: "The first broadcast",
-    body: "All India Radio's Calcutta station puts out a pre dawn programme of Chandi recitation, song and narration. It is live. There is no tape, because there is nothing to tape onto.",
+    body: "Akashvani's Calcutta station begins putting out a pre dawn programme of Chandi recitation, song and narration. It is live, because there is nothing yet to record it onto. The exact first year is genuinely disputed: 1931 is the popular answer, All India Radio's own writing says 1936 or 1937, and nobody has produced a schedule that settles it.",
   },
   {
     year: "The makers",
@@ -27,9 +81,9 @@ const TIMELINE = [
     body: "Bani Kumar writes the script. Pankaj Kumar Mullick composes and directs the music. Birendra Krishna Bhadra recites. Around them sing Dwijen Mukhopadhyay, Supriti Ghosh, Sandhya Mukhopadhyay and others, in a studio, before sunrise, every year.",
   },
   {
-    year: "1966",
+    year: "1962 to 1966",
     title: "Committed to tape",
-    body: "The programme is recorded, which is why the voice a Bengali hears at four in the morning today is the same voice their grandparents heard live.",
+    body: "The last live performance is usually placed in 1962 and the definitive studio recording in 1966. From then on the voice a Bengali hears at four in the morning is the same voice their grandparents heard performed live, which is the whole reason it cannot be replaced.",
   },
   {
     year: "1976",
@@ -40,7 +94,8 @@ const TIMELINE = [
 
 export default async function MahalayaPage() {
   const config = await getConfig();
-  const { audioUrl, youtubeId, caption } = config.mahalaya;
+  const { audioUrl, youtubeId, startSeconds, caption, allowInPageStream } =
+    config.mahalaya;
   const mahalaya = config.schedule.find((d) => d.id === "mahalaya");
 
   return (
@@ -65,13 +120,38 @@ export default async function MahalayaPage() {
         </Container>
       </Section>
 
+      {/* ---------------- the wireless ---------------- */}
+      <Section className="!pt-0">
+        <Container>
+          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-4">
+            <div>
+              <h2 className="bangla-display text-[1.618rem] text-ink">বেতার</h2>
+              <p className="font-display text-[1.05rem] text-ink-soft">
+                The wireless
+              </p>
+            </div>
+            <p className="max-w-[52ch] text-[0.78rem] leading-relaxed text-ink-faint">
+              On the morning itself this is where it actually happens, live,
+              from Akashvani Kolkata on 657 kHz. The recording below is for the
+              other three hundred and sixty four days.
+            </p>
+          </div>
+
+          <RadioSet
+            stations={STATIONS}
+            broadcast="Mahishasuramardini goes out at 4 am on Saturday 10 October 2026 and runs about ninety minutes. Akashvani Kolkata originates it; Akashvani Delhi carries a Hindi and Sanskrit version at the same hour."
+            allowInPageStream={allowInPageStream}
+          />
+        </Container>
+      </Section>
+
       {/* ---------------- listen ---------------- */}
       <Section className="!pt-0">
         <Container>
           <Reveal>
             <div className="surface overflow-hidden">
               <div className="flex flex-wrap items-center gap-3 border-b border-line px-6 py-4">
-                <Radio size={17} className="text-gold" />
+                <RadioIcon size={17} className="text-gold" />
                 <span className="font-display text-[1.1rem] text-ink">
                   Mahishasuramardini
                 </span>
@@ -93,7 +173,7 @@ export default async function MahalayaPage() {
                 ) : youtubeId ? (
                   <div className="relative aspect-video w-full">
                     <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+                      src={`https://www.youtube-nocookie.com/embed/${youtubeId}?start=${startSeconds}&rel=0`}
                       title="Mahishasuramardini"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -125,7 +205,7 @@ export default async function MahalayaPage() {
           <SectionHeading
             eyebrow="ইতিহাস The story"
             title="A programme nobody is allowed to change"
-            lede="Almost every year since 1931, and identical since the recording was made. Bengal has treated any attempt to improve it as a provocation, and has been proved right once already."
+            lede="Every year since the 1930s, and identical since the recording was made. Bengal has treated any attempt to improve it as a provocation, and has been proved right once already."
           />
 
           <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2">

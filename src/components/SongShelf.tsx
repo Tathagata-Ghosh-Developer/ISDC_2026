@@ -13,9 +13,21 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * on a specific track, so the page costs no third-party requests and
  * sets no cookies just by being opened.
  */
-export default function SongShelf({ collections }: { collections: Collection[] }) {
+export default function SongShelf({
+  collections,
+  onPlayingChange,
+}: {
+  collections: Collection[];
+  /** So the sound desk can step back while a song is on. */
+  onPlayingChange?: (playing: boolean) => void;
+}) {
   const [active, setActive] = useState(collections[0]?.id ?? "");
   const [playing, setPlaying] = useState<string | null>(null);
+
+  function play(id: string | null) {
+    setPlaying(id);
+    onPlayingChange?.(id !== null);
+  }
 
   const collection =
     collections.find((c) => c.id === active) ?? collections[0];
@@ -32,7 +44,7 @@ export default function SongShelf({ collections }: { collections: Collection[] }
               key={c.id}
               onClick={() => {
                 setActive(c.id);
-                setPlaying(null);
+                play(null);
               }}
               className={`relative shrink-0 whitespace-nowrap px-3 py-2 text-left transition-colors ${
                 c.id === active ? "text-sindoor" : "text-ink-faint hover:text-ink"
@@ -85,7 +97,7 @@ export default function SongShelf({ collections }: { collections: Collection[] }
                     </div>
                   ) : (
                     <button
-                      onClick={() => setPlaying(t.youtubeId)}
+                      onClick={() => play(t.youtubeId)}
                       className="group flex w-full items-start gap-4 p-5 text-left"
                     >
                       <span className="mt-1 grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line text-gold transition-colors group-hover:border-gold group-hover:bg-gold group-hover:text-paper-3">
