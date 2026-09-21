@@ -241,7 +241,7 @@ export default function ItihashPage() {
           >
             <Container>
               <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
-                <Reveal className="lg:sticky lg:top-24">
+                <Reveal>
                   <p className="bangla-display text-[2.618rem] leading-tight text-sindoor">
                     {block.bangla}
                   </p>
@@ -257,7 +257,7 @@ export default function ItihashPage() {
                   </p>
 
                   {block.image && (
-                    <figure className="mt-8 hidden lg:block">
+                    <figure className="mt-8">
                       <Parallax depth={26} className="relative aspect-[4/5] w-full overflow-hidden">
                         <Image
                           src={block.image.src}
@@ -272,24 +272,13 @@ export default function ItihashPage() {
                       </figcaption>
                     </figure>
                   )}
-                </Reveal>
 
-                <div>
-                  <Reveal>
-                    <h2 className="font-display text-[1.618rem] font-normal leading-snug text-ink sm:text-[2.058rem]">
-                      {block.title}
-                    </h2>
-                    <div className="mt-6 space-y-4">
-                      {block.prose.map((p, j) => (
-                        <p key={j} className="lede text-[0.98rem]">
-                          {p}
-                        </p>
-                      ))}
-                    </div>
-                  </Reveal>
-
+                  {/* Every picture for this era, in the left column.
+                      The right column is text and only text, so a
+                      laptop reader's eye has one place to look for
+                      each. On a phone they simply stack. */}
                   {block.plates && (
-                    <Stagger className="mt-[2.618rem] grid gap-5 sm:grid-cols-2">
+                    <Stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
                       {block.plates.map((pl) => (
                         <StaggerItem key={pl.src}>
                           <figure className="group h-full">
@@ -298,7 +287,7 @@ export default function ItihashPage() {
                                 src={pl.src}
                                 alt={pl.alt}
                                 fill
-                                sizes="(max-width: 640px) 100vw, 40vw"
+                                sizes="(max-width: 1024px) 50vw, 30vw"
                                 className="sepia-plate object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                               />
                             </div>
@@ -317,6 +306,22 @@ export default function ItihashPage() {
                       ))}
                     </Stagger>
                   )}
+                </Reveal>
+
+                <div>
+                  <Reveal>
+                    <h2 className="font-display text-[1.618rem] font-normal leading-snug text-ink sm:text-[2.058rem]">
+                      {block.title}
+                    </h2>
+                    <div className="mt-6 space-y-4">
+                      {block.prose.map((p, j) => (
+                        <p key={j} className="lede text-[0.98rem]">
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                  </Reveal>
+
 
                   <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2">
                     {facts.map((f) => (

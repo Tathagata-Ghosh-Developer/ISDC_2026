@@ -706,3 +706,71 @@ body::before {
     transition: none;
   }
 }
+
+/* ================================================================
+   The receipt, on paper
+
+   The bill book is a physical object and the printed page should be
+   that object, not a screenshot of a web page. So: no background
+   tint, a real border, black ink, and nothing from the site around
+   it. Backgrounds are forced to print, because a receipt whose stamp
+   does not appear is not a receipt.
+   ================================================================ */
+
+.receipt-plate {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .receipt-plate {
+    border-width: 1.5pt;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  /* One receipt, one sheet, never orphaned across a page break. */
+  .receipt-plate {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}
+
+/* ================================================================
+   The receipt is a document, not a page of the site.
+
+   It keeps paper colours whatever theme the browser is in. Somebody
+   reading the site at night still gets a receipt that prints black on
+   white rather than cream on white, which is invisible on paper.
+
+   The --color-* names are the ones Tailwind's utilities compile to.
+   Setting --c-ink here would not work: @theme resolves
+   --color-ink: var(--c-ink) once, at :root, and the resolved value is
+   what inherits down. The indirection has already happened by the
+   time this rule applies.
+   ================================================================ */
+
+.receipt-plate {
+  --color-paper: #f7f1e4;
+  --color-paper-2: #efe6d3;
+  --color-paper-3: #fffdf7;
+  --color-ink: #17110c;
+  --color-ink-soft: #463526;
+  --color-ink-faint: #6b5745;
+  --color-gold: #7d5f1a;
+  --color-sindoor: #a8201a;
+  --color-line: rgba(42, 26, 16, 0.22);
+  background: #fffdf7;
+  border-color: #17110c;
+  color: #17110c;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}

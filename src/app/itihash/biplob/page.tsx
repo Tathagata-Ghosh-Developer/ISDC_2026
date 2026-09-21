@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Container, Section } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { Parallax } from "@/components/Depth";
+import Prose from "@/components/Prose";
 import {
   SECTIONS,
   FIGURES,
@@ -171,12 +172,8 @@ export default function BiplobPage() {
                   </Reveal>
 
                   <Reveal delay={0.08}>
-                    <div className="mt-6 space-y-4">
-                      {s.body.split(/\n{2,}/).map((p, j) => (
-                        <p key={j} className="lede text-[0.98rem]">
-                          {p}
-                        </p>
-                      ))}
+                    <div className="mt-6">
+                      <Prose text={s.body} />
                     </div>
                   </Reveal>
 

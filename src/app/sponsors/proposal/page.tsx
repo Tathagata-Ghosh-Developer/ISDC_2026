@@ -41,14 +41,14 @@ const REACH = [
     note: "Annual Report 2024-25. Around half are doctoral, which means a population that stays on campus for years rather than months.",
   },
   {
-    figure: "4,000",
-    label: "visitors across the five days",
-    note: "The committee's own count from 2025. It is an estimate made by people standing at a gate, and it is the only figure on this page we cannot source to somebody else.",
+    figure: "10,000+",
+    label: "visitors expected this year",
+    note: "The committee's expectation for 2026. The figure it is built on is a counted four thousand in 2025, and we would rather show you both numbers than the flattering one on its own.",
   },
   {
     figure: "14",
-    label: "research institutes within eight kilometres",
-    note: "NCBS, JNCASR, ICTS, RRI, IIA, ISI Bangalore, URSC and others. Their Bengali staff and students have come to this Puja for years.",
+    label: "research institutes on this side of the city",
+    note: "NCBS, JNCASR, ICTS, RRI, IIA, ISI Bangalore, URSC and others, the nearest a short walk and the furthest a half-hour drive. Their Bengali staff and students have come to this Puja for years.",
   },
   {
     figure: "5",

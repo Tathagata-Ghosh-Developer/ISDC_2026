@@ -245,10 +245,10 @@ export default function Desk({
             </svg>
           </button>
           <p className="mt-6 text-[0.72rem] uppercase tracking-[0.3em] text-ink-faint">
-            বারোটি শব্দ · উননব্বইটি গান · একটি ঘর
+            এগারোটি শব্দ · দুশো এক গান · একটি ঘর
           </p>
           <p className="mt-1.5 text-[0.7rem] uppercase tracking-[0.24em] text-ink-faint">
-            Twelve sounds, eighty nine songs, one room
+            Eleven sounds, two hundred and one songs, one room
           </p>
           {restored && (
             <p className="mt-5 text-[0.75rem] text-gold">

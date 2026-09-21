@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDonationByToken } from "@/lib/db";
-import { getConfig } from "@/lib/config";
 import { formatINR, formatDate, formatDateTime } from "@/lib/format";
 import PrintButton from "@/components/PrintButton";
 import Logo from "@/components/Logo";
+import Stamp from "@/components/Stamp";
 import { SITE, RECEIPT } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -64,11 +63,11 @@ export default async function ReceiptPage({
 }) {
   const { token } = await params;
   const donation = await getDonationByToken(token);
-  const config = await getConfig();
 
   if (!donation) notFound();
 
   const issued = donation.status === "verified" && donation.receipt_no;
+  const rejected = donation.status === "rejected";
 
   return (
     <div className="min-h-dvh px-4 pb-16 pt-[6rem] sm:pt-[7rem]">
@@ -76,193 +75,185 @@ export default async function ReceiptPage({
         {!issued && (
           <div className="no-print surface mb-6 p-5">
             <p className="text-[0.88rem] leading-relaxed text-ink">
-              {donation.status === "rejected"
-                ? "This entry was not matched to a payment in the bank statement. If that is a mistake, write to a convenor with your transaction reference."
-                : "This donation is recorded but not verified yet. The treasurer matches entries against the bank statement, usually within a day. The receipt number appears here once it clears."}
+              {rejected
+                ? "This entry was not matched to a payment in the bank statement. If that is a mistake, write to a convenor with your transaction reference and they will look again."
+                : "This donation is recorded and is waiting to be checked against the bank statement, usually within a day. The receipt number appears here the moment it clears. Keep this link."}
             </p>
           </div>
         )}
 
-        <article className="print-plate surface relative overflow-hidden">
-          {/* the coloured edge a printed bill book has */}
+        {/* ================================================================
+            The committee's own bill book, rendered rather than scanned.
+
+            The paper book has two halves: a counterfoil the committee
+            keeps and a receipt the donor takes away. This is that second
+            half, laid out field for field, so a donor holding the paper
+            and a donor holding the phone are looking at the same thing.
+            ================================================================ */}
+        <article className="receipt-plate relative overflow-hidden border-2">
+          {/* the crest, ghosted, exactly as it is printed behind the book */}
           <div
-            className="h-2 w-full"
-            style={{
-              background:
-                "linear-gradient(90deg, var(--c-sindoor), var(--c-haldi), var(--c-gold), var(--c-sindoor))",
-            }}
-          />
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 grid place-items-center overflow-hidden opacity-[0.03]"
+          >
+            <span className="block max-w-full">
+              <Logo size={260} />
+            </span>
+          </div>
 
-          <div className="p-7 sm:p-[2.618rem]">
+          <div className="relative p-6 sm:p-9">
             {/* ---------------- head ---------------- */}
-            <header className="flex flex-wrap items-start justify-between gap-5 border-b border-line pb-6">
-              <div className="flex items-start gap-4">
-                <Logo size={62} />
-                <div>
-                  <p className="bangla-display text-[1.272rem] leading-tight text-ink">
-                    {SITE.nameBangla}
-                  </p>
-                  <h1 className="font-display text-[1.1rem] font-semibold text-ink">
-                    {config.bank.accountName}
-                  </h1>
-                  <p className="mt-1 text-[0.72rem] leading-relaxed text-ink-faint">
-                    {RECEIPT.heading}
-                  </p>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <p className="font-display text-[1.618rem] uppercase tracking-[0.3em] text-ink">
-                  Receipt
+            <header className="flex items-start gap-4">
+              <Logo size={58} />
+              <div className="min-w-0 flex-1 text-center">
+                <p className="font-display text-[1.15rem] font-semibold leading-tight text-ink sm:text-[1.4rem]">
+                  {SITE.name} &ndash; {SITE.year}
                 </p>
-                <p className="font-display mt-1 text-[1.272rem] tabular-nums text-sindoor">
-                  {donation.receipt_no ?? "Pending"}
+                <p className="mt-0.5 text-[0.78rem] text-ink-soft">
+                  {RECEIPT.heading}
                 </p>
-                <p className="mt-1 text-[0.72rem] text-ink-faint">
-                  {formatDate(donation.verified_at ?? donation.created_at)}
+                <p className="mt-3 inline-block border-b-2 border-ink px-2 font-display text-[1.05rem] font-bold tracking-[0.12em] text-ink">
+                  RECEIPT
                 </p>
               </div>
+              <span className="w-[58px] shrink-0" />
             </header>
 
-            {/* ---------------- body ---------------- */}
-            <section className="grid gap-5 py-7 sm:grid-cols-2">
-              <Row label="Received with thanks from" value={donation.name} wide />
-              <Row label="Contact number" value={`+91 ${donation.phone}`} />
-              <Row
-                label="Category"
-                value={
-                  donation.category[0].toUpperCase() + donation.category.slice(1)
-                }
-              />
-              {donation.sr_number && (
-                <Row label="SR number" value={donation.sr_number} />
-              )}
-              <Row label="Email" value={donation.email} />
-              <Row label="Paid by" value={donation.method.toUpperCase()} />
-              {donation.reference && (
-                <Row label="Transaction reference" value={donation.reference} />
-              )}
-              {donation.paid_on && (
-                <Row label="Date of payment" value={formatDate(donation.paid_on)} />
-              )}
-            </section>
+            {/* ---------------- number and date ---------------- */}
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+              <div className="flex items-end gap-2">
+                <span className="font-display text-[0.95rem] font-semibold text-ink">
+                  No.
+                </span>
+                <span className="min-w-[10rem] border border-ink px-3 py-1.5 text-center font-display text-[0.95rem] tabular-nums text-ink">
+                  {donation.receipt_no ?? "not yet issued"}
+                </span>
+              </div>
+              <div className="flex items-end gap-2">
+                <span className="text-[0.9rem] italic text-ink">Date :</span>
+                <span className="min-w-[8rem] border-b border-ink pb-0.5 text-center text-[0.9rem] tabular-nums text-ink">
+                  {formatDate(donation.verified_at ?? donation.created_at)}
+                </span>
+              </div>
+            </div>
 
-            {/* ---------------- amount ---------------- */}
-            <section className="flex flex-wrap items-end justify-between gap-6 border-y border-line py-6">
-              <div>
-                <p className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-faint">
-                  Amount
-                </p>
-                <p className="font-display mt-1 text-[2.618rem] font-semibold leading-none tabular-nums text-sindoor">
+            {/* ---------------- the filled fields ---------------- */}
+            <dl className="mt-7 space-y-5">
+              <Field label="Received with thanks from">
+                {donation.display_name?.trim() || donation.name}
+              </Field>
+              <Field label="Contact No.">
+                {donation.phone && donation.phone !== "0000000000"
+                  ? `+91 ${donation.phone}`
+                  : donation.email !== "not given"
+                    ? donation.email
+                    : "not given"}
+              </Field>
+              <Field label="Amount">
+                Rupees {inWords(donation.amount)} only
+              </Field>
+              <Field label="Towards">{RECEIPT.towards}</Field>
+            </dl>
+
+            {/* ---------------- the sum, and who received it ---------------- */}
+            <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-[1.272rem] font-bold text-ink">
+                  Rs.
+                </span>
+                <span className="rounded-full border-2 border-ink px-6 py-2 font-display text-[1.272rem] font-semibold tabular-nums text-ink">
                   {formatINR(donation.amount)}
-                </p>
-                <p className="mt-2 text-[0.82rem] italic text-ink-soft">
-                  Rupees {inWords(donation.amount)} only
-                </p>
+                </span>
               </div>
+
               <div className="text-right">
-                <p className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-faint">
-                  Towards
-                </p>
-                <p className="font-display mt-1 text-[1.272rem] text-ink">
-                  {RECEIPT.towards}
-                </p>
-              </div>
-            </section>
-
-            {/* ---------------- foot ---------------- */}
-            <section className="pt-7">
-              <p className="max-w-[62ch] text-[0.8rem] leading-relaxed text-ink-soft">
-                {RECEIPT.note}
-              </p>
-              <p className="bangla-display mt-4 text-[1.05rem] leading-loose text-ink">
-                আপনার অবদানের জন্য আন্তরিক কৃতজ্ঞতা। শুভ শারদীয়া।
-              </p>
-
-              <div className="mt-9 flex flex-wrap items-end justify-between gap-8">
-                <div className="text-[0.68rem] leading-relaxed text-ink-faint">
-                  <p>
-                    {config.bank.bank}, {config.bank.branch}
-                  </p>
-                  <p>
-                    Account {config.bank.accountNumber}, IFSC {config.bank.ifsc}
-                    {config.bank.upiId ? `, UPI ${config.bank.upiId}` : ""}
-                  </p>
-                  {donation.verified_by && (
-                    <p className="mt-1">
-                      Verified by {donation.verified_by} on{" "}
-                      {formatDateTime(donation.verified_at)}
+                <p className="text-[0.85rem] italic text-ink">Received by :</p>
+                <div className="mt-1.5">
+                  {RECEIPT.signatories.map((sig) => (
+                    <p key={sig.name} className="text-[0.85rem] text-ink">
+                      {sig.name}
+                      <span className="ml-2 text-[0.68rem] uppercase tracking-[0.14em] text-ink-soft">
+                        {sig.role}
+                      </span>
                     </p>
-                  )}
-                </div>
-
-                <div className="flex gap-8">
-                  {RECEIPT.signatories.map((s) => (
-                    <div key={s.name} className="text-center">
-                      {s.image ? (
-                        <Image
-                          src={s.image}
-                          alt=""
-                          width={140}
-                          height={48}
-                          className="mx-auto mb-1 h-12 w-auto object-contain"
-                        />
-                      ) : (
-                        <div className="mb-1 h-12 w-36" />
-                      )}
-                      <div className="h-px w-36 bg-line" />
-                      <p className="mt-1.5 text-[0.75rem] text-ink">{s.name}</p>
-                      <p className="text-[0.58rem] uppercase tracking-[0.2em] text-ink-faint">
-                        {s.role}
-                      </p>
-                    </div>
                   ))}
                 </div>
+                {donation.verified_by && (
+                  <p className="mt-1 text-[0.66rem] text-ink-faint">
+                    entered by {donation.verified_by}
+                  </p>
+                )}
               </div>
-            </section>
+            </div>
 
-            <p className="mt-9 border-t border-line pt-4 text-[0.6rem] leading-relaxed text-ink-faint">
-              Computer generated and valid without a physical signature. Check it
-              at {SITE.url}/receipt/{donation.receipt_token}, a reference unique to this
-              donation. The committee is not registered under section 80G, so
-              this contribution is not tax deductible.
-            </p>
+            {/* ---------------- the stamp ---------------- */}
+            {issued && (
+              <Stamp
+                year={SITE.year}
+                size={126}
+                className="pointer-events-none absolute bottom-3 right-4 text-sindoor opacity-70 sm:bottom-6 sm:right-10"
+              />
+            )}
+
+            {!issued && (
+              <p className="mt-8 border-2 border-dashed border-ink/30 px-4 py-3 text-center text-[0.8rem] uppercase tracking-[0.2em] text-ink-soft">
+                {rejected ? "not matched to a payment" : "awaiting verification"}
+              </p>
+            )}
+
+            {/* ---------------- the small print ---------------- */}
+            <footer className="mt-9 border-t border-ink/25 pt-4">
+              <p className="text-[0.7rem] leading-relaxed text-ink-soft">
+                {RECEIPT.note}
+              </p>
+              <div className="mt-3 flex flex-wrap justify-between gap-x-6 gap-y-1 text-[0.66rem] text-ink-faint">
+                <span>
+                  Paid by {donation.method.toUpperCase()}
+                  {donation.reference ? `, reference ${donation.reference}` : ""}
+                </span>
+                <span>Recorded {formatDateTime(donation.created_at)}</span>
+              </div>
+              <p className="mt-2 text-[0.62rem] text-ink-faint">
+                Verify this receipt at {SITE.url}/receipt/{donation.receipt_token}
+              </p>
+            </footer>
           </div>
         </article>
 
         <div className="no-print mt-6 flex flex-wrap gap-3">
-          <PrintButton />
+          <PrintButton label="Print or save as PDF" />
           <Link href="/daan/board" className="btn btn-ghost">
-            Donation board
+            The donation board
           </Link>
           <Link href="/" className="btn btn-ghost">
             Home
           </Link>
         </div>
+
+        <p className="no-print mt-5 text-[0.75rem] leading-relaxed text-ink-faint">
+          This link is the only copy of your receipt and it is not listed
+          anywhere. Anybody holding it can read it, so treat it the way you
+          would treat the paper one.
+        </p>
       </div>
     </div>
   );
 }
 
-function Row({
+/** One line of the bill book: a label, a rule, and what is written on it. */
+function Field({
   label,
-  value,
-  wide = false,
+  children,
 }: {
   label: string;
-  value: string;
-  wide?: boolean;
+  children: React.ReactNode;
 }) {
   return (
-    <div className={wide ? "sm:col-span-2" : ""}>
-      <p className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-faint">
-        {label}
-      </p>
-      <p
-        className={`mt-1 break-words text-ink ${wide ? "font-display text-[1.272rem]" : "text-[0.92rem]"}`}
-      >
-        {value}
-      </p>
+    <div className="flex flex-wrap items-end gap-x-2">
+      <dt className="shrink-0 text-[0.9rem] italic text-ink">{label} :</dt>
+      <dd className="min-w-0 flex-1 border-b border-ink pb-0.5 text-[0.95rem] text-ink">
+        {children}
+      </dd>
     </div>
   );
 }

@@ -42,8 +42,12 @@ export const SITE = {
   logoMono: "/media/brand/logo-mono.png",
   icon: "/media/brand/icon-512.png",
   email: "iiscdurgotsab@gmail.com",
-  /** The committee's own count from 2025. Used everywhere, unrounded. */
-  attendance: "around four thousand visitors across the five days",
+  /**
+   * What the committee expects this year, stated as an expectation.
+   * The measured figure from 2025 lives on the sponsorship proposal and
+   * is what any claim here has to be reconciled against.
+   */
+  attendance: "over ten thousand visitors expected across the five days",
   campusMapSource: "https://iisc.ac.in/wp-content/uploads/2016/02/New-IISc-Map.pdf",
   established: 2023,
 } as const;

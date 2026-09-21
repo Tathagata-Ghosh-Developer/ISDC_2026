@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SHLOKAS, ARRIVAL_LINES } from "@/lib/content/shlokas";
 import { FACTS } from "@/lib/content/facts";
@@ -52,6 +53,22 @@ const C = {
 type Props = { oncePerSession?: boolean };
 
 export default function Arrival({ oncePerSession = true }: Props) {
+  const pathname = usePathname();
+
+  /**
+   * Pages nobody arrives at for the atmosphere.
+   *
+   * A donor opening their receipt has already paid and wants to see a
+   * number. Somebody signing in to the console is working. Making
+   * either of them sit through a puppet show, or hunt for the skip
+   * button, is the sort of thing that is charming exactly once and
+   * irritating every time after.
+   */
+  const skipHere =
+    pathname?.startsWith("/receipt") ||
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/daan");
+
   const reduce = useReducedMotion();
   const [visible, setVisible] = useState(false);
   const [act, setAct] = useState(0);
@@ -135,6 +152,9 @@ export default function Arrival({ oncePerSession = true }: Props) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // After every hook, so the rules of hooks are not broken.
+  if (skipHere) return null;
 
   return (
     <AnimatePresence>

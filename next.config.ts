@@ -44,6 +44,34 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  /**
+   * Image sizes, capped on purpose.
+   *
+   * Next asks Vercel to make a new file for every width in deviceSizes
+   * and imageSizes, in every format in formats. The defaults are
+   * sixteen widths and two formats, so a single photograph can become
+   * thirty-two stored variants. This site has 206 source images, and a
+   * free plan allows five thousand transformations a month.
+   *
+   * A busy festival was projected at two and a half to three and a
+   * third thousand, which is close enough to the ceiling that a busy
+   * Navami could cross it. Past the ceiling images do not degrade,
+   * they are replaced by their alt text, and there is no way to buy
+   * more on a free plan. Half the site would look broken and the other
+   * half would look fine, depending on which pages had been visited in
+   * September.
+   *
+   * Four widths and WebP alone is six variants instead of thirty-two.
+   * AVIF is perhaps twenty per cent smaller than WebP and doubles the
+   * count on its own, which is not a trade worth making here. The
+   * widths kept are the ones the layouts actually request.
+   */
+  images: {
+    deviceSizes: [640, 828, 1200, 1920],
+    imageSizes: [96, 256],
+    formats: ["image/webp"],
+    minimumCacheTTL: 31536000,
+  },
   poweredByHeader: false,
 
   /**

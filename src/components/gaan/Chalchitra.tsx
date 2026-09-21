@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Mix } from "@/lib/content/desk";
@@ -30,7 +37,8 @@ type Shot = { id: string; at: number };
 
 type Scene = {
   id: string;
-  src: string;
+  /** One photograph, or a run of them that cycles while the scene is up. */
+  src: string | string[];
   alt: string;
   bangla: string;
   caption: string;
@@ -103,10 +111,22 @@ const SCENES: Scene[] = [
   },
   {
     id: "bhir",
-    src: "/media/video/pandal-evening.jpg",
-    alt: "The ground full, an evening under the lights",
+    // Five days rather than one night. The desk's loudest setting is
+    // the crowd, and a crowd is not a single photograph.
+    src: [
+      "/media/video/pandal-evening.jpg",
+      "/media/puja2025/43.jpg",
+      "/media/puja2025/21.jpg",
+      "/media/puja2025/02.jpg",
+      "/media/puja2025/12.jpg",
+      "/media/puja2025/26.jpg",
+      "/media/video/sindoor-khela.jpg",
+      "/media/puja2025/36.jpg",
+      "/media/video/bisarjan-road.jpg",
+    ],
+    alt: "The ground through the five days of the Puja",
     bangla: "ভিড়",
-    caption: "Navami night, when nobody is watching anything in particular",
+    caption: "Five days on this ground, one after another",
     pull: { adda: 1.6, dhak: 0.8 },
     place: 10,
   },
@@ -166,6 +186,14 @@ const WASH = {
   drone: "vignette",
 } as const;
 
+/** Notifies React when the visitor changes their motion preference. */
+function subscribeToMotionPreference(onChange: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
 export default function Chalchitra({
   mix,
   city,
@@ -179,20 +207,26 @@ export default function Chalchitra({
   shots: Shot[];
 }) {
   const host = useRef<HTMLDivElement>(null);
-  const [flash, setFlash] = useState(0);
-  const [reduced, setReduced] = useState(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }, []);
+  /**
+   * Read once, during render, rather than set from an effect. The
+   * media query is an external value that does not change between a
+   * render and its effect, so setting state for it only bought a
+   * second render that undid the first.
+   */
+  const reduced = useSyncExternalStore(
+    subscribeToMotionPreference,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false,
+  );
 
   /* ---- a conch or a bell lands, and the frame takes the light ---- */
-  const lastShot = shots.length ? shots[shots.length - 1].at : 0;
-  useEffect(() => {
-    if (!lastShot) return;
-    setFlash((n) => n + 1);
-  }, [lastShot]);
+  // The timestamp of the last hit is the key the flash animates on, so
+  // nothing has to be counted and nothing has to be set.
+  const flash = shots.length ? shots[shots.length - 1].at : 0;
+
+  /* ---- a scene made of several photographs advances on its own ---- */
+  const [reel, setReel] = useState({ id: "", frame: 0 });
 
   /* ---- which photograph is on ---- */
   const scene = useMemo(() => {
@@ -214,6 +248,30 @@ export default function Chalchitra({
     return best;
   }, [mix, city]);
 
+  const sceneId = scene.id;
+  const strip = Array.isArray(scene.src) ? scene.src : null;
+  const length = strip?.length ?? 0;
+
+  /**
+   * The scene id travels with the frame number, so changing scene
+   * resets the reel without anybody having to set state during an
+   * effect and trigger a second render to undo the first.
+   */
+  useEffect(() => {
+    if (length < 2 || reduced) return;
+    const id = setInterval(() => {
+      setReel((r) =>
+        r.id === sceneId
+          ? { id: sceneId, frame: (r.frame + 1) % length }
+          : { id: sceneId, frame: 0 },
+      );
+    }, 5200);
+    return () => clearInterval(id);
+  }, [sceneId, length, reduced]);
+
+  const frame = reel.id === sceneId ? reel.frame : 0;
+  const shown = strip ? strip[frame % strip.length] : (scene.src as string);
+
   /* ---- the washes, as plain numbers ---- */
   const rain = (mix.brishti ?? 0) / 100;
   const dusk = (mix.jhijhi_poka ?? 0) / 100;
@@ -230,7 +288,7 @@ export default function Chalchitra({
       {/* ---------- the photograph ---------- */}
       <AnimatePresence mode="sync">
         <motion.div
-          key={scene.id}
+          key={`${scene.id}-${frame}`}
           initial={{ opacity: 0, scale: 1.06 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
@@ -254,7 +312,7 @@ export default function Chalchitra({
             }}
           >
             <Image
-              src={scene.src}
+              src={shown}
               alt={scene.alt}
               fill
               sizes="(max-width: 768px) 100vw, 900px"

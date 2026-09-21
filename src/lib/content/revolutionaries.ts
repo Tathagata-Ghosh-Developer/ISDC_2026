@@ -274,8 +274,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Photograph of 1928; out of copyright in India",
     attribution: "Supplied by the committee. The original publication is not established.",
     sourcePage: "",
-    relevance:
-      "The brothers sitting on the floor to eat with everybody else. Whatever the Puja was doing politically in 1928, this is the form it took in public.",
+    relevance: "The brothers sitting on the floor to eat with everybody else. Whatever the Puja was doing politically in 1928, this is the form it took in public.",
   },
   {
     id: "bankim-portrait",
@@ -320,7 +319,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Abanindranath Tagore, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Bharat_Mata_by_Abanindranath_Tagore.jpg",
-    relevance: "The central image of section 3 - four-armed, unarmed, ascetic; the case that she is NOT Durga rests on looking at it.",
+    relevance: "Four-armed, unarmed, ascetic; the case that she is NOT Durga rests on looking at it.",
   },
   {
     id: "abanindranath-1907",
@@ -383,7 +382,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Sukumar Ray, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Rabindranath_Tagore_1905-1906_Sukumar_Ray.jpg",
-    relevance: "The anti-Partition and Rakhi Bandhan year. Low resolution (260x390) but the only public-domain image dated to 1905.",
+    relevance: "The anti-Partition and Rakhi Bandhan year..",
   },
   {
     id: "khudiram-1905",
@@ -410,7 +409,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Unknown author, from Jibantara Halder's history of the Anushilan Samiti, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Pulin_Behari_Das.jpg",
-    relevance: "The man who administered the Mahalaya initiations before the image of Kali - section 4's central figure.",
+    relevance: "The man who administered the Mahalaya initiations before the image of Kali.",
   },
   {
     id: "bipin-chandra-pal",
@@ -446,7 +445,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "CC0",
     attribution: "Swomitra Palit / Shankar Ghosh, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Pritilata_Notice_Police.jpg",
-    relevance: "High-resolution primary document (2133x3043); a strong full-page plate.",
+    relevance: "",
   },
   {
     id: "kalpana-dutt",
@@ -455,7 +454,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Calcutta State Archives, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Woman_revolutionary,_Kalpana_Dutt.jpg",
-    relevance: "Author of the 1945 memoir whose silence about the goddess is section 8's key evidence.",
+    relevance: "Author of the 1945 memoir whose silence about the goddess is.",
   },
   {
     id: "bina-das",
@@ -482,7 +481,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "CC BY 3.0",
     attribution: "Biswarup Ganguly, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Alipore_Bomb_Case_1908-09_Trial_Room_-_Alipore_Sessions_Court_-_Calcutta_1997_1.jpg",
-    relevance: "The preserved room where Aurobindo and Barindra were tried, and where Bhawani Mandir went in as evidence. Modern photograph, 5883x5761.",
+    relevance: "The preserved room where Aurobindo and Barindra were tried, and where Bhawani Mandir went in as evidence. Modern photograph,.",
   },
   {
     id: "durga-puja-1809-patna",
@@ -491,7 +490,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain (PD-Art / PD-old-100)",
     attribution: "Sevak Ram (c.1770-c.1830), British Library Add.Or.29, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Durga_Puja,_1809_watercolour_painting_in_Patna_Style.jpg",
-    relevance: "The best pre-modern depiction of the puja available freely; Company/Patna School, 3903x2313.",
+    relevance: "The best pre-modern depiction of the puja available freely; Company/Patna School,.",
   },
   {
     id: "durga-procession-c1800",
@@ -509,7 +508,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "William Prinsep (1794-1874), via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:William_Prinsep,_Europeans_being_entertained_by_dancers_and_musicians_in_a_splendid_Indian_house_in_Calcutta_during_Durga_puja_(1830s%E2%80%931840s).jpg",
-    relevance: "The babu puja as colonial social theatre - the pre-nationalist meaning of the festival, and the best illustration for the '1840 order' discussion in section 7.",
+    relevance: "The babu puja as colonial social theatre - the pre-nationalist meaning of the festival.",
   },
   {
     id: "durga-calcutta-1858",
@@ -527,7 +526,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain (PD-India)",
     attribution: "Unknown photographer, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Durga_Puja_(late_19th_or_early_20th_century).jpg",
-    relevance: "The ONLY freely licensed period photograph of a Durga Puja found; the pre-1947 photographic record on Commons is otherwise empty.",
+    relevance: "The only freely licensed period photograph of a Durga Puja found.",
   },
   {
     id: "pratima-visarjan-gaganendranath",
@@ -536,7 +535,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Gaganendranath Tagore (d. 1938), via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Pratima_Visarjan_by_Gaganendranath_Tagore.png",
-    relevance: "The Bengal School painting the immersion - same milieu and moment as Bharat Mata. Small (283x345).",
+    relevance: "The Bengal School painting the immersion - same milieu and moment as Bharat Mata. Small.",
   },
   {
     id: "kumartuli-street",
@@ -554,7 +553,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "CC BY-SA 4.0",
     attribution: "XrysD, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:BengalPartition1905_Map.png",
-    relevance: "The standard reference map; 3000x1989, large enough for a full-page plate.",
+    relevance: "The standard reference map.",
   },
   {
     id: "bengal-partition-protest-1906",
@@ -563,7 +562,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "The Sphere, 1906, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Bengal_Partition_Mass_1906.jpg",
-    relevance: "Contemporary British press image of the Swadeshi agitation; panoramic (1275x408), works as a strip across a spread.",
+    relevance: "Contemporary British press image of the Swadeshi agitation; panoramic.",
   },
 ];
 
