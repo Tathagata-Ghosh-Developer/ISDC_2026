@@ -87,9 +87,9 @@ const BLOCKS: EraBlock[] = [
     span: "1757, 1900",
     title: "The Puja becomes a party, then a subscription",
     prose: [
-      "In eighteenth-century Calcutta the Puja turned into the chief instrument of social competition among the new Bengali merchant elite. Households hired nautch troupes, laid on English food and drink, and invited Company officials. The story that Robert Clive attended Nabakrishna Deb's Puja in 1757 is repeated everywhere and rests on almost nothing, Deb became Clive's munshi after the battle, and the evidence is a single anonymous painting. By 1840 the Company was uneasy enough to forbid its own servants from attending.",
+      "In eighteenth-century Calcutta the Puja turned into the chief instrument of social competition among the new Bengali merchant elite. Households hired nautch troupes, laid on English food and drink, and invited Company officials. The story that Robert Clive attended Nabakrishna Deb's Puja in 1757 is repeated everywhere and rests on almost nothing, Deb became Clive's munshi after the battle, and the evidence is a single anonymous painting. The other thing everybody repeats is that by 1840 the Company had forbidden its own servants to attend. No such order exists. What exists for 1840 is a hostile column in the Bengal Hurkaru of 7 October, and Europeans were still going in 1855. Official unease is real and datable, the 1833 despatch, the Lords debating idolatry in August 1840, the order of March 1841 pulling troops and gun salutes out of Hindu festivals. A newspaper campaign has been promoted into a prohibition.",
       "The scale was industrial. By 1839 Calcutta was producing something in the order of seven thousand idols a year. The lion beneath the goddess had a horse's face for most of this period, because the artisans making it had never seen a lion; the face changed only after real lions reached the Calcutta zoo in the 1880s.",
-      "Then the money democratised. Twelve friends turned away from a household Puja at Guptipara in Hooghly pooled subscriptions and ran their own, baro-yari, twelve friends, the word that still means community Puja. Sources put it at 1761 or 1790. Either way it is the hinge, the festival stops belonging to families who can afford it.",
+      "Then the money democratised, and here the familiar story needs handling with tongs. Twelve men of Guptipara in Hooghly, shut out of a household Puja, raised a subscription and ran their own; baro plus yaar gives baroyari, the word that still means community Puja. Tapati Guha-Thakurta, who recounts it, hedges every clause of it and gives no firmer date than the end of the eighteenth century. Rachel Fell McDermott adds the detail nobody quotes: the first recorded baroiyari was to Jagaddhatri, not to Durga. And the cause was fiscal rather than democratic. The Permanent Settlement of 1793 left zamindars unable to collect from their own tenants, and the subscription Puja is what the collapse of that patronage produced. The best documented case is not Guptipara but Bankura in 1793, where people of all castes applied to the East India Company for permission to raise money and hold one.",
       "Not everyone approved. Debendranath Tagore abolished Durga Puja at Jorasanko on Brahmo principle, which is why the most famous Bengali family of the century kept no idol.",
     ],
     image: {
@@ -118,7 +118,7 @@ const BLOCKS: EraBlock[] = [
     span: "1900, 1990",
     title: "Everyone's goddess, and a voice on the radio",
     prose: [
-      "The baroyari Puja became the sarbojanin, of all people, in the first decades of the twentieth century. Bhowanipore's Sanatan Dharmotsahini Sabha ran a subscription Puja from 1909 or 1910; Baghbazar from 1919 is the one usually credited with fixing the modern civic form. The nationalist movement found the iconography ready-made, and Durga and Bharat Mata became difficult to tell apart on a poster.",
+      "The baroyari Puja became the sarbojanin, of all people, in the first decades of the twentieth century. Bhowanipore's Sanatan Dharmotsahini Sabha ran a subscription Puja from 1909 or 1910, and Baghbazar, founded in 1918 or 1919, is the one usually credited with fixing the modern civic form. It was founded against the exclusiveness of the old family Pujas rather than against the British, and Guha-Thakurta dates its nationalist fame to 1937, when a swadeshi fair and a display of Bengali wrestling were held beside it. The word sarbojanin arrives in 1926, and its documented motive is not anti-colonial either: Hindu leaders wanted celebrations open to every caste, in answer both to Gandhi on untouchability and to a perceived Muslim threat. The Ananda Bazar Patrika of 19 October 1926 recorded the immediate cost, that Muslims who had joined the celebrations for five or six hundred years were no longer doing so. The nationalist phase was real, brief, and confined to a handful of north Calcutta Pujas between about 1926 and 1939.",
       "In 1931 All India Radio broadcast Mahishasuramardini before dawn on Mahalaya, with Birendra Krishna Bhadra reciting the Chandi. It has opened the season almost every year since. In 1976 the station replaced it with a new production fronted by the film star Uttam Kumar. Listeners were so angry that AIR offices were stoned, and the original recording was restored within the same season.",
       "Craft changed under pressure. A fire in Kumartuli in the late 1930s destroyed the workshops days before the Puja, and Gopeshwar Pal rebuilt by breaking the single ekchala frame into separate figures that could be made fast and in parallel. The split family group that now looks traditional was an emergency measure.",
     ],
@@ -380,9 +380,31 @@ export default function ItihashPage() {
               </p>
               <p className="lede mt-3 max-w-[68ch] text-[0.92rem]">
                 Several claims that circulate widely were checked and left out
-                because no reliable source supports them. If you can source one
-                of them properly, or you find an error here, tell a convenor and
-                it will be corrected.
+                because no reliable source supports them. Three of them had to
+                be taken off this page after it was first written. Clive at
+                Shobhabazar in 1757 rests on a single anonymous painting. The
+                Company order of 1840 forbidding Europeans to attend has never
+                been produced by anyone, and the thing that actually happened in
+                October 1840 was a newspaper column. And four Bengali scientists
+                are named in every account of this campus and never worked here;
+                the real link is Jnan Chandra Ghosh, Director from 1939 to 1947.
+              </p>
+              <p className="lede mt-3 max-w-[68ch] text-[0.92rem]">
+                One more thing is worth saying plainly, because it cuts against
+                what this festival likes to believe about itself. The evidence
+                that the community Puja was a vehicle of the freedom movement is
+                thinner than its retelling. The colonial intelligence files
+                watched Shivaji, Ganpati, Birashtami and Kali, and Rachel Fell
+                McDermott finds that the organisations which condoned violence
+                worked through Kali rather than her sister. Much of the
+                scholarly authority for the nationalist story traces back, in
+                the footnotes of the scholars themselves, to popular trade books
+                rather than to archives. Where this page tells that story it
+                says who is claiming what.
+              </p>
+              <p className="lede mt-3 max-w-[68ch] text-[0.92rem]">
+                If you can source one of them properly, or you find an error
+                here, tell a convenor and it will be corrected.
               </p>
             </div>
           </Reveal>
