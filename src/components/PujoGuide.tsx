@@ -36,6 +36,9 @@ export default function PujoGuide() {
     });
   }, [msgs, busy]);
 
+  // Closing the panel when the reader navigates away. The path is the
+  // event; there is nothing to derive it from within a single render.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setOpen(false), [pathname]);
 
   async function ask(text: string) {

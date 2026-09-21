@@ -37,7 +37,10 @@ export default function ExpensesPanel() {
     setLoading(false);
   }, []);
 
+  // As in the enquiries panel: the loader raises its own flag before
+  // awaiting, which is what the rule sees.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
   }, [load]);
 

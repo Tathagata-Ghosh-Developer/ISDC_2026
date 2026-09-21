@@ -32,6 +32,8 @@ export type Station = {
   name: string;
   bangla: string;
   frequency: string;
+  /** Eight characters at most: what fits on a real dial. */
+  short?: string;
   dial: number;
   listenUrl: string;
   /** Set only on the station whose programme we may legitimately play. */
@@ -312,19 +314,31 @@ export default function Radio({
           ))}
           <line x1="66" y1="142" x2="330" y2="142" stroke="#2d1b0c" strokeWidth="0.6" />
 
-          {stations.map((s) => (
-            <text
-              key={s.id}
-              x={74 + s.dial * 248}
-              y="154"
-              fontSize="6.2"
-              fill="#2d1b0c"
-              textAnchor="middle"
-              style={{ letterSpacing: "0.04em" }}
-            >
-              {s.name.toUpperCase()}
-            </text>
-          ))}
+          {/* Ten names across 248 units printed on one line landed on
+              top of each other and read as a smear. A real dial carries
+              short names on two staggered rows, and the one you are
+              tuned to is the only one meant to be legible. */}
+          {stations.map((s, i) => {
+            const near = s.id === station?.id && proximity > 0.45;
+            return (
+              <text
+                key={s.id}
+                x={74 + s.dial * 248}
+                y={i % 2 === 0 ? 146 : 155}
+                fontSize={near ? 6.4 : 5.2}
+                fill="#2d1b0c"
+                fillOpacity={near ? 1 : 0.42}
+                textAnchor="middle"
+                style={{
+                  letterSpacing: "0.06em",
+                  fontWeight: near ? 700 : 400,
+                  transition: "fill-opacity 320ms ease, font-size 320ms ease",
+                }}
+              >
+                {(s.short ?? s.name).toUpperCase()}
+              </text>
+            );
+          })}
 
           {Array.from({ length: 27 }).map((_, i) => (
             <line

@@ -49,14 +49,22 @@ const PATH_MAX = 120;
  * question mark before it is ever written down.
  */
 export function cleanPath(raw: string): string {
-  let p = raw.split("?")[0].split("#")[0].trim();
+  // Lowercase first. The guards below used to run before this line,
+  // so /Receipt/<token> matched neither of them, fell through, and
+  // was written into the visits table with the donor's receipt token
+  // inside it. A phone that autocapitalises, or a link somebody typed
+  // from hearing it read out, was enough to produce that. The table
+  // it lands in is the one the committee reads.
+  let p = raw.split("?")[0].split("#")[0].trim().toLowerCase();
   if (!p.startsWith("/")) p = "/" + p;
+
   // A receipt link carries a token that is the only thing standing
   // between a stranger and a donor's details. It is never recorded.
-  if (p.startsWith("/receipt/")) return "/receipt";
-  if (p.startsWith("/admin")) return "/admin";
+  if (p === "/receipt" || p.startsWith("/receipt/")) return "/receipt";
+  if (p === "/admin" || p.startsWith("/admin/")) return "/admin";
+
   if (p.length > PATH_MAX) p = p.slice(0, PATH_MAX);
-  return p.toLowerCase();
+  return p;
 }
 
 /** Only the sending site's host, never the full referring URL. */

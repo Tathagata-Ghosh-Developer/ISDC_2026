@@ -27,8 +27,19 @@ export function rateLimit(
 ): { ok: boolean; retryAfter: number } {
   const now = Date.now();
 
-  // Cheap eviction. Without it a long-lived instance grows forever.
-  if (buckets.size > 2000) buckets.clear();
+  // Eviction, not a reset. clear() emptied the whole map, which meant
+  // two thousand requests from two thousand forged addresses wiped
+  // everybody's counters, including a live fifteen-minute login
+  // lockout. Map keeps insertion order, so the oldest quarter goes and
+  // anyone currently blocked stays blocked.
+  if (buckets.size > 2000) {
+    const drop = Math.ceil(buckets.size / 4);
+    let n = 0;
+    for (const k of buckets.keys()) {
+      if (n++ >= drop) break;
+      if (buckets.get(k)!.blockedUntil <= now) buckets.delete(k);
+    }
+  }
 
   const bucket = buckets.get(key) ?? { hits: [], blockedUntil: 0 };
 

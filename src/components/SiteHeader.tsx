@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMediaQuery, useMounted, useScrolledPast } from "@/lib/browser";
 import { useEffect, useState } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { NAV } from "@/lib/site";
@@ -21,19 +22,37 @@ import Logo, { Wordmark } from "./Logo";
    ================================================================ */
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+  /**
+   * The theme lives in two places that are not React: the visitor's
+   * stored choice, and their system preference. Reading them in an
+   * effect meant rendering once with a theme nobody had chosen and
+   * then again with the real one, which is a visible flicker on the
+   * icon. `useMounted` keeps the server and the first client render
+   * identical, and everything after it reads the truth directly.
+   */
+  const mounted = useMounted();
+  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)", false);
+  const [chosen, setChosen] = useState<"light" | "dark" | null>(null);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("isdc-theme") as "light" | "dark" | null;
-    const system = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-    setTheme(stored ?? system);
-  }, []);
+  const stored =
+    mounted && chosen === null
+      ? ((() => {
+          try {
+            return localStorage.getItem("isdc-theme") as
+              | "light"
+              | "dark"
+              | null;
+          } catch {
+            return null;
+          }
+        })())
+      : chosen;
+
+  const theme = mounted ? (stored ?? (prefersDark ? "dark" : "light")) : null;
 
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
+    setChosen(next);
     document.documentElement.setAttribute("data-theme", next);
     try {
       localStorage.setItem("isdc-theme", next);
@@ -56,23 +75,23 @@ function ThemeToggle() {
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [solid, setSolid] = useState(false);
+
+  // The scroll position belongs to the browser, not to React. Reading
+  // it through a subscription costs one render instead of two and
+  // leaves no frame in which the header was wrong.
+  const solid = useScrolledPast(40);
+
+  // Closing the menu on navigation is derived, not an effect: if the
+  // path has changed since the menu was opened, the menu is shut.
+  const [openedAt, setOpenedAt] = useState(pathname);
+  const menuOpen = open && openedAt === pathname;
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => setOpen(false), [pathname]);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [menuOpen]);
 
   if (pathname?.startsWith("/admin")) return null;
 
@@ -120,12 +139,12 @@ export default function SiteHeader() {
                 Donate
               </Link>
               <button
-                onClick={() => setOpen((v) => !v)}
+                onClick={() => (setOpenedAt(pathname), setOpen((v) => !v))}
                 aria-label="Menu"
-                aria-expanded={open}
+                aria-expanded={menuOpen}
                 className="grid h-11 w-11 place-items-center rounded-full border border-line text-ink lg:hidden"
               >
-                {open ? <X size={16} /> : <Menu size={16} />}
+                {menuOpen ? <X size={16} /> : <Menu size={16} />}
               </button>
             </div>
           </div>
@@ -151,13 +170,13 @@ export default function SiteHeader() {
 
       {/* ---------- the drawer ---------- */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden ${open ? "" : "pointer-events-none"}`}
-        aria-hidden={!open}
+        className={`fixed inset-0 z-40 lg:hidden ${menuOpen ? "" : "pointer-events-none"}`}
+        aria-hidden={!menuOpen}
       >
         <div
           onClick={() => setOpen(false)}
           className={`absolute inset-0 bg-paper/96 backdrop-blur-xl transition-opacity duration-500 ${
-            open ? "opacity-100" : "opacity-0"
+            menuOpen ? "opacity-100" : "opacity-0"
           }`}
         />
         <div className="relative flex h-full flex-col justify-center overflow-y-auto px-7 py-24">
@@ -168,9 +187,9 @@ export default function SiteHeader() {
               href={item.href}
               className="group flex items-baseline justify-between gap-4 border-b border-line py-3.5 transition-all duration-500"
               style={{
-                opacity: open ? 1 : 0,
-                transform: open ? "translateY(0)" : "translateY(14px)",
-                transitionDelay: `${open ? 50 + i * 40 : 0}ms`,
+                opacity: menuOpen ? 1 : 0,
+                transform: menuOpen ? "translateY(0)" : "translateY(14px)",
+                transitionDelay: `${menuOpen ? 50 + i * 40 : 0}ms`,
               }}
             >
               <span className="font-display text-[1.5rem] font-normal text-ink group-hover:text-sindoor">
@@ -190,8 +209,8 @@ export default function SiteHeader() {
             href="/daan"
             className="btn btn-primary mt-7 w-full"
             style={{
-              opacity: open ? 1 : 0,
-              transitionDelay: `${open ? 50 + NAV.length * 40 : 0}ms`,
+              opacity: menuOpen ? 1 : 0,
+              transitionDelay: `${menuOpen ? 50 + NAV.length * 40 : 0}ms`,
             }}
           >
             Donate to the Puja

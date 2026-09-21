@@ -34,9 +34,14 @@ export async function GET(req: Request) {
   const scheduled = Boolean(secret) && auth === `Bearer ${secret}`;
 
   const started = Date.now();
+
+  // An uptime checker gives up at five seconds. Without this the route
+  // sat on a dead connection for seven and the checker read a slow
+  // database as an outage.
   const { error, count } = await db()
     .from("donations")
-    .select("id", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true })
+    .abortSignal(AbortSignal.timeout(4000));
 
   if (error) {
     console.error("[keepalive]", error.message);

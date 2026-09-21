@@ -72,7 +72,12 @@ export default function EnquiriesPanel({ role }: { role: "admin" | "committee" }
     setLoading(false);
   }, [kind, status]);
 
+  // Fetching on mount and whenever the filter changes. The loader
+  // raises its own loading flag before awaiting, which is what the
+  // rule sees; the alternative is a spinner that appears one render
+  // late.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
   }, [load]);
 

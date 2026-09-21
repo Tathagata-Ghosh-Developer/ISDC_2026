@@ -19,11 +19,23 @@ type Petal = {
 export default function Kash({ count = 18 }: { count?: number }) {
   const [petals, setPetals] = useState<Petal[]>([]);
 
+  /**
+   * Random values, on the client only, once.
+   *
+   * Two React rules meet here and only one of them can be satisfied.
+   * Deriving the petals during render calls Math.random() during
+   * render, which is impure and would disagree with the server at
+   * hydration. Generating them in an effect sets state once on mount,
+   * which renders an empty sky for one frame. The empty frame is
+   * invisible and a hydration mismatch is not, so the effect stays and
+   * the rule is silenced here deliberately rather than worked around.
+   */
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const small = window.matchMedia("(max-width: 640px)").matches;
     const n = small ? Math.round(count * 0.55) : count;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPetals(
       Array.from({ length: n }, () => ({
         left: Math.random() * 100,

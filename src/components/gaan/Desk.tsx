@@ -61,6 +61,8 @@ export default function Desk({
     if (shared) {
       const decoded = decodeMix(shared);
       if (Object.keys(decoded).length) {
+        // A mix shared by URL, read from the address bar on mount.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMix(decoded);
         setPreset(null);
         return;

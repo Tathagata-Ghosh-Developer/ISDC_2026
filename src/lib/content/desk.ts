@@ -135,8 +135,12 @@ export function mixToValues(mix: Mix): number[] {
 export function encodeMix(mix: Mix): string {
   return DESK_LAYERS.filter((l) => (mix[l.id] ?? 0) > 0)
     .map(
+      // Two digits was one short: the sliders go to 100 and the share
+      // link quietly capped at 99, so a mix you sent was not the mix
+      // that arrived. Codes are always three letters, so digits can
+      // run to whatever length they need without becoming ambiguous.
       (l) =>
-        `${l.code}${String(Math.min(99, Math.round(mix[l.id]))).padStart(2, "0")}`,
+        `${l.code}${String(Math.min(100, Math.max(0, Math.round(mix[l.id])))).padStart(2, "0")}`,
     )
     .join("");
 }
@@ -144,7 +148,7 @@ export function encodeMix(mix: Mix): string {
 export function decodeMix(raw: string): Mix {
   const mix: Mix = {};
   const byCode = new Map(DESK_LAYERS.map((l) => [l.code, l.id]));
-  for (const m of raw.matchAll(/([a-z]{3})(\d{2})/g)) {
+  for (const m of raw.matchAll(/([a-z]{3})(\d{2,3})/g)) {
     const id = byCode.get(m[1]);
     if (id) mix[id] = Math.min(100, Math.max(0, Number(m[2])));
   }

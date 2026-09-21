@@ -96,6 +96,11 @@ export default function Arrival({ oncePerSession = true }: Props) {
     }
     if (seen) return;
 
+    // Whether the sequence has already played lives in sessionStorage,
+    // which does not exist on the server. Reading it during render
+    // would disagree at hydration, so it is read once on mount and the
+    // rule is silenced here rather than worked around.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true);
     document.body.style.overflow = "hidden";
 
@@ -145,9 +150,18 @@ export default function Arrival({ oncePerSession = true }: Props) {
     setVisible(false);
   }
 
+  /**
+   * Escape or Enter skips the sequence. `finish` is redefined on every
+   * render, so naming it as a dependency would tear the listener down
+   * and rebuild it sixty times a second. A ref holds the current one
+   * and the listener is attached exactly once.
+   */
+  const finishRef = useRef(finish);
+  finishRef.current = finish;
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" || e.key === "Enter") finish();
+      if (e.key === "Escape" || e.key === "Enter") finishRef.current();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
