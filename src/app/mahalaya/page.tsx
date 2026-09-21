@@ -17,51 +17,135 @@ export const metadata: Metadata = {
 export const revalidate = 600;
 
 /**
- * Akashvani's Kolkata stations, taken from Prasar Bharati's own live
- * player registry and each checked to respond. The stream URLs are
- * carried here but are not played from this page by default: the
- * broadcast is theirs and their terms restrict redistribution.
+ * The dial.
+ *
+ * Ten Akashvani stations, identified out of Prasar Bharati's own live
+ * player at akashvani.gov.in/radio/live.php, which embeds a list of
+ * 293 stations pairing each name with its stream. Not guessed from a
+ * stream number: the numbering looks contiguous and is not. The index
+ * one place below Kolkata Geetanjali is FM Gold Delhi, and putting a
+ * Delhi feed on a Kolkata dial is exactly the sort of mistake that
+ * nobody would ever notice and everybody would deserve.
+ *
+ * Every one of these streams responds, carries two bitrates, and
+ * sends an open CORS header, so playing them here would be a few
+ * lines of work. We do not, and the reason is worth writing down.
+ *
+ * Prasar Bharati's published terms grant use "for personal or
+ * educational purposes" and then say, in the same clause, that "you
+ * may not reproduce, republish, post, transmit or distribute any
+ * material on Prasar Bharati website". Embedding a live feed is
+ * transmitting it. The bar is absolute rather than commercial-only,
+ * so being a non-profit student committee with an attribution line
+ * does not cure it. Their hyperlinking policy asks for permission
+ * even to link. TuneIn and the community aggregators carry these
+ * streams anyway; that is tolerance rather than permission, and a
+ * named committee of a named institute should not lean on it.
+ *
+ * So the dial tunes, and hands you to Akashvani's own player. The one
+ * thing that does play here is Mahishasuramardini itself, from
+ * Saregama's own upload, because Saregama owns the 1966 master and
+ * permits the embed. That is the recording everybody actually came
+ * for, and it is the one we can legitimately give them.
+ *
+ * If the committee writes to Prasar Bharati and gets an answer, the
+ * streams are listed below ready to be switched on.
  */
 const STATIONS: Station[] = [
   {
+    id: "maitree",
+    name: "Akashvani Maitree",
+    bangla: "মৈত্রী",
+    frequency: "594 kHz",
+    dial: 0.06,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "The Bengali service beamed across the border, and the only station on this dial whose audience is mostly in another country.",
+  },
+  {
     id: "kolkata-a",
-    name: "Kolkata A",
+    name: "Akashvani Kolkata A",
     bangla: "গীতাঞ্জলি",
     frequency: "657 kHz",
-    dial: 0.2,
+    dial: 0.17,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
     youtubeId: "YQyo8QeoYhc",
     startSeconds: 6,
-    note: "Geetanjali, the primary channel, and the one that originates Mahishasuramardini.",
+    note: "Geetanjali. The primary Kolkata channel, and the one that originates Mahishasuramardini at four on Mahalaya morning.",
   },
   {
     id: "kolkata-b",
-    name: "Kolkata B",
+    name: "Akashvani Kolkata B",
     bangla: "সঞ্চয়িতা",
     frequency: "1008 kHz",
-    dial: 0.42,
+    dial: 0.28,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    note: "Sanchayita, the second Kolkata channel.",
-  },
-  {
-    id: "rainbow",
-    name: "FM Rainbow",
-    bangla: "এফএম রেনবো",
-    frequency: "107.0 MHz",
-    dial: 0.66,
-    listenUrl: "https://akashvani.gov.in/radio/live.php",
-    note: "The city's FM service.",
+    note: "Sanchayita, the second Kolkata channel, named after the Tagore anthology that sits on most Bengali bookshelves.",
   },
   {
     id: "bangla",
     name: "Akashvani Bangla",
     bangla: "আকাশবাণী বাংলা",
     frequency: "National",
+    dial: 0.39,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "The Bengali national stream, with no transmitter of its own. It exists only because somebody decided the language should have a channel rather than a frequency.",
+  },
+  {
+    id: "shantiniketan",
+    name: "Akashvani Shantiniketan",
+    bangla: "শান্তিনিকেতন",
+    frequency: "Medium wave",
+    dial: 0.5,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "From Tagore's own town. Worth finding on a dial for the same reason it is worth going there.",
+  },
+  {
+    id: "murshidabad",
+    name: "Akashvani Murshidabad",
+    bangla: "মুর্শিদাবাদ",
+    frequency: "Medium wave",
+    dial: 0.6,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "The old capital of Bengal, and the town whose ivory carvers made goddesses for the same households that were hiring the nautch troupes.",
+  },
+  {
+    id: "siliguri",
+    name: "Akashvani Siliguri",
+    bangla: "শিলিগুড়ি",
+    frequency: "Medium wave",
+    dial: 0.69,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "North Bengal, where the plains end. A different Bengali on the air, and a different Puja at the other end of the state.",
+  },
+  {
+    id: "kurseong",
+    name: "Akashvani Kurseong",
+    bangla: "কার্সিয়াং",
+    frequency: "Medium wave",
+    dial: 0.78,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "In the hills above Darjeeling. Broadcasts in Nepali and Bengali both, which is the honest sound of that district.",
+  },
+  {
+    id: "vividh-bharati",
+    name: "Vividh Bharati Kolkata",
+    bangla: "বিবিধ ভারতী",
+    frequency: "100.1 MHz",
     dial: 0.88,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    note: "The Bengali language national channel.",
+    note: "Film songs, ten kilowatts, and the station that taught two generations of India what a request programme was.",
+  },
+  {
+    id: "rainbow",
+    name: "FM Rainbow Kolkata",
+    bangla: "এফএম রেনবো",
+    frequency: "107.0 MHz",
+    dial: 0.96,
+    listenUrl: "https://akashvani.gov.in/radio/live.php",
+    note: "The city's own FM service, at the far end of the band where the needle runs out of dial.",
   },
 ];
+
 
 const TIMELINE = [
   {
@@ -124,15 +208,18 @@ export default async function MahalayaPage() {
               </p>
             </div>
             <p className="max-w-[52ch] text-[0.78rem] leading-relaxed text-ink-faint">
-              On the morning itself this is where it actually happens, live,
-              from Akashvani Kolkata on 657 kHz. The recording below is for the
-              other three hundred and sixty four days.
+              Ten Akashvani stations, read out of Prasar Bharati&apos;s own
+              player. Turn the knob and the static clears as you come onto one.
+              The dial hands you to Akashvani&apos;s player to listen live,
+              because their terms forbid anyone else transmitting the feed.
+              Mahishasuramardini itself plays here, from the rights
+              holder&apos;s own upload.
             </p>
           </div>
 
           <RadioSet
             stations={STATIONS}
-            broadcast="Mahishasuramardini goes out at 4 am on Saturday 10 October 2026 and runs about ninety minutes. Akashvani Kolkata originates it; Akashvani Delhi carries a Hindi and Sanskrit version at the same hour."
+            broadcast="Mahishasuramardini runs about ninety minutes from four in the morning, and Mahalaya falls on Saturday 10 October 2026. Akashvani Kolkata originates it and other stations carry it. Prasar Bharati has not published this year's schedule yet, so treat the hour as the one it has always been rather than as an announcement."
           />
         </Container>
       </Section>

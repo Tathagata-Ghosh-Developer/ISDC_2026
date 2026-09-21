@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
@@ -362,6 +363,42 @@ export default function ItihashPage() {
               </div>
             </Reveal>
           </div>
+        </Container>
+      </Section>
+
+      {/* ---------------- the chapter of its own ---------------- */}
+      <Section className="bg-paper-2/40">
+        <Container>
+          <Reveal>
+            <Link
+              href="/itihash/biplob"
+              className="group grid gap-[2.618rem] border border-line bg-paper p-7 transition-colors hover:border-gold sm:p-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-center"
+            >
+              <div>
+                <p className="eyebrow">একটি অধ্যায় A chapter of its own</p>
+                <h2 className="bangla-display mt-3 text-[1.618rem] leading-tight text-sindoor sm:text-[2.058rem]">
+                  পুজো ও বিপ্লব
+                </h2>
+                <p className="font-display mt-1 text-[1.272rem] text-ink transition-colors group-hover:text-sindoor">
+                  The Puja and the revolutionaries
+                </p>
+                <p className="lede mt-5 text-[0.95rem]">
+                  Bankim and Bande Mataram, the Swadeshi boycott fought over
+                  the tinsel on the idols, oaths sworn before a goddess with a
+                  sword on the head, Netaji as a Puja secretary, and the women
+                  the Shakti idiom was used about and by. Ten sections, each
+                  marked with how well it is evidenced, because the story is
+                  told everywhere and sourced almost nowhere.
+                </p>
+              </div>
+              <p className="border-l-2 border-gold/50 pl-5 text-[0.85rem] leading-relaxed text-ink-soft">
+                Researched from the Sedition Committee Report of 1918, J. C.
+                Ker&apos;s intelligence volumes, the Parliamentary Return of
+                1849 and Kalpana Datta&apos;s own memoir. What the documents
+                say is stranger than the legend, and in places contradicts it.
+              </p>
+            </Link>
+          </Reveal>
         </Container>
       </Section>
 

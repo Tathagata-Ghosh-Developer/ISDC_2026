@@ -7,6 +7,7 @@ const PAGES = [
   { path: "/utsab", priority: 0.9 },
   { path: "/mahalaya", priority: 0.8 },
   { path: "/itihash", priority: 0.8 },
+  { path: "/itihash/biplob", priority: 0.7 },
   { path: "/shilpa", priority: 0.8 },
   { path: "/gaan", priority: 0.7 },
   { path: "/probash", priority: 0.7 },
