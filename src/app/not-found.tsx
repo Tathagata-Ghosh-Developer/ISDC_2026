@@ -28,7 +28,12 @@ export default function NotFound() {
           </p>
 
           <nav className="mt-10 flex flex-wrap justify-center gap-2">
-            {NAV.map((n) => (
+            {[
+              ...NAV,
+              { href: "/daan", label: "Donate", bangla: "\u09a6\u09be\u09a8" },
+              { href: "/daan/board", label: "Donation board", bangla: "\u09b9\u09bf\u09b8\u09be\u09ac" },
+              { href: "/sponsors", label: "Sponsors", bangla: "\u09aa\u09c3\u09b7\u09cd\u09a0\u09aa\u09cb\u09b7\u0995" },
+            ].map((n) => (
               <Link
                 key={n.href}
                 href={n.href}

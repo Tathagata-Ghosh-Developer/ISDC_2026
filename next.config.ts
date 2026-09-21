@@ -46,6 +46,46 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  /**
+   * The addresses people type from memory. Every one of these was a
+   * 404, including /donate, which turned somebody away from the
+   * donation page at the exact moment they wanted to give money.
+   */
+  async redirects() {
+    const map: Record<string, string> = {
+      "/donate": "/daan",
+      "/donation": "/daan",
+      "/donations": "/daan",
+      "/board": "/daan/board",
+      "/ledger": "/daan/board",
+      "/sponsor": "/sponsors",
+      "/sponsorship": "/sponsors/proposal",
+      "/contact": "/thikana#write-to-us",
+      "/feedback": "/thikana#write-to-us",
+      "/about": "/utsab",
+      "/schedule": "/utsab",
+      "/timings": "/utsab",
+      "/programme": "/utsab",
+      "/map": "/thikana",
+      "/directions": "/thikana",
+      "/volunteer": "/jogdan",
+      "/join": "/jogdan",
+      "/music": "/gaan",
+      "/songs": "/gaan",
+      "/history": "/itihash",
+      "/art": "/shilpa",
+      "/magazine": "/probash",
+      "/photos": "/gallery",
+      "/album": "/gallery",
+      "/login": "/admin",
+    };
+    return Object.entries(map).map(([source, destination]) => ({
+      source,
+      destination,
+      permanent: false,
+    }));
+  },
+
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

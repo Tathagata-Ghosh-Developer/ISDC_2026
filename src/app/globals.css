@@ -92,7 +92,9 @@
   --c-paper-3: #fbf6ea;
   --c-ink: #17110c;
   --c-ink-soft: #4d3a2a;
-  --c-ink-faint: #8a7360;
+  /* 4.77:1 on --c-paper. The old #8a7360 was 3.64 and this text
+     is set at nine to eleven pixels, where it mattered most. */
+  --c-ink-faint: #76614e;
   --c-sindoor: #c0271a;
   --c-alta: #7e1a12;
   --c-haldi: #c9871f;

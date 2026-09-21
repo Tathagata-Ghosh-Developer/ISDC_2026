@@ -42,7 +42,8 @@ export const SITE = {
   logoMono: "/media/brand/logo-mono.png",
   icon: "/media/brand/icon-512.png",
   email: "iiscdurgotsab@gmail.com",
-  attendance: "over 10,000 visitors across five days",
+  /** The committee's own count from 2025. Used everywhere, unrounded. */
+  attendance: "around four thousand visitors across the five days",
   campusMapSource: "https://iisc.ac.in/wp-content/uploads/2016/02/New-IISc-Map.pdf",
   established: 2023,
 } as const;

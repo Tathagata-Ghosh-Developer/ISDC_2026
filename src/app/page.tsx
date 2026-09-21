@@ -288,7 +288,7 @@ export default async function Home() {
                   You transfer directly to the committee account, we verify it
                   against the bank statement, and a numbered receipt reaches
                   your WhatsApp. Every verified rupee appears on the public
-                  board with your name, unless you ask us not to.
+                  board with your name and the amount, like everybody else.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link href="/daan" className="btn btn-primary">

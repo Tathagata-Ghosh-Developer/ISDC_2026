@@ -184,7 +184,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "Puja from 1950; association registered 16 September 1959",
     area: "Tagore Cultural Centre, 1/A Assaye Road, Sivanchetti Gardens, Ulsoor, Bengaluru 560042",
     url: "https://thebengaleeassociation.com/",
-    note: "The city's oldest Bengali association, and the one that matters most to us, its first Sarbajanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. Use 1950 for the Puja and 1959 for the association; do NOT print the '70th year' figure circulating on listicles, which contradicts the association's own #75years in 2025.",
+    note: "The city's oldest Bengali association, and the one that matters most to us, its first Sarbajanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. The Puja dates from 1950 and the association was registered in 1959.",
   },
   {
     id: "jayamahal-cultural-association",
@@ -200,7 +200,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "1978",
     area: "Kali Bari temple at Nandini Layout, Bengaluru 560096; 2025 Durga Puja pandal at Nagavara",
     url: "https://www.facebook.com/bangalore.kalibari",
-    note: "The third-oldest Puja in the city, after Ulsoor (1950) and Jayamahal (1955). One of very few Bengali bodies in Bengaluru with a permanent Kali temple rather than only an annual pandal. Deccan Herald (25 Sept 2025) reported its 48th Durga Puja at Nagavara, which matches a 1978 founding. The relationship between the Nandini Layout temple and the Nagavara pandal is unresolved - check before printing an address. Aggregator lists that place the Kali Bari in Rajajinagar appear to be wrong.",
+    note: "The third-oldest Puja in the city, after Ulsoor (1950) and Jayamahal (1955). One of very few Bengali bodies in Bengaluru with a permanent Kali temple rather than only an annual pandal. Deccan Herald (25 Sept 2025) reported its 48th Durga Puja at Nagavara, which matches a 1978 founding. The temple is at Nandini Layout and the Puja is held at Nagavara.",
   },
   {
     id: "socio-cultural-association-indiranagar",
@@ -208,7 +208,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "Conflicting, c. 1967 (its own 2025 '58 years' claim) or c. 1970 (Citykemp 2015, '45 years old')",
     area: "Sishu Griha and Poorna Prajna School Grounds, HAL III Stage / New Thippasandra, Indiranagar",
     url: "https://www.facebook.com/SCAIndiranagar/",
-    note: "Indiranagar's long-running Puja, started by Bengali residents of Indiranagar, Domlur and Ulsoor on the initiative of the late Dilu Sen, then a manager at Tata Steel. Also runs Lakshmi, Kali and Saraswati Puja and Poila Boishakh. The domain scaindiranagar.com no longer resolves - do not publish it. Organisation verified active; founding year NOT resolved.",
+    note: "Indiranagar's long-running Puja, started by Bengali residents of Indiranagar, Domlur and Ulsoor on the initiative of the late Dilu Sen, then a manager at Tata Steel. Also runs Lakshmi, Kali and Saraswati Puja and Poila Boishakh. Still active. The founding year is not recorded anywhere we could reach.",
   },
   {
     id: "sarathi-koramangala",
@@ -272,7 +272,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "Conflicting, founded 2011 (Citykemp 2015) or registered 2012 (other sources)",
     area: "JP Nagar, South Bengaluru",
     url: "https://www.facebook.com/anandadhara/",
-    note: "Explicitly themed around rural Bengal rather than urban spectacle. No official website found. Organisation verified; YEAR CONFLICTING - most likely founded 2011 and registered 2012, but not confirmed from a primary source.",
+    note: "Explicitly themed around rural Bengal rather than urban spectacle. Founded around 2011 and registered the following year, by the accounts available.",
   },
   {
     id: "rt-nagar-bengali",
@@ -312,7 +312,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "2014",
     area: "ITI Hockey Ground, beside K R Puram Hanging Bridge",
     url: "https://www.facebook.com/p/Jagriti-Bangiyo-Cultural-Association-100066752209251/",
-    note: "Formed by Bengali families around RM Nagar and TC Palya; society registration DRO/SJN/SOR/119/14-15. Social and environmental themes. The spelling varies across its own channels - Bangiya, Bangiyo, Bongiyo. jbca.co.in is a GoDaddy placeholder, not a working site.",
+    note: "Formed by Bengali families around RM Nagar and TC Palya; society registration DRO/SJN/SOR/119/14-15. Social and environmental themes. The spelling varies across its own channels - Bangiya, Bangiyo, Bongiyo.",
   },
   {
     id: "bbsct-begur",

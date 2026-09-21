@@ -28,7 +28,7 @@ export default async function SponsorsPage() {
         <Container>
           <SectionHeading
             eyebrow="পৃষ্ঠপোষকতা Sponsorship"
-            title="Five days, ten thousand people, one campus"
+            title="Five days, one campus, and an audience nobody else reaches"
             bangla="আমাদের সঙ্গে থাকুন"
             lede="Sharodiya Durgotsab at IISc blends Bengal's cultural heritage with the working life of India's leading research institution. It is the only full scale campus Durga Puja in Bengaluru, and it is open to the city."
           />
@@ -54,7 +54,7 @@ export default async function SponsorsPage() {
             {[
               {
                 t: "Reach the right audience",
-                d: "Students, researchers, faculty, alumni and professionals from IISc and the institutes around it, with a combined footfall of over ten thousand.",
+                d: "Students, researchers, faculty, alumni and professionals from IISc and the institutes around it. The committee counted around four thousand across the five days in 2025, and that is the figure we will quote until we can count better.",
               },
               {
                 t: "Strengthen your brand",

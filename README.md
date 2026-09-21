@@ -1,11 +1,24 @@
 # IISc Sharodiya Durgotsab
 
+**Live: https://iiscsharodiyadurgotsab.vercel.app**
+
 The website for the Durga Puja of the Indian Institute of Science, Bengaluru.
 
 It is a public site, a donation ledger and a committee console in one
 application. It costs nothing to run: the hosting, the database and the
 assistant all sit inside free tiers, and there is no payment gateway, so
 no percentage of any donation is lost to fees.
+
+### The other documents
+
+| File | What is in it |
+|---|---|
+| [`GOING-LIVE.md`](GOING-LIVE.md) | Every step from an empty account to a working site, written for somebody who has not deployed anything before. Start here. |
+| [`DESIGN.md`](DESIGN.md) | What the design takes from Satyajit Ray, and the copyright rule that means none of his own work may appear here until 2053. |
+| [`supabase/schema.sql`](supabase/schema.sql) | The whole database. Run all of it. The grants at the end are not optional. |
+| [`.env.example`](.env.example) | Every environment variable, with a comment saying what breaks without it. |
+| `CREDENTIALS.local.txt` | Generated on the machine that deployed. Never committed. Sign-in passphrases. |
+| `../research/` | The sourcing behind every historical claim on the site. Not deployed. |
 
 ---
 
@@ -48,6 +61,54 @@ no percentage of any donation is lost to fees.
   a Google Sheet for tallying outside this application.
 
 ---
+
+## The pages
+
+| Route | What it is |
+|---|---|
+| `/` | Arrival sequence, countdown, the short version of everything |
+| `/utsab` | The five days, ritual by ritual, from the committee's own schedule sheet |
+| `/mahalaya` | The broadcast, a tunable radio of ten real Akashvani stations, and the history of a programme nobody is allowed to change |
+| `/itihash` | The festival's history in five eras, ninety sourced facts, and the ones that turned out to be false |
+| `/itihash/biplob` | Durga Puja and the Bengali revolutionaries, every section marked with how well it is evidenced |
+| `/shilpa` | Twenty-four art forms |
+| `/shilpa/<form>` | A page each: history, who practises it, technique, the stories, a glossary, and what state the craft is in |
+| `/gaan` | Two hundred and one songs on six shelves, and an eleven-fader ambience desk |
+| `/probash` | The magazine, read in the browser |
+| `/gallery` | Photographs and film from last year, with sound |
+| `/thikana` | The Institute's own campus map with the pandal marked and a route traced from each of seven gates |
+| `/jogdan` | Volunteering |
+| `/daan` | The donation form |
+| `/daan/board` | The public ledger, by name and amount |
+| `/sponsors` | Tiers and partners |
+| `/sponsors/proposal` | The full proposal, including what the committee will not sell, and the memorandum published in advance |
+| `/receipt/<token>` | A donor's own page. Pending before verification, a receipt after it |
+| `/admin` | The console. Three roles |
+
+## Who can do what
+
+Three kinds of account, set in three environment variables. A name may
+appear in one list only; if it appears in two, the stronger role wins.
+
+| | Administrator | Committee | Viewer |
+|---|---|---|---|
+| See the donation list | yes | yes | no |
+| See the running total | yes | yes | no |
+| Enter a donation taken in person | yes | yes | no |
+| Verify one, which issues the receipt number | yes | **no** | no |
+| Reject or delete | yes | no | no |
+| Send a receipt | yes | yes | no |
+| Open a donor's payment screenshot | yes | yes | no |
+| Read the enquiry inbox | yes | yes | no |
+| Read the committee contact sheet | yes | yes | no |
+| Edit the site's copy | yes | no | no |
+| The expense ledger | yes | no | no |
+| Export the donor list | yes | no | no |
+| Visit figures | yes | no | no |
+| The public board | yes | yes | yes |
+
+Every route checks the role again on the server. A hidden button is a
+courtesy, never a control.
 
 ## Setting it up
 

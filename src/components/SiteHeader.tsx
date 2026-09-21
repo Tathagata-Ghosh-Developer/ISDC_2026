@@ -110,9 +110,12 @@ export default function SiteHeader() {
 
             <div className="flex shrink-0 items-center gap-2">
               <ThemeToggle />
+              {/* Visible at every width. This was hidden below 640px,
+                  which is the width of every Android phone, on a site
+                  whose main job is taking donations. */}
               <Link
                 href="/daan"
-                className="btn btn-primary hidden !px-5 !py-2.5 !text-[0.66rem] sm:inline-flex"
+                className="btn btn-primary !px-4 !py-2.5 !text-[0.66rem] sm:!px-5"
               >
                 Donate
               </Link>
@@ -120,7 +123,7 @@ export default function SiteHeader() {
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Menu"
                 aria-expanded={open}
-                className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink lg:hidden"
+                className="grid h-11 w-11 place-items-center rounded-full border border-line text-ink lg:hidden"
               >
                 {open ? <X size={16} /> : <Menu size={16} />}
               </button>

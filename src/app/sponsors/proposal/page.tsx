@@ -41,9 +41,9 @@ const REACH = [
     note: "Annual Report 2024-25. Around half are doctoral, which means a population that stays on campus for years rather than months.",
   },
   {
-    figure: "~4,000",
+    figure: "4,000",
     label: "visitors across the five days",
-    note: "Committee's own count from 2025: students, faculty, families, and a steady stream from the institutes around the campus.",
+    note: "The committee's own count from 2025. It is an estimate made by people standing at a gate, and it is the only figure on this page we cannot source to somebody else.",
   },
   {
     figure: "14",
@@ -109,7 +109,7 @@ const MOU_CLAUSES = [
   {
     n: "9",
     head: "Ending it",
-    body: "Either side may withdraw in writing up to thirty days before the first day of the festival. Money already spent on the sponsor's behalf, with bills produced, is deducted and the balance returned. After that date the committee has already committed the spend and cannot refund it, which is worth knowing before a signature.",
+    body: "Either side may withdraw in writing, and the committee will say at the time what of the money has already been committed. Money already spent on the sponsor's behalf, with bills produced, is deducted and the balance returned. Close to the festival almost everything is already committed and almost nothing can come back, which is worth knowing before a signature rather than after one.",
   },
   {
     n: "10",

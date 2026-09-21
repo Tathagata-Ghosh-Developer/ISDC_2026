@@ -87,7 +87,7 @@ export const SHLOKAS: Shloka[] = [
       "To the Goddess who abides in all beings as learning, salutation, salutation, salutation again and again.",
     meaningBangla:
       "যে দেবী সর্বভূতে বিদ্যারূপে অবস্থান করেন, তাঁকে প্রণাম, প্রণাম, বারবার প্রণাম।",
-    source: "Devi Mahatmya 5.x, Ya Devi litany",
+    source: "Devi Mahatmya, chapter 5, the Ya Devi litany",
   },
   {
     id: "ya-devi-matru",
@@ -99,7 +99,7 @@ export const SHLOKAS: Shloka[] = [
       "To the Goddess who abides in all beings as the mother, salutation, salutation, salutation again and again.",
     meaningBangla:
       "যে দেবী সর্বভূতে মাতৃরূপে অবস্থান করেন, তাঁকে প্রণাম, প্রণাম, বারবার প্রণাম।",
-    source: "Devi Mahatmya 5.x, Ya Devi litany",
+    source: "Devi Mahatmya, chapter 5, the Ya Devi litany",
   },
   {
     id: "ya-devi-daya",
@@ -111,7 +111,7 @@ export const SHLOKAS: Shloka[] = [
       "To the Goddess who abides in all beings as compassion, salutation, salutation, salutation again and again.",
     meaningBangla:
       "যে দেবী সর্বভূতে দয়ারূপে অবস্থান করেন, তাঁকে প্রণাম, প্রণাম, বারবার প্রণাম।",
-    source: "Devi Mahatmya 5.x, Ya Devi litany",
+    source: "Devi Mahatmya, chapter 5, the Ya Devi litany",
   },
   {
     id: "ya-devi-tushti",
@@ -123,7 +123,7 @@ export const SHLOKAS: Shloka[] = [
       "To the Goddess who abides in all beings as contentment, salutation, salutation, salutation again and again.",
     meaningBangla:
       "যে দেবী সর্বভূতে তুষ্টিরূপে অবস্থান করেন, তাঁকে প্রণাম, প্রণাম, বারবার প্রণাম।",
-    source: "Devi Mahatmya 5.x, Ya Devi litany",
+    source: "Devi Mahatmya, chapter 5, the Ya Devi litany",
   },
   {
     id: "rupam-dehi",
