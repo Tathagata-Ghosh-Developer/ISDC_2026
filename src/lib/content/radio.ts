@@ -5,6 +5,15 @@ import "server-only";
  * dial. Each responds 200 with an open CORS header and carries a
  * 32 and a 64 kilobit rendition. If Prasar Bharati ever writes back,
  * this is the whole of what has to change.
+ *
+ * Four regional Bengali stations were listed here and have been
+ * removed: Siliguri, Murshidabad, Shantiniketan and Kurseong. They
+ * lived on Prasar Bharati's WAVES platform, which now redirects to a
+ * CloudFront distribution that answers a bare 404. They are named
+ * here so that nobody spends an afternoon rediscovering them.
+ *
+ * Checked 22 September 2026. These things move; check again before
+ * relying on any of them.
  */
 export const AKASHVANI_STREAMS: Record<string, string> = {
   maitree:
@@ -21,14 +30,6 @@ export const AKASHVANI_STREAMS: Record<string, string> = {
     "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio058/hlspbaudio058_Auto.m3u8",
   "vividh-bharati":
     "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio275/hlspbaudio275_Auto.m3u8",
-  siliguri:
-    "https://radio.wavespb.com/live/165856ba98ca031a/165856ba98ca031a.m3u8",
-  murshidabad:
-    "https://radio.wavespb.com/live/47a45f818dd9203b/47a45f818dd9203b.m3u8",
-  shantiniketan:
-    "https://radio.wavespb.com/live/66249dfecaf80241/66249dfecaf80241.m3u8",
-  kurseong:
-    "https://radio.wavespb.com/live/1f781b48497e67d3/1f781b48497e67d3.m3u8",
 };
 
 /** Prasar Bharati's published terms, quoted so nobody has to go looking. */

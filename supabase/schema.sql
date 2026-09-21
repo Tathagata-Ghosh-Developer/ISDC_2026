@@ -300,3 +300,28 @@ create unique index if not exists donations_reference_unique
   where reference is not null
     and length(btrim(reference)) > 0
     and status <> 'rejected';
+
+-- ------------------------------------------------------------
+-- The screenshots bucket.
+--
+-- Creating the bucket with "on conflict do nothing" means that if a
+-- bucket called proofs already existed and was public, it stayed
+-- public and this file said nothing about it. These are pictures of
+-- people's banking apps, frequently showing an account balance, and
+-- they were the only sensitive thing in the system whose protection
+-- was not in version control.
+--
+-- Force it private, and deny every browser-facing role outright. The
+-- site reads these through a route that mints a two-minute signed URL
+-- for a signed-in committee member, using the service role key.
+-- ------------------------------------------------------------
+update storage.buckets set public = false where id = 'proofs';
+
+alter table storage.objects enable row level security;
+
+drop policy if exists "proofs are not readable by anyone" on storage.objects;
+drop policy if exists "proofs are not writable by anyone" on storage.objects;
+
+-- No permissive policy is created, on purpose. With RLS enabled and no
+-- policy, anon and authenticated are denied and only the service role
+-- gets through.

@@ -15,7 +15,8 @@ const PAGES = [
   { path: "/thikana", priority: 0.7 },
   { path: "/jogdan", priority: 0.7 },
   { path: "/daan", priority: 0.9 },
-  { path: "/daan/board", priority: 0.6 },
+  // /daan/board is deliberately absent. It carries named donors and
+  // is marked noindex; listing it here would undo that.
   { path: "/sponsors", priority: 0.6 },
   { path: "/sponsors/proposal", priority: 0.5 },
 ];

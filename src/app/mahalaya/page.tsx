@@ -210,10 +210,11 @@ export default async function MahalayaPage() {
             <p className="max-w-[52ch] text-[0.78rem] leading-relaxed text-ink-faint">
               Ten Akashvani stations, read out of Prasar Bharati&apos;s own
               player. Turn the knob and the static clears as you come onto one.
-              The dial hands you to Akashvani&apos;s player to listen live,
-              because their terms forbid anyone else transmitting the feed.
-              Mahishasuramardini itself plays here, from the rights
-              holder&apos;s own upload.
+              Listening live means going to Akashvani&apos;s own player and
+              choosing the station there, because their terms forbid anyone
+              else transmitting the feed and they publish no direct link to a
+              single station. Mahishasuramardini itself plays here, from the
+              rights holder&apos;s own upload.
             </p>
           </div>
 

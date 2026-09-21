@@ -9,6 +9,7 @@ import Reveal from "@/components/Reveal";
 import DonateForm from "@/components/DonateForm";
 import CopyField from "@/components/CopyField";
 import { getConfig } from "@/lib/config";
+import { dbReady } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -28,6 +29,27 @@ export default async function DonatePage() {
 
   return (
     <>
+      {/* The bank account on this page is real and works whether or not
+          this site is ready to record anything. Until the ledger is
+          connected, a donation would leave the payer with no row, no
+          receipt and no entry on the board. Say so before they scan
+          anything, not after. */}
+      {!dbReady && (
+        <div className="border-b-2 border-sindoor bg-sindoor/10 px-5 py-4">
+          <div className="mx-auto max-w-[1440px]">
+            <p className="font-display text-[1.05rem] text-sindoor">
+              Please do not send money yet.
+            </p>
+            <p className="mt-1.5 max-w-[80ch] text-[0.85rem] leading-relaxed text-ink">
+              The committee is still connecting the ledger, so a payment made
+              now would not be recorded and no receipt could be issued. The
+              account details below are correct and the account is live, which
+              is exactly why this warning is here. Come back once this notice
+              is gone, or hand your donation to a committee member in person.
+            </p>
+          </div>
+        </div>
+      )}
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading

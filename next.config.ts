@@ -18,13 +18,13 @@ const csp = [
   "form-action 'self'",
   "frame-ancestors 'none'",
   "img-src 'self' data: blob: https:",
-  "media-src 'self' blob: https://cdn.freesound.org https://upload.wikimedia.org",
+  "media-src 'self' blob: data:",
   "font-src 'self' https://fonts.gstatic.com data:",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.youtube.com https://s.ytimg.com",
   "worker-src 'self' blob:",
   "connect-src 'self' blob: data:",
-  "frame-src https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com",
+  "frame-src 'self' blob: https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com",
   "upgrade-insecure-requests",
 ].join("; ");
 

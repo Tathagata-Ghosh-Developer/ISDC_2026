@@ -6,6 +6,11 @@ import Leaderboard from "@/components/Leaderboard";
 import { getBoard } from "@/lib/db";
 
 export const metadata: Metadata = {
+  // Named people, exact amounts, a religious festival, an institute
+  // domain, and no opt-out. Whatever the argument for publishing it to
+  // anyone who visits, there is none for publishing it to Google for
+  // ever. Anybody who wants to check the accounts can open the page.
+  robots: { index: false, follow: false },
   title: "Donation Board",
   description:
     "Everyone who has given to the IISc Sharodiya Durgotsab, by name, on one public board.",

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { requireRole } from "@/lib/auth";
 import { db, dbReady, getDonation } from "@/lib/db";
 import { sendReceipt, waLink, whatsappReady } from "@/lib/whatsapp";
@@ -46,10 +45,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const origin = host ? `${proto}://${host}` : SITE.url;
+  // The site's own address, never a request header. This URL is mailed
+  // to a donor and sent to their WhatsApp, so a forgeable header here
+  // would let a committee account send a donor a link to somebody
+  // else's host carrying their real receipt token.
+  const origin = SITE.url;
 
   const message = {
     phone: donation.phone,
