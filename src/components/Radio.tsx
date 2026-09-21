@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ExternalLink, Power } from "lucide-react";
+import { loadYouTubeApi, type YTPlayer } from "@/lib/youtube";
 
 /* ================================================================
    The set in the corner of the room, and it actually tunes.
@@ -38,49 +39,8 @@ export type Station = {
   note: string;
 };
 
-type YTPlayer = {
-  playVideo: () => void;
-  pauseVideo: () => void;
-  setVolume: (v: number) => void;
-  destroy: () => void;
-};
-
-declare global {
-  interface Window {
-    YT?: {
-      Player: new (el: HTMLElement | string, opts: unknown) => YTPlayer;
-    };
-    onYouTubeIframeAPIReady?: () => void;
-  }
-}
 
 const BAND = 0.075;
-
-function loadYouTubeApi(): Promise<void> {
-  return new Promise((resolve) => {
-    if (window.YT?.Player) return resolve();
-    const existing = document.getElementById("yt-iframe-api");
-    if (!existing) {
-      const s = document.createElement("script");
-      s.id = "yt-iframe-api";
-      s.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(s);
-    }
-    const prior = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => {
-      prior?.();
-      resolve();
-    };
-    // If the API was already loaded by something else, poll briefly.
-    const started = Date.now();
-    const poll = setInterval(() => {
-      if (window.YT?.Player || Date.now() - started > 8000) {
-        clearInterval(poll);
-        resolve();
-      }
-    }, 120);
-  });
-}
 
 export default function Radio({
   stations,
