@@ -1,4 +1,5 @@
 import "server-only";
+import { SITE } from "@/lib/site";
 
 /**
  * Emailing a receipt.
@@ -112,6 +113,19 @@ export async function sendReceiptEmail(m: ReceiptEmail): Promise<Result> {
   const from = process.env.MAIL_FROM!;
   const subject = `Receipt ${m.receiptNo}, IISc Sharodiya Durgotsab 2026`;
 
+  /**
+   * Replies go to a person, not to a sending domain.
+   *
+   * The address the site sends from has to be a domain the committee
+   * controls, because iisc.ac.in publishes a hard SPF fail and a
+   * DMARC quarantine policy: mail claiming to be from it, sent by
+   * anybody else, goes to spam and files a forensic report naming the
+   * sender. A donor replying to their receipt should still reach a
+   * human at the Institute, so the reply-to says so even though the
+   * From cannot.
+   */
+  const replyTo = process.env.MAIL_REPLY_TO?.trim() || SITE.email;
+
   try {
     if (process.env.RESEND_API_KEY) {
       const res = await fetch("https://api.resend.com/emails", {
@@ -123,6 +137,7 @@ export async function sendReceiptEmail(m: ReceiptEmail): Promise<Result> {
         body: JSON.stringify({
           from,
           to: [m.to],
+          reply_to: replyTo,
           subject,
           text: plain(m),
           html: html(m),
@@ -151,6 +166,7 @@ export async function sendReceiptEmail(m: ReceiptEmail): Promise<Result> {
       },
       body: JSON.stringify({
         sender: { name: senderName, email: senderEmail },
+        replyTo: { email: replyTo, name: "IISc Sharodiya Durgotsab" },
         to: [{ email: m.to, name: m.name }],
         subject,
         textContent: plain(m),
