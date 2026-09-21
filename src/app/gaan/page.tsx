@@ -7,7 +7,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ListeningRoom from "@/components/gaan/ListeningRoom";
 import { AMBIENCE, COLLECTIONS } from "@/lib/content/music";
-import { DESK_LAYERS } from "@/lib/content/desk";
+import { DESK_LAYERS, MISSING_LAYERS } from "@/lib/content/desk";
 
 export const metadata: Metadata = {
   title: "Music",
@@ -215,17 +215,26 @@ export default function GaanPage() {
 
             <Reveal delay={0.1}>
               <div className="surface p-6">
-                <h3 className="eyebrow">Two gaps we could not fill</h3>
+                <h3 className="eyebrow">What is missing, and why</h3>
+                {MISSING_LAYERS.map((m) => (
+                  <div key={m.roman} className="mt-4">
+                    <p className="bangla-display text-[1.15rem] text-ink">
+                      {m.bangla}
+                    </p>
+                    <p className="text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint">
+                      {m.roman}
+                    </p>
+                    <p className="mt-2 text-[0.85rem] leading-relaxed text-ink-soft">
+                      {m.why}
+                    </p>
+                  </div>
+                ))}
+                <div className="hidden">
+                </div>
                 <p className="mt-4 text-[0.85rem] leading-relaxed text-ink-soft">
-                  There is no freely licensed recording anywhere of the{" "}
-                  <span className="bangla-display text-[1rem] text-ink">
-                    কাঁসর
-                  </span>{" "}
-                  or of Bengali{" "}
-                  <span className="bangla-display text-[1rem] text-ink">
-                    উলুধ্বনি
-                  </span>
-                  . Those two faders use stand-ins and the desk says so.
+                  The kansar fader is a bell-metal gong standing in for one, and
+                  the drone is labelled drone because nobody has confirmed the
+                  instrument. Both say so on the desk.
                 </p>
                 <p className="mt-3 text-[0.85rem] leading-relaxed text-ink-soft">
                   Ten minutes of recording at this year&apos;s pandal, released
