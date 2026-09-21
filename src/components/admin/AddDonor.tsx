@@ -11,8 +11,18 @@ const METHODS = ["cash", "upi", "neft", "imps", "cheque", "other"];
  * For donations collected in person. Most of the mess-counter money
  * arrives as cash in someone's hand, and it still has to reach the
  * board with a receipt number like everything else.
+ *
+ * A committee member fills this in and the entry waits. Only an
+ * administrator can verify it, and verifying is what mints the
+ * receipt number, so the checkbox below is theirs alone.
  */
-export default function AddDonor({ onAdded }: { onAdded: () => void }) {
+export default function AddDonor({
+  onAdded,
+  role,
+}: {
+  onAdded: () => void;
+  role: "admin" | "committee";
+}) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,9 +50,7 @@ export default function AddDonor({ onAdded }: { onAdded: () => void }) {
         method: fd.get("method"),
         reference: fd.get("reference"),
         paid_on: fd.get("paid_on"),
-        display_name: fd.get("display_name"),
-        message: fd.get("message"),
-        verify: fd.get("verify") === "on",
+        verify: role === "admin" && fd.get("verify") === "on",
       }),
     }).catch(() => null);
 
@@ -90,7 +98,8 @@ export default function AddDonor({ onAdded }: { onAdded: () => void }) {
               <p className="text-[0.8rem] leading-relaxed text-ink-soft">
                 Use this for cash taken at a desk, a cheque handed over, or a
                 transfer someone made without filling the form. It records who
-                entered it.
+                entered it. Everyone who gives appears on the board under the
+                name written here, so write it the way the donor would.
               </p>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -141,25 +150,27 @@ export default function AddDonor({ onAdded }: { onAdded: () => void }) {
                 <Field label="Date of payment">
                   <input name="paid_on" type="date" className="field" />
                 </Field>
-                <Field label="Name to show on the board">
-                  <input name="display_name" className="field" maxLength={80} />
-                </Field>
-                <Field label="Line for the board">
-                  <input name="message" className="field" maxLength={140} />
-                </Field>
               </div>
 
-              <div className="flex flex-wrap gap-5">
-                <label className="flex items-center gap-2.5 text-[0.82rem] text-ink-soft">
-                  <input
-                    type="checkbox"
-                    name="verify"
-                    defaultChecked
-                    className="accent-[var(--c-sindoor)]"
-                  />
-                  Verify now and issue a receipt number
-                </label>
-              </div>
+              {role === "admin" ? (
+                <div className="flex flex-wrap gap-5">
+                  <label className="flex items-center gap-2.5 text-[0.82rem] text-ink-soft">
+                    <input
+                      type="checkbox"
+                      name="verify"
+                      defaultChecked
+                      className="accent-[var(--c-sindoor)]"
+                    />
+                    Verify now and issue a receipt number
+                  </label>
+                </div>
+              ) : (
+                <p className="border-l-2 border-gold/50 pl-3 text-[0.78rem] leading-relaxed text-ink-soft">
+                  This goes into the pending list. An administrator checks it
+                  against the bank statement, and verifying is what issues the
+                  receipt number and puts the name on the board.
+                </p>
+              )}
 
               {error && (
                 <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor">

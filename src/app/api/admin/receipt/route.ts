@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { requireAdmin } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
 import { db, dbReady, getDonation } from "@/lib/db";
 import { sendReceipt, waLink, whatsappReady } from "@/lib/whatsapp";
 import { sendReceiptEmail, emailReady } from "@/lib/email";
@@ -21,7 +21,10 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   let admin: string;
   try {
-    admin = await requireAdmin();
+    // Sending a receipt records something that already happened, so a
+    // committee member may do it. Deciding that it happened is still
+    // an administrator's call, and that check lives on verification.
+    admin = (await requireRole("committee")).user;
   } catch {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }

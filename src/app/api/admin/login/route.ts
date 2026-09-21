@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       {
         ok: false,
         error:
-          "Admin access is not configured. Set AUTH_SECRET and ADMIN_USERS in the environment.",
+          "Sign in is not configured. Set AUTH_SECRET and at least one of ADMIN_USERS, COMMITTEE_USERS or VIEWER_USERS.",
       },
       { status: 503 },
     );
@@ -49,7 +49,9 @@ export async function POST(req: Request) {
 
   await delay();
 
-  if (!user || !password || !checkCredentials(user, password)) {
+  const role = user && password ? checkCredentials(user, password) : null;
+
+  if (!role) {
     return NextResponse.json(
       { ok: false, error: "Those credentials were not recognised." },
       { status: 401 },
@@ -57,8 +59,8 @@ export async function POST(req: Request) {
   }
 
   rateLimitReset(key);
-  await createSession(user);
-  return NextResponse.json({ ok: true });
+  await createSession(user!, role);
+  return NextResponse.json({ ok: true, role });
 }
 
 export async function DELETE() {

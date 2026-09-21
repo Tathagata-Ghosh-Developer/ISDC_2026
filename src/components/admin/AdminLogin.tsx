@@ -30,13 +30,22 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
       return;
     }
 
-    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      role?: "admin" | "committee" | "viewer";
+    };
     if (!res.ok) {
       setError(data.error ?? "Sign-in failed.");
       setBusy(false);
       return;
     }
 
+    // A viewer account has nothing to do in the console, so it goes
+    // straight to the thing it was made for.
+    if (data.role === "viewer") {
+      router.push("/daan/board");
+      return;
+    }
     router.refresh();
   }
 
@@ -47,18 +56,28 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
           <Lock size={18} />
         </span>
         <h1 className="font-display mt-5 text-[1.618rem] font-normal text-ink">
-          Committee console
+          Sign in
         </h1>
-        <p className="bangla-display mt-1 text-[1.05rem] text-gold">কমিটির প্রবেশপথ</p>
+        <p className="bangla-display mt-1 text-[1.05rem] text-gold">প্রবেশপথ</p>
+        <p className="mx-auto mt-3 max-w-[30ch] text-[0.75rem] leading-relaxed text-ink-faint">
+          Administrators, committee members and named readers all sign in
+          here. What you see afterwards depends on the account.
+        </p>
       </div>
 
       {!configured ? (
         <div className="surface p-6 text-[0.85rem] leading-relaxed text-ink-soft">
-          <p>Admin sign-in is not configured yet. In the environment, set:</p>
+          <p>Sign-in is not configured yet. In the environment, set:</p>
           <pre className="mt-3 overflow-x-auto border border-line bg-paper-2/60 p-3 text-[0.72rem] text-ink">
 {`AUTH_SECRET=<32+ random characters>
-ADMIN_USERS=treasurer:<passphrase>`}
+ADMIN_USERS=tathagata:<passphrase>
+COMMITTEE_USERS=devraj:<passphrase>,sayak:<passphrase>
+VIEWER_USERS=probash:<passphrase>`}
           </pre>
+          <p className="mt-3">
+            Only AUTH_SECRET and one account are needed to start. A name may
+            appear in one list only.
+          </p>
           <p className="mt-3">
             Then redeploy. Generate the secret with{" "}
             <code className="text-gold">

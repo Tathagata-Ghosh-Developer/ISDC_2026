@@ -15,6 +15,7 @@ const PAGES = [
   { path: "/daan", priority: 0.9 },
   { path: "/daan/board", priority: 0.6 },
   { path: "/sponsors", priority: 0.6 },
+  { path: "/sponsors/proposal", priority: 0.5 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -4,13 +4,26 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
-const TABS = [
-  { href: "/admin", label: "Donations" },
-  { href: "/admin/expenses", label: "Expenses" },
-  { href: "/admin/content", label: "Content" },
+type Role = "admin" | "committee" | "viewer";
+
+const RANK: Record<Role, number> = { viewer: 1, committee: 2, admin: 3 };
+
+/**
+ * Tabs a role cannot use are not rendered at all, so nobody is
+ * invited to click something that will refuse them. The routes
+ * themselves check the role again, because a hidden link is a
+ * courtesy and never a control.
+ */
+const TABS: { href: string; label: string; min: Role }[] = [
+  { href: "/admin", label: "Donations", min: "committee" },
+  { href: "/admin/enquiries", label: "Enquiries", min: "committee" },
+  { href: "/admin/team", label: "Contact sheet", min: "committee" },
+  { href: "/admin/expenses", label: "Expenses", min: "admin" },
+  { href: "/admin/content", label: "Content", min: "admin" },
+  { href: "/admin/visits", label: "Visits", min: "admin" },
 ];
 
-export default function AdminNav({ admin }: { admin: string }) {
+export default function AdminNav({ user, role }: { user: string; role: Role }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -19,11 +32,15 @@ export default function AdminNav({ admin }: { admin: string }) {
     router.refresh();
   }
 
+  const tabs = TABS.filter((t) => RANK[role] >= RANK[t.min]);
+
   return (
     <nav className="flex flex-wrap items-center gap-1">
-      {TABS.map((t) => {
+      {tabs.map((t) => {
         const active =
-          t.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(t.href);
+          t.href === "/admin"
+            ? pathname === "/admin"
+            : pathname?.startsWith(t.href);
         return (
           <Link
             key={t.href}
@@ -36,8 +53,16 @@ export default function AdminNav({ admin }: { admin: string }) {
           </Link>
         );
       })}
+
+      <Link
+        href="/daan/board"
+        className="px-3 py-1.5 text-[0.75rem] uppercase tracking-[0.16em] text-ink-faint transition-colors hover:text-ink"
+      >
+        Board
+      </Link>
+
       <span className="ml-2 hidden text-[0.68rem] text-ink-faint sm:inline">
-        {admin}
+        {user}
       </span>
       <button
         onClick={signOut}

@@ -8,6 +8,7 @@ import {
   Loader2,
   RefreshCw,
   Search,
+  Trash2,
   Undo2,
   X,
 } from "lucide-react";
@@ -25,7 +26,12 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: "all", label: "Everything" },
 ];
 
-export default function DonationsPanel() {
+export default function DonationsPanel({
+  role,
+}: {
+  role: "admin" | "committee";
+}) {
+  const isAdmin = role === "admin";
   const [rows, setRows] = useState<Donation[]>([]);
   const [filter, setFilter] = useState<Filter>("pending");
   const [q, setQ] = useState("");
@@ -54,6 +60,28 @@ export default function DonationsPanel() {
     const t = setTimeout(load, q ? 350 : 0);
     return () => clearTimeout(t);
   }, [load, q]);
+
+  /** Offered only to an administrator, and refused again server side. */
+  async function remove(id: string) {
+    setWorking(id);
+    setError(null);
+    const res = await fetch("/api/admin/donations", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id }),
+    }).catch(() => null);
+
+    const data = res
+      ? ((await res.json().catch(() => ({}))) as { error?: string })
+      : {};
+    if (!res || !res.ok) {
+      setError(data.error ?? "Could not delete that.");
+      setWorking(null);
+      return;
+    }
+    setRows((rs) => rs.filter((r) => r.id !== id));
+    setWorking(null);
+  }
 
   async function act(id: string, action: string) {
     setWorking(id);
@@ -132,7 +160,7 @@ export default function DonationsPanel() {
 
   return (
     <div>
-      <AddDonor onAdded={() => void load()} />
+      <AddDonor onAdded={() => void load()} role={role} />
 
       {/* ---- summary ---- */}
       <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-4">
@@ -141,6 +169,10 @@ export default function DonationsPanel() {
         <Cell label="Verified in view" value={formatINR(totals.verified)} />
         <Cell label="Total in view" value={formatINR(totals.shown)} />
       </div>
+      <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint">
+        These figures are for the committee. The public board carries names
+        and amounts and never a total.
+      </p>
 
       {/* ---- controls ---- */}
       <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -177,12 +209,14 @@ export default function DonationsPanel() {
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Refresh
         </button>
 
-        <a
-          href={`/api/admin/export?what=donations&status=${filter}`}
-          className="btn btn-ghost !py-2 !text-[0.68rem]"
-        >
-          <Download size={13} /> CSV
-        </a>
+        {isAdmin && (
+          <a
+            href={`/api/admin/export?what=donations&status=${filter}`}
+            className="btn btn-ghost !py-2 !text-[0.68rem]"
+          >
+            <Download size={13} /> CSV
+          </a>
+        )}
       </div>
 
       {error && (
@@ -226,11 +260,6 @@ export default function DonationsPanel() {
                         {d.receipt_no}
                       </span>
                     )}
-                    {d.anonymous && (
-                      <span className="text-[0.6rem] uppercase tracking-[0.18em] text-ink-faint">
-                        Anonymous on board
-                      </span>
-                    )}
                   </div>
 
                   <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-[0.78rem] sm:grid-cols-2 lg:grid-cols-3">
@@ -269,7 +298,7 @@ export default function DonationsPanel() {
 
               {/* ---- actions ---- */}
               <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
-                {d.status !== "verified" && (
+                {isAdmin && d.status !== "verified" && (
                   <button
                     onClick={() => act(d.id, "verify")}
                     disabled={working === d.id}
@@ -304,7 +333,7 @@ export default function DonationsPanel() {
                   </>
                 )}
 
-                {d.status !== "rejected" && (
+                {isAdmin && d.status !== "rejected" && (
                   <button
                     onClick={() => act(d.id, "reject")}
                     disabled={working === d.id}
@@ -314,7 +343,7 @@ export default function DonationsPanel() {
                   </button>
                 )}
 
-                {d.status !== "pending" && (
+                {isAdmin && d.status !== "pending" && (
                   <button
                     onClick={() => act(d.id, "pending")}
                     disabled={working === d.id}
@@ -322,6 +351,33 @@ export default function DonationsPanel() {
                   >
                     <Undo2 size={12} /> Back to pending
                   </button>
+                )}
+
+                {isAdmin && !d.receipt_no && (
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Delete the entry for " +
+                            d.name +
+                            "? It has no receipt number, so nothing in the numbered series breaks. This cannot be undone.",
+                        )
+                      ) {
+                        void remove(d.id);
+                      }
+                    }}
+                    disabled={working === d.id}
+                    className="btn btn-ghost !ml-auto !border-sindoor/40 !py-1.5 !text-[0.65rem] !text-sindoor"
+                  >
+                    <Trash2 size={12} /> Delete
+                  </button>
+                )}
+
+                {!isAdmin && d.status === "pending" && (
+                  <span className="self-center text-[0.68rem] text-ink-faint">
+                    Waiting for an administrator to check this against the
+                    statement.
+                  </span>
                 )}
               </div>
             </motion.article>

@@ -9,7 +9,9 @@ import {
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
+import { Suspense } from "react";
 import SiteFooter from "@/components/SiteFooter";
+import Track from "@/components/Track";
 import PujoGuide from "@/components/PujoGuide";
 import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -135,6 +137,9 @@ export default async function RootLayout({
         <main id="main">{children}</main>
         <ShlokaBand />
         <SiteFooter />
+        <Suspense fallback={null}>
+          <Track />
+        </Suspense>
         <PujoGuide />
       </body>
     </html>

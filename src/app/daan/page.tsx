@@ -162,7 +162,7 @@ export default async function DonatePage() {
                       {
                         n: "04",
                         t: "Your name goes up on the board.",
-                        d: "Unless you asked to stay anonymous, in which case only the amount appears.",
+                        d: "Everyone who gives appears there, by name and amount. That is what makes it an account.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">

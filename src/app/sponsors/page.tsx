@@ -8,6 +8,7 @@ import { getConfig } from "@/lib/config";
 import { SPONSOR_CONTACT, SITE } from "@/lib/site";
 import { IISC_FIGURES } from "@/lib/content/neighbours";
 import { formatINR } from "@/lib/format";
+import EnquiryForm from "@/components/EnquiryForm";
 
 export const metadata: Metadata = {
   title: "Sponsors",
@@ -33,14 +34,9 @@ export default async function SponsorsPage() {
           />
 
           <Reveal className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={SPONSOR_CONTACT.deck}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="btn btn-primary"
-            >
-              <Download size={14} /> The sponsorship deck
-            </a>
+            <Link href="/sponsors/proposal" className="btn btn-primary">
+              Read the full proposal
+            </Link>
             <a
               href={`mailto:${SPONSOR_CONTACT.emails[0]}`}
               className="btn btn-ghost"
@@ -200,13 +196,16 @@ export default async function SponsorsPage() {
               </ul>
 
               <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/sponsors/proposal" className="btn btn-primary">
+                  The proposal, terms and all
+                </Link>
                 <a
                   href={SPONSOR_CONTACT.deck}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="btn btn-primary"
+                  className="btn btn-ghost"
                 >
-                  <Download size={14} /> Download the deck
+                  <Download size={14} /> One-page PDF
                 </a>
                 <Link href="/thikana#committee" className="btn btn-ghost">
                   The committee
@@ -245,6 +244,53 @@ export default async function SponsorsPage() {
                   festival is not an endorsement by IISc.
                 </p>
               </div>
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ---------------- get in touch ---------------- */}
+      <Section id="get-in-touch" className="bg-paper-2/40">
+        <Container>
+          <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
+            <Reveal>
+              <SectionHeading
+                eyebrow="যোগাযোগ Get in touch"
+                title="Tell us what would actually be worth your while"
+                bangla="আসুন, কথা বলি"
+                lede="The tiers above are a starting point and not a price list. If none of them fits, say so. We have built one-off arrangements before, and the ones that worked best were the ones neither side had planned."
+              />
+
+              <div className="surface mt-7 p-5">
+                <h3 className="eyebrow">What we can usually do</h3>
+                <ul className="mt-3 space-y-2.5 text-[0.82rem] leading-relaxed text-ink-soft">
+                  <li>A stall on the ground for all five days, with power.</li>
+                  <li>
+                    Your name on the pandal arch, the backdrop, the souvenir and
+                    every announcement from the stage.
+                  </li>
+                  <li>
+                    A full page in Probash, which goes to several hundred
+                    households and stays on shelves for years.
+                  </li>
+                  <li>
+                    A slot at the cultural evening, if what you are doing suits
+                    an audience of researchers and their families.
+                  </li>
+                  <li>
+                    Campus recruitment visibility, which is the one most
+                    companies actually come for and nobody writes down.
+                  </li>
+                </ul>
+                <p className="mt-4 border-t border-line pt-4 text-[0.75rem] leading-relaxed text-ink-faint">
+                  We will send a written note of what was agreed before anything
+                  is printed, so both sides have the same document.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <EnquiryForm kind="sponsor" />
             </Reveal>
           </div>
         </Container>

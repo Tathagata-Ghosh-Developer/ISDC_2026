@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
+import { requireRole, type Session } from "@/lib/auth";
 import { db, dbReady, type Donation } from "@/lib/db";
 import { mirrorToSheet } from "@/lib/sheets";
 
@@ -10,18 +10,32 @@ const ACTIONS = new Set(["verify", "reject", "pending", "receipt-sent", "note"])
 const CATEGORIES = new Set(["student", "faculty", "alumni", "guest"]);
 const METHODS = new Set(["upi", "neft", "imps", "cash", "cheque", "other"]);
 
-async function guard(): Promise<string | null> {
+/**
+ * Committee members reach this route too, so every handler asks for
+ * the session rather than a name and decides for itself. The rule is
+ * the same everywhere: a committee member may record what happened,
+ * only an administrator may decide that it counts.
+ */
+async function guard(min: "admin" | "committee" = "admin"): Promise<Session | null> {
   try {
-    return await requireAdmin();
+    return await requireRole(min);
   } catch {
     return null;
   }
 }
 
+const unauthorised = () =>
+  NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+
+/** Actions that change whether a donation counts. Administrators only. */
+const ADMIN_ACTIONS = new Set(["verify", "reject", "pending"]);
+
 export async function GET(req: Request) {
-  const admin = await guard();
-  if (!admin) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
-  if (!dbReady) return NextResponse.json({ donations: [], ready: false });
+  const session = await guard("committee");
+  if (!session) return unauthorised();
+  if (!dbReady) {
+    return NextResponse.json({ donations: [], ready: false, role: session.role });
+  }
 
   const url = new URL(req.url);
   const status = url.searchParams.get("status");
@@ -59,13 +73,14 @@ export async function GET(req: Request) {
     ...d,
     amount: Number(d.amount),
   }));
-  return NextResponse.json({ donations, ready: true });
+  return NextResponse.json({ donations, ready: true, role: session.role });
 }
 
 export async function PATCH(req: Request) {
-  const admin = await guard();
-  if (!admin) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await guard("committee");
+  if (!session) return unauthorised();
   if (!dbReady) return NextResponse.json({ error: "No database." }, { status: 503 });
+  const admin = session.user;
 
   const { id, action, note } = (await req.json().catch(() => ({}))) as {
     id?: string;
@@ -75,6 +90,13 @@ export async function PATCH(req: Request) {
 
   if (!id || !action || !ACTIONS.has(action)) {
     return NextResponse.json({ error: "Bad request." }, { status: 400 });
+  }
+
+  if (ADMIN_ACTIONS.has(action) && session.role !== "admin") {
+    return NextResponse.json(
+      { error: "Only an administrator can approve or reject an entry." },
+      { status: 403 },
+    );
   }
 
   if (action === "verify") {
@@ -123,9 +145,10 @@ export async function PATCH(req: Request) {
  * immediately and the name reaches the board.
  */
 export async function POST(req: Request) {
-  const admin = await guard();
-  if (!admin) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await guard("committee");
+  if (!session) return unauthorised();
   if (!dbReady) return NextResponse.json({ error: "No database." }, { status: 503 });
+  const admin = session.user;
 
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
 
@@ -164,7 +187,9 @@ export async function POST(req: Request) {
       paid_on: /^\d{4}-\d{2}-\d{2}$/.test(paidOn) ? paidOn : null,
       message: text("message").slice(0, 140) || null,
       display_name: text("display_name").slice(0, 80) || null,
-      anonymous: body.anonymous === true,
+      // Everyone who gives appears on the board. The column stays so
+      // old rows still read, but nothing sets it any more.
+      anonymous: false,
       admin_note: `Entered by ${admin}`,
       status: "pending",
     })
@@ -179,8 +204,10 @@ export async function POST(req: Request) {
     );
   }
 
-  // Verify straight away when asked, which mints the receipt number.
-  if (body.verify !== false) {
+  // Verifying mints the receipt number, so only an administrator may
+  // do it. A committee member's entry waits in the pending list until
+  // one of them looks at it, which is the whole point of the split.
+  if (body.verify !== false && session.role === "admin") {
     const { data: row, error: vErr } = await db().rpc("verify_donation", {
       p_id: data.id,
       p_by: admin,
@@ -193,5 +220,49 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, id: data.id, donation: verified });
   }
 
-  return NextResponse.json({ ok: true, id: data.id });
+  return NextResponse.json({
+    ok: true,
+    id: data.id,
+    pending: session.role !== "admin",
+  });
+}
+
+/**
+ * Deleting a donation. Administrators only, and only while it is
+ * still pending or rejected. Once a receipt number exists the row is
+ * part of a numbered series that the committee has to be able to
+ * account for end to end, so it gets rejected rather than removed.
+ */
+export async function DELETE(req: Request) {
+  const session = await guard("admin");
+  if (!session) return unauthorised();
+  if (!dbReady) return NextResponse.json({ error: "No database." }, { status: 503 });
+
+  const { id } = (await req.json().catch(() => ({}))) as { id?: string };
+  if (!id) return NextResponse.json({ error: "Missing id." }, { status: 400 });
+
+  const { data: row, error: readErr } = await db()
+    .from("donations")
+    .select("receipt_no")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (readErr) {
+    return NextResponse.json({ error: readErr.message }, { status: 500 });
+  }
+  if (!row) return NextResponse.json({ error: "No such entry." }, { status: 404 });
+
+  if ((row as { receipt_no: string | null }).receipt_no) {
+    return NextResponse.json(
+      {
+        error:
+          "This one already has a receipt number. Reject it instead, so the numbered series stays unbroken.",
+      },
+      { status: 409 },
+    );
+  }
+
+  const { error } = await db().from("donations").delete().eq("id", id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true });
 }

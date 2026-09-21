@@ -1,9 +1,16 @@
+import { redirect } from "next/navigation";
 import ContentEditor from "@/components/admin/ContentEditor";
+import { currentSession } from "@/lib/auth";
 import { getConfig, DEFAULTS, CONFIG_GROUPS } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminContentPage() {
+  // Expenses and the site's own copy are an administrator's to change.
+  const session = await currentSession();
+  if (!session) return null;
+  if (session.role !== "admin") redirect("/admin");
+
   const config = await getConfig();
 
   return (

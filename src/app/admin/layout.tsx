@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { currentAdmin, authConfigured } from "@/lib/auth";
+import { currentSession, authConfigured } from "@/lib/auth";
 import { dbReady } from "@/lib/db";
 import AdminLogin from "@/components/admin/AdminLogin";
 import AdminNav from "@/components/admin/AdminNav";
@@ -12,14 +12,21 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+/** What the header calls this account, so nobody guesses at their own reach. */
+const ROLE_LABEL = {
+  admin: "Committee console",
+  committee: "Committee desk",
+  viewer: "Reading room",
+} as const;
+
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const admin = await currentAdmin();
+  const session = await currentSession();
 
-  if (!admin) {
+  if (!session) {
     return (
       <div className="grid min-h-dvh place-items-center px-5 py-16">
         <AdminLogin configured={authConfigured()} />
@@ -36,10 +43,10 @@ export default async function AdminLayout({
               Durgotsab
             </Link>
             <span className="text-[0.6rem] uppercase tracking-[0.24em] text-gold">
-              Committee console
+              {ROLE_LABEL[session.role]}
             </span>
           </div>
-          <AdminNav admin={admin} />
+          <AdminNav user={session.user} role={session.role} />
         </div>
       </header>
 

@@ -1,8 +1,15 @@
+import { redirect } from "next/navigation";
 import ExpensesPanel from "@/components/admin/ExpensesPanel";
+import { currentSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminExpensesPage() {
+export default async function AdminExpensesPage() {
+  // Expenses and the site's own copy are an administrator's to change.
+  const session = await currentSession();
+  if (!session) return null;
+  if (session.role !== "admin") redirect("/admin");
+
   return (
     <div>
       <div className="mb-7">

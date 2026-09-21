@@ -139,6 +139,78 @@ export const CONTACTS = COMMITTEE.filter((m) => m.phone !== "").map((m) => ({
 }));
 
 /**
+ * Who to go to for what.
+ *
+ * This sheet is behind a login and is never rendered on the public
+ * site, because it carries working phone numbers for people who did
+ * not publish them. Committee members and administrators can read it;
+ * nobody else, including a signed-in viewer, can.
+ *
+ * `who` matches a name in COMMITTEE, so a change up there carries
+ * down here rather than drifting out of step.
+ */
+export const POINTS_OF_CONTACT = [
+  {
+    area: "Money, receipts and the ledger",
+    bangla: "হিসাব",
+    who: ["Sayak Maji", "Ayan Das"],
+    note: "Anything about a payment that has not been matched, a receipt number, or a donor asking where their money went. They hold the bank statement.",
+  },
+  {
+    area: "Sponsorship and the souvenir",
+    bangla: "পৃষ্ঠপোষকতা",
+    who: ["Tathagata Ghosh", "Arnab Ghosh"],
+    note: "Companies, alumni firms and anyone wanting a stall or a banner. Every sponsorship enquiry from the website lands in the committee inbox and one of them answers it.",
+  },
+  {
+    area: "The ground, the pandal and the idol",
+    bangla: "মণ্ডপ ও প্রতিমা",
+    who: ["Devraj Karmakar", "Sirshendu Pathak"],
+    note: "TMC Ground bookings, the decorator, the Kumartuli order and its transport, electricity and the sound system.",
+  },
+  {
+    area: "Bhog, prasad and the kitchen",
+    bangla: "ভোগ",
+    who: ["Devraj Karmakar"],
+    note: "Counts, timings, the caterer and the volunteer roster on the serving line.",
+  },
+  {
+    area: "Cultural evenings and the invited artists",
+    bangla: "সাংস্কৃতিক অনুষ্ঠান",
+    who: ["Sirshendu Pathak", "Arnab Ghosh"],
+    note: "The programme, rehearsal slots, the stage, and anyone arriving from another institute to perform.",
+  },
+  {
+    area: "Permissions and the Institute",
+    bangla: "অনুমতি",
+    who: ["Dr. Tapajyoti Das Gupta", "Tathagata Ghosh"],
+    note: "Anything needing the administration's signature: the ground, late-night sound, gate passes for vehicles, and the police intimation.",
+  },
+  {
+    area: "The website, the magazine and photographs",
+    bangla: "ওয়েবসাইট ও পত্রিকা",
+    who: ["Tathagata Ghosh"],
+    note: "Copy that is wrong, a photograph that should come down, the Probash submissions, and the logins for this console.",
+  },
+] as const;
+
+/** The sheet with real numbers filled in, for the committee console. */
+export function pointsOfContact() {
+  const byName = new Map(COMMITTEE.map((m) => [m.name, m]));
+  return POINTS_OF_CONTACT.map((p) => ({
+    ...p,
+    people: p.who.map((n) => {
+      const m = byName.get(n);
+      return {
+        name: n,
+        role: m?.role ?? "",
+        phone: m?.phone ?? "",
+      };
+    }),
+  }));
+}
+
+/**
  * Gates of the main campus, named as IISc names them.
  * Source: iisc.ac.in gate directory.
  */
@@ -193,7 +265,7 @@ export const NAV = [
   { href: "/shilpa", label: "Art Forms", bangla: "শিল্প", roman: "Shilpa" },
   { href: "/gaan", label: "Music", bangla: "গান", roman: "Gaan" },
   { href: "/probash", label: "Magazine", bangla: "প্রবাস", roman: "Probash" },
-  { href: "/gallery", label: "Photographs", bangla: "ছবি", roman: "Chhobi" },
+  { href: "/gallery", label: "Gallery", bangla: "ছবি", roman: "Chhobi" },
   { href: "/thikana", label: "Find Us", bangla: "ঠিকানা", roman: "Thikana" },
   { href: "/jogdan", label: "Join Us", bangla: "যোগদান", roman: "Jogdan" },
 ] as const;

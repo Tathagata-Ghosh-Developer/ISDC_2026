@@ -133,3 +133,107 @@ create table if not exists settings (
 );
 
 alter table settings enable row level security;
+
+-- ------------------------------------------------------------
+-- Enquiries — sponsors, sister institutes, feedback.
+--
+-- One table for every message the site can send us, tagged by
+-- kind, so the committee reads one inbox instead of four.
+-- ------------------------------------------------------------
+create table if not exists enquiries (
+  id           uuid primary key default gen_random_uuid(),
+  kind         text not null check (kind in ('sponsor','institute','feedback','general')),
+  name         text not null,
+  organisation text,
+  email        text,
+  phone        text,
+  subject      text,
+  message      text not null,
+  -- Where on the site they were standing when they wrote.
+  page         text,
+  status       text not null default 'new' check (status in ('new','seen','done','spam')),
+  admin_note   text,
+  handled_by   text,
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists enquiries_kind_created
+  on enquiries (kind, created_at desc);
+create index if not exists enquiries_status_created
+  on enquiries (status, created_at desc);
+
+alter table enquiries enable row level security;
+
+-- ------------------------------------------------------------
+-- Visits — counts, and nothing that is about a person.
+--
+-- There is no cookie, no device id, no address and no fingerprint
+-- anywhere in this table. A row is a day, a path, the host that
+-- sent the visitor and whether the screen was a phone, and it
+-- carries two numbers. Nothing here can be traced back to anyone,
+-- which is the reason the site needs no consent banner to keep it.
+--
+-- Rows are upserted rather than appended, so a year of traffic is
+-- a few thousand rows rather than a few million, and it fits in
+-- the free tier with room to spare.
+-- ------------------------------------------------------------
+create table if not exists visits (
+  day       date not null,
+  path      text not null,
+  referrer  text not null default 'direct',
+  device    text not null default 'unknown',
+  views     integer not null default 0,
+  sessions  integer not null default 0,
+  primary key (day, path, referrer, device)
+);
+
+create index if not exists visits_day on visits (day desc);
+
+alter table visits enable row level security;
+
+-- Upsert one visit. Called only by this site's own route handler.
+create or replace function bump_visit(
+  p_day      date,
+  p_path     text,
+  p_referrer text,
+  p_device   text,
+  p_first    boolean
+) returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into visits (day, path, referrer, device, views, sessions)
+  values (p_day, p_path, p_referrer, p_device, 1, case when p_first then 1 else 0 end)
+  on conflict (day, path, referrer, device) do update
+    set views    = visits.views + 1,
+        sessions = visits.sessions + case when p_first then 1 else 0 end;
+end;
+$$;
+
+-- ------------------------------------------------------------
+-- Events — the few clicks worth counting, by name only.
+--
+-- Same rule as visits: a name, a day and a number. No identity.
+-- ------------------------------------------------------------
+create table if not exists events (
+  day   date not null,
+  name  text not null,
+  count integer not null default 0,
+  primary key (day, name)
+);
+
+alter table events enable row level security;
+
+create or replace function bump_event(p_day date, p_name text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into events (day, name, count) values (p_day, p_name, 1)
+  on conflict (day, name) do update set count = events.count + 1;
+end;
+$$;

@@ -12,6 +12,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
+import EnquiryForm from "@/components/EnquiryForm";
 
 export const metadata: Metadata = {
   title: "Thikana",
@@ -307,6 +308,77 @@ export default async function ThikanaPage() {
               .
             </p>
           </Reveal>
+        </Container>
+      </Section>
+
+      {/* ---------------- writing in from elsewhere ---------------- */}
+      <Section id="write-to-us" className="bg-paper-2/40">
+        <Container>
+          <SectionHeading
+            eyebrow="লিখুন Write to us"
+            title="Coming from another institute, or another city"
+            bangla="সকলের জন্য খোলা"
+            lede="The Puja is open to everyone and always has been. If you are at NCBS, JNCASR, ICTS, RRI or anywhere else in Bengaluru, or you are a Bengali association wanting to bring a group, this reaches a convenor directly."
+            align="center"
+          />
+
+          <div className="mx-auto mt-[2.618rem] grid max-w-[68rem] gap-[2.618rem] lg:grid-cols-2">
+            <Reveal>
+              <div className="surface h-full p-6">
+                <h3 className="font-display text-[1.272rem] text-ink">
+                  Things worth telling us in advance
+                </h3>
+                <ul className="mt-4 space-y-3 text-[0.84rem] leading-relaxed text-ink-soft">
+                  <li>
+                    <span className="text-ink">Bringing a group.</span> Bhog is
+                    cooked to a count. A rough number a week ahead means nobody
+                    is turned away on Ashtami.
+                  </li>
+                  <li>
+                    <span className="text-ink">Performing.</span> The cultural
+                    evenings fill up by late September. Tell us what you do and
+                    how long it runs.
+                  </li>
+                  <li>
+                    <span className="text-ink">Driving in.</span> Vehicle passes
+                    for the campus take a day or two to arrange, and cannot be
+                    arranged at the gate.
+                  </li>
+                  <li>
+                    <span className="text-ink">A stall.</span> Books, food,
+                    handloom, anything a Puja ground should have. There is space
+                    and there is no charge for a non-commercial one.
+                  </li>
+                  <li>
+                    <span className="text-ink">Accessibility.</span> Tell us what
+                    you need and we will arrange it rather than improvise it.
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <EnquiryForm kind="institute" />
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ---------------- feedback ---------------- */}
+      <Section>
+        <Container>
+          <div className="mx-auto max-w-[44rem]">
+            <SectionHeading
+              eyebrow="মতামত Feedback"
+              title="Tell us what this site gets wrong"
+              bangla="ভুল ধরিয়ে দিন"
+              lede="There is a great deal of history on these pages and some of it will be wrong. If you know better, we would rather hear it than keep it. The same goes for anything broken, anything missing, and any photograph that should not be here."
+              align="center"
+            />
+            <div className="mt-[2.618rem]">
+              <EnquiryForm kind="feedback" />
+            </div>
+          </div>
         </Container>
       </Section>
     </>

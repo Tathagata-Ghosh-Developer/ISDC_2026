@@ -277,26 +277,6 @@ export default function DonateForm({ suggested, note }: Props) {
             email, phone number and SR number never do.
           </p>
 
-          <div className="mt-4">
-            <Field
-              label="Name to display"
-              hint="Leave blank to use your full name."
-            >
-              <input name="display_name" className="field" maxLength={80} />
-            </Field>
-          </div>
-
-          <div className="mt-4">
-            <Field label="A line for the board" hint="Optional, 140 characters.">
-              <textarea
-                name="message"
-                maxLength={140}
-                rows={2}
-                className="field resize-none"
-                placeholder="Shubho Sharodiya from the Physics department…"
-              />
-            </Field>
-          </div>
         </div>
 
         <AnimatePresence>

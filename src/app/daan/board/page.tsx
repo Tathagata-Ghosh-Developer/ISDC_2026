@@ -70,7 +70,7 @@ export default async function BoardPage() {
                       {
                         n: "04",
                         t: "Your name goes up",
-                        d: "Ask to stay anonymous and only the name is withheld.",
+                        d: "Everyone who gives is on this board, by name and amount. There is no opting out of a public account.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">
