@@ -31,7 +31,6 @@ export default function DonateForm({ suggested, note }: Props) {
   const [state, setState] = useState<State>({ kind: "idle" });
   const [category, setCategory] = useState("student");
   const [amount, setAmount] = useState("");
-  const [anonymous, setAnonymous] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -270,34 +269,22 @@ export default function DonateForm({ suggested, note }: Props) {
         {/* board */}
         <div className="border-t border-line pt-5">
           <Label>On the public donation board</Label>
-          <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-faint">
-            The board is a public page. Anyone can open it, and your name, the
-            amount and any line you write will be visible to them. It is not
-            indexed by search engines, but it is not private either. Your
-            email, phone number and SR number are never shown there.
+          <p className="mt-2 text-[0.82rem] leading-relaxed text-ink-soft">
+            Everyone who gives goes on the board. That is the whole point of
+            it: the accounts are public, and a public account with names
+            missing from it is not a public account. Your name and the amount
+            appear there once the treasurer has matched the payment. Your
+            email, phone number and SR number never do.
           </p>
 
-          <label className="mt-4 flex items-start gap-3 text-[0.82rem] text-ink-soft">
-            <input
-              type="checkbox"
-              name="anonymous"
-              checked={anonymous}
-              onChange={(e) => setAnonymous(e.target.checked)}
-              className="mt-1 accent-[var(--c-sindoor)]"
-            />
-            <span>
-              Keep me off the board. The amount is still counted in the
-              committee&apos;s accounts, and your receipt is unaffected.
-            </span>
-          </label>
-
-          {!anonymous && (
-            <div className="mt-4">
-              <Field label="Name to display" hint="Leave blank to use your full name.">
-                <input name="display_name" className="field" maxLength={80} />
-              </Field>
-            </div>
-          )}
+          <div className="mt-4">
+            <Field
+              label="Name to display"
+              hint="Leave blank to use your full name."
+            >
+              <input name="display_name" className="field" maxLength={80} />
+            </Field>
+          </div>
 
           <div className="mt-4">
             <Field label="A line for the board" hint="Optional, 140 characters.">

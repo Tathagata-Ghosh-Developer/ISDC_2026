@@ -30,8 +30,8 @@ const STATIONS: Station[] = [
     frequency: "657 kHz",
     dial: 0.2,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    streamUrl:
-      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio055/hlspbaudio055_Auto.m3u8",
+    youtubeId: "YQyo8QeoYhc",
+    startSeconds: 6,
     note: "Geetanjali, the primary channel, and the one that originates Mahishasuramardini.",
   },
   {
@@ -41,8 +41,6 @@ const STATIONS: Station[] = [
     frequency: "1008 kHz",
     dial: 0.42,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    streamUrl:
-      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio056/hlspbaudio056_Auto.m3u8",
     note: "Sanchayita, the second Kolkata channel.",
   },
   {
@@ -52,8 +50,6 @@ const STATIONS: Station[] = [
     frequency: "107.0 MHz",
     dial: 0.66,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    streamUrl:
-      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio058/hlspbaudio058_Auto.m3u8",
     note: "The city's FM service.",
   },
   {
@@ -63,8 +59,6 @@ const STATIONS: Station[] = [
     frequency: "National",
     dial: 0.88,
     listenUrl: "https://akashvani.gov.in/radio/live.php",
-    streamUrl:
-      "https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio137/hlspbaudio137_Auto.m3u8",
     note: "The Bengali language national channel.",
   },
 ];
@@ -94,8 +88,7 @@ const TIMELINE = [
 
 export default async function MahalayaPage() {
   const config = await getConfig();
-  const { audioUrl, youtubeId, startSeconds, caption, allowInPageStream } =
-    config.mahalaya;
+  const { audioUrl, youtubeId, startSeconds, caption } = config.mahalaya;
   const mahalaya = config.schedule.find((d) => d.id === "mahalaya");
 
   return (
@@ -140,7 +133,6 @@ export default async function MahalayaPage() {
           <RadioSet
             stations={STATIONS}
             broadcast="Mahishasuramardini goes out at 4 am on Saturday 10 October 2026 and runs about ninety minutes. Akashvani Kolkata originates it; Akashvani Delhi carries a Hindi and Sanskrit version at the same hour."
-            allowInPageStream={allowInPageStream}
           />
         </Container>
       </Section>

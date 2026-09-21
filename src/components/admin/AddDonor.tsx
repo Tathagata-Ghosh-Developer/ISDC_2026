@@ -42,7 +42,6 @@ export default function AddDonor({ onAdded }: { onAdded: () => void }) {
         paid_on: fd.get("paid_on"),
         display_name: fd.get("display_name"),
         message: fd.get("message"),
-        anonymous: fd.get("anonymous") === "on",
         verify: fd.get("verify") === "on",
       }),
     }).catch(() => null);
@@ -159,14 +158,6 @@ export default function AddDonor({ onAdded }: { onAdded: () => void }) {
                     className="accent-[var(--c-sindoor)]"
                   />
                   Verify now and issue a receipt number
-                </label>
-                <label className="flex items-center gap-2.5 text-[0.82rem] text-ink-soft">
-                  <input
-                    type="checkbox"
-                    name="anonymous"
-                    className="accent-[var(--c-sindoor)]"
-                  />
-                  Anonymous on the board
                 </label>
               </div>
 

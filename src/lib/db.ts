@@ -163,13 +163,9 @@ export async function getBoard(): Promise<BoardData> {
   const rows = (donationsRes.data ?? []) as Row[];
 
   const entries: BoardEntry[] = rows.map((r) => ({
-    name: r.anonymous
-      ? "Anonymous well-wisher"
-      : (r.display_name?.trim() || r.name),
+    name: r.display_name?.trim() || r.name,
     category: r.category,
-    // An anonymous donor's own words could identify them just as well
-    // as their name, so those are withheld too.
-    message: r.anonymous ? null : r.message,
+    message: r.message,
     amount: Number(r.amount),
   }));
 
