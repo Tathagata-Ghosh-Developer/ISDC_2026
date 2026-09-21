@@ -253,3 +253,178 @@ export async function getAnalytics(days = 30): Promise<Analytics> {
     },
   };
 }
+
+/* ---------------------------------------------------------------
+   The consented tier
+   --------------------------------------------------------------- */
+
+export type SessionRow = {
+  id: string;
+  started_at: string;
+  landing_path: string | null;
+  referrer: string | null;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  device: string | null;
+  screen_w: number | null;
+  screen_h: number | null;
+  language: string | null;
+  timezone: string | null;
+  platform: string | null;
+  browser: string | null;
+  connection: string | null;
+  touch: boolean;
+  prefers_dark: boolean;
+  page_count: number;
+  duration_ms: number;
+  max_scroll: number;
+  is_returning: boolean;
+  donated: boolean;
+};
+
+export type Journeys = {
+  ready: boolean;
+  sessions: number;
+  consented: boolean;
+  medianPages: number;
+  medianSeconds: number;
+  medianScroll: number;
+  returningPct: number;
+  donatedPct: number;
+  byBrowser: { key: string; n: number }[];
+  byPlatform: { key: string; n: number }[];
+  byTimezone: { key: string; n: number }[];
+  byLanguage: { key: string; n: number }[];
+  byCampaign: { key: string; n: number }[];
+  byLanding: { key: string; n: number }[];
+  byConnection: { key: string; n: number }[];
+  screens: { key: string; n: number }[];
+  /** The commonest routes through the site, as page sequences. */
+  paths: { steps: string[]; n: number; donated: number }[];
+  recent: SessionRow[];
+};
+
+const NO_JOURNEYS: Journeys = {
+  ready: false,
+  sessions: 0,
+  consented: false,
+  medianPages: 0,
+  medianSeconds: 0,
+  medianScroll: 0,
+  returningPct: 0,
+  donatedPct: 0,
+  byBrowser: [],
+  byPlatform: [],
+  byTimezone: [],
+  byLanguage: [],
+  byCampaign: [],
+  byLanding: [],
+  byConnection: [],
+  screens: [],
+  paths: [],
+  recent: [],
+};
+
+function tally(
+  rows: SessionRow[],
+  pick: (r: SessionRow) => string | null | undefined,
+  limit = 12,
+) {
+  const m = new Map<string, number>();
+  for (const r of rows) {
+    const k = (pick(r) ?? "not given").toString().slice(0, 40);
+    m.set(k, (m.get(k) ?? 0) + 1);
+  }
+  return [...m]
+    .map(([key, n]) => ({ key, n }))
+    .sort((a, b) => b.n - a.n)
+    .slice(0, limit);
+}
+
+function median(xs: number[]): number {
+  if (!xs.length) return 0;
+  const s = [...xs].sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+}
+
+export async function getJourneys(days = 30): Promise<Journeys> {
+  if (!dbReady) return NO_JOURNEYS;
+  const from = new Date(Date.now() - days * 86_400_000).toISOString();
+
+  const [sessionsRes, eventsRes] = await Promise.all([
+    db()
+      .from("visitor_sessions")
+      .select("*")
+      .gte("started_at", from)
+      .order("started_at", { ascending: false })
+      .limit(5000),
+    db()
+      .from("session_events")
+      .select("session_id,seq,kind,path")
+      .eq("kind", "view")
+      .gte("at", from)
+      .order("seq", { ascending: true })
+      .limit(20000),
+  ]);
+
+  if (sessionsRes.error) {
+    console.error("[journeys]", sessionsRes.error.message);
+    return NO_JOURNEYS;
+  }
+
+  const rows = (sessionsRes.data ?? []) as SessionRow[];
+  if (!rows.length) return { ...NO_JOURNEYS, ready: true };
+
+  // Stitch each visit's pages back into the order they were read.
+  const bySession = new Map<string, string[]>();
+  for (const e of (eventsRes.data ?? []) as {
+    session_id: string;
+    path: string | null;
+  }[]) {
+    if (!e.path) continue;
+    const list = bySession.get(e.session_id) ?? [];
+    if (list[list.length - 1] !== e.path) list.push(e.path);
+    bySession.set(e.session_id, list);
+  }
+
+  const routes = new Map<string, { n: number; donated: number }>();
+  for (const r of rows) {
+    const steps = (bySession.get(r.id) ?? []).slice(0, 5);
+    if (steps.length < 2) continue;
+    const key = steps.join(" \u2192 ");
+    const cur = routes.get(key) ?? { n: 0, donated: 0 };
+    cur.n += 1;
+    if (r.donated) cur.donated += 1;
+    routes.set(key, cur);
+  }
+
+  return {
+    ready: true,
+    consented: true,
+    sessions: rows.length,
+    medianPages: median(rows.map((r) => r.page_count)),
+    medianSeconds: Math.round(median(rows.map((r) => r.duration_ms)) / 1000),
+    medianScroll: median(rows.map((r) => r.max_scroll)),
+    returningPct: Math.round(
+      (rows.filter((r) => r.is_returning).length / rows.length) * 100,
+    ),
+    donatedPct: Math.round(
+      (rows.filter((r) => r.donated).length / rows.length) * 100,
+    ),
+    byBrowser: tally(rows, (r) => r.browser),
+    byPlatform: tally(rows, (r) => r.platform),
+    byTimezone: tally(rows, (r) => r.timezone),
+    byLanguage: tally(rows, (r) => r.language),
+    byCampaign: tally(rows, (r) => r.utm_campaign ?? r.utm_source),
+    byLanding: tally(rows, (r) => r.landing_path),
+    byConnection: tally(rows, (r) => r.connection),
+    screens: tally(rows, (r) =>
+      r.screen_w && r.screen_h ? `${r.screen_w} \u00d7 ${r.screen_h}` : null,
+    ),
+    paths: [...routes]
+      .map(([k, v]) => ({ steps: k.split(" \u2192 "), ...v }))
+      .sort((a, b) => b.n - a.n)
+      .slice(0, 15),
+    recent: rows.slice(0, 40),
+  };
+}

@@ -12,6 +12,8 @@ import SiteHeader from "@/components/SiteHeader";
 import { Suspense } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import Track from "@/components/Track";
+import Journey from "@/components/Journey";
+import ConsentNotice from "@/components/Consent";
 import PujoGuide from "@/components/PujoGuide";
 import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -139,7 +141,9 @@ export default async function RootLayout({
         <SiteFooter />
         <Suspense fallback={null}>
           <Track />
+          <Journey />
         </Suspense>
+        <ConsentNotice />
         <PujoGuide />
       </body>
     </html>

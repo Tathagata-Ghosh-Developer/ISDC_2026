@@ -325,3 +325,111 @@ drop policy if exists "proofs are not writable by anyone" on storage.objects;
 -- No permissive policy is created, on purpose. With RLS enabled and no
 -- policy, anon and authenticated are denied and only the service role
 -- gets through.
+
+-- ============================================================
+-- Analytics, the consented tier.
+--
+-- The committee wants as much as it can get about who visits. There
+-- are two ways to do that and only one of them is available to a body
+-- that already holds donor names, phone numbers and SR numbers.
+--
+-- Taking it covertly means it has to stay anonymous to be defensible,
+-- which caps what may be collected at roughly what `visits` already
+-- holds. Asking for it means far more may be collected, kept longer,
+-- and joined into a journey, because the visitor agreed.
+--
+-- So: `visits` stays as it is and needs no consent, because nothing in
+-- it is about a person. Everything below only ever fills when someone
+-- has said yes, and empties when they say no.
+-- ============================================================
+
+create table if not exists visitor_sessions (
+  id            uuid primary key default gen_random_uuid(),
+  started_at    timestamptz not null default now(),
+  last_seen_at  timestamptz not null default now(),
+
+  -- how they arrived
+  landing_path  text,
+  referrer      text,
+  utm_source    text,
+  utm_medium    text,
+  utm_campaign  text,
+  utm_content   text,
+  utm_term      text,
+
+  -- what they are reading on
+  device        text,
+  screen_w      integer,
+  screen_h      integer,
+  viewport_w    integer,
+  viewport_h    integer,
+  pixel_ratio   numeric(4,2),
+  language      text,
+  languages     text,
+  timezone      text,
+  platform      text,
+  browser       text,
+  connection    text,
+  touch         boolean,
+  prefers_dark  boolean,
+  reduced_motion boolean,
+
+  -- shape of the visit
+  page_count    integer not null default 0,
+  duration_ms   integer not null default 0,
+  max_scroll    integer not null default 0,
+  is_returning  boolean not null default false,
+
+  -- the only thing that matters commercially
+  donated       boolean not null default false,
+
+  -- when this row must be deleted, and by whom
+  expires_on    date not null default (current_date + interval '180 days')
+);
+
+create index if not exists visitor_sessions_started on visitor_sessions (started_at desc);
+create index if not exists visitor_sessions_campaign on visitor_sessions (utm_campaign);
+create index if not exists visitor_sessions_expires on visitor_sessions (expires_on);
+
+-- Every page and every action, in order, so a journey can be read end
+-- to end rather than guessed at from totals.
+create table if not exists session_events (
+  id          bigserial primary key,
+  session_id  uuid not null references visitor_sessions (id) on delete cascade,
+  at          timestamptz not null default now(),
+  seq         integer not null,
+  kind        text not null check (kind in ('view', 'action', 'exit')),
+  path        text,
+  name        text,
+  dwell_ms    integer,
+  scroll_pct  integer
+);
+
+create index if not exists session_events_session on session_events (session_id, seq);
+create index if not exists session_events_at on session_events (at desc);
+
+alter table visitor_sessions enable row level security;
+alter table session_events   enable row level security;
+
+revoke all on visitor_sessions, session_events from public, anon, authenticated;
+
+-- Forget them when the time is up. A committee that rotates every year
+-- will not remember to do this, so it is a function they can call from
+-- one button rather than a habit they have to keep.
+create or replace function forget_expired_sessions()
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  gone integer;
+begin
+  delete from visitor_sessions where expires_on < current_date;
+  get diagnostics gone = row_count;
+  return gone;
+end;
+$$;
+
+revoke all on function forget_expired_sessions() from public, anon, authenticated;
+grant execute on function forget_expired_sessions() to service_role;
