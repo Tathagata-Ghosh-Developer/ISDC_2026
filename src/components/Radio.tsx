@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ExternalLink, Power } from "lucide-react";
 import { loadYouTubeApi, type YTPlayer } from "@/lib/youtube";
+import VoxelRadio from "./VoxelRadio";
 
 /* ================================================================
    The set in the corner of the room, and it actually tunes.
@@ -49,12 +50,12 @@ export default function Radio({
   stations: Station[];
   broadcast: string;
 }) {
-  const reduce = useReducedMotion();
   const [tune, setTune] = useState(0.52);
   const [aerial, setAerial] = useState(-76);
   const [dragging, setDragging] = useState(false);
   const [on, setOn] = useState(false);
   const [ready, setReady] = useState(false);
+  const [skin, setSkin] = useState<"valve" | "voxel">("valve");
 
   const svg = useRef<SVGSVGElement>(null);
   const ctx = useRef<AudioContext | null>(null);
@@ -219,6 +220,18 @@ export default function Radio({
   return (
     <div className="surface overflow-hidden">
       <div className="bg-[#140f0c] px-4 py-8 sm:px-8">
+        {skin === "voxel" ? (
+          <VoxelRadio
+            signal={signal}
+            tune={tune}
+            aerial={aerial}
+            svgRef={svg}
+            onAerialDown={(e) => {
+              e.preventDefault();
+              setDragging(true);
+            }}
+          />
+        ) : (
         <svg
           ref={svg}
           viewBox="0 0 440 262"
@@ -400,6 +413,27 @@ export default function Radio({
             MURPHY
           </text>
         </svg>
+        )}
+
+        {/* ---- which set you would rather look at ---- */}
+        <div className="mt-5 flex justify-center gap-1">
+          {([
+            { id: "valve", label: "1960" },
+            { id: "voxel", label: "Blocks" },
+          ] as const).map((s) => (
+            <button
+              key={s.id}
+              onClick={() => setSkin(s.id)}
+              className={`border px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.16em] transition-colors ${
+                skin === s.id
+                  ? "border-[#e8a020] text-[#e8a020]"
+                  : "border-[#e6d3ad]/25 text-[#e6d3ad]/50 hover:border-[#e8a020]/60"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
 
         {/* ---- the tuning control, a real input so it works everywhere ---- */}
         <label className="mx-auto mt-6 block max-w-[30rem]">
