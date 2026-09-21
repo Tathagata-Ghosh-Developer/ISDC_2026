@@ -55,6 +55,16 @@ server holding the service-role key. That is deliberate. Do not add a
 policy to "make it work"; if something cannot read a table, the route is
 missing a key, not a policy.
 
+The last block of the file is the one that matters most, and it was
+missing from the first version. Postgres grants permission to run a new
+function to everybody by default, and Supabase publishes every function
+in the public schema as an endpoint reachable with the anon key, the key
+that ships inside any browser. Three of these functions run as their
+owner and ignore row level security completely. Without that block,
+anybody could have called the one that verifies a donation and minted a
+receipt number from the committee's own sequence. The tables were locked
+and the door beside them was open. Run the whole file, not part of it.
+
 Then go to Project Settings, API, and copy two values:
 
 - the **Project URL**

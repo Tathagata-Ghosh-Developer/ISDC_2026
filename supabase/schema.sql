@@ -237,3 +237,47 @@ begin
   on conflict (day, name) do update set count = events.count + 1;
 end;
 $$;
+
+-- ------------------------------------------------------------
+-- Who may call the functions.
+--
+-- This block is the most important twenty lines in the file and it
+-- was missing from the first version, so it is worth explaining.
+--
+-- Postgres grants EXECUTE on a new function to PUBLIC by default.
+-- Supabase then exposes every function in the public schema through
+-- PostgREST as an RPC endpoint reachable with the anon key, which is
+-- the key that ships in any browser. Three of the functions here are
+-- SECURITY DEFINER, which means they run as their owner and ignore
+-- row level security entirely.
+--
+-- Put together, that meant anybody holding the anon key could have
+-- called verify_donation with a guessed uuid and marked a donation
+-- verified, minting a receipt number from the committee's own
+-- sequence. The tables were locked and the back door was standing
+-- open next to them. RLS on a table says nothing about who may call
+-- a function that bypasses it.
+--
+-- So: revoke from everybody, then grant only to service_role, which
+-- is the key this site's own server holds and the browser never sees.
+-- ------------------------------------------------------------
+
+revoke all on function verify_donation(uuid, text) from public, anon, authenticated;
+revoke all on function bump_visit(date, text, text, text, boolean) from public, anon, authenticated;
+revoke all on function bump_event(date, text) from public, anon, authenticated;
+
+grant execute on function verify_donation(uuid, text) to service_role;
+grant execute on function bump_visit(date, text, text, text, boolean) to service_role;
+grant execute on function bump_event(date, text) to service_role;
+
+-- Same reasoning for the sequence. Nothing but the server should be
+-- able to advance the receipt numbering.
+revoke all on sequence receipt_seq from public, anon, authenticated;
+grant usage, select on sequence receipt_seq to service_role;
+
+-- And for the tables themselves. RLS with no policy already denies
+-- anon, but a future policy added carelessly would not be able to
+-- grant more than the table privileges allow, which makes this a
+-- second lock rather than a duplicate of the first.
+revoke all on donations, expenses, settings, enquiries, visits, events
+  from public, anon, authenticated;
