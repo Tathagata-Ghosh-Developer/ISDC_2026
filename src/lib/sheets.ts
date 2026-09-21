@@ -20,8 +20,8 @@ import "server-only";
  *     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Donations');
  *     var d = body.donation;
  *     sheet.appendRow([
- *       new Date(), d.id, d.receipt_no || '', d.name, d.sr_number || '',
- *       d.email, d.phone, d.category, d.amount, d.method,
+ *       new Date(), d.id, d.receipt_no || '', d.name, d.category,
+ *       d.amount, d.method,
  *       d.reference || '', d.paid_on || '', d.status, d.verified_by || ''
  *     ]);
  *     return ContentService.createTextOutput('ok');

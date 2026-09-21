@@ -50,7 +50,7 @@ const SECTION_IMAGE: Record<string, string> = {
   "swadeshi-1905": "bengal-partition-protest-1906",
   "bharat-mata": "bharat-mata-1905",
   "oaths-anushilan-jugantar": "pulin-behari-das",
-  "subhas-chandra-bose": "bose-nabadwip-1938",
+  "subhas-chandra-bose": "bose-annakut-1928",
   "pujas-revolutionary-descent": "durga-puja-photo-c1900",
   "surveillance-restriction": "prinsep-durga-puja",
   "women-shakti-idiom": "pritilata-waddedar",
@@ -277,6 +277,14 @@ export default function BiplobPage() {
               checked to respond, and is served from this site rather than
               linked from somewhere that may move it. The source page and the
               licence are under each one.
+            </p>
+            <p className="lede mt-3 max-w-[68ch] text-[0.95rem]">
+              One exception, marked as such. The photograph of the Bose
+              brothers at an annakut came from the committee&apos;s own
+              collection of reference images and we have not been able to
+              establish where it was first published. A photograph taken in
+              1928 is out of copyright in India either way. If you know the
+              archive it belongs to, tell us and we will credit it properly.
             </p>
           </Reveal>
 

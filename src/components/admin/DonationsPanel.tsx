@@ -8,6 +8,7 @@ import {
   Loader2,
   RefreshCw,
   Search,
+  ImageIcon,
   Trash2,
   Undo2,
   X,
@@ -60,6 +61,26 @@ export default function DonationsPanel({
     const t = setTimeout(load, q ? 350 : 0);
     return () => clearTimeout(t);
   }, [load, q]);
+
+  /** Opens the donor's screenshot on a link that dies in two minutes. */
+  async function openProof(id: string) {
+    setWorking(id);
+    setError(null);
+    const res = await fetch("/api/admin/proof", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id }),
+    }).catch(() => null);
+    const data = res
+      ? ((await res.json().catch(() => ({}))) as { url?: string; error?: string })
+      : {};
+    setWorking(null);
+    if (data.url) {
+      window.open(data.url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    setError(data.error ?? "Could not open that screenshot.");
+  }
 
   /** Offered only to an administrator, and refused again server side. */
   async function remove(id: string) {
@@ -298,6 +319,16 @@ export default function DonationsPanel({
 
               {/* ---- actions ---- */}
               <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
+                {d.proof_url && (
+                  <button
+                    onClick={() => void openProof(d.id)}
+                    disabled={working === d.id}
+                    className="btn btn-ghost !py-1.5 !text-[0.65rem]"
+                  >
+                    <ImageIcon size={12} /> Screenshot
+                  </button>
+                )}
+
                 {isAdmin && d.status !== "verified" && (
                   <button
                     onClick={() => act(d.id, "verify")}

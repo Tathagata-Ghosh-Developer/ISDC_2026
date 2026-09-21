@@ -42,3 +42,10 @@ next-env.d.ts
 
 # keep the template committed
 !.env.example
+
+.vercel
+.env*
+
+# Generated credentials. Never commit these.
+CREDENTIALS.local.txt
+.vercel-env.tmp

@@ -52,6 +52,12 @@ const BLOCKS: EraBlock[] = [
         note: "Eight arms, a trident through the buffalo's flank, and the demon emerging from its neck. The composition is fixed centuries before Bengal takes it up, and every clay pratima on a Kolkata ground is still quoting it.",
       },
       {
+        src: "/media/art/durga-stone-pala.jpg",
+        alt: "A stone Mahishasuramardini carved in the Pala and Sena manner",
+        caption: "Mahishasuramardini in stone, before Bengal worked in clay",
+        note: "Bengal's oldest Durgas are stone, and they are not the goddess Bengalis now picture. No family group, no painted arch, no four-day calendar. Everything that now reads as timeless is still centuries away from this.",
+      },
+      {
         src: "/media/art/durga-rock-relief.jpg",
         alt: "A rock-cut relief of Mahishasuramardini, the goddess riding a lion into the buffalo demon's army",
         caption: "Mahishasuramardini, rock-cut relief",
@@ -75,6 +81,18 @@ const BLOCKS: EraBlock[] = [
       caption: "Durga and Mahishasura, painted",
     },
     plates: [
+      {
+        src: "/media/art/durga-folio-aged.jpg",
+        alt: "A painted folio of the family group, the paper foxed and cracked with age",
+        caption: "The family group on paper, foxed and cracked",
+        note: "Painted for a household rather than a temple, and kept until the paper gave out. Most of what Bengal made for its own walls has not survived, which is why the printed versions dominate the record.",
+      },
+      {
+        src: "/media/art/durga-arch-teal.jpg",
+        alt: "An ornate painted ek-chala with smaller figures set into the arch",
+        caption: "An arch carrying its own register of smaller figures",
+        note: "The chalchitra is not decoration. It is where the rest of the story goes, in horizontal registers, so that a single frame can hold more than the five figures standing in front of it.",
+      },
       {
         src: "/media/art/durga-oleograph.jpg",
         alt: "A printed lithograph of the whole family group under a painted arch",
@@ -107,6 +125,18 @@ const BLOCKS: EraBlock[] = [
         note: "A photograph rather than a painting, and the difference shows. Priests, family and servants stand where they stood, the ekchala fills the whole arch of the hall, and nobody is posing for posterity. This is what the paintings on either side of it were describing.",
       },
       {
+        src: "/media/art/thakur-dalan-priests.jpg",
+        alt: "Priests at work in a pillared thakur dalan during the Puja",
+        caption: "Priests in the thakur dalan, the hall a Bengali house kept for this",
+        note: "A household that could afford a Puja built a room for it and used that room five days a year. The architecture is the clearest surviving evidence of how much the festival mattered to the people paying for it.",
+      },
+      {
+        src: "/media/art/puja-gathering-archival.jpg",
+        alt: "A household Puja photographed with the whole assembly present",
+        caption: "The whole assembly, photographed",
+        note: "Everyone in the frame knew they were being photographed, which in the 1800s meant standing still for a long time. Nobody is worshipping in this picture. They are being counted.",
+      },
+      {
         src: "/media/art/durga-ivory-murshidabad.jpg",
         alt: "A ten-armed Mahishasuramardini Durga carved in ivory, Murshidabad, late nineteenth century",
         caption: "Ten-armed Mahishasuramardini, ivory, Murshidabad, late nineteenth century",
@@ -129,6 +159,32 @@ const BLOCKS: EraBlock[] = [
       alt: "Nandalal Bose's Durga, painted in the mid-1940s",
       caption: "Nandalal Bose, Durga, mid-1940s",
     },
+    plates: [
+      {
+        src: "/media/art/pratima-priests-archival.jpg",
+        alt: "An ek-chala pratima with its priests, early twentieth century",
+        caption: "An ek-chala and its priests, early twentieth century",
+        note: "Still one frame, still one arch, and the split into separate figures that now looks traditional is still ahead of it.",
+      },
+      {
+        src: "/media/art/daker-saj-archival.jpg",
+        alt: "Daker saj photographed under working light",
+        caption: "Daker saj under whatever light there was",
+        note: "Beaten foil photographs badly and looks extraordinary in a lamplit pandal, which is a good part of why it was worth posting in from Germany.",
+      },
+      {
+        src: "/media/art/durga-tiger-modern.jpg",
+        alt: "A twentieth-century painted Durga whose mount is a tiger",
+        caption: "A twentieth-century Durga, mounted on a tiger",
+        note: "The mount is a tiger here rather than a lion. Both appear across Bengal, and artisans who had seen neither animal drew whichever the workshop had drawn last.",
+      },
+      {
+        src: "/media/art/pratima-crowd-archival.jpg",
+        alt: "The pratima in its arch with a crowd pressed to the rail",
+        caption: "The crowd at the rail",
+        note: "The sarbojanin in practice: not a courtyard with invited guests but a rail, and everybody behind it.",
+      },
+    ],
   },
   {
     era: "Contemporary",

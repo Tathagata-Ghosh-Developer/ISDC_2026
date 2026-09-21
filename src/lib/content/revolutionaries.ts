@@ -268,6 +268,16 @@ export const FIGURES: Figure[] = [
 
 export const IMAGES: ChapterImage[] = [
   {
+    id: "bose-annakut-1928",
+    title: "Subhas and Sarat Chandra Bose at an Ashtami annakut, 1928",
+    src: "/media/art/bose-annakut-1928.jpg",
+    licence: "Photograph of 1928; out of copyright in India",
+    attribution: "Supplied by the committee. The original publication is not established.",
+    sourcePage: "",
+    relevance:
+      "The brothers sitting on the floor to eat with everybody else. Whatever the Puja was doing politically in 1928, this is the form it took in public.",
+  },
+  {
     id: "bankim-portrait",
     title: "Bankim Chandra Chattopadhyay, portrait",
     src: "/media/biplob/bankim-portrait.jpg",

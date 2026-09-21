@@ -281,3 +281,22 @@ grant usage, select on sequence receipt_seq to service_role;
 -- second lock rather than a duplicate of the first.
 revoke all on donations, expenses, settings, enquiries, visits, events
   from public, anon, authenticated;
+
+-- ------------------------------------------------------------
+-- One bank credit, one receipt.
+--
+-- The unbroken receipt sequence proves the console issued every
+-- number it said it did. It proves nothing about the bank account.
+-- Two people can declare the same UTR, both get verified, and two
+-- receipt numbers are issued against one credit. The sequence stays
+-- unbroken and the books do not balance, which is the failure the
+-- sequence was supposed to prevent.
+--
+-- Rejected rows are excluded so that a mistyped reference can be
+-- rejected and entered again correctly.
+-- ------------------------------------------------------------
+create unique index if not exists donations_reference_unique
+  on donations (reference)
+  where reference is not null
+    and length(btrim(reference)) > 0
+    and status <> 'rejected';

@@ -15,7 +15,8 @@ type Props = {
 type State =
   | { kind: "idle" }
   | { kind: "sending" }
-  | { kind: "done"; id: string; name: string; amount: number }
+  | { kind: "done"; id: string;
+      token: string | null; name: string; amount: number }
   | { kind: "error"; message: string };
 
 const METHODS = [
@@ -46,6 +47,7 @@ export default function DonateForm({ suggested, note }: Props) {
       const data = (await res.json()) as {
         ok?: boolean;
         id?: string;
+        receiptToken?: string | null;
         error?: string;
       };
       if (!res.ok || !data.ok || !data.id) {
@@ -58,6 +60,7 @@ export default function DonateForm({ suggested, note }: Props) {
       setState({
         kind: "done",
         id: data.id,
+        token: data.receiptToken ?? null,
         name: String(fd.get("name") ?? ""),
         amount: Number(fd.get("amount") ?? 0),
       });
@@ -93,7 +96,30 @@ export default function DonateForm({ suggested, note }: Props) {
           a numbered receipt reaches your WhatsApp and your name appears on the
           donation board.
         </p>
+
+        {state.token && (
+          <div className="mx-auto mt-6 max-w-[46ch] border border-gold/40 bg-paper-2/50 p-4">
+            <p className="text-[0.82rem] leading-relaxed text-ink-soft">
+              This link is yours. It shows where your entry stands now, and it
+              becomes your receipt the moment the treasurer clears it. Save it
+              somewhere, because it is the only copy and we cannot look it up
+              for you.
+            </p>
+            <a
+              href={`/receipt/${state.token}`}
+              className="mt-3 block break-all text-[0.78rem] text-gold underline underline-offset-2 hover:text-sindoor"
+            >
+              /receipt/{state.token}
+            </a>
+          </div>
+        )}
+
         <div className="mt-7 flex flex-wrap justify-center gap-3">
+          {state.token && (
+            <Link href={`/receipt/${state.token}`} className="btn btn-primary">
+              Open my receipt
+            </Link>
+          )}
           <Link href="/daan/board" className="btn btn-ghost">
             See the board
           </Link>
@@ -315,8 +341,7 @@ export default function DonateForm({ suggested, note }: Props) {
             to the committee treasurer so the payment can be matched and a
             receipt sent. A screenshot, if you upload one, is stored privately
             and is visible only to the committee. Nothing is sold, shared or
-            used for anything else, and you can ask a convenor to remove your
-            entry at any time.
+            used for anything else. Everyone who gives appears on the board, which is what makes the account checkable, so there is no opting out of it. If something is wrong with your entry, tell a convenor and it will be corrected. 
           </p>
         </div>
       </fieldset>

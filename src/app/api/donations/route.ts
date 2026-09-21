@@ -139,10 +139,20 @@ export async function POST(req: Request) {
   const { data, error } = await db()
     .from("donations")
     .insert(row)
-    .select("id")
+    .select("id,receipt_token")
     .single();
 
   if (error || !data) {
+    // 23505 is a unique violation, and on this table it means the
+    // transaction reference has already been declared by somebody.
+    // One bank credit, one receipt: two claims on the same reference
+    // would put two receipt numbers against one payment.
+    if (error?.code === "23505") {
+      return bad(
+        "That transaction reference has already been recorded. If you think this is a mistake, or you are paying a second time, leave the reference blank and tell the treasurer.",
+        409,
+      );
+    }
     console.error("[donations] insert", error?.message);
     return bad("We could not save that. Please try again, or message the treasurer.", 500);
   }
@@ -150,5 +160,13 @@ export async function POST(req: Request) {
   // Best effort; a spreadsheet hiccup must never fail the donation.
   void mirrorToSheet({ ...row, id: data.id, created_at: new Date().toISOString() });
 
-  return NextResponse.json({ ok: true, id: data.id });
+  // The token goes back now, not after verification. Between declaring
+  // and being matched against the statement the donor otherwise holds
+  // nothing at all, and the page that shows them where they stand has
+  // existed the whole time with no way to reach it.
+  return NextResponse.json({
+    ok: true,
+    id: data.id,
+    receiptToken: (data as { receipt_token?: string }).receipt_token ?? null,
+  });
 }
