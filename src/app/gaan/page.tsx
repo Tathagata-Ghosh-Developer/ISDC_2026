@@ -39,7 +39,10 @@ function resolveSources() {
       return {
         ...layer,
         local: exists,
-        src: exists ? `/media/audio/${layer.id}.mp3` : layer.remoteUrl,
+        // Always same-origin. A local file is served directly; anything
+        // else goes through a proxy on this server, so the browser's
+        // content policy and the visitor's network never come into it.
+        src: exists ? `/media/audio/${layer.id}.mp3` : `/api/audio/${layer.id}`,
       };
     });
 }
