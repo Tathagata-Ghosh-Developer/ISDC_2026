@@ -12,7 +12,7 @@ import { DESK_LAYERS, MISSING_LAYERS } from "@/lib/content/desk";
 export const metadata: Metadata = {
   title: "Music",
   description:
-    "The listening room. Twelve faders of dhak, conch, rain, adda and river, and eighty nine Bengali songs of the Puja, from the city and from the village.",
+    "The listening room. Eleven faders of dhak, conch, rain, adda and river, and two hundred Bengali songs of the Puja, from the city, the village and the years in between.",
 };
 
 export const revalidate = 3600;
@@ -60,7 +60,7 @@ export default function GaanPage() {
             eyebrow="গান Music"
             title="One tap, and the Pujo is on"
             bangla="এক গান, এক আড্ডা, এক শরৎ"
-            lede="A shelf chosen by the clock in Kolkata, playing by itself, the way a radio in a tea shop does. Underneath it, twelve faders of dhak, conch, rain and river, so you can build the room the songs are playing in. No signing in, nothing to install."
+            lede="A shelf chosen by the clock in Kolkata, playing by itself, the way a radio in a tea shop does. Underneath it, eleven faders of dhak, conch, rain and river, so you can build the room the songs are playing in. No signing in, nothing to install."
           />
         </Container>
       </Section>

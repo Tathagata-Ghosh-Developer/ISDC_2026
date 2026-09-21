@@ -46,24 +46,68 @@ const ALBUMS = [
   },
 ] as const;
 
+/**
+ * Shot on phones on this ground last year, and kept with the sound
+ * they were recorded with. An earlier version of this page stripped
+ * the audio to save a few megabytes, which turned a dhak into a
+ * silent picture of a drum.
+ */
 const FILMS = [
   {
     src: "/media/video/sindoor-khela.mp4",
     poster: "/media/video/sindoor-khela.jpg",
     title: "Sindoor Khela",
     bangla: "সিঁদুর খেলা",
+    note: "Dashami morning, before she leaves. Married women smear her with vermilion and then each other.",
+    portrait: false,
+  },
+  {
+    src: "/media/video/dhunuchi-smoke.mp4",
+    poster: "/media/video/dhunuchi-smoke.jpg",
+    title: "Dhunuchi, and the smoke",
+    bangla: "ধুনুচি",
+    note: "Coconut husk and camphor in a clay censer, carried into the middle of a crowd that does not move out of the way.",
+    portrait: false,
+  },
+  {
+    src: "/media/video/dhunuchi-naach.mp4",
+    poster: "/media/video/dhunuchi-naach.jpg",
+    title: "The dance itself",
+    bangla: "ধুনুচি নাচ",
+    note: "Barefoot on the carpet, one censer in each hand, keeping time with the dhak.",
+    portrait: true,
   },
   {
     src: "/media/video/cultural-night.mp4",
     poster: "/media/video/cultural-night.jpg",
     title: "The cultural evening",
     bangla: "সাংস্কৃতিক সন্ধ্যা",
+    note: "The band on the stage under the pandal, with the goddess watching from behind them.",
+    portrait: false,
+  },
+  {
+    src: "/media/video/pandal-evening.mp4",
+    poster: "/media/video/pandal-evening.jpg",
+    title: "An evening on the ground",
+    bangla: "সন্ধ্যার মণ্ডপ",
+    note: "The hour when the pandal fills and nobody is watching anything in particular.",
+    portrait: false,
   },
   {
     src: "/media/video/bisarjan.mp4",
     poster: "/media/video/bisarjan.jpg",
     title: "Bisarjan, leaving the campus",
     bangla: "বিসর্জন",
+    note: "The procession sets off down the avenue. This is the part nobody films well, because nobody is standing still.",
+    portrait: true,
+  },
+  {
+    src: "/media/video/bisarjan-road.mp4",
+    poster: "/media/video/bisarjan-road.jpg",
+    title: "On the road, with the dhak",
+    bangla: "পথে ঢাক",
+    note: "Out of the gate and onto the public road, where the campus stops and Bengaluru starts.",
+    portrait: true,
   },
 ];
 
@@ -135,28 +179,37 @@ export default function GalleryPage() {
         <Container>
           <SectionHeading
             eyebrow="ছবি চলমান Moving picture"
-            title="Three minutes of last year"
+            title="Two minutes of last year"
             bangla="গত বছরের কিছু মুহূর্ত"
-            lede="Short clips, no sound, shot on phones by whoever had a free hand."
+            lede="Shot on phones by whoever had a free hand, and kept with the sound they were recorded with. Turn it up. The dhak on the last two was still going when the camera stopped."
           />
           <div className="mt-[2.618rem] grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FILMS.map((f, i) => (
               <Reveal key={f.src} delay={i * 0.06}>
-                <figure>
-                  <video
-                    src={f.src}
-                    poster={f.poster}
-                    controls
-                    playsInline
-                    preload="none"
-                    className="w-full border border-line bg-ink"
-                  />
+                <figure className="group">
+                  <div
+                    className={`overflow-hidden border border-line bg-ink ${
+                      f.portrait ? "aspect-[9/16]" : "aspect-video"
+                    }`}
+                  >
+                    <video
+                      src={f.src}
+                      poster={f.poster}
+                      controls
+                      playsInline
+                      preload="none"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                   <figcaption className="mt-2">
                     <span className="bangla-display block text-[1.05rem] text-ink">
                       {f.bangla}
                     </span>
                     <span className="block text-[0.7rem] uppercase tracking-[0.18em] text-ink-faint">
                       {f.title}
+                    </span>
+                    <span className="mt-1.5 block text-[0.76rem] leading-relaxed text-ink-soft">
+                      {f.note}
                     </span>
                   </figcaption>
                 </figure>

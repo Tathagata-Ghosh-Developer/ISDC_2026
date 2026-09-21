@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Desk from "./Desk";
+import DhunuchiCursor from "./DhunuchiCursor";
 import Wireless from "./Wireless";
 import type { AmbienceLayer, Collection } from "@/lib/content/music";
 
@@ -22,7 +23,9 @@ export default function ListeningRoom({
   const [songPlaying, setSongPlaying] = useState(false);
 
   return (
-    <>
+    <div className="dhunuchi-zone">
+      <DhunuchiCursor />
+
       <div id="wireless">
         <Wireless collections={collections} onPlayingChange={setSongPlaying} />
       </div>
@@ -36,7 +39,7 @@ export default function ListeningRoom({
             </p>
           </div>
           <p className="max-w-[52ch] text-[0.78rem] leading-relaxed text-ink-faint">
-            Underneath the songs, the room itself. Twelve recordings on twelve
+            Underneath the songs, the room itself. Eleven recordings on eleven
             faders. Nothing plays until you press the disc.
           </p>
         </div>
@@ -48,6 +51,6 @@ export default function ListeningRoom({
           ducked={songPlaying}
         />
       </div>
-    </>
+    </div>
   );
 }

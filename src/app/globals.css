@@ -547,3 +547,101 @@ body::before {
     border-radius: 50% 50% 0.5rem 0.5rem / 30% 30% 0.5rem 0.5rem;
   }
 }
+
+/* ================================================================
+   The backdrop on the listening page
+
+   Rain is drawn as two repeating gradients moving at different
+   speeds, because real rain has no single speed. Grain is one small
+   SVG turbulence tile repeated, which costs nothing and stops the
+   photographs looking like stock.
+   ================================================================ */
+
+.chalchitra-rain {
+  background-image:
+    repeating-linear-gradient(
+      101deg,
+      transparent 0 6px,
+      rgba(226, 238, 248, 0.5) 6px 7px,
+      transparent 7px 14px
+    ),
+    repeating-linear-gradient(
+      97deg,
+      transparent 0 11px,
+      rgba(226, 238, 248, 0.28) 11px 12px,
+      transparent 12px 23px
+    );
+  background-size:
+    120px 240px,
+    180px 340px;
+  animation:
+    chalchitra-rain-a 0.55s linear infinite,
+    chalchitra-rain-b 0.95s linear infinite;
+}
+
+@keyframes chalchitra-rain-a {
+  to {
+    background-position-y: 240px, 0;
+  }
+}
+
+@keyframes chalchitra-rain-b {
+  to {
+    background-position-y: 0, 340px;
+  }
+}
+
+.chalchitra-grain {
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter>\
+<rect width='120' height='120' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 120px 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chalchitra-rain {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   The dhunuchi cursor
+
+   On the listening page the pointer carries a censer, and the smoke
+   follows a beat behind it. It is only ever applied where there is a
+   fine pointer, because a thumb has no cursor and a trail that chases
+   a touch is nausea rather than atmosphere.
+   ================================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  .dhunuchi-zone,
+  .dhunuchi-zone * {
+    cursor: url("/media/brand/dhunuchi-cursor.png") 12 6, crosshair;
+  }
+}
+
+.dhunuchi-smoke {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle,
+    rgba(238, 226, 205, 0.55) 0%,
+    rgba(214, 196, 166, 0.28) 45%,
+    transparent 72%
+  );
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dhunuchi-smoke {
+    display: none;
+  }
+}

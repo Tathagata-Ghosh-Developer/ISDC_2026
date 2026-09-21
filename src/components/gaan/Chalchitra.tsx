@@ -1,27 +1,170 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import type { Mix } from "@/lib/content/desk";
 
 /* ================================================================
-   চালচিত্র, the painted arch behind the idol, used here as the meter.
+   চালচিত্র, the painted arch behind the idol.
 
-   Flat fields, hard edges, mis-registered plates. Light is posterised
-   rather than glowed, because a glow is a photograph and this page is
-   a print. Everything responds to what is actually playing, but it
-   responds in steps and bar graphs, never in blurs.
+   This used to be drawn: flat fields, hard edges, a print rather than
+   a photograph. It was a decent piece of illustration and it was the
+   wrong thing on this page, because everything else here is real. The
+   recordings are real, the songs are the artists' own uploads, and the
+   ground in these photographs is the ground the committee will stand
+   on this October.
 
-   Runs at 30fps, not 60. This is ambience; halving the rate halves the
-   battery cost and nothing about it looks worse.
+   So the backdrop is now the photographs, and the faders choose which
+   one you are looking at. Push the dhak up and the crowd arrives. Push
+   the arati up and it is the evening lamp. Push the river up and she
+   is already on the road out of the campus. The slider from city to
+   village moves the whole set with it.
+
+   Nothing here is decorative in the sense of being arbitrary. Every
+   frame is last year, on this ground, and the caption says which
+   moment it was.
    ================================================================ */
 
 type Shot = { id: string; at: number };
 
-const INK = "#16120F";
-const PAPER = "#EFE3CC";
-const ALTA = "#C8202A";
-const HOLUD = "#E8A020";
-const NIL = "#1B4B6B";
+type Scene = {
+  id: string;
+  src: string;
+  alt: string;
+  bangla: string;
+  caption: string;
+  /** Faders that pull this frame forward, and how hard. */
+  pull: Partial<Record<string, number>>;
+  /** Where it sits on the city to village line, 0 city, 100 village. */
+  place: number;
+  /** Treated as an old plate rather than a photograph. */
+  plate?: boolean;
+};
+
+/**
+ * Ordered roughly as an evening runs, which is also the order the
+ * faders sit in on the desk.
+ */
+const SCENES: Scene[] = [
+  {
+    id: "pandal-wide",
+    src: "/media/puja2025/08.jpg",
+    alt: "The pandal from the floor, the full pratima under her arch",
+    bangla: "মণ্ডপ",
+    caption: "The whole of her, from the floor of the pandal",
+    pull: { adda: 1, mandir_ghanta: 0.5 },
+    place: 20,
+  },
+  {
+    id: "pratima",
+    src: "/media/puja2025/16.jpg",
+    alt: "The pratima with the white sholapith arch behind her",
+    bangla: "প্রতিমা",
+    caption: "Sholar saj, cut from pith and set against the blue",
+    pull: { mantra_path: 1, shankha: 0.8 },
+    place: 35,
+  },
+  {
+    id: "mukh",
+    src: "/media/puja2025/38.jpg",
+    alt: "The goddess's face, close, under the pith crown",
+    bangla: "মুখ",
+    caption: "The eyes, painted last, at dawn, by the oldest hand in the workshop",
+    pull: { drone: 1, mantra_path: 0.6 },
+    place: 45,
+  },
+  {
+    id: "arati",
+    src: "/media/puja2025/12.jpg",
+    alt: "Evening arati in front of the idol, the lamp lit",
+    bangla: "সন্ধ্যারতি",
+    caption: "Sandhya arati, the hour the pandal starts to fill",
+    pull: { sandhya_arati: 1.6, kanshor_ghanta: 0.7, mandir_ghanta: 0.5 },
+    place: 30,
+  },
+  {
+    id: "homa",
+    src: "/media/puja2025/10.jpg",
+    alt: "The fire lit for the homa in front of the idol",
+    bangla: "হোম",
+    caption: "The homa fire, which is the one part nobody photographs well",
+    pull: { mantra_path: 1.4, drone: 0.5 },
+    place: 55,
+  },
+  {
+    id: "dhunuchi",
+    src: "/media/video/dhunuchi-smoke.jpg",
+    alt: "Dhunuchi smoke rising through a crowd",
+    bangla: "ধুনুচি",
+    caption: "Coconut husk and camphor, carried into the middle of the crowd",
+    pull: { dhak: 1.3, kanshor_ghanta: 1 },
+    place: 25,
+  },
+  {
+    id: "bhir",
+    src: "/media/video/pandal-evening.jpg",
+    alt: "The ground full, an evening under the lights",
+    bangla: "ভিড়",
+    caption: "Navami night, when nobody is watching anything in particular",
+    pull: { adda: 1.6, dhak: 0.8 },
+    place: 10,
+  },
+  {
+    id: "sindoor",
+    src: "/media/video/sindoor-khela.jpg",
+    alt: "Sindoor khela on Dashami morning",
+    bangla: "সিঁদুর খেলা",
+    caption: "Dashami morning, vermilion, and then she goes",
+    pull: { shankha: 1.5, kanshor_ghanta: 0.6 },
+    place: 40,
+  },
+  {
+    id: "path",
+    src: "/media/video/bisarjan-road.jpg",
+    alt: "The procession out on the road with the dhak",
+    bangla: "পথে",
+    caption: "Out of the gate, where the campus stops and Bengaluru starts",
+    pull: { dhak: 1, gangar_dhara: 0.9 },
+    place: 70,
+  },
+  {
+    id: "gachh",
+    src: "/media/puja2025/37.jpg",
+    alt: "The idol carried out under the trees of the campus",
+    bangla: "গাছের নিচে",
+    caption: "Under the rain trees, on the way to the water",
+    pull: { jhijhi_poka: 1.2, brishti: 0.8, gangar_dhara: 0.8 },
+    place: 85,
+  },
+  {
+    id: "nodi",
+    src: "/media/art/company-school-durbar.jpg",
+    alt: "A nineteenth-century painting of a Durga Puja by the river",
+    bangla: "নদীর ধারে",
+    caption: "A Company school painting, when the Puja was a courtyard and a river",
+    pull: { gangar_dhara: 1.6, jhijhi_poka: 0.6 },
+    place: 100,
+    plate: true,
+  },
+  {
+    id: "raat",
+    src: "/media/art/old-kolkata-puja-night.jpg",
+    alt: "A nineteenth-century Puja at night in Calcutta",
+    bangla: "কলকাতার রাত",
+    caption: "Calcutta at night, a hundred and fifty years ago, and much the same noise",
+    pull: { drone: 1, adda: 0.5 },
+    place: 60,
+    plate: true,
+  },
+];
+
+/** Layers whose level should wash the whole frame rather than pick one. */
+const WASH = {
+  brishti: "rain",
+  jhijhi_poka: "dusk",
+  drone: "vignette",
+} as const;
 
 export default function Chalchitra({
   mix,
@@ -35,324 +178,193 @@ export default function Chalchitra({
   playing: boolean;
   shots: Shot[];
 }) {
-  const [t, setT] = useState(0);
-  const [slip, setSlip] = useState(1.5);
   const host = useRef<HTMLDivElement>(null);
-  const visible = useRef(true);
+  const [flash, setFlash] = useState(0);
+  const [reduced, setReduced] = useState(false);
 
-  /* ---- a slow clock, paused when off screen or hidden ---- */
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const el = host.current;
-    const io = el
-      ? new IntersectionObserver(([e]) => (visible.current = e.isIntersecting), {
-          threshold: 0.02,
-        })
-      : null;
-    if (el && io) io.observe(el);
-
-    let raf = 0;
-    let last = 0;
-    const loop = (now: number) => {
-      raf = requestAnimationFrame(loop);
-      if (now - last < 33) return;
-      last = now;
-      if (document.hidden || !visible.current) return;
-      setT(now / 1000);
-    };
-    raf = requestAnimationFrame(loop);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      io?.disconnect();
-    };
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
-  /* ---- a bell rings and the press slips ---- */
+  /* ---- a conch or a bell lands, and the frame takes the light ---- */
+  const lastShot = shots.length ? shots[shots.length - 1].at : 0;
   useEffect(() => {
-    const bell = shots.find(
-      (s) => s.id === "kanshor_ghanta" || s.id === "mandir_ghanta",
-    );
-    if (!bell) return;
-    setSlip(3);
-    const id = setTimeout(() => setSlip(1.5), 120);
-    return () => clearTimeout(id);
-  }, [shots]);
+    if (!lastShot) return;
+    setFlash((n) => n + 1);
+  }, [lastShot]);
 
-  const v = (id: string) => (mix[id] ?? 0) / 100;
+  /* ---- which photograph is on ---- */
+  const scene = useMemo(() => {
+    let best = SCENES[0];
+    let bestScore = -Infinity;
+    for (const s of SCENES) {
+      let score = 0;
+      for (const [layer, weight] of Object.entries(s.pull)) {
+        score += ((mix[layer] ?? 0) / 100) * (weight ?? 1);
+      }
+      // The city to village slider tips the whole set. A frame at the
+      // far end of the line gains most when the slider is there too.
+      score += 0.55 * (1 - Math.abs(s.place - city) / 100);
+      if (score > bestScore) {
+        bestScore = score;
+        best = s;
+      }
+    }
+    return best;
+  }, [mix, city]);
 
-  const dhak = v("dhak");
-  const adda = v("adda");
-  const rain = v("brishti");
-  const arati = v("sandhya_arati");
-  const ganga = v("gangar_dhara");
-  const drone = Math.max(v("tanpura_drone"), v("mantra_path"));
-
-  const beat = playing ? 1 + dhak * 0.035 * (0.5 + 0.5 * Math.sin(t * 4.4)) : 1;
-  const figures = Math.round(adda * 24);
-  const rainLines = Math.round(rain * 26);
-  const villageWipe = city;
-
-  const conch = shots.find((s) => s.id === "shankha");
-  const ulu = shots.find((s) => s.id === "ulu_dhwani");
+  /* ---- the washes, as plain numbers ---- */
+  const rain = (mix.brishti ?? 0) / 100;
+  const dusk = (mix.jhijhi_poka ?? 0) / 100;
+  const vignette = (mix.drone ?? 0) / 100;
+  const loud =
+    (((mix.dhak ?? 0) + (mix.kanshor_ghanta ?? 0) + (mix.adda ?? 0)) / 300) *
+    (playing ? 1 : 0.35);
 
   return (
-    <div ref={host} className="relative w-full overflow-hidden" style={{ background: INK }}>
-      <svg
-        viewBox="0 0 400 240"
-        className="block w-full"
-        role="img"
-        aria-label="A painted arch that responds to the sounds playing"
-      >
-        <defs>
-          <clipPath id="archClip">
-            <path d="M40,230 L40,120 Q40,36 200,36 Q360,36 360,120 L360,230 Z" />
-          </clipPath>
-          <clipPath id="villageClip">
-            <rect x="0" y="0" width={(villageWipe / 100) * 400} height="240" />
-          </clipPath>
-        </defs>
-
-        {/* ---- the scarlet plate, mis-registered ---- */}
-        <g transform={`translate(${slip} ${slip * 0.6})`} opacity="0.92">
-          <path
-            d="M40,230 L40,120 Q40,36 200,36 Q360,36 360,120 L360,230 Z"
-            fill={ALTA}
-          />
-        </g>
-
-        {/* ---- the black plate ---- */}
-        <path
-          d="M46,230 L46,122 Q46,44 200,44 Q354,44 354,122 L354,230 Z"
-          fill={INK}
-        />
-
-        <g clipPath="url(#archClip)">
-          {/* ---- the city behind ---- */}
-          <g>
-            {[70, 120, 170, 220, 270, 320].map((x, i) => (
-              <rect
-                key={x}
-                x={x - 16}
-                y={128 - (i % 3) * 14}
-                width="32"
-                height={110 + (i % 3) * 14}
-                fill={NIL}
-                opacity={0.5}
-              />
-            ))}
-            {/* a pandal façade, three finials */}
-            <path
-              d="M150,150 L200,96 L250,150 Z"
-              fill={HOLUD}
-              opacity="0.65"
-            />
-            <rect x="182" y="150" width="36" height="80" fill={HOLUD} opacity="0.5" />
-          </g>
-
-          {/* ---- the village, wiped in from the left ---- */}
-          <g clipPath="url(#villageClip)">
-            <rect x="0" y="0" width="400" height="240" fill={INK} />
-            <rect x="0" y="176" width="400" height="54" fill={NIL} opacity="0.75" />
-            {/* a boat */}
-            <path d="M120,186 L190,186 L182,198 L128,198 Z" fill={PAPER} opacity="0.8" />
-            <path d="M155,186 L155,150 L180,178 Z" fill={PAPER} opacity="0.62" />
-            {/* palms, flat */}
-            {[60, 300, 340].map((x) => (
-              <g key={x}>
-                <rect x={x} y="132" width="3" height="48" fill={PAPER} opacity="0.5" />
-                <path
-                  d={`M${x + 1.5},132 q-22,-10 -28,4 q18,-6 28,2 q10,-12 28,-6 q-8,-14 -28,0 Z`}
-                  fill={PAPER}
-                  opacity="0.45"
-                />
-              </g>
-            ))}
-          </g>
-
-          {/* the wipe edge travels as a keyline, a slide changeover */}
-          {villageWipe > 1 && villageWipe < 99 && (
-            <rect
-              x={(villageWipe / 100) * 400 - 1}
-              y="0"
-              width="2"
-              height="240"
-              fill={INK}
-            />
-          )}
-
-          {/* ---- the petal ring, scaled by the dhak ---- */}
-          <g
-            style={{
-              transform: `scale(${beat})`,
-              transformOrigin: "200px 230px",
+    <div
+      ref={host}
+      className="relative aspect-[16/9] w-full select-none overflow-hidden border border-line bg-ink"
+    >
+      {/* ---------- the photograph ---------- */}
+      <AnimatePresence mode="sync">
+        <motion.div
+          key={scene.id}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
+        >
+          <motion.div
+            className="absolute inset-[-3%]"
+            animate={
+              reduced
+                ? {}
+                : {
+                    scale: playing ? [1, 1.045, 1] : 1,
+                    x: [0, -6, 0],
+                  }
+            }
+            transition={{
+              duration: 26,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
           >
-            {Array.from({ length: 22 }).map((_, i) => {
-              const a = (Math.PI * i) / 21 + Math.PI;
-              const r = 152;
-              return (
-                <ellipse
-                  key={i}
-                  cx={200 + r * Math.cos(a)}
-                  cy={230 + r * Math.sin(a)}
-                  rx="7"
-                  ry="13"
-                  fill={HOLUD}
-                  opacity={0.5 + dhak * 0.45}
-                  transform={`rotate(${(a * 180) / Math.PI + 90} ${200 + r * Math.cos(a)} ${230 + r * Math.sin(a)})`}
-                />
-              );
-            })}
-          </g>
-
-          {/* ---- ten alpona dots as a bar graph ---- */}
-          {Array.from({ length: 10 }).map((_, i) => {
-            const lit = playing && i < Math.round(dhak * 10);
-            return (
-              <circle
-                key={i}
-                cx={128 + i * 16}
-                cy="66"
-                r="3.4"
-                fill={lit ? HOLUD : PAPER}
-                opacity={lit ? 1 : 0.16}
-              />
-            );
-          })}
-
-          {/* ---- the diya, posterised ---- */}
-          {arati > 0.02 && (
-            <g>
-              {[3, 2, 1].map((ring) => (
-                <circle
-                  key={ring}
-                  cx="200"
-                  cy="128"
-                  r={10 + arati * 26 * ring}
-                  fill={HOLUD}
-                  opacity={ring === 3 ? 0.18 : ring === 2 ? 0.35 : 0.6}
-                />
-              ))}
-              <circle cx="200" cy="128" r={5 + arati * 12} fill={HOLUD} />
-            </g>
-          )}
-
-          {/* ---- the sruti hairline ---- */}
-          {drone > 0.02 && (
-            <rect
-              x="46"
-              y={112 + Math.sin(t / 6.4) * 3}
-              width="308"
-              height="1"
-              fill={HOLUD}
-              opacity={0.3 + drone * 0.5}
-            />
-          )}
-
-          {/* ---- the river band ---- */}
-          {ganga > 0.02 && (
-            <g>
-              <rect x="0" y="196" width="400" height="34" fill={NIL} opacity={0.4 + ganga * 0.5} />
-              {[0, 1, 2].map((i) => (
-                <path
-                  key={i}
-                  d={`M-40,${204 + i * 8} q 20,-4 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0 t 40,0`}
-                  fill="none"
-                  stroke={INK}
-                  strokeWidth="1.25"
-                  opacity="0.7"
-                  transform={`translate(${(-(t * (8 + i * 3)) % 80)} 0)`}
-                />
-              ))}
-            </g>
-          )}
-
-          {/* ---- rain, drawn with a ruler ---- */}
-          {rainLines > 0 &&
-            Array.from({ length: rainLines }).map((_, i) => {
-              const x = ((i * 53) % 400) + ((t * 130) % 40);
-              const y = ((i * 91 + t * 260) % 260) - 20;
-              return (
-                <line
-                  key={i}
-                  x1={x}
-                  y1={y}
-                  x2={x - 5}
-                  y2={y + 22}
-                  stroke={PAPER}
-                  strokeWidth="1"
-                  opacity="0.22"
-                />
-              );
-            })}
-
-          {/* ---- the crowd along the base ---- */}
-          {figures > 0 &&
-            Array.from({ length: figures }).map((_, i) => {
-              const x = 46 + (i * 308) / Math.max(1, figures);
-              const bob = Math.sin(t * 1.6 + i * 2.39) * 0.5;
-              return (
-                <g key={i} transform={`translate(${x} ${bob})`}>
-                  <circle cx="0" cy="204" r="4" fill={INK} />
-                  <path d="M-4.5,210 L4.5,210 L6,230 L-6,230 Z" fill={INK} />
-                </g>
-              );
-            })}
-
-          {/* ---- one-shots ---- */}
-          {conch && (
-            <circle
-              cx="330"
-              cy="150"
-              r="14"
-              fill="none"
-              stroke={PAPER}
-              strokeWidth="2"
-              opacity="0.8"
+            <Image
+              src={scene.src}
+              alt={scene.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 900px"
+              priority={false}
+              className={`object-cover ${scene.plate ? "sepia-plate" : ""}`}
               style={{
-                animation: "shot-ring 700ms steps(5) 1",
-                transformOrigin: "330px 150px",
+                filter: `saturate(${1 - rain * 0.45}) contrast(${1 + loud * 0.18}) brightness(${
+                  0.86 + (playing ? 0.14 : 0) - dusk * 0.18
+                })`,
               }}
             />
-          )}
-          {ulu &&
-            Array.from({ length: 7 }).map((_, i) => (
-              <rect
-                key={i}
-                x={120 + i * 28}
-                y="74"
-                width="2.5"
-                height="16"
-                fill={HOLUD}
-                opacity="0.85"
-                style={{ animation: `shot-flick 630ms steps(2) ${i * 90}ms 1` }}
-              />
-            ))}
-        </g>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
 
-        {/* the arch keyline, on top of everything */}
+      {/* ---------- dusk, when the crickets come up ---------- */}
+      <div
+        className="pointer-events-none absolute inset-0 mix-blend-multiply transition-opacity duration-1000"
+        style={{
+          opacity: dusk * 0.75,
+          background:
+            "linear-gradient(to top, #1b2f4b 0%, #24406080 45%, transparent 100%)",
+        }}
+      />
+
+      {/* ---------- rain ---------- */}
+      {rain > 0.02 && !reduced && (
+        <div
+          className="pointer-events-none absolute inset-0 chalchitra-rain"
+          style={{ opacity: Math.min(0.55, rain * 0.8) }}
+        />
+      )}
+
+      {/* ---------- the conch, as light ---------- */}
+      <AnimatePresence>
+        <motion.div
+          key={flash}
+          initial={{ opacity: 0.42 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="pointer-events-none absolute inset-0 bg-[#f5e2b0] mix-blend-screen"
+        />
+      </AnimatePresence>
+
+      {/* ---------- vignette, tied to the drone ---------- */}
+      <div
+        className="pointer-events-none absolute inset-0 transition-opacity duration-1000"
+        style={{
+          opacity: 0.35 + vignette * 0.5,
+          background:
+            "radial-gradient(ellipse at 50% 42%, transparent 35%, rgba(12,9,6,0.85) 100%)",
+        }}
+      />
+
+      {/* ---------- the grain, always ---------- */}
+      <div className="pointer-events-none absolute inset-0 chalchitra-grain opacity-[0.16] mix-blend-overlay" />
+
+      {/* ---------- the level, drawn as the arch ---------- */}
+      <svg
+        viewBox="0 0 100 56"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] w-full"
+        aria-hidden="true"
+      >
         <path
-          d="M46,230 L46,122 Q46,44 200,44 Q354,44 354,122 L354,230"
-          fill="none"
-          stroke={PAPER}
-          strokeWidth="1.25"
-          opacity="0.5"
+          d={`M0 56 L0 ${44 - loud * 14} Q 50 ${20 - loud * 16} 100 ${44 - loud * 14} L100 56 Z`}
+          fill="rgba(200,32,42,0.16)"
         />
       </svg>
 
-      <style>{`
-        @keyframes shot-ring {
-          from { transform: scale(0.4); opacity: 0.9; }
-          to   { transform: scale(5); opacity: 0; }
-        }
-        @keyframes shot-flick {
-          0%, 100% { opacity: 0; }
-          50% { opacity: 0.9; }
-        }
-      `}</style>
+      {/* ---------- the caption ---------- */}
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 via-ink/50 to-transparent px-5 pb-4 pt-12">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={scene.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="bangla-display block text-[1.15rem] leading-tight text-paper-3">
+              {scene.bangla}
+            </span>
+            <span className="mt-0.5 block text-[0.72rem] leading-relaxed text-paper-3/75">
+              {scene.caption}
+            </span>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ---------- what the faders are doing to the picture ---------- */}
+      <div className="absolute right-4 top-4 flex flex-col items-end gap-1.5">
+        <span className="text-[0.52rem] uppercase tracking-[0.22em] text-paper-3/55">
+          {playing ? "the room is on" : "silent"}
+        </span>
+        <div className="flex gap-1">
+          {Object.keys(WASH).map((id) => (
+            <span
+              key={id}
+              className="h-1 w-6 bg-paper-3/25"
+              aria-hidden="true"
+            >
+              <span
+                className="block h-full bg-gold transition-all duration-500"
+                style={{ width: `${mix[id] ?? 0}%` }}
+              />
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

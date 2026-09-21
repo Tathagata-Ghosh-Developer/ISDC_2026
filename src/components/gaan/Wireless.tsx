@@ -48,7 +48,8 @@ const SLOTS: { from: number; to: number; shelf: string; label: string; bangla: s
     { from: 6, to: 11, shelf: "agomoni-bijoya", label: "Morning", bangla: "সকাল" },
     { from: 11, to: 16, shelf: "village", label: "Afternoon by the river", bangla: "দুপুর" },
     { from: 16, to: 20, shelf: "city", label: "Evening in the city", bangla: "সন্ধ্যা" },
-    { from: 20, to: 23.5, shelf: "funny", label: "Adda hours", bangla: "আড্ডার সময়" },
+    { from: 20, to: 22.5, shelf: "funny", label: "Adda hours", bangla: "আড্ডার সময়" },
+    { from: 22.5, to: 23.99, shelf: "adhunik", label: "Late, and quieter", bangla: "রাতের গান" },
   ];
 
 function slotNow() {
@@ -57,7 +58,7 @@ function slotNow() {
     SLOTS.find((s) => h >= s.from && h < s.to) ?? {
       from: 23.5,
       to: 3.5,
-      shelf: "village",
+      shelf: "adhunik",
       label: "Late night",
       bangla: "গভীর রাত",
     }
