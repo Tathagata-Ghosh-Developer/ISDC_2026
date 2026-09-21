@@ -645,3 +645,34 @@ body::before {
     display: none;
   }
 }
+
+/* ================================================================
+   The art form cards
+
+   The shadow is warm, not grey. A neutral shadow over a paper
+   coloured page reads as dirt rather than depth, which is a thing
+   that shows up only once the page is printed on real paper and the
+   comparison becomes unavoidable.
+   ================================================================ */
+
+.art-card {
+  transition:
+    transform 700ms var(--ease-silk),
+    filter 700ms var(--ease-silk);
+  filter: drop-shadow(0 1px 1px rgb(72 44 20 / 0.06))
+    drop-shadow(0 6px 14px rgb(72 44 20 / 0.07));
+}
+
+.art-card:hover {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 2px 3px rgb(72 44 20 / 0.09))
+    drop-shadow(0 18px 34px rgb(72 44 20 / 0.14));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-card,
+  .art-card:hover {
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
+import { ART_FORMS } from "@/lib/content/artforms";
 
 const PAGES = [
   { path: "/", priority: 1 },
@@ -20,10 +21,24 @@ const PAGES = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  return PAGES.map((p) => ({
-    url: `${SITE.url}${p.path}`,
+
+  // One page per art form. They change rarely and are the pages most
+  // likely to be found by somebody searching for the craft rather
+  // than for the festival, which is the point of writing them.
+  const arts = ART_FORMS.map((a) => ({
+    url: `${SITE.url}/shilpa/${a.id}`,
     lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: p.priority,
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
   }));
+
+  return [
+    ...PAGES.map((p) => ({
+      url: `${SITE.url}${p.path}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: p.priority,
+    })),
+    ...arts,
+  ];
 }

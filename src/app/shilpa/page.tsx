@@ -3,6 +3,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ArtGrid from "@/components/ArtGrid";
 import { ART_FORMS, ART_CATEGORIES } from "@/lib/content/artforms";
+import { CARD_IMAGE, hasDetail } from "@/lib/content/artform-detail";
 
 export const metadata: Metadata = {
   title: "Shilpa",
@@ -40,7 +41,14 @@ export default function ShilpaPage() {
 
       <Section className="!pt-0">
         <Container>
-          <ArtGrid arts={ART_FORMS} categories={[...ART_CATEGORIES]} />
+          <ArtGrid
+            arts={ART_FORMS}
+            categories={[...ART_CATEGORIES]}
+            images={CARD_IMAGE}
+            detailed={Object.fromEntries(
+              ART_FORMS.map((a) => [a.id, hasDetail(a.id)]),
+            )}
+          />
         </Container>
       </Section>
 
