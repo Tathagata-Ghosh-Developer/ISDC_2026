@@ -19,6 +19,7 @@ export default function ShilpaPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="শিল্প Art forms"
             title="The festival is a commission"
             bangla="বাংলার শিল্পের মরশুম"

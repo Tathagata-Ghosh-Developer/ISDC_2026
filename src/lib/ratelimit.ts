@@ -37,9 +37,13 @@ export function rateLimit(
   }
 
   bucket.hits = bucket.hits.filter((t) => now - t < windowMs);
-  bucket.hits.push(now);
 
-  if (bucket.hits.length > max) {
+  // Test before counting. The old order pushed first, so a request
+  // that was refused still went into the window, and anybody who did
+  // what the error message told them and tried again a minute later
+  // renewed their own lockout for ever. Only requests that are let
+  // through are counted.
+  if (bucket.hits.length >= max) {
     if (blockMs > 0) bucket.blockedUntil = now + blockMs;
     buckets.set(key, bucket);
     return {
@@ -48,6 +52,7 @@ export function rateLimit(
     };
   }
 
+  bucket.hits.push(now);
   buckets.set(key, bucket);
   return { ok: true, retryAfter: 0 };
 }

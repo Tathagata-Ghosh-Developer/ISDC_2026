@@ -220,6 +220,7 @@ export default function ItihashPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="ইতিহাস History"
             title="Fifteen centuries, and the parts that got lost"
             bangla="হারিয়ে যাওয়া ইতিহাস"

@@ -180,6 +180,7 @@ export default async function MahalayaPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="মহালয়া Mahalaya"
             title="Four in the morning, and the radio is already on"
             bangla="আশ্বিনের শারদপ্রাতে"

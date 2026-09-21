@@ -140,6 +140,7 @@ export default function SponsorshipProposalPage() {
           </Link>
 
           <SectionHeading
+            as="h1"
             eyebrow="প্রস্তাব The proposal"
             title="What we are asking for, and what you get for it"
             bangla="স্পষ্ট কথা"

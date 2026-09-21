@@ -17,7 +17,11 @@ export const metadata: Metadata = {
     "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account, no payment gateway, no fees, and every rupee listed publicly.",
 };
 
-export const revalidate = 120;
+// Never prerendered. This page's most important line depends on
+// whether the database answers right now, and a build-time copy of it
+// is wrong in both directions: missing the warning when the ledger is
+// off, and still showing it after the ledger comes back on.
+export const dynamic = "force-dynamic";
 
 export default async function DonatePage() {
   const config = await getConfig();
@@ -53,6 +57,7 @@ export default async function DonatePage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="দান Donate"
             title="Every rupee, on the record"
             bangla="স্বচ্ছ হিসেব, প্রকাশ্য খাতা"

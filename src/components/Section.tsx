@@ -26,20 +26,23 @@ export function SectionHeading({
   bangla,
   lede,
   align = "left",
+  as: Tag = "h2",
 }: {
   eyebrow?: string;
   title: string;
   bangla?: string;
   lede?: string;
   align?: "left" | "center";
+  /** The first heading on a page should be an h1; the rest are h2. */
+  as?: "h1" | "h2";
 }) {
   const centred = align === "center";
   return (
     <Reveal className={centred ? "text-center" : ""}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.08] tracking-tight text-ink sm:text-[2.618rem] lg:text-[3.33rem]">
+      <Tag className="font-display mt-3 text-[2.058rem] font-normal leading-[1.08] tracking-tight text-ink sm:text-[2.618rem] lg:text-[3.33rem]">
         {title}
-      </h2>
+      </Tag>
       {bangla && (
         <p className="bangla-display mt-3 text-[1.618rem] text-sindoor sm:text-[2.058rem]">
           {bangla}

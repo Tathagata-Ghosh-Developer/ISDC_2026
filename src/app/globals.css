@@ -98,7 +98,9 @@
   --c-sindoor: #c0271a;
   --c-alta: #7e1a12;
   --c-haldi: #c9871f;
-  --c-gold: #a8842f;
+  /* 4.86:1 on --c-paper. The old #a8842f was 2.85 and this is the
+     colour of every eyebrow on the site, set at about twelve pixels. */
+  --c-gold: #7d5f1a;
   --c-indigo: #1e3a5f;
   --c-terracotta: #a9613c;
   --c-leaf: #4f6b4a;

@@ -23,6 +23,7 @@ export default async function JogdanPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="যোগদান Join us"
             title="A Puja was never one person's work"
             bangla="পুজো হয় সবার মিলিত প্রার্থনায়"

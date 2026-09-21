@@ -27,6 +27,7 @@ export default async function SponsorsPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="পৃষ্ঠপোষকতা Sponsorship"
             title="Five days, one campus, and an audience nobody else reaches"
             bangla="আমাদের সঙ্গে থাকুন"

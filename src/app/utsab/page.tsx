@@ -22,6 +22,7 @@ export default async function UtsabPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="উৎসব The days"
             title="Four days, and the two that frame them"
             bangla="বোধন থেকে বিসর্জন"

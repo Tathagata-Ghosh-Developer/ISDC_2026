@@ -142,6 +142,7 @@ export default function GalleryPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="ছবি Gallery"
             title="Five days, kept"
             bangla="স্মৃতির অ্যালবাম"

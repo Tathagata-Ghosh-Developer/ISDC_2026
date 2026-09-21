@@ -57,6 +57,7 @@ export default function GaanPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="গান Music"
             title="One tap, and the Pujo is on"
             bangla="এক গান, এক আড্ডা, এক শরৎ"

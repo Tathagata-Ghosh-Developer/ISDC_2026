@@ -46,6 +46,7 @@ export default async function ThikanaPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="ঠিকানা Finding us"
             title="The pandal stands on the TMC ground"
             bangla="টিএমসি মাঠ, এসবিআই-এর উল্টোদিকে"

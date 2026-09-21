@@ -26,6 +26,7 @@ export default async function BoardPage() {
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="দানপত্র The board"
             title="Everyone who gave"
             bangla="দাতাদের নাম"

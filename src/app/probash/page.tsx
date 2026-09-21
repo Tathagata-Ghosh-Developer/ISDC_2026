@@ -61,6 +61,7 @@ export default async function ProbashPage() {
       <Section className="!pt-[2.618rem]">
         <Container>
           <SectionHeading
+            as="h1"
             eyebrow="পড়ুন Read it"
             title="The back issues, open on the table"
             bangla="আগের সংখ্যা"
