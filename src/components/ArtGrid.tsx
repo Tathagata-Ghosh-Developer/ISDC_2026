@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Tilt } from "@/components/Depth";
 import type { ArtForm } from "@/lib/content/artforms";
 
 /* ================================================================
@@ -88,6 +89,7 @@ export default function ArtGrid({
                 transition={{ duration: 0.45, ease: EASE }}
                 className="art-card scroll-mt-32"
               >
+                <Tilt className="h-full" max={5}>
                 <Link
                   href={`/shilpa/${a.id}`}
                   className="group flex h-full flex-col overflow-hidden border border-line bg-paper transition-colors duration-500 hover:border-gold"
@@ -143,6 +145,7 @@ export default function ArtGrid({
                     </span>
                   </div>
                 </Link>
+                </Tilt>
               </motion.article>
             );
           })}

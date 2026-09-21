@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
+import { Parallax } from "@/components/Depth";
 import { FACTS, ERAS, factsByEra, type Era } from "@/lib/content/facts";
 import EraRail from "@/components/EraRail";
 
@@ -199,7 +200,7 @@ export default function ItihashPage() {
 
                   {block.image && (
                     <figure className="mt-8 hidden lg:block">
-                      <div className="relative aspect-[4/5] w-full overflow-hidden">
+                      <Parallax depth={26} className="relative aspect-[4/5] w-full overflow-hidden">
                         <Image
                           src={block.image.src}
                           alt={block.image.alt}
@@ -207,7 +208,7 @@ export default function ItihashPage() {
                           sizes="30vw"
                           className="sepia-plate object-cover"
                         />
-                      </div>
+                      </Parallax>
                       <figcaption className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink-faint">
                         {block.image.caption}
                       </figcaption>
