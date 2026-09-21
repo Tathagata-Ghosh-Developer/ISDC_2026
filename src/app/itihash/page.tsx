@@ -18,6 +18,12 @@ type EraBlock = {
   title: string;
   prose: string[];
   image?: { src: string; alt: string; caption: string };
+  /**
+   * A second, wider run of pictures under the prose. The one in the
+   * margin sets the era; these show what it actually looked like, and
+   * each caption says what the object is rather than decorating it.
+   */
+  plates?: { src: string; alt: string; caption: string; note?: string }[];
 };
 
 const BLOCKS: EraBlock[] = [
@@ -36,6 +42,20 @@ const BLOCKS: EraBlock[] = [
       alt: "An illuminated manuscript folio showing Durga slaying the buffalo demon",
       caption: "Mahishasuramardini in an illuminated manuscript folio",
     },
+    plates: [
+      {
+        src: "/media/art/durga-sandstone-rajasthan.jpg",
+        alt: "A sandstone relief of Durga killing the buffalo demon, Rajasthan",
+        caption: "Durga and the buffalo demon, sandstone, Rajasthan",
+        note: "Eight arms, a trident through the buffalo's flank, and the demon emerging from its neck. The composition is fixed centuries before Bengal takes it up, and every clay pratima on a Kolkata ground is still quoting it.",
+      },
+      {
+        src: "/media/art/durga-rock-relief.jpg",
+        alt: "A rock-cut relief of Mahishasuramardini, the goddess riding a lion into the buffalo demon's army",
+        caption: "Mahishasuramardini, rock-cut relief",
+        note: "Carved into living rock rather than assembled from clay. She is a battlefield here, not a household guest, and the lion is doing as much of the work as she is.",
+      },
+    ],
   },
   {
     era: "Medieval",
@@ -46,6 +66,19 @@ const BLOCKS: EraBlock[] = [
       "The story that explains why Bengal worships in autumn is a Bengali addition. In Krittibas Ojha's fifteenth-century Bengali Ramayana, Rama wakes the goddess out of season to ask for help against Ravana, akalbodhan, the untimely awakening. It is not in Valmiki's Sanskrit original. By the texts, Durga's proper season is spring, and Basanti Puja is the older rite. The exception swallowed the rule.",
       "The ritual manuals that make a four-day festival possible arrive in the same centuries, the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
       "Who held the first grand household Puja is genuinely contested. Raja Kangshanarayan of Taherpur around 1580 and Bhabananda Majumdar of Nadia are both named; the Sabarna Roy Choudhury family's Puja at Barisha, begun in 1610, has the strongest claim to unbroken continuity, and predates the city of Calcutta itself.",
+    ],
+    image: {
+      src: "/media/art/durga-painting-rajput.jpg",
+      alt: "A painting of Durga on her lion driving a spear into the buffalo demon",
+      caption: "Durga and Mahishasura, painted",
+    },
+    plates: [
+      {
+        src: "/media/art/durga-oleograph.jpg",
+        alt: "A printed lithograph of the whole family group under a painted arch",
+        caption: "The family group under a single arch, printed",
+        note: "This is the arrangement Bengal settles on and then argues about for four hundred years. One arch, one frame, the whole family in a single piece, with Ganesha and Kartikeya at her feet and the demon under the lion.",
+      },
     ],
   },
   {
@@ -64,6 +97,20 @@ const BLOCKS: EraBlock[] = [
       alt: "A Company-school watercolour of a household Puja with a nautch performance",
       caption: "A thakurdalan during Puja, Company school watercolour",
     },
+    plates: [
+      {
+        src: "/media/art/thakur-dalan-photograph.jpg",
+        alt: "A photograph of a household Puja in a thakur dalan, late nineteenth or early twentieth century",
+        caption: "A household Puja in its thakur dalan, late nineteenth or early twentieth century",
+        note: "A photograph rather than a painting, and the difference shows. Priests, family and servants stand where they stood, the ekchala fills the whole arch of the hall, and nobody is posing for posterity. This is what the paintings on either side of it were describing.",
+      },
+      {
+        src: "/media/art/durga-ivory-murshidabad.jpg",
+        alt: "A ten-armed Mahishasuramardini Durga carved in ivory, Murshidabad, late nineteenth century",
+        caption: "Ten-armed Mahishasuramardini, ivory, Murshidabad, late nineteenth century",
+        note: "Murshidabad's ivory carvers worked for the same patrons who were hiring the nautch troupes. A goddess made of clay for the courtyard, and the same goddess in ivory for the drawing room, at a scale that could be given as a gift.",
+      },
+    ],
   },
   {
     era: "Modern",
@@ -98,6 +145,14 @@ const BLOCKS: EraBlock[] = [
       alt: "The idol at a recent IISc Sharodiya Durgotsab",
       caption: "The goddess in daker saj, IISc campus",
     },
+    plates: [
+      {
+        src: "/media/art/ekchala-daker-saj.jpg",
+        alt: "An ek-chala pratima under an arch of beaten silver foil and coloured pith",
+        caption: "Ek-chala under daker saj, the ornament posted in from Germany",
+        note: "Daker saj is named for the post. The beaten foil arrived by mail from Germany in the nineteenth century and the name stuck to the technique long after the supply moved to Bengal. The arch is not decoration, it is the frame that makes the family one object.",
+      },
+    ],
   },
 ];
 
@@ -173,6 +228,36 @@ export default function ItihashPage() {
                       ))}
                     </div>
                   </Reveal>
+
+                  {block.plates && (
+                    <Stagger className="mt-[2.618rem] grid gap-5 sm:grid-cols-2">
+                      {block.plates.map((pl) => (
+                        <StaggerItem key={pl.src}>
+                          <figure className="group h-full">
+                            <div className="relative aspect-[4/5] w-full overflow-hidden border border-line bg-ink">
+                              <Image
+                                src={pl.src}
+                                alt={pl.alt}
+                                fill
+                                sizes="(max-width: 640px) 100vw, 40vw"
+                                className="sepia-plate object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                              />
+                            </div>
+                            <figcaption className="mt-2.5">
+                              <span className="block text-[0.68rem] uppercase tracking-[0.16em] text-gold">
+                                {pl.caption}
+                              </span>
+                              {pl.note && (
+                                <span className="mt-1.5 block text-[0.8rem] leading-relaxed text-ink-soft">
+                                  {pl.note}
+                                </span>
+                              )}
+                            </figcaption>
+                          </figure>
+                        </StaggerItem>
+                      ))}
+                    </Stagger>
+                  )}
 
                   <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2">
                     {facts.map((f) => (
