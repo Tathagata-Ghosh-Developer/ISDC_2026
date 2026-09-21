@@ -11,7 +11,22 @@ export const SITE = {
   taglineBangla: "গঙ্গা যেখানে মেশে জ্ঞানের নদীতে",
   description:
     "The Durga Puja of the Indian Institute of Science, Bengaluru. Four days of ritual, art and homecoming on a campus built for the pursuit of knowledge.",
-  url: "https://iisc-durgotsab.vercel.app",
+  /**
+   * The address, and the one place it is written down.
+   *
+   * The handle is iiscsharodiyadurgotsab everywhere: the Vercel
+   * project, the domain when one is bought, and the social accounts.
+   * It is long and it is unambiguous, which is the right trade for a
+   * name people will be told out loud at a pandal.
+   *
+   * NEXT_PUBLIC_SITE_URL overrides it, so moving to a real domain is
+   * an environment variable rather than a deploy of changed code.
+   */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ??
+    "https://iiscsharodiyadurgotsab.vercel.app",
+  /** The handle to claim, consistently, wherever it is available. */
+  handle: "iiscsharodiyadurgotsab",
   venue:
     "Tata Memorial Club (TMC) Ground, opposite the SBI branch, Indian Institute of Science, Bengaluru 560012",
   venueShort: "TMC Ground, opposite SBI",

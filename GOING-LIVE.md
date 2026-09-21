@@ -114,6 +114,13 @@ accident.
 In Vercel, import the GitHub repository. The root directory is `site`.
 Everything else it guesses is correct.
 
+**Name the Vercel project `iiscsharodiyadurgotsab`.** That gives you
+`iiscsharodiyadurgotsab.vercel.app` straight away, which is the address
+the site already expects and the one printed on anything you hand out.
+Claim the same handle on Instagram, YouTube and anywhere else it is
+free, so there is one name to say out loud at a pandal and no second
+guessing about spelling.
+
 Before the first deploy, add the environment variables. The full list
 with comments is in `.env.example`. The four that are not optional:
 
@@ -178,8 +185,13 @@ Two routes:
   administration to agree, which takes longer than a week, so start it
   now and use a free domain in the meantime.
 
+Whatever you buy, buy `iiscsharodiyadurgotsab` if the registrar has it.
+A long unambiguous name beats a short clever one for something people
+are told out loud in a crowd.
+
 Add the domain in Vercel, follow its DNS instructions, and set
-`NEXT_PUBLIC_SITE_URL` to match.
+`NEXT_PUBLIC_SITE_URL` to it, with no trailing slash. Nothing else in
+the code has to change; the address is read from that one variable.
 
 ---
 

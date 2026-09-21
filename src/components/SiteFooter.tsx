@@ -95,6 +95,22 @@ export default function SiteFooter() {
                   The committee
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/sponsors/proposal"
+                  className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
+                >
+                  Sponsorship proposal
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/thikana#write-to-us"
+                  className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
+                >
+                  Write to us
+                </Link>
+              </li>
             </ul>
           </nav>
 
@@ -139,8 +155,11 @@ export default function SiteFooter() {
             <Link href="/daan/board" className="hover:text-gold">
               Financial transparency
             </Link>
+            <Link href="/thikana#write-to-us" className="hover:text-gold">
+              Tell us what is wrong
+            </Link>
             <Link href="/admin" className="hover:text-gold">
-              Committee login
+              Sign in
             </Link>
           </p>
         </div>
