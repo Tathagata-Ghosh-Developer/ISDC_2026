@@ -67,7 +67,7 @@ export const ART_FORMS: ArtForm[] = [
     technique: "Fine deltaic clay from the Ganga bed, hand-modelled part by part over bamboo or wire armatures, sun-dried, kiln-fired and painted with natural pigments, never fully mould-cast, so each figure differs.",
     status: "Evolving",
     practitioner: "The Ghurni artisan cluster, Krishnanagar (Nadia), open studios; documented by the Rural Craft and Cultural Hubs (RCCH) Bengal programme",
-    didYouKnow: "The craft has just won a Geographical Indication as the Krishnagar Clay Doll, after decades in which the name was borrowed by mass-produced imitations. Over 300 people in Ghurni now work in clay.",
+    didYouKnow: "The Ghurni cooperative applied for a Geographical Indication in 2021 and the Registry approved it as the Krishnagar Clay Doll in July 2026, after decades in which the name was borrowed by mass-produced imitations. Over 300 people in Ghurni work in clay.",
   },
   {
     id: "daker-saj",
@@ -187,7 +187,7 @@ export const ART_FORMS: ArtForm[] = [
     technique: "Bamboo poles lashed with coir rope into a semi-rigid space frame, clad in cloth, plywood, jute, cane or whatever the theme demands; no nails in the primary structure.",
     status: "Thriving",
     practitioner: "The decorator firms of Medinipur and Nadia, family businesses, often four generations deep, that supply Kolkata's 3,000-plus community pujas",
-    didYouKnow: "Kolkata accounts for about 15 percent of West Bengal's pandal-making industry by value, and the art-and-decoration segment of Durga Puja alone was valued at 860 crore rupees in a British Council study.",
+    didYouKnow: "The British Council study put the art-and-decoration segment of Durga Puja at about 860 crore rupees across West Bengal. Kolkata is roughly 15 per cent of the pandal-making industry by value, which is the 129 crore figure that gets quoted on its own and confuses everybody. Both numbers are the same number.",
   },
   {
     id: "theme-pujo",

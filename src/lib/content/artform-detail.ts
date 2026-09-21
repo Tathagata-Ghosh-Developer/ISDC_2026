@@ -403,7 +403,7 @@ export const ART_DETAIL: Record<string, ArtFormDetail> = {
     ],
     sources: [
       "https://en.wikipedia.org/wiki/Chalchitra",
-      "https://en.wikipedia.org/wiki/Bengal_Patachitra",
+      "https://en.wikipedia.org/wiki/Pattachitra",
       "https://oaklores.com/2025/07/21/framing-the-goddess-the-almost-forgotten-beauty-of-bengals-chalchitra-art/",
       "https://www.getbengal.com/details/chalchitra-tradition-of-bengal-being-revived-getbengal-story",
       "https://artsandculture.google.com/story/patachitra-in-durga-puja-festival-banglanatak/rAVxYXl3CHiYow",
@@ -485,7 +485,6 @@ export const ART_DETAIL: Record<string, ArtFormDetail> = {
     ],
     sources: [
       "https://en.wikipedia.org/wiki/Pattachitra",
-      "https://en.wikipedia.org/wiki/Bengal_Patachitra",
       "https://en.wikipedia.org/wiki/Swarna_Chitrakar",
       "https://www.chitrolekha.com/V1/n3/03_Patachitra_Bengal_Naya_Pingla.pdf",
       "https://paschimmedinipur.gov.in/tourist-place/naya-pata-gram/",
@@ -1902,7 +1901,6 @@ export const ART_DETAIL: Record<string, ArtFormDetail> = {
       "https://en.wikipedia.org/wiki/Anandabazar_Patrika",
       "https://en.wikipedia.org/wiki/Feluda_(series)",
       "https://en.wikipedia.org/wiki/Ananda_Puraskar",
-      "https://www.getbengal.com/details/how-pujabarshikis-became-an-intrinsic-part-of-bengal-s-durga-puja-getbengal-story",
       "https://sharadiyathefestival.blogspot.com/2013/01/sharadiya-or-pujabarshiki_30.html",
       "https://en.wikipedia.org/wiki/Asian_Paints_Sharad_Shamman",
       "https://www.zee5.com/global/blog/pujo-parikrama-live-how-to-watch-durga-puja-2025-online-zee5-exclusive-all-details-inside/",
