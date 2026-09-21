@@ -60,6 +60,32 @@
 }
 
 /* ---------- Light: aged paper, noon pandal ---------- */
+/* ================================================================
+   Colour.
+
+   The brief asked for Satyajit Ray's art direction. The research that
+   followed found the useful part, and it is not a set of hexes: on the
+   covers he designed, the ground occupies 50 to 69 per cent of the
+   area and the accent colour 4 to 8 per cent. The ratio is the style.
+   One colour over most of the surface, one over very little of it, and
+   never more than three or four on a single surface plus the paper.
+
+   Two rules follow from that and both are load-bearing here:
+
+   The ground is never white. Straw, cream or newsprint. A pure #ffffff
+   background is the first thing that would make this page stop looking
+   like anything he made.
+
+   The black is never black. His sits at #1c0e16, a near-black with a
+   warm violet cast. Ours is warmer and browner because this is a paper
+   site about a Bengali festival rather than a film title card, but the
+   principle is the same: no #000000 anywhere in this file.
+
+   His own work is in copyright in India until 31 December 2052, so
+   none of it appears on this site and none of these values is sampled
+   from it. What is borrowed is a discipline, which is not ownable.
+   ================================================================ */
+
 :root {
   --c-paper: #f2e7d2;
   --c-paper-2: #e8d8bc;
@@ -104,9 +130,9 @@
 }
 
 :root[data-theme="dark"] {
-  --c-paper: #120d10;
-  --c-paper-2: #1b1419;
-  --c-paper-3: #241a1e;
+  --c-paper: #140d13;
+  --c-paper-2: #1d1520;
+  --c-paper-3: #261b25;
   --c-ink: #f4e7d2;
   --c-ink-soft: #cbb496;
   --c-ink-faint: #93806c;
