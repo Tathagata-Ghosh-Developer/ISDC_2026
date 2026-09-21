@@ -12,6 +12,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
+import CampusMap from "@/components/CampusMap";
 import EnquiryForm from "@/components/EnquiryForm";
 
 export const metadata: Metadata = {
@@ -80,7 +81,28 @@ export default async function ThikanaPage() {
         </Container>
       </Section>
 
-      {/* ---------------- the map ---------------- */}
+      {/* ---------------- the Institute's own map, marked ---------------- */}
+      <Section className="!pt-0">
+        <Container>
+          <Reveal>
+            <div className="surface overflow-hidden">
+              <CampusMap />
+            </div>
+          </Reveal>
+
+          <Reveal className="mt-4">
+            <p className="max-w-[78ch] text-[0.78rem] leading-relaxed text-ink-faint">
+              That is the Institute&apos;s own map, unaltered underneath. The
+              pandal, the gates and the walks are drawn over it by the
+              committee, and every distance is measured off the traced path
+              using the map&apos;s own scale bar, which is why they are not
+              round numbers.
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ---------------- where that is in the city ---------------- */}
       <Section className="!pt-0">
         <Container>
           <Reveal>
@@ -96,7 +118,8 @@ export default async function ThikanaPage() {
               </div>
               <figcaption className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-3.5 text-[0.72rem] text-ink-faint">
                 <span>
-                  The main campus. The pandal sits near the centre, by the bank.
+                  Where the campus sits in Bengaluru, for anyone working out
+                  how to get to it at all.
                 </span>
                 <a
                   href={OSM_LINK}
@@ -136,7 +159,7 @@ export default async function ThikanaPage() {
           <SectionHeading
             eyebrow="ফটক From every gate"
             title="Whichever gate you come through"
-            lede="The campus has several entrances and they are far apart. Pick the one you are walking in by; each link opens walking directions to the pandal. Security at any gate will also point you towards the bank."
+            lede="The same seven gates again, written out, for anyone who would rather read than click. Each link opens walking directions to the pandal. Security at any gate will also point you towards the bank."
           />
 
           <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
