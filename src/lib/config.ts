@@ -117,9 +117,9 @@ export const DEFAULTS: Config = {
     titleBangla: "শারদীয়া দুর্গোৎসব",
     titleRoman: `IISc ${SITE.year}`,
     subtitle:
-      "From the banks of the Ganga to the river of knowledge, four days when a campus becomes a home.",
+      "From the banks of the Ganga to the river of knowledge, five days when a campus becomes a home.",
     ctaPrimary: { label: "Donate to the Puja", href: "/daan" },
-    ctaSecondary: { label: "Four days, hour by hour", href: "/utsab" },
+    ctaSecondary: { label: "Five days, hour by hour", href: "/utsab" },
     image: "/media/art/nandalal-bose-durga.jpg",
     campusImage: "/media/iisc/main-building-sunset.jpg",
   },

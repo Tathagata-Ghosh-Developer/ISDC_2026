@@ -43,7 +43,7 @@ export default async function Home() {
                 month early. Nobody is surprised by this.
               </p>
               <p className="lede mt-4 max-w-[58ch]">
-                But you are far from home. That is the whole point. For four
+                But you are far from home. That is the whole point. For five
                 days this campus stops being an institute and becomes the
                 courtyard of a house, one where nobody is a stranger, the
                 khichuri is free, and the queue for anjali is the friendliest
@@ -51,7 +51,7 @@ export default async function Home() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href="/utsab" className="btn btn-ghost">
-                  See the four days
+                  See the five days
                 </Link>
                 <Link href="/jogdan" className="btn btn-ghost">
                   Volunteer with us
@@ -81,7 +81,7 @@ export default async function Home() {
       <FactMarquee />
 
       {/* ============================================================
-          The four days
+          The five days
           ============================================================ */}
       <Section>
         <Container>
@@ -172,26 +172,26 @@ export default async function Home() {
                 Knowledge is deposited, carried, argued over and eventually
                 given back. This one was vested in 1909 and took its first
                 students in 1911. C. V. Raman arrived as its first Indian
-                Director in 1933, and from 1939 to 1947 the Director was Jnan
+                Director in 1933, and from 1939 to 1948 the Director was Jnan
                 Chandra Ghosh, a Bengali chemist trained under Prafulla Chandra
                 Ray, who left here to found IIT Kharagpur.
               </p>
               <p className="lede mt-4 max-w-[56ch]">
                 The campus was always a mixed inheritance. Its founder was a
-                Parsi, its land came from a Hindu Maharaja, and the Tata
-                Memorial that faces the Main Building carries an Avestan
-                inscription, good thought, good word, good deed, at an
-                institute whose motto is a line from the Gita.
+                Parsi, its land was granted by a Hindu queen ruling as regent
+                for a son still too young to rule, and the Tata Memorial that
+                faces the Main Building carries an Avestan inscription, good
+                thought, good word, good deed.
               </p>
               <p className="lede mt-4 max-w-[56ch]">
                 So when a Puja happens here, nothing is being borrowed. On
-                Navami the old rite is Ayudha Puja, where you put down your
+                Nabami the old rite is Ayudha Puja, where you put down your
                 instruments and garland them. A laboratory has never needed a
                 translation for that.
               </p>
               <p className="lede mt-4 max-w-[56ch]">
                 And there is a straighter line than that. Bengaluru&apos;s first
-                Sarbajanin Durga Puja was held in 1950, and by the Bengalee
+                Sarbojanin Durga Puja was held in 1950, and by the Bengalee
                 Association&apos;s own account it happened under the initiative
                 of a few professors of the Indian Institute of Science. The
                 city&apos;s Pujo started here. We are only picking it back up.
@@ -219,7 +219,7 @@ export default async function Home() {
             eyebrow="শিল্প The crafts"
             title="A festival is a commission"
             bangla="বাংলার শিল্পের মরশুম"
-            lede="Behind four days of ritual sit a dozen trades, most of them seasonal, several of them endangered. These are the hands the Puja hires."
+            lede="Behind five days of ritual sit a dozen trades, most of them seasonal, several of them endangered. These are the hands the Puja hires."
           />
 
           <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

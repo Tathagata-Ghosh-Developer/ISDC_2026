@@ -29,7 +29,7 @@ export const SCHEDULE: PujaDay[] = [
     weekday: "Saturday",
     headline: "The fortnight of the ancestors ends and the fortnight of the goddess begins",
     story:
-      "Before dawn, Bengal turns on the radio for a recitation first broadcast in 1931. On the same day the idol receives its eyes, and the count that has run quietly since Rath Yatra becomes visible to everyone else.",
+      "Before dawn, Bengal turns on the radio for a recitation broadcast every year since the 1930s. On the same day the idol receives its eyes, and the count that has run quietly since Rath Yatra becomes visible to everyone else.",
     rituals: [
       {
         time: "04:00",
@@ -72,7 +72,7 @@ export const SCHEDULE: PujaDay[] = [
     weekday: "Saturday and Sunday",
     headline: "Nabapatrika is installed on one day and worshipped on the next",
     story:
-      "Nine plants are bound together, bathed and dressed in a bordered sari. She is not Ganesh's wife, whatever the campus insists. She is Durga in her oldest green form, from before anyone thought to give her a face.",
+      "Nine plants are bound together, bathed and dressed in a bordered sari. Most households know her as Kola Bou and seat her at Ganesh's side, and that name has held for centuries. In the ritual itself she is Durga, in her oldest green form, from before anyone thought to give her a face.",
     rituals: [
       {
         time: "17 Oct, 7:00 AM",
@@ -97,9 +97,9 @@ export const SCHEDULE: PujaDay[] = [
     tithiBangla: "মহাষ্টমী",
     date: "19 October 2026",
     weekday: "Monday",
-    headline: "The longest queue, the loudest dhak, and the forty eight minutes",
+    headline: "The longest queue, the loudest dhak, and the forty-eight minutes",
     story:
-      "Anjali in new clothes in the morning, and then the seam between Ashtami and Navami when the lamps are lit and nobody speaks. Sandhi Puja is the still centre of five loud days.",
+      "Anjali in new clothes in the morning, and then the seam between Ashtami and Nabami when the lamps are lit and nobody speaks. Sandhi Puja is the still centre of five loud days.",
     rituals: [
       {
         time: "6:00 AM",
@@ -110,7 +110,7 @@ export const SCHEDULE: PujaDay[] = [
         time: "7:26 to 8:14 AM",
         title: "Sandhi Puja",
         bangla: "সন্ধি পূজো",
-        note: "The last twenty four minutes of Ashtami and the first twenty four of Navami.",
+        note: "The last twenty four minutes of Ashtami and the first twenty four of Nabami.",
       },
       {
         time: "6:30 PM",
@@ -149,7 +149,7 @@ export const SCHEDULE: PujaDay[] = [
     weekday: "Wednesday",
     headline: "Debi Boron, vermilion, and the walk back",
     story:
-      "She is welcomed one last time before she goes, given sweets and sent off. Then vermilion, embraces, and the year long wait that Bengalis pretend not to be counting.",
+      "She is welcomed one last time before she goes, given sweets and sent off. Then vermilion, embraces, and the year-long wait that Bengalis pretend not to be counting.",
     rituals: [
       {
         time: "by 8:31 AM",
@@ -158,13 +158,13 @@ export const SCHEDULE: PujaDay[] = [
       },
       {
         time: "12:00 PM",
-        title: "Debi Boron and Sindur Khela",
+        title: "Debi Boron and Sindoor Khela",
         bangla: "দেবী বরণ ও সিঁদুর খেলা",
         note: "Open to everyone who wants to take part.",
       },
       {
         time: "6:00 PM",
-        title: "Visarjan",
+        title: "Bisarjan",
         bangla: "প্রতিমা নিরঞ্জন",
       },
     ],

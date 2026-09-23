@@ -261,7 +261,7 @@ export default async function ThikanaPage() {
                   <li>
                     Anjali and bhog timings are on the{" "}
                     <Link href="/utsab" className="text-gold hover:text-sindoor">
-                      four-days page
+                      five-days page
                     </Link>
                     .
                   </li>

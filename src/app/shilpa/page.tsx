@@ -23,7 +23,7 @@ export default function ShilpaPage() {
             eyebrow="শিল্প Art forms"
             title="The festival is a commission"
             bangla="বাংলার শিল্পের মরশুম"
-            lede="Four days of ritual are the visible end of a year of work by potters, foil-beaters, pith-carvers, scroll painters, drummers, bamboo riggers and lighting engineers. Most of it is seasonal. Some of it is disappearing. Every entry below names someone still doing it."
+            lede="Five days of ritual are the visible end of a year of work by potters, foil-beaters, pith-carvers, scroll painters, drummers, bamboo riggers and lighting engineers. Most of it is seasonal. Some of it is disappearing. Every entry below names someone still doing it."
           />
 
           <Reveal className="mt-[2.618rem]">

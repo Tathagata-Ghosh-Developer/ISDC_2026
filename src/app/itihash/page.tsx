@@ -37,7 +37,7 @@ const BLOCKS: EraBlock[] = [
     prose: [
       "The text every Bengali household still reads at Mahalaya is not an independent scripture. The Devi Mahatmya is chapters 81 to 93 of the Markandeya Purana, inserted into a much older work somewhere between 400 and 600 CE. It is the first Sanskrit text to argue that the Goddess is not a consort or an attendant but the ground of reality itself, and it makes the argument through three battle narratives rather than through philosophy.",
       "The buffalo demon is older than the text. Terracottas from Nagar in Rajasthan show a goddess killing a buffalo in the first century BCE or thereabouts, and a dated inscription places a Mahishasuramardini image at Udayagiri Cave 6 in 401 CE. What the Devi Mahatmya adds is the theology, each god surrenders his weapon, and out of that collective disarmament a single figure is assembled who can do what none of them could.",
-      "Bengal's own oldest Durgas are Pala and Sena stone, and they are not the goddess Bengalis now picture. The family group, the painted arch, the clay, the four-day calendar, all of that is still centuries away.",
+      "Bengal's own oldest Durgas are Pala and Sena stone, and they are not the goddess Bengalis now picture. The family group, the painted arch, the clay, the five-day calendar, all of that is still centuries away.",
     ],
     image: {
       src: "/media/art/durga-manuscript.jpg",
@@ -55,7 +55,7 @@ const BLOCKS: EraBlock[] = [
         src: "/media/art/durga-stone-pala.jpg",
         alt: "A stone Mahishasuramardini carved in the Pala and Sena manner",
         caption: "Mahishasuramardini in stone, before Bengal worked in clay",
-        note: "Bengal's oldest Durgas are stone, and they are not the goddess Bengalis now picture. No family group, no painted arch, no four-day calendar. Everything that now reads as timeless is still centuries away from this.",
+        note: "Bengal's oldest Durgas are stone, and they are not the goddess Bengalis now picture. No family group, no painted arch, no five-day calendar. Everything that now reads as timeless is still centuries away from this.",
       },
       {
         src: "/media/art/durga-rock-relief.jpg",
@@ -72,7 +72,7 @@ const BLOCKS: EraBlock[] = [
     title: "Autumn, out of season and on purpose",
     prose: [
       "The story that explains why Bengal worships in autumn is a Bengali addition. In Krittibas Ojha's fifteenth-century Bengali Ramayana, Rama wakes the goddess out of season to ask for help against Ravana, akalbodhan, the untimely awakening. It is not in Valmiki's Sanskrit original. By the texts, Durga's proper season is spring, and Basanti Puja is the older rite. The exception swallowed the rule.",
-      "The ritual manuals that make a four-day festival possible arrive in the same centuries, the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
+      "The ritual manuals that make a five-day festival possible arrive in the same centuries, the Kalika Purana and the Brihaddharma Purana set out bodhon, adhibas, the Nabapatrika, the forty-eight minutes of Sandhi Puja. Bengal's smriti scholars then argue the details for three hundred years.",
       "Who held the first grand household Puja is genuinely contested. Raja Kangshanarayan of Taherpur around 1580 and Bhabananda Majumdar of Nadia are both named; the Sabarna Roy Choudhury family's Puja at Barisha, begun in 1610, has the strongest claim to unbroken continuity, and predates the city of Calcutta itself.",
     ],
     image: {
@@ -151,7 +151,7 @@ const BLOCKS: EraBlock[] = [
     title: "Everyone's goddess, and a voice on the radio",
     prose: [
       "The baroyari Puja became the sarbojanin, of all people, in the first decades of the twentieth century. Bhowanipore's Sanatan Dharmotsahini Sabha ran a subscription Puja from 1909 or 1910, and Baghbazar, founded in 1918 or 1919, is the one usually credited with fixing the modern civic form. It was founded against the exclusiveness of the old family Pujas rather than against the British, and Guha-Thakurta dates its nationalist fame to 1937, when a swadeshi fair and a display of Bengali wrestling were held beside it. The word sarbojanin arrives in 1926, and its documented motive is not anti-colonial either: Hindu leaders wanted celebrations open to every caste, in answer both to Gandhi on untouchability and to a perceived Muslim threat. The Ananda Bazar Patrika of 19 October 1926 recorded the immediate cost, that Muslims who had joined the celebrations for five or six hundred years were no longer doing so. The nationalist phase was real, brief, and confined to a handful of north Calcutta Pujas between about 1926 and 1939.",
-      "In 1931 All India Radio broadcast Mahishasuramardini before dawn on Mahalaya, with Birendra Krishna Bhadra reciting the Chandi. It has opened the season almost every year since. In 1976 the station replaced it with a new production fronted by the film star Uttam Kumar. Listeners were so angry that AIR offices were stoned, and the original recording was restored within the same season.",
+      "By the popular account, Mahishasuramardini was first broadcast before dawn on Mahalaya in 1931, with Birendra Krishna Bhadra reciting the Chandi, though the year is disputed and the broadcaster was not yet called All India Radio. It has opened the season almost every year since. In 1976 the station replaced it with a new production fronted by the film star Uttam Kumar. Listeners were so angry that AIR offices were stoned, and the original recording was restored within the same season.",
       "Craft changed under pressure. A fire in Kumartuli in the late 1930s destroyed the workshops days before the Puja, and Gopeshwar Pal rebuilt by breaking the single ekchala frame into separate figures that could be made fast and in parallel. The split family group that now looks traditional was an emergency measure.",
     ],
     image: {
@@ -196,7 +196,7 @@ const BLOCKS: EraBlock[] = [
       "The economics are not a side effect. A British Council study with Queen Mary University of London and IIT Kharagpur, from 2019 fieldwork, valued the creative economy around Durga Puja at ₹32,377 crore, about 2.58 per cent of West Bengal's gross domestic product.",
       "In December 2021 UNESCO inscribed the festival on the Representative List of the Intangible Cultural Heritage of Humanity. The title is Durga Puja in Kolkata, not of India, because the nominating team argued that the specific civic form of the city was what deserved recognition.",
       "And the rite keeps moving. In 2021 a Kolkata Puja was conducted start to finish by a team of women priests. Sindoor khela has opened at many pandals to widows, single and transgender women. The festival has always been argued about; that argument is the tradition.",
-      "A local footnote, and not a small one. Bengaluru's first Sarbajanin Durga Puja was held in 1950, and the Bengalee Association's own history records that it took place under the initiative and tutelage of a few professors of the Indian Institute of Science. The association itself was registered nine years later, in 1959. The Puja on this campus is three years old. The Puja that came out of this campus is seventy six.",
+      "A local footnote, and not a small one. Bengaluru's first Sarbojanin Durga Puja was held in 1950, and the Bengalee Association's own history records that it took place under the initiative and tutelage of a few professors of the Indian Institute of Science. The association itself was registered nine years later, in 1959. The Puja on this campus is three years old. The Puja that came out of this campus is seventy six.",
     ],
     image: {
       src: "/media/puja/archive-1.jpg",
@@ -487,7 +487,7 @@ export default function ItihashPage() {
                 been produced by anyone, and the thing that actually happened in
                 October 1840 was a newspaper column. And four Bengali scientists
                 are named in every account of this campus and never worked here;
-                the real link is Jnan Chandra Ghosh, Director from 1939 to 1947.
+                the real link is Jnan Chandra Ghosh, Director from August 1939 to December 1948.
               </p>
               <p className="lede mt-3 max-w-[68ch] text-[0.92rem]">
                 One more thing is worth saying plainly, because it cuts against

@@ -32,7 +32,7 @@ const ALBUMS = [
     dir: "iisc",
     title: "The campus itself",
     bangla: "প্রাঙ্গণ",
-    note: "The Main Building, standing under these rain trees since 1913.",
+    note: "The Main Building, standing under these rain trees since the 1910s.",
     sepia: true,
     aspect: "16/10",
   },

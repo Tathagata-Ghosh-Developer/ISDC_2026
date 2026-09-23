@@ -47,7 +47,7 @@ export default async function AdminVisitsPage({
           device, no fingerprint, so they are collected from every visitor
           and could not leak anything if they tried. Below them is what
           visitors have agreed to share, which is a great deal more and is
-          deleted after six months. Everything is the last {days} days.
+          deleted after six months. All of it covers the last {days} days.
         </p>
         <div className="mt-3 flex gap-1">
           {[7, 30, 90, 365].map((d) => (

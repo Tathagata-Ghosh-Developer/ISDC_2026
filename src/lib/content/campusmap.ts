@@ -101,7 +101,7 @@ export const MAP_GATES: MapGate[] = [
       [0.4389, 0.6761],
       VENUE_POINT,
     ],
-    note: "On C. V. Raman Road at the western end, beside the Gymkhana. The shortest walk of all of them if you are coming from Malleswaram by bus.",
+    note: "On C. V. Raman Road at the western end, beside the Gymkhana. A short walk in, and the natural gate if you are coming from Malleswaram by bus.",
     origin: "IISc Gymkhana Gate, Bengaluru",
   },
   {
@@ -145,7 +145,7 @@ export const MAP_GATES: MapGate[] = [
       [0.4722, 0.5896],
       VENUE_POINT,
     ],
-    note: "By Ramaiah College on New BEL Road, the corner nearest Sadashivanagar and RMV. The longest walk on this map, so take an auto to the bank if it is raining.",
+    note: "By Ramaiah College on New BEL Road, the corner nearest Sadashivanagar and RMV. A long walk once you are through, so take an auto to the bank if it is raining.",
     origin: "IISc New BEL Road Gate, Bengaluru",
   },
   {
@@ -207,7 +207,7 @@ export const MAP_GATES: MapGate[] = [
       [0.4356, 0.5975],
       VENUE_POINT,
     ],
-    note: "The northern gate by the National Institute of Advanced Studies. Rarely used by visitors and a genuinely long walk, but the prettiest way in.",
+    note: "The northern gate by the National Institute of Advanced Studies. Rarely used by visitors and the longest walk on this map, but the prettiest way in.",
     origin: "NIAS Gate, Indian Institute of Science, Bengaluru",
   },
 ];

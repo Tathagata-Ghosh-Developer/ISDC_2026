@@ -173,7 +173,7 @@ export default function AddDonor({
               )}
 
               {error && (
-                <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor">
+                <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor" role="alert">
                   {error}
                 </p>
               )}

@@ -9,7 +9,7 @@ import { getConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Utsab",
   description:
-    "The four days of the IISc Sharodiya Durgotsab, hour by hour, Bodhon, Nabapatrika Snan, Anjali, Sandhi Puja, Kumari Puja, Bhog, Sindoor Khela and Bisarjan.",
+    "The five days of the IISc Sharodiya Durgotsab, hour by hour, Bodhon, Nabapatrika Snan, Anjali, Sandhi Puja, Kumari Puja, Bhog, Sindoor Khela and Bisarjan.",
 };
 
 export const revalidate = 300;
@@ -24,7 +24,7 @@ export default async function UtsabPage() {
           <SectionHeading
             as="h1"
             eyebrow="উৎসব The days"
-            title="Four days, and the two that frame them"
+            title="Five days, and the one that calls them in"
             bangla="বোধন থেকে বিসর্জন"
             lede="Timings below are the committee's working plan. Ritual timings that depend on the tithi, Sandhi Puja above all, are confirmed by the priest closer to the day and announced on WhatsApp and Instagram."
           />
@@ -151,7 +151,7 @@ export default async function UtsabPage() {
                 {[
                   ["বোধন Bodhon", "Waking the goddess, out of her proper season."],
                   ["অঞ্জলি Anjali", "Flowers offered from cupped palms, with the priest leading the verses."],
-                  ["সন্ধিপূজা Sandhi Puja", "The forty-eight minutes across the Ashtami-Navami seam. A hundred and eight lamps."],
+                  ["সন্ধিপূজা Sandhi Puja", "The forty-eight minutes across the Ashtami-Nabami seam. A hundred and eight lamps."],
                   ["ভোগ Bhog", "Food offered to the goddess, then served to everyone present."],
                   ["ধুনুচি Dhunuchi", "An earthen censer of burning resin, danced with at arati."],
                   ["সিঁদুরখেলা Sindoor Khela", "Vermilion on Dashami, as she is about to leave."],

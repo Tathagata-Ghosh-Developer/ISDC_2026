@@ -10,7 +10,7 @@ export const SITE = {
   tagline: "Where the Ganga meets the river of knowledge",
   taglineBangla: "গঙ্গা যেখানে মেশে জ্ঞানের নদীতে",
   description:
-    "The Durga Puja of the Indian Institute of Science, Bengaluru. Four days of ritual, art and homecoming on a campus built for the pursuit of knowledge.",
+    "The Durga Puja of the Indian Institute of Science, Bengaluru. Five days of ritual, art and homecoming on a campus built for the pursuit of knowledge.",
   /**
    * The address, and the one place it is written down.
    *
@@ -246,7 +246,7 @@ export const GATES = [
     id: "gymkhana-gate",
     name: "Gymkhana Gate",
     bangla: "জিমখানা গেট",
-    note: "Marker 172, grid G2. The western end of C. V. Raman Road, beside the Gymkhana. The shortest walk of all of them if you arrive from Malleswaram by bus.",
+    note: "Marker 172, grid G2. The western end of C. V. Raman Road, beside the Gymkhana. A short walk in, and the natural gate if you arrive from Malleswaram by bus.",
     origin: "IISc Gymkhana Gate, Bengaluru",
   },
   {
@@ -260,7 +260,7 @@ export const GATES = [
     id: "new-bel-road-gate",
     name: "New BEL Road Gate",
     bangla: "নিউ বেল রোড গেট",
-    note: "Marker 179, grid B5, by Ramaiah College. Closest if you are coming from Sadashivanagar or RMV, and the longest walk on the map once you are inside.",
+    note: "Marker 179, grid B5, by Ramaiah College. Closest if you are coming from Sadashivanagar or RMV, and a long walk once you are inside.",
     origin: "IISc New BEL Road Gate, Bengaluru",
   },
   {
@@ -483,7 +483,7 @@ export const VOLUNTEER_ROLES = [
     en: "Fundraising",
     bn: "ফান্ডরেইজিং",
     blurb:
-      "Desks outside the mess counters three weeks before the Puja. Chat with peers, spread the festive vibe, mobilise the campus.",
+      "Desks outside the mess counters three weeks before the Puja. Chat with peers, spread the festive mood, mobilise the campus.",
     blurbBn:
       "পুজোর ঠিক তিন সপ্তাহ আগে মেসে বসে শিক্ষার্থীদের সাথে গল্পে-আড্ডায় অনুদান সংগ্রহের দায়িত্ব।",
   },
@@ -493,7 +493,7 @@ export const VOLUNTEER_ROLES = [
     en: "Logistics",
     bn: "লজিস্টিকস",
     blurb:
-      "Pandal build, sound, lighting, procurement, venue execution, the backbone that keeps four days of festivity flawless.",
+      "Pandal build, sound, lighting, procurement, venue execution, the backbone that keeps five days of festivity running.",
     blurbBn:
       "মণ্ডপ তৈরি, সাউন্ড, লাইটিং থেকে শুরু করে পুজোর যাবতীয় সরঞ্জামের পরিচালনা, পেছনের সারির মাস্টারমাইন্ড।",
   },

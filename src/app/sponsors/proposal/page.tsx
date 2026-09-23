@@ -53,7 +53,7 @@ const REACH = [
   {
     figure: "5",
     label: "days, from Shashthi to Dashami",
-    note: "Continuous footfall from morning arati to the cultural programme each night, with the heaviest evenings on Ashtami and Navami.",
+    note: "Continuous footfall from morning arati to the cultural programme each night, with the heaviest evenings on Ashtami and Nabami.",
   },
 ];
 
@@ -295,7 +295,7 @@ export default function SponsorshipProposalPage() {
                 <p>
                   <span className="text-ink">One thing, done well.</span> The
                   bhog for one day. The children&apos;s competition. The whole
-                  cultural evening on Navami. Named for you, and nothing else
+                  cultural evening on Nabami. Named for you, and nothing else
                   asked of you.
                 </p>
                 <p>

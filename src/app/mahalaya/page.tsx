@@ -11,7 +11,7 @@ import { getConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Mahalaya",
   description:
-    "Mahishasuramardini, the pre dawn broadcast that has opened Durga Puja since 1931, and the year Bengal refused to let All India Radio replace it.",
+    "Mahishasuramardini, the pre-dawn broadcast that has opened Durga Puja since the 1930s, and the year Bengal refused to let All India Radio replace it.",
 };
 
 export const revalidate = 600;
@@ -161,7 +161,7 @@ const TIMELINE = [
   {
     year: "The 1930s",
     title: "The first broadcast",
-    body: "Akashvani's Calcutta station begins putting out a pre dawn programme of Chandi recitation, song and narration. It is live, because there is nothing yet to record it onto. The exact first year is genuinely disputed: 1931 is the popular answer, All India Radio's own writing says 1936 or 1937, and nobody has produced a schedule that settles it.",
+    body: "Akashvani's Calcutta station begins putting out a pre-dawn programme of Chandi recitation, song and narration. It is live, because there is nothing yet to record it onto. The exact first year is genuinely disputed: 1931 is the popular answer, All India Radio's own writing says 1936 or 1937, and nobody has produced a schedule that settles it.",
   },
   {
     year: "The makers",

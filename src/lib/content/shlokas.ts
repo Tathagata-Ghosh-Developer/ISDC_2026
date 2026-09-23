@@ -32,7 +32,7 @@ export const SHLOKAS: Shloka[] = [
   {
     id: "sarvamangala",
     sanskrit:
-      "সর্বমঙ্গলমঙ্গল্যে শিবে সর্বার্থসাধিকে।\nশরণ্যে ত্র্যম্বকে গৌরি নারায়ণি নমোহস্তুতে॥",
+      "সর্বমঙ্গলমাঙ্গল্যে শিবে সর্বার্থসাধিকে।\nশরণ্যে ত্র্যম্বকে গৌরি নারায়ণি নমোহস্তুতে॥",
     transliteration:
       "sarva-maṅgala-māṅgalye śive sarvārtha-sādhike\nśaraṇye tryambake gauri nārāyaṇi namo'stu te",
     meaning:
@@ -179,7 +179,7 @@ export const SHLOKAS: Shloka[] = [
     transliteration: "jāgo tumi jāgo, jāgo durgā, jāgo daśa-praharaṇa-dhāriṇī",
     meaning: "Wake, you who wake. Wake, Durga, wake, bearer of ten weapons.",
     meaningBangla: "জাগো তুমি জাগো, জাগো দুর্গা, জাগো দশপ্রহরণধারিণী।",
-    source: "Mahishasuramardini, All India Radio, 1931",
+    source: "Mahishasuramardini, All India Radio, from the 1930s",
   },
 ];
 

@@ -270,8 +270,8 @@ export default function BiplobPage() {
           <Reveal>
             <p className="eyebrow">ছবি The pictures</p>
             <p className="lede mt-3 max-w-[68ch] text-[0.95rem]">
-              Every image on this page is public domain or openly licensed, was
-              checked to respond, and is served from this site rather than
+              Every image on this page is public domain or openly licensed, is
+              checked to still load, and is served from this site rather than
               linked from somewhere that may move it. The source page and the
               licence are under each one.
             </p>

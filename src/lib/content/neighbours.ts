@@ -184,7 +184,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "Puja from 1950; association registered 16 September 1959",
     area: "Tagore Cultural Centre, 1/A Assaye Road, Sivanchetti Gardens, Ulsoor, Bengaluru 560042",
     url: "https://thebengaleeassociation.com/",
-    note: "The city's oldest Bengali association, and the one that matters most to us, its first Sarbajanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. The Puja dates from 1950 and the association was registered in 1959.",
+    note: "The city's oldest Bengali association, and the one that matters most to us, its first Sarbojanin Durga Puja in 1950 was, in its own words, 'held under the initiatives and tutelage of a few Professors of the Indian Institute of Science, Bangalore'. One of the very few with a permanent cultural centre rather than an annual pandal - land allotted April 1977, building inaugurated 4 April 1980. The Puja dates from 1950 and the association was registered in 1959.",
   },
   {
     id: "jayamahal-cultural-association",

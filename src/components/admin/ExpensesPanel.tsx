@@ -161,7 +161,7 @@ export default function ExpensesPanel() {
         </label>
 
         {error && (
-          <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor">
+          <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor" role="alert">
             {error}
           </p>
         )}
@@ -222,7 +222,7 @@ export default function ExpensesPanel() {
                     )}
                     <p className="mt-1 text-[0.68rem] uppercase tracking-[0.16em] text-ink-faint">
                       {formatDate(e.spent_on)}
-                      {e.vendor ? ` ${e.vendor}` : ""}
+                      {e.vendor ? ` · ${e.vendor}` : ""}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
@@ -231,7 +231,7 @@ export default function ExpensesPanel() {
                     </span>
                     <button
                       onClick={() => remove(e.id)}
-                      aria-label="Delete"
+                      aria-label={`Delete ${e.head}`}
                       className="grid h-7 w-7 place-items-center border border-line text-ink-faint transition-colors hover:border-sindoor hover:text-sindoor"
                     >
                       <Trash2 size={12} />

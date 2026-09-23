@@ -119,7 +119,7 @@ export default async function JogdanPage() {
           <div className="mt-[4.236rem]">
             <h3 className="eyebrow">Bengali Bengaluru</h3>
             <p className="lede mt-4 max-w-[64ch] text-[0.95rem]">
-              The Bengalee Association held this city&apos;s first Sarbajanin
+              The Bengalee Association held this city&apos;s first Sarbojanin
               Durga Puja in 1950. Our Puja is three years old. We are the
               youngest people in this room and we know it.
             </p>
@@ -168,7 +168,7 @@ export default async function JogdanPage() {
               </h2>
               <p className="lede mt-5 max-w-[58ch]">
                 Just your love for Durga Puja, and that familiar ache of missing
-                home, is more than enough. People who had never tied a bamboo
+                home, are more than enough. People who had never tied a bamboo
                 joint have built the pandal. People who could not read Bengali
                 have served bhog to four hundred people in an hour.
               </p>

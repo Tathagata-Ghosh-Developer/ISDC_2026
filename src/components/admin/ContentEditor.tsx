@@ -67,7 +67,7 @@ function GroupCard({
       } catch (err) {
         setState("error");
         setMessage(
-          err instanceof Error ? `Not valid JSON, ${err.message}` : "Not valid JSON.",
+          err instanceof Error ? `Not valid JSON: ${err.message}` : "Not valid JSON.",
         );
         return;
       }
@@ -139,6 +139,7 @@ function GroupCard({
 
           {message && (
             <p
+              role="alert"
               className={`mt-4 border p-3 text-[0.78rem] ${
                 state === "error"
                   ? "border-sindoor/40 text-sindoor"

@@ -60,7 +60,7 @@ export const SECTIONS: Section[] = [
     heading: "The novel and the hymn",
     headingBangla: "উপন্যাস ও সঙ্গীত — Upanyas o sangeet",
     body: "Bankim Chandra Chattopadhyay (বঙ্কিমচন্দ্র চট্টোপাধ্যায়, 1838–1894) was a deputy magistrate in the service of the Government of Bengal for thirty-three years. The man who gave the Indian revolution its battle-cry spent his working life collecting the revenue of the government it was aimed at.\n\nHe wrote *Bande Mataram* (বন্দে মাতরম্) around 1875; the date everyone gives, 7 November 1875, rests on the Government of India's commemoration rather than on any manuscript traced here. The claim that it appeared in *Bangadarshan* (বঙ্গদর্শন) that year is a confusion: it reached print inside *Anandamath* (আনন্দমঠ), serialised there from March 1881 and published as a book in December 1882.\n\nWhat the novel does with the goddess is stranger than the popular account. In Chapter XI the ascetic Satyananda leads the householder Mahendra through three chambers. In the first stands Jagaddhatri (জগদ্ধাত্রী): \"The Mother,\" says the monk, \"as she was.\" In an underground room lit by one straggling streak of light stands Kali (কালী) — \"Look what the mother has now become… despoiled of all wealth, and without a cloth to wear.\" Mahendra asks why there are weapons in her hands. \"We are her children, we have only just given her the arms.\" Then a tunnel opens into sunlight, and in a marble temple stands \"a golden image of the ten-handed goddess smiling brightly in the morning sun.\" This is \"the mother as she would be.\"\n\nNote what Bankim does not do. He does not write *Durga* there; he writes *dashabhuja*, the ten-handed one. It is Nares Chandra Sen-Gupta, his 1906 translator, who closes the circle in a footnote: the figure \"is called Rajrajeswari or simply Durga and is the form in which the goddess is worshipped in September–October by the Hindus of Bengal\" — adding, scrupulously, that \"the new meaning read into it is, of course, the author's own.\" (*The Abbey of Bliss*, 1906, ch. XI, pp. 40–42.) The hymn leaves nothing to inference: \"Durga bold who wields her arms / With half a score of hands… / What are they but, mother, thou.\"\n\nRabindranath Tagore set the song to music in Bankim's lifetime and sang it first, at the Calcutta Congress of 1896. Forty-one years later he was the man who insisted on cutting it. Asked for his view by Subhas Chandra Bose and the Congress Working Committee, he wrote on 20 October 1937: \"The core of Vande Mataram is a hymn to goddess Durga: this is so plain that there can be no debate about it… no Mussulman can be expected patriotically to worship the ten-handed deity.\" The Committee adopted his recommendation that only the first two stanzas be sung. (*Selected Works of Jawaharlal Nehru* vol. 8, pp. 825–30; *Selected Letters of Rabindranath Tagore*, CUP, p. 487.)\n\nThe man best placed to know thought the Durga identification was the whole point — and thought that was the problem.",
-    pullQuote: "The man best placed to know thought the Durga identification was the whole point - and thought that was the problem.",
+    pullQuote: "The man best placed to know thought the Durga identification was the whole point — and thought that was the problem.",
     confidence: "verified",
   },
   {
@@ -98,7 +98,7 @@ export const SECTIONS: Section[] = [
   {
     id: "pujas-revolutionary-descent",
     heading: "The pujas that claim a revolutionary descent",
-    headingBangla: "সর্বজনীন — Sarbajanin",
+    headingBangla: "সর্বজনীন — Sarbojanin",
     body: "Begin with a warning sign. The candidates for \"first community puja\" are mutually incompatible: Guptipara 1790 or 1761, Bhowanipore 1909 or 1910, Shyampukur 1911, Sikdar Bagan 1913, Baghbazar 1918 or 1919, Simla Byayam Samity and Maniktala 1926. When a dozen institutions claim the same origin on different dates, the origin is being asked to carry more than the evidence can bear.\n\nThe *Friend of India* (Serampore, 1820) describes the Guptipara event within living memory: \"About thirty years ago at Gooptipara near Santipoora… a number of Brahmins formed an association for the celebration of a pooja independently of the rule of the Shastras.\" Twelve men, hence *baro-yaari*; subscriptions from the surrounding villages. The impulse recorded is ritual autonomy and neighbourhood finance — and the deity was Bindhyabasini, a form of Jagaddhatri. Not Durga, and a century before nationalism.\n\nThe first *barowari* Durga Puja in Kolkata is usually dated to 1909, at Balaram Bose Ghat Road, Bhowanipore, by the Bhowanipore Sanatan Dharmotsahini Sabha (ভবানীপুর সনাতন ধর্মোৎসাহিনী সভা) — the occasion on which Aurobindo published his *Durga Stotra* in his Bengali weekly *Dharma* (ধর্ম), 4 October 1909. Jatindranath Mukherjee (যতীন্দ্রনাথ মুখোপাধ্যায়), Bagha Jatin, belonged to the same circle.\n\n**Simla Byayam Samity (সিমলা ব্যায়াম সমিতি)** is the strongest single story and needs stating exactly. Founded on 2 April 1926 by Atindranath Bose (অতীন্দ্রনাথ বসু) in Vivekananda's own north Calcutta neighbourhood as a gymnasium — physical culture for young men, which in Bengal in 1926 was never only physical culture — it began a Durga Puja the same year. It is said to have been declared illegal and closed on 4 January 1932, its furniture and equipment confiscated, and unbanned in 1939, when Mahendranath Dutta (মহেন্দ্রনাথ দত্ত), Vivekananda's younger brother, took charge, fixed the form of the image still followed, and Netaji inaugurated that year's puja.\n\nHere is the honest position. **4 January 1932 is a real date**: the day four emergency ordinances were promulgated across India and mass declarations of unlawful associations began (*India in 1931-32*, the official statement to Parliament). The state was demonstrably suspicious of gymnastic clubs — an Intelligence Branch report complains that a club's drill \"goes far beyond the needs of a gymnastic club.\" But **no notification naming Simla Byayam Samity was found** in Ker, the Sedition Committee Report, Samanta's IB volumes or the official annual statements, and the journalism contradicts itself about which years the ban covered. The story is plausible, contextually anchored, and unproven.\n\n**Baghbazar Sarbojanin (বাগবাজার সর্বজনীন)** began in 1918 or 1919 at the Sarkar house as the Lebubagan Baroyari puja. Durgacharan Bandyopadhyay, president from 1930, started the exhibition promoting indigenous goods and boycotting British imports — it survives as the Puja-cum-exhibition today, the clearest institutional trace of Swadeshi still standing inside a Durga Puja. **Kumartuli Park Sarbojanin**, often swept into this story, was founded in 1992 and has no revolutionary history; the puja people mean is the older, separate Kumartuli Sarbojanin.",
     pullQuote: "When a dozen institutions claim the same origin on different dates, the origin is being asked to carry more than the evidence can bear.",
     confidence: "contested",
@@ -253,7 +253,7 @@ export const FIGURES: Figure[] = [
   {
     name: "Sumit Sarkar",
     nameBangla: "সুমিত সরকার",
-    years: "1939-2026",
+    years: "b. 1939",
     what: "Historian whose The Swadeshi Movement in Bengal, 1903-1908 (1973) remains the standard monograph - and which does not contain the phrase 'Durga Puja' once.",
     source: "The Swadeshi Movement in Bengal 1903-1908 (archive.org, dli.bengal.10689.13361, full text searched)",
   },
@@ -382,7 +382,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Sukumar Ray, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Rabindranath_Tagore_1905-1906_Sukumar_Ray.jpg",
-    relevance: "The anti-Partition and Rakhi Bandhan year..",
+    relevance: "The anti-Partition and Rakhi Bandhan year.",
   },
   {
     id: "khudiram-1905",
@@ -454,7 +454,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain",
     attribution: "Calcutta State Archives, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Woman_revolutionary,_Kalpana_Dutt.jpg",
-    relevance: "Author of the 1945 memoir whose silence about the goddess is.",
+    relevance: "Author of the 1945 memoir whose silence about the goddess is the sharpest evidence on this page.",
   },
   {
     id: "bina-das",
@@ -481,7 +481,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "CC BY 3.0",
     attribution: "Biswarup Ganguly, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Alipore_Bomb_Case_1908-09_Trial_Room_-_Alipore_Sessions_Court_-_Calcutta_1997_1.jpg",
-    relevance: "The preserved room where Aurobindo and Barindra were tried, and where Bhawani Mandir went in as evidence. Modern photograph,.",
+    relevance: "The preserved room where Aurobindo and Barindra were tried, and where Bhawani Mandir went in as evidence. Modern photograph.",
   },
   {
     id: "durga-puja-1809-patna",
@@ -490,7 +490,7 @@ export const IMAGES: ChapterImage[] = [
     licence: "Public domain (PD-Art / PD-old-100)",
     attribution: "Sevak Ram (c.1770-c.1830), British Library Add.Or.29, via Wikimedia Commons",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Durga_Puja,_1809_watercolour_painting_in_Patna_Style.jpg",
-    relevance: "The best pre-modern depiction of the puja available freely; Company/Patna School,.",
+    relevance: "The best pre-modern depiction of the puja available freely; Company/Patna School.",
   },
   {
     id: "durga-procession-c1800",

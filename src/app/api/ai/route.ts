@@ -190,7 +190,7 @@ function fallback(question: string, context: string): string {
     .slice(0, 3);
 
   if (scored.length === 0) {
-    return "I could not find that on this site. The pages in the menu cover the history, the art forms, the four days and the donation details, or message a student convenor from the footer.";
+    return "I could not find that on this site. The menu covers the history, the art forms, the five days and the donation details, or you can message a student convenor from the footer.";
   }
 
   return (

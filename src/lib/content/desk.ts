@@ -91,7 +91,7 @@ export const PRESETS: Preset[] = [
   {
     slug: "nabamir-raat",
     bangla: "নবমীর রাত",
-    roman: "Navami Night",
+    roman: "Nabami Night",
     values: [82, 56, 34, 30, 74, 0, 30, 0, 0, 0, 12],
   },
   {

@@ -30,7 +30,7 @@ export default function SiteFooter() {
           <div>
             <Logo size={72} className="mb-6" />
             <p className="bangla-display text-[1.618rem] leading-relaxed text-ink">
-              সর্বমঙ্গলমঙ্গল্যে শিবে সর্বার্থসাধিকে।
+              সর্বমঙ্গলমাঙ্গল্যে শিবে সর্বার্থসাধিকে।
               <br />
               শরণ্যে ত্র্যম্বকে গৌরি নারায়ণি নমোহস্তুতে॥
             </p>

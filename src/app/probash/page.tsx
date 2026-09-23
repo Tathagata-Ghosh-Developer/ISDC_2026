@@ -117,7 +117,7 @@ export default async function ProbashPage() {
             <div className="grid gap-4 sm:grid-cols-3">
               {[
                 {
-                  t: "It outlives the four days",
+                  t: "It outlives the five days",
                   d: "The pandal comes down in a week. The magazine sits on a shelf and gets found again in five years.",
                 },
                 {
