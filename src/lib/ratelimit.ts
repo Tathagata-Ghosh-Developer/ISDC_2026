@@ -14,11 +14,7 @@ type Bucket = { hits: number[]; blockedUntil: number };
 const buckets = new Map<string, Bucket>();
 
 export function clientKey(req: Request, scope: string): string {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "anonymous";
-  return `${scope}:${ip}`;
+  return `${scope}:${clientIp(req)}`;
 }
 
 export function rateLimit(
@@ -71,4 +67,45 @@ export function rateLimit(
 /** Clears a key, used after a successful login. */
 export function rateLimitReset(key: string): void {
   buckets.delete(key);
+}
+
+/**
+ * For limits that should count only what went wrong, such as failed
+ * sign-ins. rateLimit() counts every request it lets through, which is
+ * right for a form and wrong for a login: eleven fund raisers signing
+ * in correctly from the same campus Wi-Fi, which reaches us as one
+ * address, must not use up anybody's allowance.
+ *
+ * blockedFor() looks without counting. recordFailure() counts one
+ * failure and starts the block once there are too many.
+ */
+export function blockedFor(key: string): number {
+  const bucket = buckets.get(key);
+  const now = Date.now();
+  if (!bucket || bucket.blockedUntil <= now) return 0;
+  return Math.ceil((bucket.blockedUntil - now) / 1000);
+}
+
+export function recordFailure(
+  key: string,
+  { max, windowMs, blockMs }: { max: number; windowMs: number; blockMs: number },
+): void {
+  const now = Date.now();
+  const bucket = buckets.get(key) ?? { hits: [], blockedUntil: 0 };
+  bucket.hits = bucket.hits.filter((t) => now - t < windowMs);
+  bucket.hits.push(now);
+  if (bucket.hits.length >= max) {
+    bucket.blockedUntil = now + blockMs;
+    bucket.hits = [];
+  }
+  buckets.set(key, bucket);
+}
+
+/** The address a request came from, for keys that combine it with something else. */
+export function clientIp(req: Request): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req.headers.get("x-real-ip") ??
+    "anonymous"
+  );
 }

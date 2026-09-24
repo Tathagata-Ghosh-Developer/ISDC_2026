@@ -18,6 +18,7 @@ const KEYS = [
   "ADMIN_USERS",
   "COMMITTEE_USERS",
   "VIEWER_USERS",
+  "FUNDRAISER_USERS",
   "ADMIN_PASSWORD",
   "AUTH_SECRET",
 ] as const;
@@ -118,7 +119,7 @@ describe("checkCredentials", () => {
     process.env.COMMITTEE_USERS = "sayak:shared-passphrase";
     process.env.ADMIN_USERS = "sayak:shared-passphrase";
     expect(checkCredentials("sayak", "shared-passphrase")).toBe("admin");
-    expect(accountCounts()).toEqual({ admin: 1, committee: 0, viewer: 0 });
+    expect(accountCounts()).toEqual({ admin: 1, committee: 0, fundraiser: 0, viewer: 0 });
   });
 
   it("gives the stronger role when only two of the three lists name them", () => {
@@ -149,7 +150,7 @@ describe("checkCredentials", () => {
     process.env.VIEWER_USERS = ",,,";
     expect(checkCredentials("tathagata", "anything")).toBeNull();
     expect(checkCredentials("", "")).toBeNull();
-    expect(accountCounts()).toEqual({ admin: 0, committee: 0, viewer: 0 });
+    expect(accountCounts()).toEqual({ admin: 0, committee: 0, fundraiser: 0, viewer: 0 });
   });
 
   it("skips a malformed pair but keeps the good one beside it", () => {
@@ -161,7 +162,7 @@ describe("checkCredentials", () => {
     expect(checkCredentials("arnab", "")).toBeNull();
     expect(checkCredentials("", "orphan")).toBeNull();
     expect(checkCredentials("ayan", "")).toBeNull();
-    expect(accountCounts()).toEqual({ admin: 1, committee: 0, viewer: 0 });
+    expect(accountCounts()).toEqual({ admin: 1, committee: 0, fundraiser: 0, viewer: 0 });
   });
 
   it("does not let a name with no passphrase sign in with an empty string", () => {
@@ -196,7 +197,7 @@ describe("accountCounts", () => {
     process.env.ADMIN_USERS = "a:one,b:two";
     process.env.COMMITTEE_USERS = "c:three";
     process.env.VIEWER_USERS = "d:four,e:five,f:six";
-    expect(accountCounts()).toEqual({ admin: 2, committee: 1, viewer: 3 });
+    expect(accountCounts()).toEqual({ admin: 2, committee: 1, fundraiser: 0, viewer: 3 });
   });
 });
 

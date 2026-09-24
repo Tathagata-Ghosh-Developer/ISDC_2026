@@ -5,39 +5,73 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
   Download,
+  ExternalLink,
+  ImageIcon,
   Loader2,
+  Pencil,
   RefreshCw,
   Search,
-  ImageIcon,
   Trash2,
   Undo2,
   X,
 } from "lucide-react";
 import { WhatsappIcon } from "@/components/BrandIcons";
 import AddDonor from "./AddDonor";
+import DonorFields, { readDonorForm, type DonorInput } from "./DonorFields";
 import type { Donation } from "@/lib/db";
+import { can, type Role } from "@/lib/roles";
 import { formatINR, formatDate, formatDateTime } from "@/lib/format";
 
-type Filter = "pending" | "verified" | "rejected" | "all";
+type Filter = "pending" | "to-send" | "sent" | "verified" | "rejected" | "all";
 
 const FILTERS: { value: Filter; label: string }[] = [
+  { value: "to-send", label: "Receipt to send" },
+  { value: "sent", label: "Receipt sent" },
   { value: "pending", label: "Awaiting check" },
-  { value: "verified", label: "Verified" },
+  { value: "verified", label: "All verified" },
   { value: "rejected", label: "Rejected" },
   { value: "all", label: "Everything" },
 ];
 
-export default function DonationsPanel({
-  role,
-}: {
-  role: "admin" | "committee";
-}) {
+type DeskRole = Exclude<Role, "viewer">;
+
+/** Who typed the entry in: the new column, or the note older rows carry. */
+function enteredBy(d: Donation): string | null {
+  if (d.entered_by) return d.entered_by;
+  const m = /^Entered by (\S+)/.exec(d.admin_note ?? "");
+  return m ? m[1] : null;
+}
+
+function toInput(d: Donation): DonorInput {
+  return {
+    name: d.name,
+    display_name: d.display_name ?? "",
+    amount: String(Number(d.amount)),
+    category: d.category,
+    phone: d.phone,
+    email: d.email,
+    sr_number: d.sr_number ?? "",
+    method: d.method,
+    reference: d.reference ?? "",
+    paid_on: d.paid_on ?? "",
+    message: d.message ?? "",
+  };
+}
+
+export default function DonationsPanel({ role, user }: { role: DeskRole; user: string }) {
   const isAdmin = role === "admin";
+  const everyone = can(role, "seeAllDonations");
+  const canSend = can(role, "markReceiptSent");
+  const canEdit = can(role, "editDonation");
+
   const [rows, setRows] = useState<Donation[]>([]);
-  const [filter, setFilter] = useState<Filter>("pending");
+  const [filter, setFilter] = useState<Filter>(
+    !everyone ? "all" : isAdmin ? "pending" : "to-send",
+  );
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState<string | null>(null);
+  const [editing, setEditing] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -62,6 +96,12 @@ export default function DonationsPanel({
     return () => clearTimeout(t);
   }, [load, q]);
 
+  function replace(d: Donation) {
+    setRows((rs) =>
+      rs.map((r) => (r.id === d.id ? { ...r, ...d, amount: Number(d.amount) } : r)),
+    );
+  }
+
   /** Opens the donor's screenshot on a link that dies in two minutes. */
   async function openProof(id: string) {
     setWorking(id);
@@ -82,7 +122,7 @@ export default function DonationsPanel({
     setError(data.error ?? "Could not open that screenshot.");
   }
 
-  /** Offered only to an administrator, and refused again server side. */
+  /** Offered only to the administrator, and refused again server side. */
   async function remove(id: string) {
     setWorking(id);
     setError(null);
@@ -92,9 +132,7 @@ export default function DonationsPanel({
       body: JSON.stringify({ id }),
     }).catch(() => null);
 
-    const data = res
-      ? ((await res.json().catch(() => ({}))) as { error?: string })
-      : {};
+    const data = res ? ((await res.json().catch(() => ({}))) as { error?: string }) : {};
     if (!res || !res.ok) {
       setError(data.error ?? "Could not delete that.");
       setWorking(null);
@@ -104,35 +142,46 @@ export default function DonationsPanel({
     setWorking(null);
   }
 
-  async function act(id: string, action: string) {
+  async function act(id: string, action: string, extra: Record<string, unknown> = {}) {
     setWorking(id);
+    setError(null);
     const res = await fetch("/api/admin/donations", {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ id, action }),
+      body: JSON.stringify({ id, action, ...extra }),
     }).catch(() => null);
 
-    if (!res || !res.ok) {
-      const data = res ? ((await res.json().catch(() => ({}))) as { error?: string }) : {};
-      setError(data.error ?? "That did not go through.");
-      setWorking(null);
-      return;
-    }
-    const data = (await res.json()) as { donation?: Donation };
-    if (data.donation) {
-      setRows((rs) =>
-        rs.map((r) =>
-          r.id === id ? { ...r, ...data.donation, amount: Number(data.donation!.amount) } : r,
-        ),
-      );
-    }
+    const data = res
+      ? ((await res.json().catch(() => ({}))) as { donation?: Donation; error?: string })
+      : {};
     setWorking(null);
-    if (filter !== "all") void load();
+
+    if (!res || !res.ok) {
+      setError(data.error ?? "That did not go through.");
+      return false;
+    }
+    if (data.donation) replace(data.donation);
+    return true;
+  }
+
+  /** The tick box. The row leaves "Receipt to send" once the list reloads. */
+  async function tick(d: Donation, sent: boolean) {
+    const ok = await act(d.id, sent ? "receipt-sent" : "receipt-unsent");
+    if (ok && (filter === "to-send" || filter === "sent")) {
+      setRows((rs) => rs.filter((r) => r.id !== d.id));
+    }
+  }
+
+  async function saveEdit(d: Donation, form: HTMLFormElement) {
+    if (!form.reportValidity()) return;
+    const ok = await act(d.id, "edit", { fields: readDonorForm(new FormData(form)) });
+    if (ok) setEditing(null);
   }
 
   /**
-   * Sends through the Cloud API when the committee has configured it,
-   * and otherwise opens WhatsApp with the message already written.
+   * Opens WhatsApp with the receipt already written. It does not tick
+   * the box: opening WhatsApp is not the same as pressing send, and the
+   * box is only worth anything if it means the message went.
    */
   async function sendReceipt(d: Donation) {
     setWorking(d.id);
@@ -153,20 +202,19 @@ export default function DonationsPanel({
         })
       : {};
 
-    if (data.emailed && data.emailed.startsWith("failed")) {
-      setError(`Email ${data.emailed}`);
-    }
+    setWorking(null);
+    if (data.emailed && data.emailed.startsWith("failed")) setError(`Email ${data.emailed}`);
 
     if (data.link) {
       window.open(data.link, "_blank", "noopener");
-      await act(d.id, "receipt-sent");
-      setWorking(null);
       return;
     }
-
-    if (!data.ok) setError(data.error ?? "Could not send that.");
-    setWorking(null);
-    void load();
+    if (data.ok) {
+      // Sent by the API itself, which has already marked it.
+      void load();
+      return;
+    }
+    setError(data.error ?? "Could not send that.");
   }
 
   const totals = useMemo(() => {
@@ -176,6 +224,7 @@ export default function DonationsPanel({
       shown: rows.reduce((s, r) => s + Number(r.amount), 0),
       verified: verified.reduce((s, r) => s + Number(r.amount), 0),
       awaiting: rows.filter((r) => r.status === "pending").length,
+      toSend: verified.filter((r) => !r.receipt_sent_at).length,
     };
   }, [rows]);
 
@@ -184,34 +233,45 @@ export default function DonationsPanel({
       <AddDonor onAdded={() => void load()} role={role} />
 
       {/* ---- summary ---- */}
-      <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-4">
-        <Cell label="Rows shown" value={String(totals.count)} />
-        <Cell label="Awaiting check" value={String(totals.awaiting)} tone="sindoor" />
-        <Cell label="Verified in view" value={formatINR(totals.verified)} />
-        <Cell label="Total in view" value={formatINR(totals.shown)} />
-      </div>
-      <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint">
-        These figures are for the committee. The public board carries names
-        and amounts and never a total.
-      </p>
+      {everyone ? (
+        <>
+          <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-4">
+            <Cell label="Rows shown" value={String(totals.count)} />
+            <Cell label="Receipts to send, in view" value={String(totals.toSend)} tone="sindoor" />
+            <Cell label="Awaiting check, in view" value={String(totals.awaiting)} />
+            <Cell label="Verified in view" value={formatINR(totals.verified)} />
+          </div>
+          <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint">
+            These figures are for the committee. The public board carries names
+            and amounts and never a total.
+          </p>
+        </>
+      ) : (
+        <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+          <Cell label={`Entries by ${user}`} value={String(totals.count)} />
+          <Cell label="Collected by you" value={formatINR(totals.verified)} tone="sindoor" />
+        </div>
+      )}
 
       {/* ---- controls ---- */}
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <div className="flex flex-wrap gap-1">
-          {FILTERS.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => setFilter(f.value)}
-              className={`border px-3 py-1.5 text-[0.72rem] uppercase tracking-[0.14em] transition-colors ${
-                filter === f.value
-                  ? "border-sindoor bg-sindoor text-paper-3"
-                  : "border-line text-ink-faint hover:border-gold hover:text-gold"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
+        {everyone && (
+          <div className="flex flex-wrap gap-1">
+            {FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`border px-3 py-1.5 text-[0.72rem] uppercase tracking-[0.14em] transition-colors ${
+                  filter === f.value
+                    ? "border-sindoor bg-sindoor text-paper-3"
+                    : "border-line text-ink-faint hover:border-gold hover:text-gold"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <label className="relative min-w-[12rem] flex-1">
           <Search
@@ -221,7 +281,7 @@ export default function DonationsPanel({
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Name, email, phone, UTR, receipt or SR number"
+            placeholder="Name, phone, UTR, receipt or SR number"
             className="field !py-2 !pl-9 !text-[0.8rem]"
           />
         </label>
@@ -232,7 +292,9 @@ export default function DonationsPanel({
 
         {isAdmin && (
           <a
-            href={`/api/admin/export?what=donations&status=${filter}`}
+            href={`/api/admin/export?what=donations&status=${
+              filter === "to-send" || filter === "sent" ? "verified" : filter
+            }`}
             className="btn btn-ghost !py-2 !text-[0.68rem]"
           >
             <Download size={13} /> CSV
@@ -256,7 +318,13 @@ export default function DonationsPanel({
 
         {!loading && rows.length === 0 && (
           <p className="surface p-8 text-center text-[0.85rem] text-ink-soft">
-            Nothing here. {filter === "pending" && "Every declaration has been checked."}
+            {!everyone
+              ? "Nothing entered from this account yet."
+              : filter === "to-send"
+                ? "Every verified donor has been sent a receipt."
+                : filter === "pending"
+                  ? "Nothing here. Every declaration has been checked."
+                  : "Nothing here."}
           </p>
         )}
 
@@ -284,21 +352,30 @@ export default function DonationsPanel({
                   </div>
 
                   <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-[0.78rem] sm:grid-cols-2 lg:grid-cols-3">
-                    <Item label="Category" value={d.category} />
-                    <Item label="SR" value={d.sr_number ?? "not given"} />
-                    <Item label="Email" value={d.email} />
-                    <Item label="WhatsApp" value={`+91 ${d.phone}`} />
                     <Item label="Mode" value={d.method.toUpperCase()} />
-                    <Item label="Reference" value={d.reference ?? "not given"} />
-                    <Item label="Paid on" value={formatDate(d.paid_on)} />
-                    <Item label="Declared" value={formatDateTime(d.created_at)} />
-                    {d.verified_by && (
+                    <Item
+                      label="WhatsApp"
+                      value={d.phone === "0000000000" ? "not given" : `+91 ${d.phone}`}
+                    />
+                    {everyone && <Item label="Category" value={d.category} />}
+                    {everyone && <Item label="SR" value={d.sr_number ?? "not given"} />}
+                    {everyone && <Item label="Email" value={d.email} />}
+                    {d.reference && <Item label="Reference" value={d.reference} />}
+                    {d.paid_on && <Item label="Paid on" value={formatDate(d.paid_on)} />}
+                    <Item
+                      label={everyone ? "Declared" : "Entered"}
+                      value={formatDateTime(d.created_at)}
+                    />
+                    {everyone && enteredBy(d) && (
+                      <Item label="Entered by" value={enteredBy(d)!} />
+                    )}
+                    {everyone && d.verified_by && (
                       <Item label="Verified by" value={d.verified_by} />
                     )}
-                    {d.receipt_sent_at && (
+                    {everyone && d.updated_by && (
                       <Item
-                        label="Receipt sent"
-                        value={formatDateTime(d.receipt_sent_at)}
+                        label="Edited"
+                        value={`${d.updated_by}, ${formatDateTime(d.updated_at ?? null)}`}
                       />
                     )}
                   </dl>
@@ -317,9 +394,101 @@ export default function DonationsPanel({
                 </div>
               </div>
 
+              {/* ---- the receipt, ticked off ---- */}
+              {canSend && d.status === "verified" && (
+                <label
+                  className={`mt-4 flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 border px-3 py-2.5 text-[0.82rem] transition-colors ${
+                    d.receipt_sent_at
+                      ? "border-leaf/50 bg-leaf/5 text-leaf"
+                      : "border-gold/50 text-ink"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={Boolean(d.receipt_sent_at)}
+                    disabled={working === d.id}
+                    onChange={(e) => void tick(d, e.target.checked)}
+                    className="h-4 w-4 accent-[var(--c-leaf)]"
+                  />
+                  <span>WhatsApp receipt sent</span>
+                  {d.receipt_sent_at && (
+                    <span className="text-[0.7rem] text-ink-faint">
+                      {d.receipt_sent_by ? `${d.receipt_sent_by}, ` : ""}
+                      {formatDateTime(d.receipt_sent_at)}
+                    </span>
+                  )}
+                </label>
+              )}
+
+              {/* ---- correcting the details ---- */}
+              {canEdit && editing === d.id && (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void saveEdit(d, e.currentTarget);
+                  }}
+                  className="mt-4 border-t border-line pt-4"
+                >
+                  <fieldset disabled={working === d.id} className="space-y-4">
+                    <DonorFields initial={toInput(d)} full />
+                    <p className="text-[0.72rem] leading-relaxed text-ink-faint">
+                      The receipt number and status do not change. The change is
+                      recorded under your name.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <button className="btn btn-primary !py-1.5 !text-[0.65rem]">
+                        {working === d.id ? (
+                          <Loader2 size={12} className="animate-spin" />
+                        ) : (
+                          <Check size={12} />
+                        )}
+                        Save changes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditing(null)}
+                        className="btn btn-ghost !py-1.5 !text-[0.65rem]"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </fieldset>
+                </form>
+              )}
+
               {/* ---- actions ---- */}
-              <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
-                {d.proof_url && (
+              <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
+                {d.status === "verified" && (
+                  <a
+                    href={`/receipt/${d.receipt_token}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-ghost !py-1.5 !text-[0.65rem]"
+                  >
+                    <ExternalLink size={12} /> Open receipt
+                  </a>
+                )}
+
+                {canSend && d.status === "verified" && (
+                  <button
+                    onClick={() => void sendReceipt(d)}
+                    disabled={working === d.id}
+                    className="btn btn-ghost !border-leaf !py-1.5 !text-[0.65rem] !text-leaf"
+                  >
+                    <WhatsappIcon size={12} /> Send on WhatsApp
+                  </button>
+                )}
+
+                {canEdit && editing !== d.id && (
+                  <button
+                    onClick={() => setEditing(d.id)}
+                    className="btn btn-ghost !py-1.5 !text-[0.65rem]"
+                  >
+                    <Pencil size={12} /> Edit details
+                  </button>
+                )}
+
+                {everyone && d.proof_url && (
                   <button
                     onClick={() => void openProof(d.id)}
                     disabled={working === d.id}
@@ -331,7 +500,7 @@ export default function DonationsPanel({
 
                 {isAdmin && d.status !== "verified" && (
                   <button
-                    onClick={() => act(d.id, "verify")}
+                    onClick={() => void act(d.id, "verify").then(() => void load())}
                     disabled={working === d.id}
                     className="btn btn-primary !py-1.5 !text-[0.65rem]"
                   >
@@ -344,29 +513,9 @@ export default function DonationsPanel({
                   </button>
                 )}
 
-                {d.status === "verified" && (
-                  <>
-                    <a
-                      href={`/receipt/${d.receipt_token}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-ghost !py-1.5 !text-[0.65rem]"
-                    >
-                      Open receipt
-                    </a>
-                    <button
-                      onClick={() => sendReceipt(d)}
-                      disabled={working === d.id}
-                      className="btn btn-ghost !py-1.5 !text-[0.65rem] !border-leaf !text-leaf"
-                    >
-                      <WhatsappIcon size={12} /> Send the receipt
-                    </button>
-                  </>
-                )}
-
                 {isAdmin && d.status !== "rejected" && (
                   <button
-                    onClick={() => act(d.id, "reject")}
+                    onClick={() => void act(d.id, "reject").then(() => void load())}
                     disabled={working === d.id}
                     className="btn btn-ghost !py-1.5 !text-[0.65rem]"
                   >
@@ -376,7 +525,7 @@ export default function DonationsPanel({
 
                 {isAdmin && d.status !== "pending" && (
                   <button
-                    onClick={() => act(d.id, "pending")}
+                    onClick={() => void act(d.id, "pending").then(() => void load())}
                     disabled={working === d.id}
                     className="btn btn-ghost !py-1.5 !text-[0.65rem]"
                   >
@@ -406,7 +555,7 @@ export default function DonationsPanel({
 
                 {!isAdmin && d.status === "pending" && (
                   <span className="self-center text-[0.68rem] text-ink-faint">
-                    Waiting for an administrator to check this against the
+                    Waiting for the administrator to check this against the
                     statement.
                   </span>
                 )}
@@ -418,7 +567,6 @@ export default function DonationsPanel({
     </div>
   );
 }
-
 
 function StatusPill({ status }: { status: Donation["status"] }) {
   const map = {

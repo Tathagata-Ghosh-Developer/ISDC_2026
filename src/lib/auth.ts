@@ -1,27 +1,26 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { RANK, isRole, type Role } from "@/lib/roles";
 
 /**
- * Three ways into the console.
+ * Four ways into the console.
  *
  * There is no user table, no email provider and no OAuth. The
- * committee is a handful of people and the accounts rotate once a
- * year, so credentials live in environment variables and the session
+ * committee is a few dozen people at most and the accounts rotate once
+ * a year, so credentials live in environment variables and the session
  * is a signed cookie.
  *
- *   ADMIN_USERS="tathagata:one-long-passphrase,arnab:another-one"
- *   COMMITTEE_USERS="devraj:passphrase,sirshendu:passphrase"
+ *   ADMIN_USERS="tathagata:one-long-passphrase"
+ *   COMMITTEE_USERS="arnab:passphrase,devraj:passphrase"
+ *   FUNDRAISER_USERS="sourav:passphrase,rohit:passphrase"
  *   VIEWER_USERS="probash:passphrase"
  *
- * admin      everything, including approving and deleting entries,
- *            editing the site's copy and exporting the ledger.
- * committee  enters donations on a donor's behalf, sees the running
- *            total, and sees the core committee's contact sheet.
- *            Cannot approve, delete, or change anything on the site.
- * viewer     the board, by name and amount, with no total. The same
- *            thing the public sees, behind a login, for anyone the
- *            committee wants to give a named account to.
+ * What each role may do is in src/lib/roles.ts.
+ *
+ * The session is a signed cookie and nothing is stored server side, so
+ * one account may be signed in on any number of phones and laptops at
+ * once, and none of them affects the others.
  *
  * A name may appear in only one table. If it appears in two the
  * stronger role wins, which is checked at load so a typo cannot
@@ -31,10 +30,8 @@ import { cookies } from "next/headers";
 const COOKIE = "isdc_session";
 const MAX_AGE = 60 * 60 * 12; // 12 hours
 
-export type Role = "admin" | "committee" | "viewer";
-
-/** Higher number, more power. Used for at-least comparisons. */
-const RANK: Record<Role, number> = { viewer: 1, committee: 2, admin: 3 };
+export type { Role } from "@/lib/roles";
+export { atLeast, can } from "@/lib/roles";
 
 export type Session = { user: string; role: Role };
 
@@ -77,6 +74,8 @@ function accounts(): Map<string, Account> {
   };
 
   for (const [n, p] of parsePairs(process.env.VIEWER_USERS)) add(n, p, "viewer");
+  for (const [n, p] of parsePairs(process.env.FUNDRAISER_USERS))
+    add(n, p, "fundraiser");
   for (const [n, p] of parsePairs(process.env.COMMITTEE_USERS))
     add(n, p, "committee");
   for (const [n, p] of parsePairs(process.env.ADMIN_USERS)) add(n, p, "admin");
@@ -124,10 +123,6 @@ export async function destroySession(): Promise<void> {
   jar.delete("isdc_admin"); // the single-role cookie this replaced
 }
 
-function isRole(v: unknown): v is Role {
-  return v === "admin" || v === "committee" || v === "viewer";
-}
-
 /** Whoever is signed in, or null. */
 export async function currentSession(): Promise<Session | null> {
   const token = (await cookies()).get(COOKIE)?.value;
@@ -161,10 +156,6 @@ export async function requireCommittee(): Promise<Session> {
   return requireRole("committee");
 }
 
-export function atLeast(role: Role | null | undefined, min: Role): boolean {
-  return Boolean(role) && RANK[role as Role] >= RANK[min];
-}
-
 /**
  * A secret shorter than 32 characters makes secret() throw, which used
  * to surface as an unexplained 500 on the login form. Check the length
@@ -176,7 +167,12 @@ export function authConfigured(): boolean {
 
 /** For the setup notice: how many of each kind exist, never who. */
 export function accountCounts(): Record<Role, number> {
-  const counts: Record<Role, number> = { admin: 0, committee: 0, viewer: 0 };
+  const counts: Record<Role, number> = {
+    admin: 0,
+    committee: 0,
+    fundraiser: 0,
+    viewer: 0,
+  };
   for (const a of accounts().values()) counts[a.role] += 1;
   return counts;
 }

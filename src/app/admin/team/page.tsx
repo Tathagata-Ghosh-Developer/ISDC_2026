@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { currentSession } from "@/lib/auth";
+import { can } from "@/lib/roles";
 import { pointsOfContact, COMMITTEE, SITE } from "@/lib/site";
+import { fundraisers } from "@/lib/people.server";
 import { WhatsappIcon } from "@/components/BrandIcons";
 
 export const dynamic = "force-dynamic";
@@ -10,14 +12,18 @@ export const dynamic = "force-dynamic";
  *
  * Working phone numbers for people who have not published them, which
  * is precisely why this page is behind a login and carries no index.
- * A viewer account cannot reach it.
+ * Only the core committee and the administrator reach it; a fund
+ * raiser or viewer account is sent elsewhere.
  */
 export default async function AdminTeamPage() {
   const session = await currentSession();
   if (!session) return null;
-  if (session.role === "viewer") redirect("/daan/board");
+  if (!can(session.role, "contactSheet")) {
+    redirect(session.role === "viewer" ? "/daan/board" : "/admin");
+  }
 
   const sheet = pointsOfContact();
+  const raisers = fundraisers();
 
   return (
     <div>
@@ -87,6 +93,64 @@ export default async function AdminTeamPage() {
           </article>
         ))}
       </div>
+
+      {raisers.length > 0 && (
+      <section className="surface mt-6 overflow-hidden">
+        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line px-5 py-4">
+          <div>
+            <h2 className="text-[1rem] text-ink">Fund raisers</h2>
+            <p className="mt-1 max-w-[62ch] text-[0.78rem] leading-relaxed text-ink-soft">
+              Volunteers who take donations at a desk. Each signs in with the
+              account name shown, and what they enter lands verified with a
+              receipt number. They cannot send receipts or edit entries, so a
+              WhatsApp receipt for their donors is sent from the Donations tab.
+            </p>
+          </div>
+          <span className="bangla-display shrink-0 text-[1.05rem] text-gold">
+            অর্থ সংগ্রহ
+          </span>
+        </div>
+        <ul className="grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0">
+          {raisers.map((f) => (
+            <li
+              key={f.login}
+              className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-line px-5 py-3 sm:border-b"
+            >
+              <span className="text-[0.88rem] text-ink">
+                {f.name}
+                <span className="ml-2 text-[0.62rem] uppercase tracking-[0.16em] text-ink-faint">
+                  {f.department}
+                </span>
+                <span className="ml-2 font-mono text-[0.68rem] text-ink-faint">
+                  {f.login}
+                </span>
+              </span>
+              {f.phone ? (
+              <span className="flex items-center gap-3">
+                <a
+                  href={`tel:+91${f.phone}`}
+                  className="font-display text-[0.9rem] tabular-nums text-ink-soft hover:text-gold"
+                >
+                  +91 {f.phone}
+                </a>
+                <a
+                  href={`https://wa.me/91${f.phone}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label={`WhatsApp ${f.name}`}
+                  className="text-leaf hover:text-sindoor"
+                >
+                  <WhatsappIcon size={14} />
+                </a>
+              </span>
+              ) : (
+                <span className="text-[0.72rem] text-ink-faint">number not shared</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+      )}
 
       <section className="surface mt-6 p-5">
         <h2 className="eyebrow">The committee, as elected</h2>

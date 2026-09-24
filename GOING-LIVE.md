@@ -100,8 +100,9 @@ Write them out as one line each, names in lower case, passphrases long
 rather than clever:
 
 ```
-ADMIN_USERS=tathagata:<passphrase>,arnab:<passphrase>
-COMMITTEE_USERS=devraj:<passphrase>,sirshendu:<passphrase>,sayak:<passphrase>,ayan:<passphrase>
+ADMIN_USERS=tathagata:<passphrase>
+COMMITTEE_USERS=arnab:<passphrase>,devraj:<passphrase>,sirshendu:<passphrase>,sayak:<passphrase>,ayan:<passphrase>
+FUNDRAISER_USERS=sourav:<passphrase>,rohit:<passphrase>,...
 VIEWER_USERS=probash:<passphrase>
 ```
 

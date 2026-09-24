@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { db, dbReady, getDonation } from "@/lib/db";
+import { db, dbReady, getDonation, ledgerV2 } from "@/lib/db";
 import { sendReceipt, waLink, whatsappReady } from "@/lib/whatsapp";
 import { sendReceiptEmail, emailReady } from "@/lib/email";
 import { formatINR } from "@/lib/format";
@@ -20,9 +20,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   let admin: string;
   try {
-    // Sending a receipt records something that already happened, so a
-    // committee member may do it. Deciding that it happened is still
-    // an administrator's call, and that check lives on verification.
+    // The core committee and the administrator send receipts. A fund
+    // raiser enters donations and stops there.
     admin = (await requireRole("committee")).user;
   } catch {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
@@ -100,13 +99,11 @@ export async function POST(req: Request) {
     });
   }
 
-  await db()
-    .from("donations")
-    .update({
-      receipt_sent_at: new Date().toISOString(),
-      admin_note: `Receipt sent by ${admin}`,
-    })
-    .eq("id", id);
+  // admin_note is left alone: it says who entered the donation, and
+  // overwriting it here used to erase that.
+  const sentPatch: Record<string, unknown> = { receipt_sent_at: new Date().toISOString() };
+  if (await ledgerV2()) sentPatch.receipt_sent_by = admin;
+  await db().from("donations").update(sentPatch).eq("id", id);
 
   return NextResponse.json({ ok: true, configured: true, emailed, id: result.id });
 }

@@ -3,10 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
-
-type Role = "admin" | "committee" | "viewer";
-
-const RANK: Record<Role, number> = { viewer: 1, committee: 2, admin: 3 };
+import { atLeast, CAN, type Role } from "@/lib/roles";
 
 /**
  * Tabs a role cannot use are not rendered at all, so nobody is
@@ -15,12 +12,12 @@ const RANK: Record<Role, number> = { viewer: 1, committee: 2, admin: 3 };
  * courtesy and never a control.
  */
 const TABS: { href: string; label: string; min: Role }[] = [
-  { href: "/admin", label: "Donations", min: "committee" },
-  { href: "/admin/enquiries", label: "Enquiries", min: "committee" },
-  { href: "/admin/team", label: "Contact sheet", min: "committee" },
-  { href: "/admin/expenses", label: "Expenses", min: "admin" },
-  { href: "/admin/content", label: "Content", min: "admin" },
-  { href: "/admin/visits", label: "Visits", min: "admin" },
+  { href: "/admin", label: "Donations", min: CAN.enterDonation },
+  { href: "/admin/enquiries", label: "Enquiries", min: CAN.readEnquiries },
+  { href: "/admin/team", label: "Contact sheet", min: CAN.contactSheet },
+  { href: "/admin/expenses", label: "Expenses", min: CAN.manageExpenses },
+  { href: "/admin/content", label: "Content", min: CAN.editContent },
+  { href: "/admin/visits", label: "Visits", min: CAN.seeVisits },
 ];
 
 export default function AdminNav({ user, role }: { user: string; role: Role }) {
@@ -32,7 +29,7 @@ export default function AdminNav({ user, role }: { user: string; role: Role }) {
     router.refresh();
   }
 
-  const tabs = TABS.filter((t) => RANK[role] >= RANK[t.min]);
+  const tabs = TABS.filter((t) => atLeast(role, t.min));
 
   return (
     <nav className="flex flex-wrap items-center gap-1">

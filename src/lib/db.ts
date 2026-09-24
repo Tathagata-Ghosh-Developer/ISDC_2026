@@ -34,6 +34,12 @@ export type Donation = {
   verified_by: string | null;
   receipt_sent_at: string | null;
   created_at: string;
+  // Added by supabase/migrations/2026-09-24-roles.sql. Absent until that
+  // has been run, so every reader treats them as optional.
+  entered_by?: string | null;
+  receipt_sent_by?: string | null;
+  updated_at?: string | null;
+  updated_by?: string | null;
 };
 
 export type Expense = {
@@ -66,6 +72,30 @@ export function db(): SupabaseClient {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return cached;
+}
+
+/**
+ * Whether the columns from the September 2026 migration exist.
+ *
+ * The code ships before anybody has pasted the migration into Supabase,
+ * and must not break in between. So it asks once, and a yes is kept for
+ * the life of the instance. A no is asked again after a minute, so the
+ * new columns are picked up soon after the SQL runs, with no redeploy.
+ */
+let ledgerV2Seen = false;
+let ledgerV2CheckedAt = 0;
+
+export async function ledgerV2(): Promise<boolean> {
+  if (!dbReady) return false;
+  if (ledgerV2Seen) return true;
+  if (Date.now() - ledgerV2CheckedAt < 60_000) return false;
+  ledgerV2CheckedAt = Date.now();
+  const [a, b] = await Promise.all([
+    db().from("donations").select("entered_by,receipt_sent_by,updated_by").limit(1),
+    db().from("donation_edits").select("id").limit(1),
+  ]);
+  ledgerV2Seen = !a.error && !b.error;
+  return ledgerV2Seen;
 }
 
 /* ---------------------------------------------------------------

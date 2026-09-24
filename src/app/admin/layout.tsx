@@ -4,6 +4,7 @@ import { currentSession, authConfigured } from "@/lib/auth";
 import { dbReady } from "@/lib/db";
 import AdminLogin from "@/components/admin/AdminLogin";
 import AdminNav from "@/components/admin/AdminNav";
+import { ROLE_LABEL } from "@/lib/roles";
 
 export const metadata: Metadata = {
   title: "Committee",
@@ -11,13 +12,6 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-/** What the header calls this account, so nobody guesses at their own reach. */
-const ROLE_LABEL = {
-  admin: "Committee console",
-  committee: "Committee desk",
-  viewer: "Reading room",
-} as const;
 
 export default async function AdminLayout({
   children,

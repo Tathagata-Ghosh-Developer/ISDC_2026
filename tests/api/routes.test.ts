@@ -244,7 +244,7 @@ describe("POST /api/donations validation", () => {
     expect(body).not.toContain("Test Donor");
   });
 
-  it("throttles after five submissions from one address", async () => {
+  it("throttles after five submissions from one donor at one address", async () => {
     const ip = "198.51.100.42";
     const results: number[] = [];
     for (let i = 0; i < 7; i++) {
@@ -266,6 +266,27 @@ describe("POST /api/donations validation", () => {
     expect(results.slice(0, 5).every((s) => s === 400), results.join(",")).toBe(true);
     expect(results[5]).toBe(429);
     expect(results[6]).toBe(429);
+  });
+
+  it("does not turn away different donors who share one address", async () => {
+    // Every Jio phone at the pandal, and the whole campus Wi-Fi, arrives
+    // from a handful of addresses. The sixth donor must still get through.
+    const ip = "198.51.100.43";
+    const results: number[] = [];
+    for (let i = 0; i < 12; i++) {
+      const res = await fetch(`${BASE_DB_DOWN}/api/donations`, {
+        method: "POST",
+        headers: headers({}, ip),
+        body: donationForm({
+          ...VALID_DONATION,
+          phone: `98765432${String(i).padStart(2, "0")}`,
+          amount: "abc",
+        }),
+      });
+      results.push(res.status);
+      await res.text();
+    }
+    expect(results.every((s) => s === 400), results.join(",")).toBe(true);
   });
 
   it("answers 405 to a GET", async () => {
@@ -377,10 +398,11 @@ describe("POST /api/enquiries", () => {
     expectNoStackTrace(await res.text(), "enquiries/long-message");
   });
 
-  it("throttles after four messages from one address", async () => {
+  it("throttles after thirty messages from one address", async () => {
+    // Thirty, not four: the campus reaches us as one address.
     const ip = "198.51.100.77";
     const results: number[] = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 32; i++) {
       const res = await fetch(`${BASE_NO_DB}/api/enquiries`, {
         method: "POST",
         headers: headers({ "content-type": "application/json" }, ip),
@@ -394,8 +416,8 @@ describe("POST /api/enquiries", () => {
         await res.text();
       }
     }
-    expect(results.slice(0, 4).every((s) => s === 400), results.join(",")).toBe(true);
-    expect(results[4]).toBe(429);
+    expect(results.slice(0, 30).every((s) => s === 400), results.join(",")).toBe(true);
+    expect(results[30]).toBe(429);
   });
 
   it("answers 405 to a GET", async () => {

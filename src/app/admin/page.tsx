@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import DonationsPanel from "@/components/admin/DonationsPanel";
 import { currentSession } from "@/lib/auth";
+import { can } from "@/lib/roles";
 
 export const dynamic = "force-dynamic";
 
@@ -10,9 +11,17 @@ export default async function AdminDonationsPage() {
   // all, so anyone arriving here with a viewer account is simply in
   // the wrong room and gets sent to the one they came for.
   if (!session) return null;
-  if (session.role === "viewer") redirect("/daan/board");
+  if (!can(session.role, "enterDonation")) redirect("/daan/board");
 
-  const admin = session.role === "admin";
+  const intro = {
+    admin:
+      "Each online row is someone telling us they have transferred money. Match it against the bank statement before verifying, which issues the next receipt number and puts the name on the board. Anything entered here by you, the committee or a fund raiser is verified as it is saved.",
+    committee:
+      "Enter donations you have in hand; they are verified as they are saved and the receipt number appears at once. Tick off each WhatsApp receipt as you send it, and use Receipt to send to see who is left. Correct a donor's details with Edit; every change is recorded.",
+    fundraiser:
+      "Enter each donation as you take it. It is verified as it is saved, and the receipt number appears at once, so you can show the donor their receipt before they leave. Below are the entries you have made.",
+  } as const;
+  const role = session.role as keyof typeof intro;
 
   return (
     <div>
@@ -21,12 +30,10 @@ export default async function AdminDonationsPage() {
           Donations
         </h1>
         <p className="mt-1 max-w-[70ch] text-[0.85rem] leading-relaxed text-ink-soft">
-          {admin
-            ? "Each row is someone telling us they have transferred money. Match it against the bank statement before verifying. Verifying issues the next receipt number in sequence and puts the name on the board."
-            : "Enter donations collected in person here, and check on the ones already entered. Verifying is an administrator's job, because that is what issues the receipt number."}
+          {intro[role]}
         </p>
       </div>
-      <DonationsPanel role={session.role} />
+      <DonationsPanel role={role} user={session.user} />
     </div>
   );
 }

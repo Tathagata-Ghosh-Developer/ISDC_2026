@@ -32,7 +32,7 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
 
     const data = (await res.json().catch(() => ({}))) as {
       error?: string;
-      role?: "admin" | "committee" | "viewer";
+      role?: "admin" | "committee" | "fundraiser" | "viewer";
     };
     if (!res.ok) {
       setError(data.error ?? "Sign-in failed.");
@@ -60,8 +60,8 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
         </h1>
         <p className="bangla-display mt-1 text-[1.05rem] text-gold">প্রবেশপথ</p>
         <p className="mx-auto mt-3 max-w-[30ch] text-[0.75rem] leading-relaxed text-ink-faint">
-          Administrators, committee members and named readers all sign in
-          here. What you see afterwards depends on the account.
+          The committee, fund raisers and named readers all sign in here.
+          What you see afterwards depends on the account.
         </p>
       </div>
 

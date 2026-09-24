@@ -24,7 +24,8 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: Request) {
   const key = clientKey(req, "track");
-  if (!rateLimit(key, { max: 120, windowMs: 60_000 }).ok) {
+  // Sized for a shared campus or carrier address, not one browser.
+  if (!rateLimit(key, { max: 1200, windowMs: 60_000 }).ok) {
     return new NextResponse(null, { status: 204 });
   }
 

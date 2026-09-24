@@ -29,7 +29,9 @@ const EVENT_FOR: Record<string, string> = {
 
 export async function POST(req: Request) {
   const key = clientKey(req, "enquiry");
-  const limit = rateLimit(key, { max: 4, windowMs: 10 * 60_000 });
+  // Per address, and the campus is one address, so this is sized for a
+  // hostel full of people rather than one person.
+  const limit = rateLimit(key, { max: 30, windowMs: 10 * 60_000 });
   if (!limit.ok) {
     return NextResponse.json(
       { error: "That is several messages in a row. Try again shortly." },

@@ -49,3 +49,6 @@ next-env.d.ts
 # Generated credentials. Never commit these.
 CREDENTIALS.local.txt
 .vercel-env.tmp
+
+# Local ledger snapshots. Donor names, phones and emails: never commit.
+backups/

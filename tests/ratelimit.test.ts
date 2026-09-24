@@ -217,3 +217,46 @@ describe("eviction", () => {
     expect(rateLimit(victim, opts).ok).toBe(true);
   });
 });
+
+/**
+ * Sign-in counts failures only. Many people signing in correctly from
+ * the same campus address must never lock anybody out.
+ */
+import { blockedFor, recordFailure, clientIp } from "@/lib/ratelimit";
+
+describe("recordFailure and blockedFor", () => {
+  const opts = { max: 3, windowMs: 60_000, blockMs: 120_000 };
+
+  it("is not blocked before any failure", () => {
+    expect(blockedFor("fail:fresh")).toBe(0);
+  });
+
+  it("blocks at the limit and not before", () => {
+    recordFailure("fail:a", opts);
+    recordFailure("fail:a", opts);
+    expect(blockedFor("fail:a")).toBe(0);
+    recordFailure("fail:a", opts);
+    expect(blockedFor("fail:a")).toBeGreaterThan(100);
+  });
+
+  it("keeps separate keys separate", () => {
+    for (let i = 0; i < 3; i++) recordFailure("fail:b", opts);
+    expect(blockedFor("fail:b")).toBeGreaterThan(0);
+    expect(blockedFor("fail:c")).toBe(0);
+  });
+
+  it("looking does not count", () => {
+    for (let i = 0; i < 50; i++) blockedFor("fail:d");
+    recordFailure("fail:d", opts);
+    expect(blockedFor("fail:d")).toBe(0);
+  });
+});
+
+describe("clientIp", () => {
+  it("takes the first forwarded address", () => {
+    const req = new Request("https://x.test", {
+      headers: { "x-forwarded-for": "203.0.113.9, 10.0.0.1" },
+    });
+    expect(clientIp(req)).toBe("203.0.113.9");
+  });
+});

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { currentSession } from "@/lib/auth";
+import { can } from "@/lib/roles";
 import EnquiriesPanel from "@/components/admin/EnquiriesPanel";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +8,9 @@ export const dynamic = "force-dynamic";
 export default async function AdminEnquiriesPage() {
   const session = await currentSession();
   if (!session) return null;
-  if (session.role === "viewer") redirect("/daan/board");
+  if (!can(session.role, "readEnquiries")) {
+    redirect(session.role === "viewer" ? "/daan/board" : "/admin");
+  }
 
   return (
     <div>
@@ -22,7 +25,7 @@ export default async function AdminEnquiriesPage() {
           actually replied, so nobody writes to them twice.
         </p>
       </div>
-      <EnquiriesPanel role={session.role} />
+      <EnquiriesPanel role={session.role === "admin" ? "admin" : "committee"} />
     </div>
   );
 }

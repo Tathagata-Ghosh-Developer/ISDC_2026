@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db, dbReady } from "@/lib/db";
 import { normalisePhone } from "@/lib/format";
 import { mirrorToSheet } from "@/lib/sheets";
-import { clientKey, rateLimit } from "@/lib/ratelimit";
+import { clientIp, clientKey, rateLimit } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,10 +29,14 @@ function bad(message: string, status = 400) {
  * banking app, and the treasurer verifies it against the statement.
  */
 export async function POST(req: Request) {
-  // Unauthenticated and it writes a row and accepts a file, so it is
-  // the one endpoint worth throttling hardest.
+  // Unauthenticated, it writes a row and accepts a file, so it is
+  // throttled. But not by address alone: every phone on Jio, and the
+  // whole campus Wi-Fi, reaches us through a handful of addresses, and
+  // at the pandal a per-address limit of five turned away the sixth
+  // donor in ten minutes. So the address gets a generous ceiling that
+  // only a script reaches, and each donor's own number gets the tight one.
   const limit = rateLimit(clientKey(req, "donate"), {
-    max: 5,
+    max: 120,
     windowMs: 10 * 60_000,
   });
   if (!limit.ok) {
@@ -81,6 +85,17 @@ export async function POST(req: Request) {
     return bad("That email does not look right. Leave it blank if you prefer.");
   }
   if (phone.length !== 10) return bad("The WhatsApp number needs ten digits.");
+
+  const perDonor = rateLimit(`donate-phone:${phone}:${clientIp(req)}`, {
+    max: 5,
+    windowMs: 10 * 60_000,
+  });
+  if (!perDonor.ok) {
+    return NextResponse.json(
+      { ok: false, error: "That is several submissions in a row. Wait a few minutes." },
+      { status: 429, headers: { "retry-after": String(perDonor.retryAfter) } },
+    );
+  }
   if (!Number.isFinite(amount) || amount <= 0) return bad("Enter the amount you transferred.");
   if (amount > 10_000_000) return bad("That amount looks like a typo. Please contact the treasurer.");
   if (!CATEGORIES.has(category)) return bad("Pick who you are.");

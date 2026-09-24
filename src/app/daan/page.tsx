@@ -17,11 +17,17 @@ export const metadata: Metadata = {
     "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account, no payment gateway, no fees, and every rupee listed publicly.",
 };
 
-// Never prerendered. This page's most important line depends on
-// whether the database answers right now, and a build-time copy of it
-// is wrong in both directions: missing the warning when the ledger is
-// off, and still showing it after the ledger comes back on.
-export const dynamic = "force-dynamic";
+// Cached at the edge and rebuilt at most once a minute. This is the page
+// behind the QR code at the pandal, and rendering it afresh for every
+// scan meant a server function and a database read per visitor, which
+// is exactly what falls over when a thousand people scan at once.
+//
+// The warning below depends on dbReady, which is whether the Supabase
+// keys are set, not whether the database answers. Keys only change with
+// a redeploy, so a cached copy is never wrong about it. Bank details
+// edited in the console refresh this page at once (revalidatePath in
+// /api/admin/config).
+export const revalidate = 60;
 
 export default async function DonatePage() {
   const config = await getConfig();

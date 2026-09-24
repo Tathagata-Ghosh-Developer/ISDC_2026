@@ -1,75 +1,86 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Loader2, Plus, X } from "lucide-react";
-import { DONOR_CATEGORIES } from "@/lib/site";
+import { Check, ExternalLink, Loader2, Plus, X } from "lucide-react";
+import DonorFields, { readDonorForm } from "./DonorFields";
+import type { Role } from "@/lib/roles";
 
-const METHODS = ["cash", "upi", "neft", "imps", "cheque", "other"];
+type Saved = { receipt_no?: string | null; receipt_token?: string; name?: string };
 
 /**
- * For donations collected in person. Most of the mess-counter money
- * arrives as cash in someone's hand, and it still has to reach the
- * board with a receipt number like everything else.
+ * For donations taken in person: cash at a desk, a cheque, a transfer
+ * someone made without filling the form.
  *
- * A committee member fills this in and the entry waits. Only an
- * administrator can verify it, and verifying is what mints the
- * receipt number, so the checkbox below is theirs alone.
+ * Whoever enters it, the entry is verified as it is saved, so the
+ * receipt number exists before the donor walks away. Only the
+ * administrator may choose to hold one back for checking first.
  */
 export default function AddDonor({
   onAdded,
   role,
 }: {
   onAdded: () => void;
-  role: "admin" | "committee";
+  role: Exclude<Role, "viewer">;
 }) {
-  const [open, setOpen] = useState(false);
+  // A fund raiser is here to do exactly this, so the form starts open.
+  const [open, setOpen] = useState(role === "fundraiser");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<string | null>(null);
+  const [twin, setTwin] = useState(false);
+  const [saved, setSaved] = useState<Saved | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
+  async function save(confirmDuplicate: boolean) {
+    const form = formRef.current;
+    if (!form || !form.reportValidity()) return;
     const fd = new FormData(form);
 
     setBusy(true);
     setError(null);
-    setDone(null);
+    setSaved(null);
 
     const res = await fetch("/api/admin/donations", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        name: fd.get("name"),
-        email: fd.get("email"),
-        phone: fd.get("phone"),
-        sr_number: fd.get("sr_number"),
-        category: fd.get("category"),
-        amount: Number(fd.get("amount")),
-        method: fd.get("method"),
-        reference: fd.get("reference"),
-        paid_on: fd.get("paid_on"),
-        verify: role === "admin" && fd.get("verify") === "on",
+        ...readDonorForm(fd),
+        verify: role === "admin" ? fd.get("verify") === "on" : true,
+        confirm_duplicate: confirmDuplicate,
       }),
     }).catch(() => null);
 
     const data = res
       ? ((await res.json().catch(() => ({}))) as {
           error?: string;
-          donation?: { receipt_no?: string | null };
+          warning?: string;
+          duplicate?: boolean;
+          pending?: boolean;
+          donation?: Saved;
         })
       : {};
 
-    if (!res || !res.ok) {
+    setBusy(false);
+
+    if (!res) {
+      setError("No connection. Nothing was saved; try again when the network is back.");
+      return;
+    }
+    if (data.duplicate) {
+      setTwin(true);
+      setError(data.error ?? "This looks like an entry made a moment ago.");
+      return;
+    }
+    if (!res.ok) {
+      setTwin(false);
       setError(data.error ?? "Could not save that.");
-      setBusy(false);
       return;
     }
 
-    setDone(data.donation?.receipt_no ?? "saved");
+    setTwin(false);
+    if (data.warning) setError(data.warning);
+    setSaved(data.donation ?? { receipt_no: null });
     form.reset();
-    setBusy(false);
     onAdded();
   }
 
@@ -87,7 +98,11 @@ export default function AddDonor({
       <AnimatePresence initial={false}>
         {open && (
           <motion.form
-            onSubmit={submit}
+            ref={formRef}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void save(false);
+            }}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -96,122 +111,81 @@ export default function AddDonor({
           >
             <fieldset disabled={busy} className="space-y-4 p-6">
               <p className="text-[0.8rem] leading-relaxed text-ink-soft">
-                Use this for cash taken at a desk, a cheque handed over, or a
-                transfer someone made without filling the form. It records who
-                entered it. Everyone who gives appears on the board under the
-                name written here, so write it the way the donor would.
+                Write the name the way the donor would want it on the board;
+                everyone who gives appears there. Take their WhatsApp number so
+                the committee can send the receipt.
               </p>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <Field label="Name" required>
-                  <input name="name" required className="field" maxLength={120} />
-                </Field>
-                <Field label="Amount" required>
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    step="0.01"
-                    required
-                    className="field"
-                    inputMode="decimal"
-                  />
-                </Field>
-                <Field label="Category">
-                  <select name="category" className="field" defaultValue="student">
-                    {DONOR_CATEGORIES.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="WhatsApp number">
-                  <input name="phone" className="field" inputMode="numeric" />
-                </Field>
-                <Field label="Email">
-                  <input name="email" type="email" className="field" />
-                </Field>
-                <Field label="SR number">
-                  <input name="sr_number" className="field" />
-                </Field>
-                <Field label="Paid by">
-                  <select name="method" className="field" defaultValue="cash">
-                    {METHODS.map((m) => (
-                      <option key={m} value={m}>
-                        {m.toUpperCase()}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="Reference">
-                  <input name="reference" className="field" />
-                </Field>
-                <Field label="Date of payment">
-                  <input name="paid_on" type="date" className="field" />
-                </Field>
-              </div>
+              <DonorFields />
 
               {role === "admin" ? (
-                <div className="flex flex-wrap gap-5">
-                  <label className="flex items-center gap-2.5 text-[0.82rem] text-ink-soft">
-                    <input
-                      type="checkbox"
-                      name="verify"
-                      defaultChecked
-                      className="accent-[var(--c-sindoor)]"
-                    />
-                    Verify now and issue a receipt number
-                  </label>
-                </div>
+                <label className="flex items-center gap-2.5 text-[0.82rem] text-ink-soft">
+                  <input
+                    type="checkbox"
+                    name="verify"
+                    defaultChecked
+                    className="accent-[var(--c-sindoor)]"
+                  />
+                  Verify now and issue a receipt number
+                </label>
               ) : (
-                <p className="border-l-2 border-gold/50 pl-3 text-[0.78rem] leading-relaxed text-ink-soft">
-                  This goes into the pending list. An administrator checks it
-                  against the bank statement, and verifying is what issues the
-                  receipt number and puts the name on the board.
+                <p className="border-l-2 border-leaf/50 pl-3 text-[0.78rem] leading-relaxed text-ink-soft">
+                  Saving verifies it and issues the next receipt number at once,
+                  under your name. Only enter money you actually have in hand or
+                  have seen arrive.
                 </p>
               )}
 
               {error && (
-                <p className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor" role="alert">
-                  {error}
-                </p>
+                <div
+                  className="border border-sindoor/40 p-3 text-[0.8rem] text-sindoor"
+                  role="alert"
+                >
+                  <p>{error}</p>
+                  {twin && (
+                    <button
+                      type="button"
+                      onClick={() => void save(true)}
+                      className="btn btn-ghost mt-3 !border-sindoor/50 !py-1.5 !text-[0.65rem] !text-sindoor"
+                    >
+                      It is a different donation, save it anyway
+                    </button>
+                  )}
+                </div>
               )}
-              {done && (
-                <p className="flex items-center gap-2 border border-leaf/40 p-3 text-[0.8rem] text-leaf">
-                  <Check size={14} /> Saved
-                  {done !== "saved" && ` as ${done}`}
-                </p>
+
+              {saved && (
+                <div
+                  className="flex flex-wrap items-center gap-x-4 gap-y-2 border border-leaf/40 p-3 text-[0.82rem] text-leaf"
+                  role="status"
+                >
+                  <span className="flex items-center gap-2">
+                    <Check size={14} />
+                    {saved.receipt_no
+                      ? `Verified. Receipt ${saved.receipt_no}`
+                      : "Saved, waiting to be verified"}
+                  </span>
+                  {saved.receipt_token && (
+                    <a
+                      href={`/receipt/${saved.receipt_token}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-sindoor"
+                    >
+                      Show the donor their receipt <ExternalLink size={12} />
+                    </a>
+                  )}
+                </div>
               )}
 
               <button className="btn btn-primary !py-2 !text-[0.68rem]">
                 {busy ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />}
-                Add to the board
+                Save and issue receipt
               </button>
             </fieldset>
           </motion.form>
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-function Field({
-  label,
-  required,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="text-[0.62rem] uppercase tracking-[0.2em] text-ink-soft">
-        {label}
-        {required && <span className="ml-1 text-sindoor">*</span>}
-      </span>
-      <div className="mt-1.5">{children}</div>
-    </label>
   );
 }

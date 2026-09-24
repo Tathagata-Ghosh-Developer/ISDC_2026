@@ -60,7 +60,7 @@ const ACTIONS = new Set([
 export async function POST(req: Request) {
   // Generous, because one visitor legitimately sends one of these per
   // page, but not unlimited.
-  if (!rateLimit(clientKey(req, "session"), { max: 200, windowMs: 60_000 }).ok) {
+  if (!rateLimit(clientKey(req, "session"), { max: 1200, windowMs: 60_000 }).ok) {
     return new NextResponse(null, { status: 204 });
   }
   if (!dbReady) return new NextResponse(null, { status: 204 });
