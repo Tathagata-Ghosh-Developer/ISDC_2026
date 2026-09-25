@@ -52,3 +52,6 @@ CREDENTIALS.local.txt
 
 # Local ledger snapshots. Donor names, phones and emails: never commit.
 backups/
+
+# graphify knowledge graph, rebuilt locally (see the graphify skill)
+graphify-out/

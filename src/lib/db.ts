@@ -37,6 +37,7 @@ export type Donation = {
   // Added by supabase/migrations/2026-09-24-roles.sql. Absent until that
   // has been run, so every reader treats them as optional.
   entered_by?: string | null;
+  paid_at?: string | null;
   receipt_sent_by?: string | null;
   updated_at?: string | null;
   updated_by?: string | null;
@@ -96,6 +97,27 @@ export async function ledgerV2(): Promise<boolean> {
   ]);
   ledgerV2Seen = !a.error && !b.error;
   return ledgerV2Seen;
+}
+
+/**
+ * A write that survives a column the migration has not added yet.
+ *
+ * PostgREST refuses a whole row if one field names a column it does not
+ * know (PGRST204). Rather than keep a flag per column, drop the one it
+ * names and try again, so new fields ship before the SQL is run and
+ * start being stored the moment it is.
+ */
+export async function tolerant<T extends { error: { code?: string; message?: string } | null }>(
+  row: Record<string, unknown>,
+  write: (row: Record<string, unknown>) => PromiseLike<T>,
+): Promise<T> {
+  const r = { ...row };
+  for (let i = 0; ; i++) {
+    const res = await write(r);
+    const col = /'([a-z_]+)' column/.exec(res.error?.message ?? "")?.[1];
+    if (res.error?.code !== "PGRST204" || !col || !(col in r) || i >= 5) return res;
+    delete r[col];
+  }
 }
 
 /* ---------------------------------------------------------------

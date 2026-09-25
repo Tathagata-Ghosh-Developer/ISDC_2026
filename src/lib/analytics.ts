@@ -103,6 +103,10 @@ const EVENT_NAMES = new Set([
   "institute-enquiry",
   "feedback-sent",
   "route-to-pandal",
+  "guide-ai",
+  "guide-cached",
+  "guide-fallback",
+  "guide-money",
 ]);
 
 export function isKnownEvent(name: string): boolean {

@@ -446,6 +446,8 @@ alter table donations add column if not exists receipt_sent_by text;
 -- The last edit to the donor's details.
 alter table donations add column if not exists updated_at      timestamptz;
 alter table donations add column if not exists updated_by      text;
+-- The time of payment, filled from the server clock (2026-09-26).
+alter table donations add column if not exists paid_at         timestamptz;
 
 create index if not exists donations_entered_by_idx
   on donations (entered_by, created_at desc);

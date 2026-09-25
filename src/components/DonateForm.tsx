@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Loader2, AlertCircle } from "lucide-react";
 import { DONOR_CATEGORIES } from "@/lib/site";
 import { formatINR, normalisePhone } from "@/lib/format";
+import PaidAt from "@/components/PaidAt";
 
 type Props = {
   suggested: number[];
@@ -275,8 +276,8 @@ export default function DonateForm({ suggested, note }: Props) {
             <input name="reference" className="field" placeholder="e.g. 4312XXXXXXXX" />
           </Field>
 
-          <Field label="Date of payment">
-            <input name="paid_on" type="date" className="field" />
+          <Field label="Date and time of payment" hint="Filled in for now. Change it if you paid earlier.">
+            <PaidAt />
           </Field>
 
           <Field label="Screenshot of payment" hint="Optional. Helps us match it faster.">

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { db, dbReady } from "@/lib/db";
+import { db, dbReady, tolerant } from "@/lib/db";
+import { istToIso } from "@/lib/format";
 import { normalisePhone } from "@/lib/format";
 import { mirrorToSheet } from "@/lib/sheets";
 import { clientIp, clientKey, rateLimit } from "@/lib/ratelimit";
@@ -103,6 +104,10 @@ export async function POST(req: Request) {
 
   const paidOnRaw = text("paid_on");
   const paidOn = /^\d{4}-\d{2}-\d{2}$/.test(paidOnRaw) ? paidOnRaw : null;
+  const paidAt = istToIso(paidOnRaw, text("paid_time"));
+  if (paidAt && Date.parse(paidAt) > Date.now() + 60 * 60_000) {
+    return bad("That date and time are in the future.");
+  }
 
   /* --- optional proof of payment, into a private bucket --- */
   let proofUrl: string | null = null;
@@ -142,6 +147,7 @@ export async function POST(req: Request) {
     sr_number: text("sr_number").slice(0, 60) || null,
     reference: text("reference").slice(0, 80) || null,
     paid_on: paidOn,
+    paid_at: paidAt,
     message: text("message").slice(0, 140) || null,
     display_name: text("display_name").slice(0, 80) || null,
     // Being on the board is not optional: an account with names missing
@@ -151,11 +157,9 @@ export async function POST(req: Request) {
     status: "pending" as const,
   };
 
-  const { data, error } = await db()
-    .from("donations")
-    .insert(row)
-    .select("id,receipt_token")
-    .single();
+  const { data, error } = await tolerant(row, (r) =>
+    db().from("donations").insert(r).select("id,receipt_token").single(),
+  );
 
   if (error || !data) {
     // 23505 is a unique violation, and on this table it means the

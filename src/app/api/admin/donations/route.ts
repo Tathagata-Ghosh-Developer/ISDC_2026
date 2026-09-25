@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireRole, type Session } from "@/lib/auth";
 import { can, type Role } from "@/lib/roles";
-import { db, dbReady, ledgerV2, type Donation } from "@/lib/db";
+import { db, dbReady, ledgerV2, tolerant, type Donation } from "@/lib/db";
+import { istToIso } from "@/lib/format";
 import { mirrorToSheet } from "@/lib/sheets";
 
 export const runtime = "nodejs";
@@ -73,6 +74,7 @@ type Fields = {
   method: string;
   reference: string | null;
   paid_on: string | null;
+  paid_at: string | null;
   message: string | null;
 };
 
@@ -87,6 +89,7 @@ const EDITABLE: (keyof Fields)[] = [
   "method",
   "reference",
   "paid_on",
+  "paid_at",
   "message",
 ];
 
@@ -112,6 +115,10 @@ function readFields(
   }
   if (!CATEGORIES.has(category)) return "Unknown category.";
   if (!METHODS.has(method)) return "Unknown payment method.";
+  const paidAt = istToIso(paidOn, text("paid_time"));
+  if (paidAt && Date.parse(paidAt) > Date.now() + 60 * 60_000) {
+    return "That date and time are in the future.";
+  }
 
   return {
     name,
@@ -124,6 +131,7 @@ function readFields(
     method,
     reference: text("reference").slice(0, 80) || null,
     paid_on: /^\d{4}-\d{2}-\d{2}$/.test(paidOn) ? paidOn : null,
+    paid_at: paidAt,
     message: text("message").slice(0, 140) || null,
   };
 }
@@ -326,7 +334,12 @@ async function edit(
   for (const k of EDITABLE) {
     const was = k === "amount" ? Number(row.amount) : (row[k as keyof Donation] ?? null);
     const now = fields[k] ?? null;
-    if (was !== now) {
+    // Postgres hands a timestamp back in its own spelling; compare instants.
+    const same =
+      k === "paid_at" && typeof was === "string" && typeof now === "string"
+        ? Date.parse(was) === Date.parse(now)
+        : was === now;
+    if (!same) {
       before[k] = was;
       after[k] = now;
     }
@@ -342,12 +355,9 @@ async function edit(
     patch.updated_by = who;
   }
 
-  const { data, error } = await db()
-    .from("donations")
-    .update(patch)
-    .eq("id", id)
-    .select("*")
-    .single();
+  const { data, error } = await tolerant(patch, (r) =>
+    db().from("donations").update(r).eq("id", id).select("*").single(),
+  );
 
   if (duplicateReference(error)) {
     return NextResponse.json({ error: REFERENCE_TAKEN }, { status: 409 });
@@ -357,7 +367,15 @@ async function edit(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  if (v2) {
+  // tolerant() may have dropped a column the database does not have yet;
+  // the history records only what was actually stored.
+  for (const k of Object.keys(after)) {
+    if (!(k in (data as Record<string, unknown>))) {
+      delete before[k];
+      delete after[k];
+    }
+  }
+  if (v2 && Object.keys(after).length > 0) {
     const { error: logErr } = await db()
       .from("donation_edits")
       .insert({ donation_id: id, edited_by: who, before, after });
@@ -428,11 +446,9 @@ export async function POST(req: Request) {
   };
   if (v2) insert.entered_by = who;
 
-  const { data, error } = await db()
-    .from("donations")
-    .insert(insert)
-    .select("id")
-    .single();
+  const { data, error } = await tolerant(insert, (r) =>
+    db().from("donations").insert(r).select("id").single(),
+  );
 
   if (duplicateReference(error)) {
     return NextResponse.json({ error: REFERENCE_TAKEN }, { status: 409 });

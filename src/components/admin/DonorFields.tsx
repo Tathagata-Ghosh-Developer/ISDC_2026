@@ -1,6 +1,7 @@
 "use client";
 
 import { DONOR_CATEGORIES } from "@/lib/site";
+import PaidAt from "@/components/PaidAt";
 
 export const METHODS = ["cash", "upi", "neft", "imps", "cheque", "other"] as const;
 
@@ -16,6 +17,7 @@ export type DonorInput = {
   method: string;
   reference: string;
   paid_on: string;
+  paid_time: string;
   message: string;
 };
 
@@ -30,6 +32,7 @@ export const EMPTY_DONOR: DonorInput = {
   method: "cash",
   reference: "",
   paid_on: "",
+  paid_time: "",
   message: "",
 };
 
@@ -47,6 +50,7 @@ export function readDonorForm(fd: FormData) {
     method: s("method"),
     reference: s("reference"),
     paid_on: s("paid_on"),
+    paid_time: s("paid_time"),
     message: s("message"),
   };
 }
@@ -131,8 +135,8 @@ export default function DonorFields({
       <Field label="Reference" hint="UTR or cheque no.">
         <input name="reference" className="field" defaultValue={initial.reference} />
       </Field>
-      <Field label="Date of payment">
-        <input name="paid_on" type="date" className="field" defaultValue={initial.paid_on} />
+      <Field label="Date and time of payment" hint={full ? undefined : "live, from the server"}>
+        <PaidAt initialDate={initial.paid_on} initialTime={initial.paid_time} live={!full} />
       </Field>
       {full && (
         <>

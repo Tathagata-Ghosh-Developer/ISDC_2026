@@ -4,6 +4,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import Leaderboard from "@/components/Leaderboard";
 import AdminLogin from "@/components/admin/AdminLogin";
+import LiveRefresh from "@/components/LiveRefresh";
 import { getBoard } from "@/lib/db";
 import { authConfigured, currentSession } from "@/lib/auth";
 
@@ -53,6 +54,7 @@ export default async function BoardPage() {
 
   return (
     <>
+      <LiveRefresh seconds={30} />
       <Section className="pt-[7.5rem] sm:pt-[9rem]">
         <Container>
           <SectionHeading

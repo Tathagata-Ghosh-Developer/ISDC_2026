@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
@@ -20,7 +20,7 @@ import AddDonor from "./AddDonor";
 import DonorFields, { readDonorForm, type DonorInput } from "./DonorFields";
 import type { Donation } from "@/lib/db";
 import { can, type Role } from "@/lib/roles";
-import { formatINR, formatDate, formatDateTime } from "@/lib/format";
+import { formatINR, formatDate, formatDateTime, istParts } from "@/lib/format";
 
 type Filter = "pending" | "to-send" | "sent" | "verified" | "rejected" | "all";
 
@@ -53,7 +53,8 @@ function toInput(d: Donation): DonorInput {
     sr_number: d.sr_number ?? "",
     method: d.method,
     reference: d.reference ?? "",
-    paid_on: d.paid_on ?? "",
+    paid_on: d.paid_at ? istParts(Date.parse(d.paid_at)).date : (d.paid_on ?? ""),
+    paid_time: d.paid_at ? istParts(Date.parse(d.paid_at)).time : "",
     message: d.message ?? "",
   };
 }
@@ -74,27 +75,49 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
   const [editing, setEditing] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // A slow old response must not overwrite a newer one.
+  const latest = useRef(0);
+
+  /** silent: the background refresh, which must not flash or clear a message. */
+  const load = useCallback(async (silent = false) => {
+    const ticket = ++latest.current;
+    if (!silent) {
+      setLoading(true);
+      setError(null);
+    }
     const params = new URLSearchParams({ status: filter });
     if (q.trim()) params.set("q", q.trim());
 
     const res = await fetch(`/api/admin/donations?${params}`).catch(() => null);
     if (!res || !res.ok) {
-      setError("Could not load donations.");
+      if (!silent) setError("Could not load donations.");
       setLoading(false);
       return;
     }
     const data = (await res.json()) as { donations?: Donation[] };
+    if (ticket !== latest.current) return;
     setRows(data.donations ?? []);
     setLoading(false);
   }, [filter, q]);
 
   useEffect(() => {
-    const t = setTimeout(load, q ? 350 : 0);
+    const t = setTimeout(() => void load(), q ? 350 : 0);
     return () => clearTimeout(t);
   }, [load, q]);
+
+  // Eleven fund raisers and six committee members on their own phones:
+  // pick up each other's entries every 15 seconds while this tab is in
+  // view. Paused while a row is being edited, so nothing moves under a
+  // cursor. ponytail: polling, not push; Supabase Realtime would need a
+  // browser key and RLS policies this project deliberately does not have.
+  const quiet = editing === null && working === null;
+  useEffect(() => {
+    if (!quiet) return;
+    const id = setInterval(() => {
+      if (document.visibilityState === "visible") void load(true);
+    }, 15_000);
+    return () => clearInterval(id);
+  }, [load, quiet]);
 
   function replace(d: Donation) {
     setRows((rs) =>
@@ -361,7 +384,12 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
                     {everyone && <Item label="SR" value={d.sr_number ?? "not given"} />}
                     {everyone && <Item label="Email" value={d.email} />}
                     {d.reference && <Item label="Reference" value={d.reference} />}
-                    {d.paid_on && <Item label="Paid on" value={formatDate(d.paid_on)} />}
+                    {(d.paid_at || d.paid_on) && (
+                      <Item
+                        label="Paid"
+                        value={d.paid_at ? formatDateTime(d.paid_at) : formatDate(d.paid_on)}
+                      />
+                    )}
                     <Item
                       label={everyone ? "Declared" : "Entered"}
                       value={formatDateTime(d.created_at)}

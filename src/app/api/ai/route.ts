@@ -4,6 +4,8 @@ import { ART_FORMS } from "@/lib/content/artforms";
 import { getConfig } from "@/lib/config";
 import { VOLUNTEER_ROLES } from "@/lib/site";
 import { clientKey, rateLimit } from "@/lib/ratelimit";
+import { recordEvent } from "@/lib/analytics";
+import { MONEY, MONEY_REPLY, cacheKey, grounded } from "@/lib/guide";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,7 +62,7 @@ async function buildLines(): Promise<string[]> {
 function retrieve(question: string, lines: string[], take = 14): string[] {
   const words = question
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, " ")
     .split(/\s+/)
     .filter((w) => w.length > 3);
 
@@ -99,69 +101,110 @@ Rules:
 - Do not discuss anything unrelated to this Puja, the festival's history, or its art forms.`;
 
 /* ----------------------------------------------------------------
-   Providers, in order of preference. All free tiers.
+   Providers, in order: Groq, Gemini, then OmniRoute if one is hosted.
+   All free tiers. Each gets four seconds; one that answers 429 is
+   benched for a minute rather than asked again by every visitor.
    ---------------------------------------------------------------- */
-async function askGroq(messages: Msg[], context: string): Promise<string | null> {
-  const key = process.env.GROQ_API_KEY;
-  if (!key) return null;
+const TIMEOUT_MS = 4_000;
+const benched: Record<string, number> = {};
 
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${key}`,
-    },
-    body: JSON.stringify({
-      model: process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
-      temperature: 0.3,
-      max_tokens: 400,
-      messages: [
-        { role: "system", content: `${SYSTEM}\n\nCONTEXT:\n${context}` },
-        ...messages,
-      ],
-    }),
-  });
+type Ask = (messages: Msg[], context: string) => Promise<string | null>;
 
-  if (!res.ok) {
-    console.error("[ai] groq", res.status, await res.text().catch(() => ""));
-    return null;
-  }
-  const data = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
+/** Any OpenAI-compatible endpoint: Groq, and OmniRoute's /v1. */
+function openAi(name: string, url: string, key: string | undefined, model: string): Ask {
+  return async (messages, context) => {
+    if (Date.now() < (benched[name] ?? 0)) return null;
+    const res = await fetch(url, {
+      method: "POST",
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      headers: {
+        "content-type": "application/json",
+        ...(key ? { authorization: `Bearer ${key}` } : {}),
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.2,
+        max_tokens: 300,
+        messages: [{ role: "system", content: `${SYSTEM}\n\nCONTEXT:\n${context}` }, ...messages],
+      }),
+    });
+    if (res.status === 429) benched[name] = Date.now() + 60_000;
+    if (!res.ok) {
+      console.error(`[ai] ${name}`, res.status, (await res.text().catch(() => "")).slice(0, 200));
+      return null;
+    }
+    const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+    return data.choices?.[0]?.message?.content?.trim() || null;
   };
-  return data.choices?.[0]?.message?.content?.trim() ?? null;
 }
 
-async function askGemini(messages: Msg[], context: string): Promise<string | null> {
+const askGemini: Ask = async (messages, context) => {
   const key = process.env.GEMINI_API_KEY;
-  if (!key) return null;
-
-  const model = process.env.GEMINI_MODEL ?? "gemini-2.0-flash";
+  if (!key || Date.now() < (benched.gemini ?? 0)) return null;
+  // The alias follows Google's current Flash model, so a retired model
+  // name cannot silently switch the guide off.
+  const model = process.env.GEMINI_MODEL ?? "gemini-flash-latest";
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
     {
       method: "POST",
+      signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { "content-type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: `${SYSTEM}\n\nCONTEXT:\n${context}` }] },
-        contents: messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: m.content }],
-        })),
-        generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+        contents: messages.map((m) => ({ role: "user", parts: [{ text: m.content }] })),
+        generationConfig: { temperature: 0.2, maxOutputTokens: 300 },
       }),
     },
   );
-
+  if (res.status === 429) benched.gemini = Date.now() + 60_000;
   if (!res.ok) {
-    console.error("[ai] gemini", res.status, await res.text().catch(() => ""));
+    console.error("[ai] gemini", res.status, (await res.text().catch(() => "")).slice(0, 200));
     return null;
   }
   const data = (await res.json()) as {
     candidates?: { content?: { parts?: { text?: string }[] } }[];
   };
-  return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? null;
+  return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+};
+
+function providers(): { name: string; ask: Ask }[] {
+  const out: { name: string; ask: Ask }[] = [];
+  if (process.env.GROQ_API_KEY) {
+    out.push({
+      name: "groq",
+      ask: openAi(
+        "groq",
+        "https://api.groq.com/openai/v1/chat/completions",
+        process.env.GROQ_API_KEY,
+        process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
+      ),
+    });
+  }
+  if (process.env.GEMINI_API_KEY) out.push({ name: "gemini", ask: askGemini });
+  // OmniRoute runs on a server the committee hosts; its /v1 speaks the
+  // OpenAI protocol. Last, because a sleeping host must not delay the
+  // providers that are always up.
+  const omni = process.env.OMNIROUTE_URL?.replace(/\/+$/, "");
+  if (omni) {
+    out.push({
+      name: "omniroute",
+      ask: openAi(
+        "omniroute",
+        `${omni}/chat/completions`,
+        process.env.OMNIROUTE_KEY,
+        process.env.OMNIROUTE_MODEL ?? "auto",
+      ),
+    });
+  }
+  return out;
 }
+
+/* ponytail: per-instance memory, emptied by a cold start. A shared table
+   if the hit rate on festival days says it is worth a database round trip. */
+const answered = new Map<string, { reply: string; at: number }>();
+const CACHE_MS = 60 * 60_000;
+
 
 /**
  * No key, or every provider down: fall back to keyword retrieval over
@@ -170,7 +213,7 @@ async function askGemini(messages: Msg[], context: string): Promise<string | nul
 function fallback(question: string, context: string): string {
   const words = question
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, " ")
     .split(/\s+/)
     .filter((w) => w.length > 3);
 
@@ -241,14 +284,41 @@ export async function POST(req: Request) {
   }
 
   const question = clean[clean.length - 1].content;
-  const context = retrieve(question, await buildLines()).join("\n");
 
-  try {
-    const reply = (await askGroq(clean, context)) ?? (await askGemini(clean, context));
-    if (reply) return NextResponse.json({ reply });
-  } catch (err) {
-    console.error("[ai]", err instanceof Error ? err.message : err);
+  if (MONEY.test(question)) {
+    void recordEvent("guide-money");
+    return NextResponse.json({ reply: MONEY_REPLY, source: "fixed" });
   }
 
-  return NextResponse.json({ reply: fallback(question, context) });
+  // Only a first question is cached: a follow-up depends on what came before.
+  const key = clean.length === 1 ? cacheKey(question) : "";
+  const hit = key ? answered.get(key) : undefined;
+  if (hit && Date.now() - hit.at < CACHE_MS) {
+    void recordEvent("guide-cached");
+    return NextResponse.json({ reply: hit.reply, source: "cache" });
+  }
+
+  const context = retrieve(question, await buildLines()).join("\n");
+  const started = Date.now();
+
+  for (const p of providers()) {
+    // Never keep a visitor waiting past about nine seconds in total.
+    if (Date.now() - started > 5_000) break;
+    const reply = await p.ask(clean, context).catch((err) => {
+      console.error(`[ai] ${p.name}`, err instanceof Error ? err.message : err);
+      return null;
+    });
+    if (reply && grounded(reply, context)) {
+      if (key) {
+        if (answered.size >= 500) answered.delete(answered.keys().next().value!);
+        answered.set(key, { reply, at: Date.now() });
+      }
+      void recordEvent("guide-ai");
+      return NextResponse.json({ reply, source: p.name });
+    }
+    if (reply) console.warn(`[ai] ${p.name} reply rejected as ungrounded`);
+  }
+
+  void recordEvent("guide-fallback");
+  return NextResponse.json({ reply: fallback(question, context), source: "keyword" });
 }

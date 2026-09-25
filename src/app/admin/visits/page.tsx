@@ -18,6 +18,10 @@ const EVENT_LABEL: Record<string, string> = {
   "institute-enquiry": "Wrote in from another institute",
   "feedback-sent": "Sent feedback",
   "route-to-pandal": "Asked for directions",
+  "guide-ai": "Guide answered with AI",
+  "guide-cached": "Guide answered from its cache",
+  "guide-fallback": "Guide fell back to keyword search",
+  "guide-money": "Guide asked about money (fixed reply)",
 };
 
 export default async function AdminVisitsPage({

@@ -18,6 +18,8 @@ alter table donations add column if not exists receipt_sent_by text;
 -- The last edit to the donor's details.
 alter table donations add column if not exists updated_at      timestamptz;
 alter table donations add column if not exists updated_by      text;
+-- The time of payment, filled from the server clock (2026-09-26).
+alter table donations add column if not exists paid_at         timestamptz;
 
 create index if not exists donations_entered_by_idx
   on donations (entered_by, created_at desc);
@@ -41,9 +43,9 @@ alter table donation_edits enable row level security;
 revoke all on table donation_edits from public, anon, authenticated;
 grant all on table donation_edits to service_role;
 
--- Check: should print four column names and one table name.
+-- Check: should print five column names and one table name.
 select column_name from information_schema.columns
  where table_name = 'donations'
-   and column_name in ('entered_by','receipt_sent_by','updated_at','updated_by')
+   and column_name in ('entered_by','receipt_sent_by','updated_at','updated_by','paid_at')
 union all
 select table_name from information_schema.tables where table_name = 'donation_edits';

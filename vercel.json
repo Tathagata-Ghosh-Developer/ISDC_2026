@@ -5,5 +5,9 @@
       "path": "/api/keepalive",
       "schedule": "0 3 * * *"
     }
-  ]
+  ],
+  "regions": [
+    "sin1"
+  ],
+  "fluid": true
 }
