@@ -103,7 +103,7 @@ export async function ledgerV2(): Promise<boolean> {
    --------------------------------------------------------------- */
 
 /**
- * What the public board is allowed to know.
+ * What the donation board is allowed to know.
  *
  * Deliberately carries no identifier of any kind. An earlier version
  * sent the row id, which the browser then had in its HTML, and since a

@@ -104,7 +104,7 @@ const MOU_CLAUSES = [
   {
     n: "8",
     head: "Accounts",
-    body: "The committee publishes every donation it receives, by name and amount, on its public board, and publishes its expenditure alongside. A sponsor's contribution appears there in the same way as everyone else's. Anyone may tally the board against the committee's bank statement, which is the entire point of publishing it.",
+    body: "The committee records every donation it receives, by name and amount, with a numbered receipt, and records its expenditure alongside. A sponsor's contribution is recorded in the same way as everyone else's, and the committee will show a sponsor its own entries against the bank statement on request.",
   },
   {
     n: "9",
@@ -421,16 +421,11 @@ export default function SponsorshipProposalPage() {
                 artists. Printing Probash.
               </p>
               <p className="lede mt-4 text-[0.95rem]">
-                Every rupee of it is published as it is spent, next to every
-                rupee that came in, on a board anybody can check against the
-                bank statement. There is no payment gateway taking a cut, and
-                there is no total shown on the public board because the
-                committee would rather be checked line by line than trusted in
-                aggregate.
+                Every rupee of it is recorded as it is spent, next to every
+                rupee that came in, and every donation carries a numbered
+                receipt from an unbroken series. There is no payment gateway
+                taking a cut.
               </p>
-              <Link href="/daan/board" className="btn btn-ghost mt-7">
-                The donation board
-              </Link>
             </Reveal>
 
             <Reveal delay={0.1}>

@@ -287,15 +287,12 @@ export default async function Home() {
                   There is no payment gateway, so no percentage is skimmed off.
                   You transfer directly to the committee account, we verify it
                   against the bank statement, and a numbered receipt reaches
-                  your WhatsApp. Every verified rupee appears on the public
-                  board with your name and the amount, like everybody else.
+                  your WhatsApp. Every verified rupee is recorded against your
+                  name, like everybody else&apos;s.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link href="/daan" className="btn btn-primary">
                     <Heart size={14} /> Donate now
-                  </Link>
-                  <Link href="/daan/board" className="btn btn-ghost">
-                    See the donation board
                   </Link>
                 </div>
               </Reveal>
@@ -308,11 +305,8 @@ export default async function Home() {
                   <p className="text-[0.88rem] leading-relaxed text-ink-soft">
                     There is no minimum and no suggested minimum. A hundred
                     rupees from a first year and twenty thousand from an alumnus
-                    sit on the same board, under the same rules.
+                    get the same receipt, under the same rules.
                   </p>
-                  <Link href="/daan/board" className="btn btn-ghost">
-                    See the board
-                  </Link>
                 </div>
               </Reveal>
             </div>

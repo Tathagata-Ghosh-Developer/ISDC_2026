@@ -144,8 +144,8 @@ export async function POST(req: Request) {
     paid_on: paidOn,
     message: text("message").slice(0, 140) || null,
     display_name: text("display_name").slice(0, 80) || null,
-    // Being on the board is not optional. The accounts are public and a
-    // public account with names missing from it is not a public account.
+    // Being on the board is not optional: an account with names missing
+    // from it is not an account. The board itself needs a login.
     anonymous: false,
     proof_url: proofUrl,
     status: "pending" as const,

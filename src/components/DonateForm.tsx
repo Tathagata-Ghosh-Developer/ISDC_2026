@@ -120,9 +120,6 @@ export default function DonateForm({ suggested, note }: Props) {
               Open my receipt
             </Link>
           )}
-          <Link href="/daan/board" className="btn btn-ghost">
-            See the board
-          </Link>
           <button
             onClick={() => setState({ kind: "idle" })}
             className="btn btn-ghost"
@@ -341,7 +338,7 @@ export default function DonateForm({ suggested, note }: Props) {
             to the committee treasurer so the payment can be matched and a
             receipt sent. A screenshot, if you upload one, is stored privately
             and is visible only to the committee. Nothing is sold, shared or
-            used for anything else. Everyone who gives appears on the board, which is what makes the account checkable, so there is no opting out of it. If something is wrong with your entry, tell a convenor and it will be corrected. 
+            used for anything else. Everyone who gives is recorded on the donation board by name and amount. The board is visible only to the committee and signed-in members, not to the public. If something is wrong with your entry, tell a convenor and it will be corrected.
           </p>
         </div>
       </fieldset>

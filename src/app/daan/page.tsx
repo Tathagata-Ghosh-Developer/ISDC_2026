@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import fs from "node:fs";
 import path from "node:path";
 import { Building2, QrCode, ShieldCheck } from "lucide-react";
@@ -14,7 +13,7 @@ import { dbReady } from "@/lib/db";
 export const metadata: Metadata = {
   title: "Donate",
   description:
-    "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account, no payment gateway, no fees, and every rupee listed publicly.",
+    "Support the IISc Sharodiya Durgotsab. Transfer directly to the committee account, no payment gateway, no fees, and a numbered receipt for every rupee.",
 };
 
 // Cached at the edge and rebuilt at most once a minute. This is the page
@@ -194,8 +193,8 @@ export default async function DonatePage() {
                       },
                       {
                         n: "04",
-                        t: "Your name goes up on the board.",
-                        d: "Everyone who gives appears there, by name and amount. That is what makes it an account.",
+                        t: "Your name goes on the board.",
+                        d: "Everyone who gives is recorded there, by name and amount. The board is open to the committee and signed-in members.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">
@@ -211,9 +210,6 @@ export default async function DonatePage() {
                       </li>
                     ))}
                   </ol>
-                  <Link href="/daan/board" className="btn btn-ghost mt-7 w-full">
-                    See the public ledger
-                  </Link>
                 </div>
               </Reveal>
             </div>

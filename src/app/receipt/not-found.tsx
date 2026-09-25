@@ -82,8 +82,8 @@ export default function ReceiptNotFound() {
           </div>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/daan/board" className="btn btn-ghost">
-              The donation board
+            <Link href="/daan" className="btn btn-ghost">
+              Donate
             </Link>
             <Link href="/" className="btn btn-ghost">
               Back to the beginning

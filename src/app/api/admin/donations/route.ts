@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import { requireRole, type Session } from "@/lib/auth";
 import { can, type Role } from "@/lib/roles";
 import { db, dbReady, ledgerV2, type Donation } from "@/lib/db";
@@ -43,15 +42,6 @@ async function authorise(min: Role): Promise<Session | NextResponse> {
       { error: forbidden ? "Your account cannot do that." : "Unauthorised" },
       { status: forbidden ? 403 : 401 },
     );
-  }
-}
-
-/** The public board is cached for a minute. A change to who counts refreshes it at once. */
-function boardChanged() {
-  try {
-    revalidatePath("/daan/board");
-  } catch {
-    // Outside a request (tests) there is nothing to revalidate.
   }
 }
 
@@ -251,7 +241,6 @@ export async function PATCH(req: Request) {
     }
     const row = (Array.isArray(data) ? data[0] : data) as Donation;
     void mirrorToSheet({ ...row, amount: Number(row.amount) });
-    boardChanged();
     return NextResponse.json({ ok: true, donation: row });
   }
 
@@ -303,7 +292,6 @@ export async function PATCH(req: Request) {
     console.error("[admin/donations] patch", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  if (action !== "note") boardChanged();
   return NextResponse.json({ ok: true, donation: data });
 }
 
@@ -376,7 +364,6 @@ async function edit(
     if (logErr) console.error("[admin/donations] edit log", logErr.message);
   }
 
-  if (row.status === "verified") boardChanged();
   return NextResponse.json({ ok: true, donation: data, changed: Object.keys(after) });
 }
 
@@ -479,7 +466,6 @@ export async function POST(req: Request) {
 
   const verified = (Array.isArray(row) ? row[0] : row) as Donation;
   void mirrorToSheet({ ...verified, amount: Number(verified.amount) });
-  boardChanged();
   return NextResponse.json({ ok: true, id: data.id, donation: verified });
 }
 

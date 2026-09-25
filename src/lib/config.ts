@@ -151,7 +151,7 @@ export const DEFAULTS: Config = {
   donation: {
     goal: 0,
     showGoal: false,
-    note: "There is no minimum. Give what feels right; every rupee is listed publicly.",
+    note: "There is no minimum. Give what feels right; every rupee gets a numbered receipt.",
     noteBangla:
       "কোনও ন্যূনতম অঙ্ক নেই। যা মন চায় দিন, প্রতিটি টাকার হিসেব প্রকাশ্যে থাকবে।",
     suggested: [251, 501, 1001, 2100, 5001],

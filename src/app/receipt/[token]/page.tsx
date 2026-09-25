@@ -222,9 +222,6 @@ export default async function ReceiptPage({
 
         <div className="no-print mt-6 flex flex-wrap gap-3">
           <PrintButton label="Print or save as PDF" />
-          <Link href="/daan/board" className="btn btn-ghost">
-            The donation board
-          </Link>
           <Link href="/" className="btn btn-ghost">
             Home
           </Link>

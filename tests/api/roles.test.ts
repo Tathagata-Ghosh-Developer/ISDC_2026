@@ -275,3 +275,44 @@ describe("fund raisers' phone numbers", () => {
     }
   });
 });
+
+/* ================================================================
+   The donation board needs a login
+   ================================================================ */
+
+describe("the donation board", () => {
+  async function board(cookie: string | null) {
+    const res = await fetch(`${BASE_ROLES}/daan/board`, {
+      headers: { "x-forwarded-for": freshIp(), ...(cookie ? { cookie } : {}) },
+    });
+    return { status: res.status, cache: res.headers.get("cache-control") ?? "", html: await res.text() };
+  }
+
+  it("shows a stranger the sign-in form and no list", async () => {
+    const { status, html, cache } = await board(null);
+    expect(status).toBe(200);
+    expect(html).toContain("The donation board");
+    expect(html).toContain("Sign in");
+    expect(html).not.toContain("Everyone who gave");
+    expect(html).not.toContain("How a name gets here");
+    // A cached copy would be served to the next person to ask.
+    expect(cache).toMatch(/private|no-store/);
+  });
+
+  for (const role of ["viewer", "fundraiser", "committee", "admin"] as const) {
+    it(`shows the list to a signed-in ${role}`, async () => {
+      const { status, html, cache } = await board(await session(role));
+      expect(status).toBe(200);
+      expect(html).toContain("Everyone who gave");
+      expect(cache).toMatch(/private|no-store/);
+    });
+  }
+
+  it("is not linked from the public pages", async () => {
+    for (const page of ["/", "/daan", "/thikana", "/sponsors/proposal", "/no-such-page"]) {
+      const res = await fetch(`${BASE_ROLES}${page}`, { headers: { "x-forwarded-for": freshIp() } });
+      const html = await res.text();
+      expect(html.includes('href="/daan/board"'), `${page} links to the board`).toBe(false);
+    }
+  });
+});

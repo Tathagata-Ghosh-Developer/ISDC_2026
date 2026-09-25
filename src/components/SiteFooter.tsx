@@ -73,14 +73,6 @@ export default function SiteFooter() {
               ))}
               <li>
                 <Link
-                  href="/daan/board"
-                  className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
-                >
-                  Donation Board
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/sponsors"
                   className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                 >
@@ -152,9 +144,6 @@ export default function SiteFooter() {
             © {SITE.year} {SITE.name}. Run by students, funded by the community.
           </p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <Link href="/daan/board" className="hover:text-gold">
-              Financial transparency
-            </Link>
             <Link href="/thikana#write-to-us" className="hover:text-gold">
               Tell us what is wrong
             </Link>

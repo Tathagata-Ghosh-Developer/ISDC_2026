@@ -3,22 +3,52 @@ import Link from "next/link";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import Leaderboard from "@/components/Leaderboard";
+import AdminLogin from "@/components/admin/AdminLogin";
 import { getBoard } from "@/lib/db";
+import { authConfigured, currentSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  // Named people, exact amounts, a religious festival, an institute
-  // domain, and no opt-out. Whatever the argument for publishing it to
-  // anyone who visits, there is none for publishing it to Google for
-  // ever. Anybody who wants to check the accounts can open the page.
   robots: { index: false, follow: false },
   title: "Donation Board",
-  description:
-    "Everyone who has given to the IISc Sharodiya Durgotsab, by name, on one public board.",
+  description: "The donation board of the IISc Sharodiya Durgotsab, for signed-in members.",
 };
 
-export const revalidate = 60;
+// Behind a login since 25 September 2026, at the committee's decision.
+// Rendered per request, never cached: a cached copy of this page is a
+// copy of every donor's name and amount, served to whoever asks next.
+export const dynamic = "force-dynamic";
 
 export default async function BoardPage() {
+  const session = await currentSession();
+
+  // Nobody signed in: no names, no amounts, no database read at all.
+  if (!session) {
+    return (
+      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+        <Container>
+          <SectionHeading
+            as="h1"
+            eyebrow="দানপত্র The board"
+            title="The donation board"
+            bangla="দাতাদের নাম"
+            lede="The list of donors is open to the committee and to members with an account. Sign in to see it. If you have given and want to check your own entry, your receipt link has everything, or message a convenor."
+          />
+          <div className="mt-[2.618rem] grid place-items-center">
+            <AdminLogin configured={authConfigured()} />
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/daan" className="btn btn-primary">
+              Donate
+            </Link>
+            <Link href="/thikana#committee" className="btn btn-ghost">
+              Reach the committee
+            </Link>
+          </div>
+        </Container>
+      </Section>
+    );
+  }
+
   const board = await getBoard();
 
   return (
@@ -76,7 +106,7 @@ export default async function BoardPage() {
                       {
                         n: "04",
                         t: "Your name goes up",
-                        d: "Everyone who gives is on this board, by name and amount. There is no opting out of a public account.",
+                        d: "Everyone who gives is on this board, by name and amount, for signed-in members to see.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">
@@ -105,8 +135,8 @@ export default async function BoardPage() {
                   <h2 className="eyebrow">If something looks wrong</h2>
                   <p className="mt-4 text-[0.82rem] leading-relaxed text-ink-soft">
                     A spelling, an amount, a missing entry. Message a convenor
-                    and it gets corrected in public rather than quietly. Nothing
-                    on this board is removed without a note.
+                    and it gets corrected. Nothing on this board is removed
+                    without a note.
                   </p>
                   <Link
                     href="/thikana#committee"

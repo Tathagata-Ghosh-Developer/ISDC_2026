@@ -14,7 +14,7 @@
  *   fundraiser  volunteers at a desk. Enters donations, which land
  *               verified with a receipt number, and sees their own
  *               entries. Nothing else.
- *   viewer      the public board behind a named login.
+ *   viewer      the donation board, which needs a login.
  */
 
 export type Role = "admin" | "committee" | "fundraiser" | "viewer";

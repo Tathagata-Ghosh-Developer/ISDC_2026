@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { db, dbReady, type Expense } from "@/lib/db";
-import { revalidatePath } from "next/cache";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -63,7 +62,6 @@ export async function POST(req: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  revalidatePath("/daan/board");
   return NextResponse.json({ ok: true, expense: data });
 }
 
@@ -77,6 +75,5 @@ export async function DELETE(req: Request) {
   const { error } = await db().from("expenses").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  revalidatePath("/daan/board");
   return NextResponse.json({ ok: true });
 }

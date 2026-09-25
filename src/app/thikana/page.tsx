@@ -324,12 +324,8 @@ export default async function ThikanaPage() {
           <Reveal className="mt-8">
             <p className="max-w-[70ch] text-[0.8rem] leading-relaxed text-ink-faint">
               The committee account is operated jointly, and no single member can
-              move money alone. What comes in and what goes out is published on
-              the{" "}
-              <Link href="/daan/board" className="text-gold hover:text-sindoor">
-                donation board
-              </Link>
-              .
+              move money alone. Every donation is issued a numbered receipt from
+              an unbroken series.
             </p>
           </Reveal>
         </Container>
