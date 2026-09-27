@@ -63,6 +63,33 @@ export function istParts(ms: number): { date: string; time: string } {
   return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
 }
 
+/** The calendar day in India on which an instant falls: "2026-10-16". */
+export function istDay(iso: string | null | undefined): string {
+  const ms = iso ? Date.parse(iso) : NaN;
+  return Number.isNaN(ms) ? "" : istParts(ms).date;
+}
+
+/**
+ * A from/to pair of Indian calendar days as the instants that bound them,
+ * for filtering a timestamp column: from the first instant of `from` up
+ * to, but not including, the first instant of the day after `to`. A side
+ * that is missing, malformed or not a real date ("2026-13-01") is open.
+ */
+export function istDayRange(from?: string | null, to?: string | null): { gte?: string; lt?: string } {
+  const start = (d?: string | null) => {
+    if (!d || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+    const ms = Date.parse(`${d}T00:00:00+05:30`);
+    // Reject dates the parser quietly rolls over, like 31 April.
+    return Number.isNaN(ms) || istParts(ms).date !== d ? null : ms;
+  };
+  const f = start(from);
+  const t = start(to);
+  return {
+    ...(f !== null ? { gte: new Date(f).toISOString() } : {}),
+    ...(t !== null ? { lt: new Date(t + 86_400_000).toISOString() } : {}),
+  };
+}
+
 /** A date and time typed in India, as an instant. Null if either is malformed. */
 export function istToIso(date: string, time: string): string | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return null;

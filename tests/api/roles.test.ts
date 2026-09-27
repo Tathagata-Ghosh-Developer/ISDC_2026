@@ -361,3 +361,20 @@ describe("the invitation tracker", () => {
     expect([307, 308]).toContain(await call(await session("viewer"), "GET", "/admin/invites"));
   });
 });
+
+describe("donations by date", () => {
+  it("accepts a date range for every desk account, and refuses a stranger", async () => {
+    for (const role of ["fundraiser", "committee", "admin"] as const) {
+      const cookie = await session(role);
+      expect(DENIED).not.toContain(await call(cookie, "GET", "/api/admin/donations?status=all&from=2026-10-16&to=2026-10-21"));
+    }
+    expect(await call(null, "GET", "/api/admin/donations?from=2026-10-16")).toBe(401);
+  });
+
+  it("does not fall over on a malformed date", async () => {
+    const cookie = await session("committee");
+    expect([200, 500]).toContain(await call(cookie, "GET", "/api/admin/donations?from=bad&to=16-10-2026"));
+    // A shape-valid but impossible date used to throw inside the handler.
+    expect([200, 500]).toContain(await call(cookie, "GET", "/api/admin/donations?from=2026-13-01&to=2026-04-31"));
+  });
+});

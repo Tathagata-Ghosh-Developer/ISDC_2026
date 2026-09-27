@@ -20,7 +20,7 @@ import AddDonor from "./AddDonor";
 import DonorFields, { readDonorForm, type DonorInput } from "./DonorFields";
 import type { Donation } from "@/lib/db";
 import { can, type Role } from "@/lib/roles";
-import { formatINR, formatDate, formatDateTime, istParts } from "@/lib/format";
+import { formatINR, formatDate, formatDateTime, istDay, istParts } from "@/lib/format";
 
 type Filter = "pending" | "to-send" | "sent" | "verified" | "rejected" | "all";
 
@@ -70,6 +70,9 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
     !everyone ? "all" : isAdmin ? "pending" : "to-send",
   );
   const [q, setQ] = useState("");
+  // Days recorded, in India. Empty means that side is open.
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
@@ -87,6 +90,8 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
     }
     const params = new URLSearchParams({ status: filter });
     if (q.trim()) params.set("q", q.trim());
+    if (from) params.set("from", from);
+    if (to) params.set("to", to);
 
     const res = await fetch(`/api/admin/donations?${params}`).catch(() => null);
     if (!res || !res.ok) {
@@ -98,7 +103,7 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
     if (ticket !== latest.current) return;
     setRows(data.donations ?? []);
     setLoading(false);
-  }, [filter, q]);
+  }, [filter, q, from, to]);
 
   useEffect(() => {
     const t = setTimeout(() => void load(), q ? 350 : 0);
@@ -110,7 +115,10 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
   // view. Paused while a row is being edited, so nothing moves under a
   // cursor. ponytail: polling, not push; Supabase Realtime would need a
   // browser key and RLS policies this project deliberately does not have.
-  const quiet = editing === null && working === null;
+  // ponytail: the whole view is re-fetched, so auto-refresh stops once a
+  // view is large. Supabase's free tier counts every byte sent; narrow the
+  // dates or the filter, or press Refresh, for big views.
+  const quiet = editing === null && working === null && rows.length <= 300;
   useEffect(() => {
     if (!quiet) return;
     const id = setInterval(() => {
@@ -240,6 +248,34 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
     setError(data.error ?? "Could not send that.");
   }
 
+  /** Day by day, newest first, for whatever is in view. */
+  const days = useMemo(() => {
+    const m = new Map<string, { count: number; amount: number }>();
+    for (const r of rows) {
+      if (r.status === "rejected") continue;
+      const d = istDay(r.created_at);
+      const cur = m.get(d) ?? { count: 0, amount: 0 };
+      cur.count += 1;
+      cur.amount += Number(r.amount);
+      m.set(d, cur);
+    }
+    return [...m.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+  }, [rows]);
+
+  const [daysOpen, setDaysOpen] = useState(true);
+  // Read after mount: the clock is not something to call while rendering.
+  const [today, setToday] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setToday(istParts(Date.now()).date), 0);
+    return () => clearTimeout(t);
+  }, []);
+  const dayBefore = (d: string, n: number) =>
+    istParts(Date.parse(`${d}T12:00:00+05:30`) - n * 86_400_000).date;
+  const setDays = (f: string, t: string) => {
+    setFrom(f);
+    setTo(t);
+  };
+
   const totals = useMemo(() => {
     const verified = rows.filter((r) => r.status === "verified");
     return {
@@ -274,6 +310,93 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
           <Cell label={`Entries by ${user}`} value={String(totals.count)} />
           <Cell label="Collected by you" value={formatINR(totals.verified)} tone="sindoor" />
         </div>
+      )}
+
+      {/* ---- by date ---- */}
+      <div className="mt-6 flex flex-wrap items-center gap-2 text-[0.78rem]">
+        <span className="text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint">Date recorded</span>
+        {(today
+          ? [
+              { label: "Today", f: today, t: today },
+              { label: "Yesterday", f: dayBefore(today, 1), t: dayBefore(today, 1) },
+              { label: "Last 7 days", f: dayBefore(today, 6), t: today },
+              { label: "All dates", f: "", t: "" },
+            ]
+          : [{ label: "All dates", f: "", t: "" }]
+        ).map((b) => (
+          <button
+            key={b.label}
+            onClick={() => setDays(b.f, b.t)}
+            className={`border px-2.5 py-1 text-[0.7rem] transition-colors ${
+              from === b.f && to === b.t
+                ? "border-gold bg-gold/15 text-ink"
+                : "border-line text-ink-faint hover:border-gold hover:text-gold"
+            }`}
+          >
+            {b.label}
+          </button>
+        ))}
+        <label className="flex items-center gap-1.5 text-ink-faint">
+          from
+          <input
+            type="date"
+            value={from}
+            max={to || undefined}
+            onChange={(e) => setFrom(e.target.value)}
+            className="field !w-auto !py-1 !text-[0.75rem]"
+            aria-label="From date"
+          />
+        </label>
+        <label className="flex items-center gap-1.5 text-ink-faint">
+          to
+          <input
+            type="date"
+            value={to}
+            min={from || undefined}
+            onChange={(e) => setTo(e.target.value)}
+            className="field !w-auto !py-1 !text-[0.75rem]"
+            aria-label="To date"
+          />
+        </label>
+      </div>
+
+      {days.length > 0 && (
+        <details
+          className="surface mt-3"
+          open={daysOpen}
+          onToggle={(e) => setDaysOpen(e.currentTarget.open)}
+        >
+          <summary className="cursor-pointer px-4 py-2.5 text-[0.8rem] text-ink">
+            Amount by date, in view
+            <span className="ml-2 text-[0.7rem] text-ink-faint">
+              {days.length} {days.length === 1 ? "day" : "days"}; press a date to see only that day
+            </span>
+          </summary>
+          <ul className="max-h-64 divide-y divide-line overflow-y-auto border-t border-line">
+            {days.map(([d, v]) => (
+              <li key={d}>
+                <button
+                  onClick={() => setDays(d, d)}
+                  className={`flex w-full items-baseline justify-between gap-4 px-4 py-2 text-left transition-colors hover:bg-gold/10 ${
+                    from === d && to === d ? "bg-gold/15" : ""
+                  }`}
+                >
+                  <span className="text-[0.82rem] text-ink">
+                    {formatDate(`${d}T12:00:00+05:30`)}
+                    {d === today && <span className="ml-2 text-[0.65rem] text-gold">today</span>}
+                  </span>
+                  <span className="text-[0.78rem] tabular-nums text-ink-soft">
+                    {v.count} {v.count === 1 ? "donation" : "donations"}
+                    <span className="font-display ml-3 text-[0.9rem] text-sindoor">{formatINR(v.amount)}</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="border-t border-line px-4 py-2 text-[0.66rem] text-ink-faint">
+            Counts pending and verified entries in the current view; rejected ones are left out.
+          </p>
+        </details>
       )}
 
       {/* ---- controls ---- */}

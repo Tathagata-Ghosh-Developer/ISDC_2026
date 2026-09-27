@@ -3,7 +3,7 @@
  * and the guide's guards.
  */
 import { describe, expect, it } from "vitest";
-import { istParts, istToIso } from "@/lib/format";
+import { istDay, istDayRange, istParts, istToIso } from "@/lib/format";
 import { tolerant } from "@/lib/db";
 import { MONEY, MONEY_REPLY, cacheKey, grounded } from "@/lib/guide";
 
@@ -165,5 +165,42 @@ describe("cacheKey", () => {
 
   it("keeps Bengali letters", () => {
     expect(cacheKey("\u09b8\u09a8\u09cd\u09a7\u09bf\u09aa\u09c2\u099c\u09be \u0995\u0996\u09a8?")).toBe("\u09b8\u09a8\u09cd\u09a7\u09bf\u09aa\u09c2\u099c\u09be \u0995\u0996\u09a8");
+  });
+});
+
+describe("istDay", () => {
+  it("puts a late-evening UTC instant on the next Indian day", () => {
+    // 19:00 UTC on the 20th is 00:30 on the 21st in Kolkata
+    expect(istDay("2026-10-20T19:00:00Z")).toBe("2026-10-21");
+    expect(istDay("2026-10-20T18:29:59Z")).toBe("2026-10-20");
+  });
+  it("is empty for nothing or nonsense", () => {
+    expect(istDay(null)).toBe("");
+    expect(istDay("not a date")).toBe("");
+  });
+});
+
+describe("istDayRange", () => {
+  it("bounds a single Indian day exactly", () => {
+    expect(istDayRange("2026-10-16", "2026-10-16")).toEqual({
+      gte: "2026-10-15T18:30:00.000Z",
+      lt: "2026-10-16T18:30:00.000Z",
+    });
+  });
+  it("leaves a missing or malformed side open", () => {
+    expect(istDayRange("", "2026-10-16")).toEqual({ lt: "2026-10-16T18:30:00.000Z" });
+    expect(istDayRange("16/10/2026", null)).toEqual({});
+    expect(istDayRange(undefined, undefined)).toEqual({});
+  });
+  it("treats an impossible date as open instead of throwing", () => {
+    expect(istDayRange("2026-13-01", "2026-04-31")).toEqual({});
+    expect(istDayRange("2026-02-29", null)).toEqual({});
+    expect(istDayRange("2028-02-29", null).gte).toBe("2028-02-28T18:30:00.000Z");
+  });
+  it("agrees with istDay at both edges", () => {
+    const r = istDayRange("2026-10-19", "2026-10-19");
+    expect(istDay(r.gte)).toBe("2026-10-19");
+    expect(istDay(new Date(Date.parse(r.lt!) - 1).toISOString())).toBe("2026-10-19");
+    expect(istDay(r.lt)).toBe("2026-10-20");
   });
 });

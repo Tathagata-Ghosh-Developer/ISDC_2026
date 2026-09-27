@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireRole, type Session } from "@/lib/auth";
 import { can, type Role } from "@/lib/roles";
 import { db, dbReady, ledgerV2, tolerant, type Donation } from "@/lib/db";
-import { istToIso } from "@/lib/format";
+import { istDayRange, istToIso } from "@/lib/format";
 import { mirrorToSheet } from "@/lib/sheets";
 
 export const runtime = "nodejs";
@@ -152,19 +152,36 @@ export async function GET(req: Request) {
   const q = url.searchParams.get("q")?.trim();
   const everyone = can(session.role, "seeAllDonations");
   const v2 = await ledgerV2();
+  // The day a donation was recorded, in India.
+  const range = istDayRange(url.searchParams.get("from"), url.searchParams.get("to"));
 
+  // Account names come from our own configuration, but they are spliced
+  // into a filter string below, so anything unexpected fails closed.
+  if (!everyone && !/^[a-z0-9_-]+$/.test(session.user)) {
+    return NextResponse.json({ donations: [], ready: true, role: session.role, user: session.user, history: v2 });
+  }
+
+  // Built afresh for every page: Supabase returns at most 1,000 rows a
+  // request, and the ledger passes that within days of the festival.
+  const build = () => {
   let query = db()
     .from("donations")
     .select(everyone ? "*" : FUNDRAISER_COLUMNS)
     .order("created_at", { ascending: false })
-    .limit(1000);
+    .order("id", { ascending: true });
+
+  if (range.gte) query = query.gte("created_at", range.gte);
+  if (range.lt) query = query.lt("created_at", range.lt);
 
   // A fund raiser sees what they entered and nothing else: the list is
-  // other people's names, phones and emails.
+  // other people's names, phones and emails. Entries from before the
+  // entered_by column existed carry only the "Entered by" note, so both
+  // are matched; nothing is rewritten in the rows themselves.
   if (!everyone) {
+    const note = `Entered by ${session.user}`;
     query = v2
-      ? query.eq("entered_by", session.user)
-      : query.ilike("admin_note", `Entered by ${literal(session.user)}%`);
+      ? query.or(`entered_by.eq.${session.user},admin_note.eq."${note}"`)
+      : query.eq("admin_note", note);
   }
 
   if (status === "to-send") {
@@ -188,11 +205,34 @@ export async function GET(req: Request) {
       ].join(","),
     );
   }
+  return query;
+  };
 
-  const { data, error } = await query;
-  if (error) {
-    console.error("[admin/donations]", error.message);
-    return NextResponse.json({ error: "Could not load donations." }, { status: 500 });
+  // Keyset paging: each page starts after the last row of the one before,
+  // by value, not by position. With offsets, a donation entered while the
+  // pages were loading shifted every later row by one, so one row was
+  // counted twice and the new one never appeared.
+  const PAGE = 1000;
+  const data: { id: string; created_at: string }[] = [];
+  for (let n = 0; ; n++) {
+    let q2 = build();
+    const last = data[data.length - 1];
+    if (last) {
+      q2 = q2.or(
+        `created_at.lt."${last.created_at}",and(created_at.eq."${last.created_at}",id.gt.${last.id})`,
+      );
+    }
+    const { data: page, error } = await q2.limit(PAGE);
+    if (error) {
+      console.error("[admin/donations]", error.message);
+      return NextResponse.json({ error: "Could not load donations." }, { status: 500 });
+    }
+    data.push(...((page ?? []) as unknown as { id: string; created_at: string }[]));
+    if (!page || page.length < PAGE) break;
+    if (n >= 49) {
+      console.error("[admin/donations] stopped at 50,000 rows; the list is incomplete");
+      break;
+    }
   }
 
   const donations = (data as unknown as Donation[]).map((d) => ({
