@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Send, Sparkles, X } from "lucide-react";
+import { Send, X } from "lucide-react";
+import DhakiDa from "@/components/DhakiDa";
+import { GUIDE } from "@/lib/guide";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -17,7 +19,7 @@ const OPENERS = [
 ];
 
 /**
- * A small assistant that answers from this site's own content.
+ * Dhaki-da, the site's AI guide, answering from this site's own content.
  * With no API key configured it still works, falling back to a
  * keyword search over the same material on the server.
  */
@@ -87,8 +89,9 @@ export default function PujoGuide() {
     <>
       <button
         onClick={() => setOpen((v) => !v)}
-        aria-label="Ask the Pujo guide"
-        className="no-print fixed bottom-5 right-5 z-[90] grid h-12 w-12 place-items-center rounded-full border border-gold/50 bg-paper-3 text-gold shadow-lg transition-all duration-500 hover:scale-105 hover:border-gold sm:bottom-7 sm:right-7"
+        aria-label={open ? `Close ${GUIDE.name}` : `Ask ${GUIDE.name}, the ${GUIDE.tag}`}
+        title={GUIDE.alt}
+        className="no-print fixed bottom-5 right-5 z-[90] grid h-14 w-14 place-items-center rounded-full border border-gold/50 bg-paper-3 text-gold shadow-lg transition-all duration-500 hover:scale-105 hover:border-gold sm:bottom-7 sm:right-7"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -98,7 +101,7 @@ export default function PujoGuide() {
             exit={{ opacity: 0, rotate: 40 }}
             transition={{ duration: 0.25 }}
           >
-            {open ? <X size={18} /> : <Sparkles size={18} />}
+            {open ? <X size={18} /> : <DhakiDa size={48} title={null} />}
           </motion.span>
         </AnimatePresence>
       </button>
@@ -112,23 +115,24 @@ export default function PujoGuide() {
             transition={{ duration: 0.45, ease: EASE }}
             className="no-print surface fixed bottom-20 right-4 z-[90] flex max-h-[min(30rem,70dvh)] w-[min(23rem,calc(100vw-2rem))] flex-col overflow-hidden sm:bottom-24 sm:right-7"
           >
-            <header className="flex items-center justify-between border-b border-line px-4 py-3">
-              <div>
-                <p className="font-display text-[1rem] text-ink">Pujo Guide</p>
-                <p className="bangla-display text-[0.8rem] text-gold">পুজোর সহায়ক</p>
+            <header className="flex items-center gap-3 border-b border-line px-4 py-3">
+              <DhakiDa size={40} />
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-[1rem] leading-tight text-ink">
+                  {GUIDE.name}
+                  <span className="bangla-display ml-2 text-[0.85rem] text-gold">{GUIDE.nameBn}</span>
+                </p>
+                <p className="mt-0.5 text-[0.55rem] uppercase tracking-[0.2em] text-ink-faint">
+                  {GUIDE.tag} · answers from this site only
+                </p>
               </div>
-              <span className="text-[0.55rem] uppercase tracking-[0.2em] text-ink-faint">
-                Answers from this site
-              </span>
             </header>
 
             <div ref={scroller} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
               {msgs.length === 0 && (
                 <div>
-                  <p className="text-[0.82rem] leading-relaxed text-ink-soft">
-                    Ask about the rituals, the history, the schedule, or how to
-                    donate. I only answer from what is published here.
-                  </p>
+                  <p className="text-[0.82rem] leading-relaxed text-ink-soft">{GUIDE.greeting}</p>
+                  <p className="bangla mt-2 text-[0.8rem] leading-relaxed text-ink-faint">{GUIDE.greetingBn}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {OPENERS.map((q) => (
                       <button
@@ -184,7 +188,7 @@ export default function PujoGuide() {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about the Puja…"
+                placeholder={`Ask ${GUIDE.name}…`}
                 className="field !py-2 !text-[0.82rem]"
                 aria-label="Your question"
               />

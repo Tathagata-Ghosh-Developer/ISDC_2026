@@ -116,3 +116,16 @@ exploreray.org. And a hand-drawn Ray alphabet was framed on the
 staircase wall of the old D. J. Keymer office in Kolkata, digitised
 once by the designer Nabina Ghosh under Ram Ray's supervision and never
 released. It may still be hanging there.
+
+## Dhaki-da, the AI guide (27 September 2026)
+
+The site's chat guide is **Dhaki-da** (ঢাকিদা): the pandal's drummer-brother, who keeps time for the Puja but never performs it. Character sheet and colour variables: [Figma, "Dhaki-da — ISDC AI guide character"](https://www.figma.com/design/HJ2YcrndmvtEB5VTVx82X0). Name, greeting and labels live in one place, `GUIDE` in `src/lib/guide.ts`; the avatar is `src/components/DhakiDa.tsx`. A rename touches those two files and nothing else.
+
+Rules, for anyone changing it:
+
+- **The drum, never a drummer.** No drawn person, no turban, no caricature of the men who play the dhak.
+- **No deity's name, image or sacred mark** on or near the character. A god's name on a bot that can be wrong is the offence; "Narayan" is also Vishnu's name, at a goddess festival.
+- **The paper circle stays**, so the mark reads on dark pages. Minimum 24 px; the drumstick is dropped below 32 px.
+- **Five colours only**: paper `#f7f1e4`, vermilion `#c0271a`, gold `#b0892f`, ink `#2a1a10`, highlight `#fffdf7`. No gradients or shadows inside the mark.
+- **The "AI guide" tag sits beside the name** wherever it appears. The name alone sounds like a real volunteer.
+- **Voice**: warm, brief, a little playful, never flippant about the goddess. Answers only from this site and the sources its facts cite. Never gives a ritual ruling ("I keep time; I don't give rulings. Please ask the purohit at the pandal."), never confirms a payment, never claims to be a person.

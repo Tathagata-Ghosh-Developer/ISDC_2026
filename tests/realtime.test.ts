@@ -204,3 +204,26 @@ describe("istDayRange", () => {
     expect(istDay(r.lt)).toBe("2026-10-20");
   });
 });
+
+import { GUIDE } from "@/lib/guide";
+
+describe("GUIDE, the AI guide's identity", () => {
+  it("is Dhaki-da, labelled as an AI everywhere it speaks for itself", () => {
+    expect(GUIDE.name).toBe("Dhaki-da");
+    expect(GUIDE.tag).toBe("AI guide");
+    expect(GUIDE.greeting).toMatch(/AI guide/);
+    expect(GUIDE.alt).toMatch(/AI/);
+  });
+
+  it("carries no deity's name, which the council ruled out", () => {
+    const all = Object.values(GUIDE).join(" ");
+    for (const deity of ["Narayan", "Vishnu", "Durga", "Uma", "Gauri", "Shiva", "Lakshmi", "Ganesh"]) {
+      expect(all.includes(deity), deity).toBe(false);
+    }
+  });
+
+  it("sends ritual questions to the purohit and money to the committee", () => {
+    expect(GUIDE.greeting).toMatch(/purohit/);
+    expect(GUIDE.greeting).toMatch(/committee/);
+  });
+});

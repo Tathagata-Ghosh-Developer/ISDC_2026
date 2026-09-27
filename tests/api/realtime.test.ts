@@ -107,3 +107,11 @@ describe("POST /api/ai", () => {
     expect(Date.now() - t).toBeLessThan(5_000);
   });
 });
+
+describe("Dhaki-da on the page", () => {
+  it("the home page carries the guide's button, named and labelled as AI", async () => {
+    const html = await (await fetch(`${BASE_NO_DB}/`, { headers: { "x-forwarded-for": ip() } })).text();
+    expect(html).toContain("Ask Dhaki-da, the AI guide");
+    expect(html).not.toContain("Pujo Guide");
+  });
+});

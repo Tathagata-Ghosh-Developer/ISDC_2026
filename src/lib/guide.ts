@@ -1,4 +1,27 @@
-/** The Pujo Guide's guards, kept apart from the route so they can be tested. */
+/**
+ * The site's AI guide: who it is, and the guards on what it may say.
+ * Kept apart from the route so they can be tested, and so the name lives
+ * in one place: a rename is a change to GUIDE and nothing else.
+ */
+
+/**
+ * Chosen by an LLM council on 27 September 2026 (council-transcript-
+ * 2026-09-27.md): no deity's name, since a god's name on a bot that can
+ * be wrong is itself the offence, and Narayan is Vishnu's name at a
+ * goddess festival. A drum, with the everyday "-da" of an elder brother.
+ */
+export const GUIDE = {
+  name: "Dhaki-da",
+  nameBn: "ঢাকিদা",
+  tag: "AI guide",
+  tagBn: "এআই গাইড",
+  alt: "Dhaki-da, AI festival guide (a smiling drum)",
+  greeting:
+    "Nomoshkar! I'm Dhaki-da, this site's AI guide. I know the timings, the venue and the events, not the rituals' rules. For those, ask the purohit at the pandal. For anything about money, contact the committee.",
+  greetingBn:
+    "নমস্কার! আমি ঢাকিদা, এই সাইটের এআই গাইড। সময়সূচি, জায়গা আর অনুষ্ঠানের খবর জানি, পুজোর বিধান নয়।",
+} as const;
+
 
 /**
  * Money questions never reach a model. Nothing a model says can make a
