@@ -336,6 +336,7 @@ describe("the invitation tracker", () => {
     expect(await call(cookie, "PATCH", "/api/admin/invites", { ids: [ID], fields: { invited: true } })).toBe(403);
     expect(await call(cookie, "POST", "/api/admin/invites", { row: { name: "Someone" } })).toBe(403);
     expect(await call(cookie, "DELETE", "/api/admin/invites", { id: ID })).toBe(403);
+    expect(await call(cookie, "GET", "/api/admin/invites?format=csv")).toBe(403);
   });
 
   it("a volunteer cannot change anything but the card, payment, amount and remarks", async () => {

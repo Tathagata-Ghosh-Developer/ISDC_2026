@@ -95,9 +95,14 @@ function readPatch(
 export async function GET(req: Request) {
   const session = await authorise("fundraiser");
   if (session instanceof NextResponse) return session;
+  const everyone = can(session.role, "manageInvites");
+  const csvWanted = new URL(req.url).searchParams.get("format") === "csv";
+  // Permission first, before anything else can answer.
+  if (csvWanted && !everyone) {
+    return NextResponse.json({ error: "Your account cannot do that." }, { status: 403 });
+  }
   if (!dbReady) return notSetUp();
 
-  const everyone = can(session.role, "manageInvites");
   let query = db()
     .from("faculty_invites")
     .select("*")
@@ -123,8 +128,7 @@ export async function GET(req: Request) {
     .filter((r) => everyone || ownsInvite(r.volunteer, session.user, mine))
     .map((r) => ({ ...r, amount: r.amount === null ? null : Number(r.amount) }));
 
-  if (new URL(req.url).searchParams.get("format") === "csv") {
-    if (!everyone) return NextResponse.json({ error: "Your account cannot do that." }, { status: 403 });
+  if (csvWanted) {
     const cols = ["name", "post", "department", "division", "email", "volunteer", "invited", "paid", "amount", "remarks", "updated_by", "updated_at"] as const;
     const cell = (v: unknown) => {
       let s = v === null || v === undefined ? "" : String(v);
