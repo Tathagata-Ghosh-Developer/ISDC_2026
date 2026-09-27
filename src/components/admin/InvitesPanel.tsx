@@ -35,29 +35,51 @@ export default function InvitesPanel({ canManage, user }: Props) {
   const [notice, setNotice] = useState<string | null>(null);
   const typing = useRef(false);
   const latest = useRef(0);
+  const asOf = useRef<string | null>(null);
+  const lastFull = useRef(0);
 
-  const load = useCallback(async (silent = false) => {
-    const ticket = ++latest.current;
-    if (!silent) setLoading(true);
-    const res = await fetch("/api/admin/invites").catch(() => null);
-    const data = res
-      ? ((await res.json().catch(() => ({}))) as {
-          ready?: boolean;
-          rows?: Invite[];
-          suggestions?: string[];
-          error?: string;
-        })
-      : {};
-    if (ticket !== latest.current) return;
-    setLoading(false);
-    if (!res || !res.ok) {
-      if (!silent) setError(data.error ?? "Could not load the list.");
-      return;
-    }
-    setReady(data.ready !== false);
-    setRows(data.rows ?? []);
-    setSuggestions(data.suggestions ?? []);
-  }, []);
+  const load = useCallback(
+    async (silent = false) => {
+      const ticket = ++latest.current;
+      if (!silent) setLoading(true);
+      // A quiet refresh asks the committee's list only for what changed;
+      // a full reload every five minutes also drops deleted rows.
+      const since = canManage && silent && asOf.current && Date.now() - lastFull.current < 300_000 ? asOf.current : null;
+      const res = await fetch(since ? `/api/admin/invites?since=${encodeURIComponent(since)}` : "/api/admin/invites").catch(() => null);
+      const data = res
+        ? ((await res.json().catch(() => ({}))) as {
+            ready?: boolean;
+            rows?: Invite[];
+            suggestions?: string[];
+            changedOnly?: boolean;
+            asOf?: string;
+            error?: string;
+          })
+        : {};
+      if (ticket !== latest.current) return;
+      setLoading(false);
+      if (!res || !res.ok) {
+        if (!silent) setError(data.error ?? "Could not load the list.");
+        return;
+      }
+      setReady(data.ready !== false);
+      if (data.asOf) asOf.current = data.asOf;
+      const fetched = data.rows ?? [];
+      if (data.changedOnly) {
+        if (fetched.length === 0) return;
+        const byId = new Map(fetched.map((r) => [r.id, r]));
+        setRows((rs) => {
+          const known = new Set(rs.map((r) => r.id));
+          return [...rs.map((r) => byId.get(r.id) ?? r), ...fetched.filter((r) => !known.has(r.id))];
+        });
+        return;
+      }
+      lastFull.current = Date.now();
+      setRows(fetched);
+      setSuggestions(data.suggestions ?? []);
+    },
+    [canManage],
+  );
 
   useEffect(() => {
     const t = setTimeout(() => void load(), 0);

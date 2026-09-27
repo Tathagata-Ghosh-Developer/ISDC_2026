@@ -104,6 +104,15 @@ export async function GET(req: Request) {
   }
   if (!dbReady) return notSetUp();
 
+  // The committee's page refreshes every 20 seconds. With the whole
+  // directory on the list, it asks only for rows changed since its last
+  // answer (?since=), which keeps Supabase's free egress in hand. The
+  // cursor it gets back overlaps by ten seconds, so a write that lands
+  // while the list is being read is picked up on the next round.
+  const sinceRaw = new URL(req.url).searchParams.get("since");
+  const since = everyone && !csvWanted && sinceRaw && !Number.isNaN(Date.parse(sinceRaw)) ? new Date(sinceRaw) : null;
+  const asOf = new Date(Date.now() - 10_000).toISOString();
+
   let query = db()
     .from("faculty_invites")
     .select("*")
@@ -111,6 +120,7 @@ export async function GET(req: Request) {
     .order("department", { ascending: true, nullsFirst: false })
     .order("name", { ascending: true })
     .limit(5000);
+  if (since) query = query.gt("updated_at", since.toISOString());
 
   // A volunteer's rows are picked out below with the same ownsInvite()
   // that guards their edits, so what they see and what they may change
@@ -149,6 +159,8 @@ export async function GET(req: Request) {
     });
   }
 
+  if (since) return NextResponse.json({ ready: true, rows, changedOnly: true, asOf });
+
   // Names the committee can pick when assigning: the fund raisers, and
   // anyone already written in.
   const suggestions = everyone
@@ -160,7 +172,7 @@ export async function GET(req: Request) {
       ).sort((a, b) => a.localeCompare(b))
     : [];
 
-  return NextResponse.json({ ready: true, rows, role: session.role, user: session.user, suggestions });
+  return NextResponse.json({ ready: true, rows, role: session.role, user: session.user, suggestions, asOf });
 }
 
 /* ------------------------------------------------------------------ */

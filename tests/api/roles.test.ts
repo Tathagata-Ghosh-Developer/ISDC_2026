@@ -325,6 +325,11 @@ describe("the invitation tracker", () => {
   it("a stranger and a viewer get nothing", async () => {
     expect(await call(null, "GET", "/api/admin/invites")).toBe(401);
     expect(await call(await session("viewer"), "GET", "/api/admin/invites")).toBe(403);
+    // Asking only for recent changes opens no side door.
+    const since = "/api/admin/invites?since=2026-01-01T00:00:00Z";
+    expect(await call(null, "GET", since)).toBe(401);
+    expect(await call(await session("viewer"), "GET", since)).toBe(403);
+    expect(await call(await session("fundraiser"), "GET", since + "&format=csv")).toBe(403);
   });
 
   it("a volunteer may read their list and update a row, but not assign, add, remove or export", async () => {
