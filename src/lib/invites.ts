@@ -63,10 +63,12 @@ export function nameKey(name: string): string {
  *   Division | Department | Name | Email        (the Durga Puja list)
  *   Name | Post | Department | Email | Phone    (the faculty directory)
  *
- * A header row decides the layout; without one, the Puja layout is
- * assumed. Blank Division or Department cells repeat the one above, the
- * way the Puja list is written. Duplicates within the paste are dropped
- * by email, or by name when there is no email.
+ * A header row decides the layout, and any mix of those columns works
+ * with one (Division | Department | Name | Post | Email, say); without a
+ * header, the Puja layout is assumed. Blank Division or Department cells
+ * repeat the one above, the way the Puja list is written. Duplicates
+ * within the paste are dropped by email, or by name when there is no
+ * email.
  */
 export function parseSheet(text: string): NewInvite[] {
   const lines = text.replace(/\r/g, "").split("\n").filter((l) => l.trim());
@@ -74,17 +76,14 @@ export function parseSheet(text: string): NewInvite[] {
 
   const header = lines[0].toLowerCase().split("\t").map((h) => h.trim());
   const hasHeader = header.includes("name");
-  const col = (label: string, fallback: number) => {
-    const i = header.indexOf(label);
-    return hasHeader ? i : fallback;
-  };
-  const directory = hasHeader && header.includes("post");
+  // With a header, a column it does not name is -1 (absent).
+  const col = (label: string, fallback: number) => (hasHeader ? header.indexOf(label) : fallback);
   const at = {
-    division: directory ? -1 : col("division", 0),
-    department: col("department", directory ? 2 : 1),
-    name: col("name", directory ? 0 : 2),
-    post: directory ? col("post", 1) : -1,
-    email: col("email", directory ? 3 : 3),
+    division: col("division", 0),
+    department: col("department", 1),
+    name: col("name", 2),
+    post: col("post", -1),
+    email: col("email", 3),
   };
 
   const out: NewInvite[] = [];
@@ -109,7 +108,7 @@ export function parseSheet(text: string): NewInvite[] {
       name,
       post: cell(at.post) || null,
       department: department || null,
-      division: directory ? null : division || null,
+      division: division || null,
       email,
     });
   }

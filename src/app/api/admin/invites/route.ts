@@ -7,6 +7,7 @@ import {
   COMMITTEE_FIELDS,
   VOLUNTEER_FIELDS,
   cleanEmail,
+  nameKey,
   ownsInvite,
   parseSheet,
   type Invite,
@@ -255,11 +256,15 @@ export async function POST(req: Request) {
     rows = [one];
   }
 
-  const { data: existing, error: readErr } = await db().from("faculty_invites").select("email").limit(10000);
+  const { data: existing, error: readErr } = await db().from("faculty_invites").select("email, name").limit(10000);
   if (missingTable(readErr)) return notSetUp();
   if (readErr) return NextResponse.json({ error: readErr.message }, { status: 500 });
   const known = new Set((existing ?? []).map((r) => (r.email ?? "").toLowerCase()).filter(Boolean));
-  const fresh = rows.filter((r) => !r.email || !known.has(String(r.email).toLowerCase()));
+  const knownNames = new Set((existing ?? []).map((r) => nameKey(String(r.name ?? ""))));
+  // Without an email, the name is all there is to go on.
+  const fresh = rows.filter((r) =>
+    r.email ? !known.has(String(r.email).toLowerCase()) : !knownNames.has(nameKey(String(r.name))),
+  );
 
   if (fresh.length === 0) {
     return NextResponse.json({ ok: true, added: 0, skipped: rows.length });

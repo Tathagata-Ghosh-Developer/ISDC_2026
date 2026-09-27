@@ -49,6 +49,24 @@ describe("parseSheet", () => {
     });
   });
 
+  it("reads Division and Post together when the header names both", () => {
+    const text = [
+      "Division\tDepartment\tName\tPost\tEmail",
+      "Mech\tMAT / BE\tJaya Menon\tProfessor\tjaya@example.org",
+      "\t\tKiran Das\t\tkiran@example.org",
+    ].join("\n");
+    expect(parseSheet(text)).toEqual([
+      { name: "Jaya Menon", post: "Professor", department: "MAT / BE", division: "Mech", email: "jaya@example.org" },
+      { name: "Kiran Das", post: null, department: "MAT / BE", division: "Mech", email: "kiran@example.org" },
+    ]);
+  });
+
+  it("assumes the Puja layout when there is no header", () => {
+    expect(parseSheet("Bio\tMCB\tLata Roy\tlata@example.org")).toEqual([
+      { name: "Lata Roy", post: null, department: "MCB", division: "Bio", email: "lata@example.org" },
+    ]);
+  });
+
   it("drops duplicates by email, and by name when there is no email", () => {
     const text = [
       "Division\tDepartment\tName\tEmail",
