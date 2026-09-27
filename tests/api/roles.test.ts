@@ -316,3 +316,47 @@ describe("the donation board", () => {
     }
   });
 });
+
+/* ================================================================
+   The faculty invitation tracker
+   ================================================================ */
+
+describe("the invitation tracker", () => {
+  it("a stranger and a viewer get nothing", async () => {
+    expect(await call(null, "GET", "/api/admin/invites")).toBe(401);
+    expect(await call(await session("viewer"), "GET", "/api/admin/invites")).toBe(403);
+  });
+
+  it("a volunteer may read their list and update a row, but not assign, add, remove or export", async () => {
+    const cookie = await session("fundraiser");
+    expect(DENIED).not.toContain(await call(cookie, "GET", "/api/admin/invites"));
+    expect(DENIED).not.toContain(
+      await call(cookie, "PATCH", "/api/admin/invites", { id: ID, fields: { invited: true } }),
+    );
+    expect(await call(cookie, "PATCH", "/api/admin/invites", { ids: [ID], fields: { invited: true } })).toBe(403);
+    expect(await call(cookie, "POST", "/api/admin/invites", { row: { name: "Someone" } })).toBe(403);
+    expect(await call(cookie, "DELETE", "/api/admin/invites", { id: ID })).toBe(403);
+  });
+
+  it("a volunteer cannot change anything but the card, payment, amount and remarks", async () => {
+    const cookie = await session("fundraiser");
+    expect(await call(cookie, "PATCH", "/api/admin/invites", { id: ID, fields: { volunteer: "me" } })).toBe(400);
+    expect(await call(cookie, "PATCH", "/api/admin/invites", { id: ID, fields: { name: "New Name" } })).toBe(400);
+  });
+
+  it("the committee may do all of it", async () => {
+    const cookie = await session("committee");
+    expect(DENIED).not.toContain(await call(cookie, "GET", "/api/admin/invites"));
+    expect(DENIED).not.toContain(
+      await call(cookie, "PATCH", "/api/admin/invites", { ids: [ID], fields: { volunteer: "Sourav" } }),
+    );
+    expect(DENIED).not.toContain(await call(cookie, "POST", "/api/admin/invites", { row: { name: "Someone New" } }));
+    expect(DENIED).not.toContain(await call(cookie, "DELETE", "/api/admin/invites", { id: ID }));
+  });
+
+  it("the committee and volunteers reach the page; a viewer is sent away", async () => {
+    expect(await call(await session("committee"), "GET", "/admin/invites")).toBe(200);
+    expect(await call(await session("fundraiser"), "GET", "/admin/invites")).toBe(200);
+    expect([307, 308]).toContain(await call(await session("viewer"), "GET", "/admin/invites"));
+  });
+});

@@ -57,6 +57,8 @@ describe("can", () => {
     openProof:       [false, false, true,  true],
     readEnquiries:   [false, false, true,  true],
     contactSheet:    [false, false, true,  true],
+    manageInvites:   [false, false, true,  true],
+    ownInvites:      [false, true,  true,  true],
     verifyDeclared:  [false, false, false, true],
     deleteDonation:  [false, false, false, true],
     exportLedger:    [false, false, false, true],

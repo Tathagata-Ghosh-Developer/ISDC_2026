@@ -55,3 +55,6 @@ backups/
 
 # graphify knowledge graph, rebuilt locally (see the graphify skill)
 graphify-out/
+
+# Committee data that must never reach the public repository
+private/

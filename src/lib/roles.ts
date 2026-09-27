@@ -48,6 +48,11 @@ export const CAN = {
   openProof: "committee",
   readEnquiries: "committee",
   contactSheet: "committee",
+  // The faculty invitation tracker: the committee sees and edits all of
+  // it; a volunteer (a fund raiser account) sees only the faculty
+  // assigned to them, and may only record the invitation and payment.
+  manageInvites: "committee",
+  ownInvites: "fundraiser",
   verifyDeclared: "admin",
   deleteDonation: "admin",
   exportLedger: "admin",

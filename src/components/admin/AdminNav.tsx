@@ -13,6 +13,7 @@ import { atLeast, CAN, type Role } from "@/lib/roles";
  */
 const TABS: { href: string; label: string; min: Role }[] = [
   { href: "/admin", label: "Donations", min: CAN.enterDonation },
+  { href: "/admin/invites", label: "Invitations", min: CAN.ownInvites },
   { href: "/admin/enquiries", label: "Enquiries", min: CAN.readEnquiries },
   { href: "/admin/team", label: "Contact sheet", min: CAN.contactSheet },
   { href: "/admin/expenses", label: "Expenses", min: CAN.manageExpenses },
