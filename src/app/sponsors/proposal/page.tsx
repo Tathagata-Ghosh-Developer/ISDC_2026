@@ -5,12 +5,14 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import EnquiryForm from "@/components/EnquiryForm";
 import PrintButton from "@/components/PrintButton";
+import { TakenBadge } from "@/components/Sponsors";
 import {
   SITE,
   SPONSOR_TIERS,
   SPONSOR_CONTACT,
   PUJA_DATES,
   COMMITTEE,
+  TITLE_SPONSOR,
 } from "@/lib/site";
 import { IISC_FIGURES } from "@/lib/content/neighbours";
 import { formatINR } from "@/lib/format";
@@ -238,8 +240,8 @@ export default function SponsorshipProposalPage() {
         <Container>
           <SectionHeading
             eyebrow="স্তর The levels"
-            title="Six levels, and none of them fixed"
-            lede="Take one as written, or take the parts of it you want and tell us what the rest should be. We would rather build something that suits you than sell you a tier you half need."
+            title="Six levels, the title one taken"
+            lede="The title level is taken for 2026 by Genotypic Technologies. Take one of the other five as written, or take the parts of it you want and tell us what the rest should be. We would rather build something that suits you than sell you a tier you half need."
           />
 
           <div className="mt-[2.618rem] space-y-px bg-line">
@@ -258,9 +260,18 @@ export default function SponsorshipProposalPage() {
                     <p className="bangla-display mt-1 text-[1.15rem] text-gold">
                       {t.bangla}
                     </p>
-                    <p className="font-display mt-3 text-[1.618rem] tabular-nums text-sindoor">
-                      {formatINR(t.amount)}
-                    </p>
+                    {t.id === TITLE_SPONSOR.tierId ? (
+                      <div className="mt-3">
+                        <TakenBadge />
+                        <p className="mt-2 text-[0.9rem] text-ink">
+                          {TITLE_SPONSOR.name}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="font-display mt-3 text-[1.618rem] tabular-nums text-sindoor">
+                        {formatINR(t.amount)}
+                      </p>
+                    )}
                     <p className="mt-2 text-[0.8rem] leading-relaxed text-ink-soft">
                       {t.headline}
                     </p>

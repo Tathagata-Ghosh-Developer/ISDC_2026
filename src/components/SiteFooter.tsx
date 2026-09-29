@@ -3,6 +3,7 @@ import { MapPin, Mail } from "lucide-react";
 import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
 import { SITE, LINKS, CONTACTS, NAV } from "@/lib/site";
 import Logo from "./Logo";
+import { TitleSponsorStrip } from "./Sponsors";
 
 const SOCIALS = [
   { href: LINKS.instagram, label: "Instagram", Icon: InstagramIcon },
@@ -135,6 +136,11 @@ export default function SiteFooter() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* the title sponsor, a band of its own above the small print */}
+        <div className="mt-[2.618rem] border-t border-line pt-[2.618rem]">
+          <TitleSponsorStrip compact />
         </div>
 
         <div className="my-[2.618rem] h-px w-full bg-line" />

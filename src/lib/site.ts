@@ -394,6 +394,55 @@ export const SPONSOR_TIERS = [
 ] as const;
 
 /**
+ * The title sponsor for this year.
+ *
+ * This lives in code and not in the console, on purpose. The console's
+ * sponsor list is for partners that come and go between one edit and
+ * the next. The title sponsorship is a signed arrangement, and a stray
+ * edit to a JSON field must not be able to take it off the site.
+ * Changing it is a commit, with a name against it.
+ *
+ * The four marks are cut to one size, 1200 by 480 with the artwork
+ * centred in a 1040 by 360 box, so they render at the same scale in
+ * tiles of the same 5:2 shape. The order is the committee's; keep it.
+ * An empty url means there is no link: the tile renders plain, and an
+ * address is never guessed. The site is "Powered by" the first of them.
+ */
+export const TITLE_SPONSOR = {
+  name: "Genotypic Technologies",
+  line: "Powered by Genotypic Technologies",
+  lineBangla: "নিবেদনে জেনোটাইপিক টেকনোলজিস",
+  year: 2026,
+  tierId: "title",
+  logos: [
+    {
+      id: "genotypic",
+      name: "Genotypic Technologies",
+      logo: "/media/sponsors/genotypic.png",
+      url: "https://genotypic.co.in/",
+    },
+    {
+      id: "genstride",
+      name: "Genstride Technologies",
+      logo: "/media/sponsors/genstride.png",
+      url: "",
+    },
+    {
+      id: "dhitiomics",
+      name: "Dhitiomics Technologies",
+      logo: "/media/sponsors/dhitiomics.png",
+      url: "https://www.dhitiomics.com/",
+    },
+    {
+      id: "qtlomics",
+      name: "Qtlomics",
+      logo: "/media/sponsors/qtlomics.png",
+      url: "https://www.qtlomics.com/",
+    },
+  ],
+} as const;
+
+/**
  * The printed receipt. Modelled on the committee's own bill book, down
  * to the wording. Drop scanned signatures into public/media/signatures
  * and name them here when the treasurers provide them.

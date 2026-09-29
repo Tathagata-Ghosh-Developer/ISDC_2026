@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { NAV } from "@/lib/site";
 import Logo, { Wordmark } from "./Logo";
+import { PoweredBy } from "./Sponsors";
 
 /* ================================================================
    The masthead.
@@ -111,9 +112,25 @@ export default function SiteHeader() {
               solid ? "py-2.5" : "py-4 lg:py-5"
             }`}
           >
-            <Link href="/" className="shrink-0">
-              <Wordmark size={solid ? 32 : 40} />
-            </Link>
+            {/* Neither this wrapper nor the link may refuse to shrink.
+                A 360px phone leaves the wordmark about 130px once the
+                theme toggle, Donate and the menu button have theirs, and
+                the name wraps onto two lines there; a wordmark that
+                held its width pushed the menu button off the right-hand
+                edge, and a phone has no other way into the site. */}
+            <div className="flex min-w-0 items-center">
+              <Link href="/" className="min-w-0">
+                <Wordmark size={solid ? 32 : 40} />
+              </Link>
+              {/* The title sponsor's mark rides beside the wordmark while
+                  the header is at rest. Once the navigation has folded up
+                  into this row it needs the room more than the mark does,
+                  and below a laptop there was never room to begin with. */}
+              <div className={solid ? "hidden" : "hidden lg:flex items-center"}>
+                <span className="mx-4 h-6 w-px bg-line" aria-hidden />
+                <PoweredBy size="sm" />
+              </div>
+            </div>
 
             {/* the navigation rides up here once the page has scrolled */}
             <nav
@@ -179,8 +196,19 @@ export default function SiteHeader() {
             menuOpen ? "opacity-100" : "opacity-0"
           }`}
         />
-        <div className="relative flex h-full flex-col justify-center overflow-y-auto px-7 py-24">
-          <Logo size={54} className="mb-8" />
+        {/* "safe" centring: on a short phone the list is taller than the
+            screen, and plain centring would push the crest above the top
+            where no amount of scrolling reaches it. */}
+        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto px-7 py-24">
+          {/* Fades with the links: the crest and the mark must not show
+              through the header while the drawer is shut. */}
+          <div
+            className="mb-6 transition-opacity duration-500"
+            style={{ opacity: menuOpen ? 1 : 0 }}
+          >
+            <Logo size={54} className="mb-4" />
+            <PoweredBy size="sm" />
+          </div>
           {NAV.map((item, i) => (
             <Link
               key={item.href}

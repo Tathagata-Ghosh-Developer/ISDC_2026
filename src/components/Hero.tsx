@@ -7,6 +7,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ChevronDown } from "lucide-react";
 import Countdown from "./Countdown";
 import Kash from "./Kash";
+import { PoweredBy } from "./Sponsors";
 import type { Config } from "@/lib/config";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -119,6 +120,16 @@ export default function Hero({
         >
           {hero.titleRoman}
         </motion.p>
+
+        {/* the title sponsor, as the last line of the title block */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.5, ease: EASE }}
+          className="mt-4"
+        >
+          <PoweredBy size="md" />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 18 }}

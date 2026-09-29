@@ -7,7 +7,7 @@ import {
   Inter,
 } from "next/font/google";
 import "./globals.css";
-import { SITE } from "@/lib/site";
+import { SITE, TITLE_SPONSOR } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import { Suspense } from "react";
 import SiteFooter from "@/components/SiteFooter";
@@ -69,7 +69,7 @@ const body = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} ${SITE.year}`,
+    default: `${SITE.name} ${TITLE_SPONSOR.line}`,
     template: `%s ${SITE.name}`,
   },
   description: SITE.description,
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     "Indian Institute of Science",
   ],
   openGraph: {
-    title: `${SITE.name} ${SITE.year}`,
+    title: `${SITE.name} ${TITLE_SPONSOR.line}`,
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
@@ -118,13 +118,23 @@ export default async function RootLayout({
   const config = await getConfig();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    /*
+      The font variables go on <html>, not <body>. Tailwind resolves the
+      @theme fonts in globals.css (--font-display: var(--f-display), ...)
+      once, at :root, and a var() that is undefined there makes the whole
+      value invalid: every font-family on the site then fell through to
+      the browser's system stack and not one of the five faces loaded.
+      On :root the variables exist when the theme is resolved.
+    */
+    <html
+      lang="en"
+      className={`${display.variable} ${banglaDisplay.variable} ${banglaPoster.variable} ${bangla.variable} ${body.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
-      <body
-        className={`${display.variable} ${banglaDisplay.variable} ${banglaPoster.variable} ${bangla.variable} ${body.variable} min-h-dvh antialiased`}
-      >
+      <body className="min-h-dvh antialiased">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-sindoor focus:px-4 focus:py-2 focus:text-paper-3"

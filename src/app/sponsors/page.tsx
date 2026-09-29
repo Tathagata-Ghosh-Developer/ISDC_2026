@@ -5,10 +5,21 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
-import { SPONSOR_CONTACT, SITE } from "@/lib/site";
+import {
+  SPONSOR_CONTACT,
+  SPONSOR_TIERS,
+  SITE,
+  TITLE_SPONSOR,
+} from "@/lib/site";
 import { IISC_FIGURES } from "@/lib/content/neighbours";
 import { formatINR } from "@/lib/format";
 import EnquiryForm from "@/components/EnquiryForm";
+import {
+  LogoTile,
+  TakenBadge,
+  TitleSponsorStrip,
+  TITLE_TAKEN,
+} from "@/components/Sponsors";
 
 export const metadata: Metadata = {
   title: "Sponsors",
@@ -20,7 +31,15 @@ export const revalidate = 600;
 
 export default async function SponsorsPage() {
   const config = await getConfig();
-  const tiers = config.sponsorTiers;
+  // The title level is fixed in code, in SPONSOR_TIERS, and not in the
+  // console: it is a signed arrangement, and a stray edit to the tiers
+  // JSON must not be able to put it back on sale or drop it from the
+  // page. The console supplies the levels that are open, and a copy of
+  // the title level in there is ignored.
+  const tiers = [
+    SPONSOR_TIERS[0],
+    ...config.sponsorTiers.filter((t) => t.id !== TITLE_SPONSOR.tierId),
+  ];
 
   return (
     <>
@@ -48,8 +67,21 @@ export default async function SponsorsPage() {
         </Container>
       </Section>
 
+      {/* ---------------- the title sponsor ---------------- */}
+      <Section className="bg-paper-2/40">
+        <Container>
+          <Reveal>
+            <TitleSponsorStrip heading />
+            <p className="mt-6 max-w-[62ch] text-[0.85rem] text-ink-soft">
+              The title sponsorship for 2026 is taken. The five levels below
+              are open, and so is anything that does not appear on this list.
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
+
       {/* ---------------- why ---------------- */}
-      <Section className="!pt-0">
+      <Section>
         <Container>
           <div className="grid gap-4 md:grid-cols-3">
             {[
@@ -112,49 +144,73 @@ export default async function SponsorsPage() {
           <SectionHeading
             eyebrow="স্তর The tiers"
             title="What each level carries"
-            lede="Six levels, and room to build something that does not appear on this list. The deck has the full detail; terms apply to the LED display slots."
+            lede="Six levels, the first of them taken for 2026, and room to build something that does not appear on this list. The deck has the full detail; terms apply to the LED display slots."
           />
 
           <div className="mt-[2.618rem] grid gap-4 lg:grid-cols-2">
-            {tiers.map((tier, i) => (
-              <Reveal key={tier.id} delay={i * 0.04}>
-                <article
-                  className={`surface flex h-full flex-col p-6 sm:p-8 ${
-                    i === 0 ? "border-gold lg:col-span-2" : ""
-                  }`}
-                >
-                  <div className="flex flex-wrap items-baseline justify-between gap-3">
-                    <div>
-                      <span className="bangla-display block text-[1.272rem] text-gold">
-                        {tier.bangla}
-                      </span>
-                      <h3 className="font-display text-[1.618rem] font-normal text-ink">
-                        {tier.name}
-                      </h3>
+            {tiers.map((tier, i) => {
+              // The title level's card stays because it documents what
+              // the title sponsor receives; only the price goes.
+              const taken = tier.id === TITLE_SPONSOR.tierId;
+              return (
+                <Reveal key={tier.id} delay={i * 0.04}>
+                  <article
+                    aria-label={taken ? `Title sponsor, ${TITLE_TAKEN}` : undefined}
+                    className={`surface flex h-full flex-col p-6 sm:p-8 ${
+                      taken ? "border-gold lg:col-span-2" : ""
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-3">
+                      <div>
+                        <span className="bangla-display block text-[1.272rem] text-gold">
+                          {tier.bangla}
+                        </span>
+                        <h3 className="font-display text-[1.618rem] font-normal text-ink">
+                          {tier.name}
+                        </h3>
+                      </div>
+                      {taken ? (
+                        <TakenBadge />
+                      ) : (
+                        <span className="font-display text-[1.618rem] tabular-nums text-sindoor">
+                          {formatINR(tier.amount)}
+                        </span>
+                      )}
                     </div>
-                    <span className="font-display text-[1.618rem] tabular-nums text-sindoor">
-                      {formatINR(tier.amount)}
-                    </span>
-                  </div>
 
-                  <p className="mt-3 text-[0.9rem] italic text-ink-soft">
-                    {tier.headline}
-                  </p>
+                    <p className="mt-3 text-[0.9rem] italic text-ink-soft">
+                      {tier.headline}
+                    </p>
 
-                  <ul className="mt-5 space-y-2.5">
-                    {tier.benefits.map((b) => (
-                      <li
-                        key={b}
-                        className="flex gap-2.5 text-[0.84rem] leading-relaxed text-ink-soft"
-                      >
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rotate-45 bg-gold" />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </Reveal>
-            ))}
+                    {taken && (
+                      <div className="mt-4 flex flex-wrap items-center gap-4">
+                        <LogoTile
+                          {...TITLE_SPONSOR.logos[0]}
+                          compact
+                          sizes="12rem"
+                          className="w-full max-w-[12rem]"
+                        />
+                        <span className="text-[0.8rem] text-ink-soft">
+                          {TITLE_SPONSOR.name}
+                        </span>
+                      </div>
+                    )}
+
+                    <ul className="mt-5 space-y-2.5">
+                      {tier.benefits.map((b) => (
+                        <li
+                          key={b}
+                          className="flex gap-2.5 text-[0.84rem] leading-relaxed text-ink-soft"
+                        >
+                          <span className="mt-1.5 h-1 w-1 shrink-0 rotate-45 bg-gold" />
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                </Reveal>
+              );
+            })}
           </div>
 
           <Reveal className="mt-8">
@@ -297,6 +353,8 @@ export default async function SponsorsPage() {
         </Container>
       </Section>
 
+      {/* The console's list, for partners that come and go. The title
+          sponsor is fixed in code above and never depends on it. */}
       {config.sponsors.length > 0 && (
         <Section>
           <Container>

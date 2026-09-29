@@ -673,3 +673,38 @@ describe("security headers", () => {
     expect(text).not.toContain("/admin");
   });
 });
+
+/* ================================================================
+   The title sponsor, on the pages a sponsor would open to check
+   ================================================================ */
+
+describe("the title sponsor", () => {
+  it("is on the home page, by name and by mark", async () => {
+    const res = await fetch(`${BASE_NO_DB}/`, { headers: headers() });
+    const body = await res.text();
+    expect(res.status).toBe(200);
+    expect(body).toContain("Powered by Genotypic Technologies");
+    expect(body).toContain("/media/sponsors/genotypic.png");
+  });
+
+  it("is in the title of the home page", async () => {
+    const res = await fetch(`${BASE_NO_DB}/`, { headers: headers() });
+    const body = await res.text();
+    const title = /<title>([^<]*)<\/title>/.exec(body)?.[1] ?? "";
+    expect(title).toContain("Powered by Genotypic Technologies");
+  });
+
+  it("marks the title level as taken on the sponsors page", async () => {
+    const res = await fetch(`${BASE_NO_DB}/sponsors`, { headers: headers() });
+    const body = await res.text();
+    expect(res.status).toBe(200);
+    expect(body).toContain("Taken for 2026");
+  });
+
+  it("names the sponsor in the proposal", async () => {
+    const res = await fetch(`${BASE_NO_DB}/sponsors/proposal`, { headers: headers() });
+    const body = await res.text();
+    expect(res.status).toBe(200);
+    expect(body).toContain("Genotypic Technologies");
+  });
+});

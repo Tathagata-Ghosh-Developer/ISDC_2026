@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import { FactMarquee, FactGrid } from "@/components/Facts";
+import { TitleSponsorStrip } from "@/components/Sponsors";
 import { getConfig } from "@/lib/config";
 import { ART_FORMS } from "@/lib/content/artforms";
 import TitleCard from "@/components/TitleCard";
@@ -75,6 +76,28 @@ export default async function Home() {
               </p>
             </Reveal>
           </div>
+        </Container>
+      </Section>
+
+      {/* ============================================================
+          The title sponsor
+          ============================================================ */}
+      <Section className="!pt-0 !pb-[2.618rem] sm:!pb-[4.236rem]">
+        <Container>
+          <Reveal>
+            <TitleSponsorStrip heading />
+          </Reveal>
+          <Reveal
+            delay={0.1}
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+          >
+            <p className="text-[0.85rem] text-ink-soft">
+              Five sponsorship levels are still open.
+            </p>
+            <Link href="/sponsors" className="btn btn-ghost">
+              Sponsor the Puja
+            </Link>
+          </Reveal>
         </Container>
       </Section>
 
@@ -310,6 +333,52 @@ export default async function Home() {
                 </div>
               </Reveal>
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================================================
+          Merchandise, soon
+          ============================================================ */}
+      <Section className="!pt-0">
+        <Container>
+          <div className="surface relative overflow-hidden p-7 sm:p-[2.618rem] lg:p-[4.236rem]">
+            <div
+              className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full opacity-40 blur-3xl"
+              style={{ background: "var(--c-glow)" }}
+            />
+            <Reveal className="relative">
+              <p className="eyebrow">শীঘ্রই আসছে Coming soon</p>
+              <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
+                Official Durga Puja merchandise
+              </h2>
+              <p className="bangla-display mt-3 text-[1.618rem] text-sindoor">
+                পুজোর অফিসিয়াল মার্চেন্ডাইজ
+              </p>
+              <p className="lede mt-6 max-w-[54ch]">
+                Something to wear home from the pandal this year, and a few
+                surprises we are not telling you about yet. Watch this page
+                and our Instagram.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={config.links.instagram}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn btn-ghost"
+                >
+                  <InstagramIcon size={14} /> Follow on Instagram
+                </a>
+                <a
+                  href={config.links.whatsappGroup}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn btn-ghost"
+                >
+                  <WhatsappIcon size={14} /> Join the WhatsApp group
+                </a>
+              </div>
+            </Reveal>
           </div>
         </Container>
       </Section>

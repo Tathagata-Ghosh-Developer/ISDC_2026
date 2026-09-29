@@ -6,7 +6,7 @@
  * that was never committed does not fail the build and does not fail
  * type checking. It fails in front of a visitor.
  */
-import { existsSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -16,7 +16,15 @@ import { ART_FORMS, ART_CATEGORIES } from "@/lib/content/artforms";
 import { ART_DETAIL, CARD_IMAGE } from "@/lib/content/artform-detail";
 import { IMAGES as BIPLOB_IMAGES, FIGURES, SECTIONS } from "@/lib/content/revolutionaries";
 import { SCHEDULE } from "@/lib/content/schedule";
-import { NAV, MAGAZINES, SITE, COMMITTEE, POINTS_OF_CONTACT } from "@/lib/site";
+import {
+  NAV,
+  MAGAZINES,
+  SITE,
+  COMMITTEE,
+  POINTS_OF_CONTACT,
+  SPONSOR_TIERS,
+  TITLE_SPONSOR,
+} from "@/lib/site";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PUBLIC = join(ROOT, "public");
@@ -337,6 +345,44 @@ describe("site assets", () => {
 
   it("has a site URL with no trailing slash", () => {
     expect(SITE.url).toMatch(/^https?:\/\/[^/]+$/);
+  });
+});
+
+describe("the title sponsor", () => {
+  it("shows the four marks in the order the committee gave", () => {
+    expect(TITLE_SPONSOR.logos.map((l) => l.id)).toEqual([
+      "genotypic",
+      "genstride",
+      "dhitiomics",
+      "qtlomics",
+    ]);
+  });
+
+  it("has every mark on disk as a 1200 by 480 PNG, so the four render at one size", () => {
+    for (const l of TITLE_SPONSOR.logos) {
+      const file = publicFile(l.logo);
+      expect(existsSync(file), l.logo).toBe(true);
+      const bytes = readFileSync(file);
+      // The eight-byte PNG signature, then the IHDR chunk, whose width
+      // and height are the big-endian integers at bytes 16 and 20.
+      expect(bytes.subarray(0, 8).toString("hex"), l.logo).toBe("89504e470d0a1a0a");
+      expect([bytes.readUInt32BE(16), bytes.readUInt32BE(20)], l.logo).toEqual([1200, 480]);
+    }
+  });
+
+  it("says who powers the site, in those words", () => {
+    expect(TITLE_SPONSOR.line).toBe("Powered by Genotypic Technologies");
+  });
+
+  it("takes the first tier on the list, which is the title", () => {
+    expect(SPONSOR_TIERS[0].id).toBe("title");
+    expect(TITLE_SPONSOR.tierId).toBe(SPONSOR_TIERS[0].id);
+  });
+
+  it("links only to an address that was checked, over https", () => {
+    for (const l of TITLE_SPONSOR.logos) {
+      if (l.url !== "") expect(l.url, l.id).toMatch(/^https:\/\//);
+    }
   });
 });
 
