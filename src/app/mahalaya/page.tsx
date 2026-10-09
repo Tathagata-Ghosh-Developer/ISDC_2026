@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Radio as RadioIcon } from "lucide-react";
+import { CalendarPlus, Radio as RadioIcon } from "lucide-react";
 import RadioSet, { type Station } from "@/components/Radio";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import Countdown from "@/components/Countdown";
 import { FactGrid } from "@/components/Facts";
 import { getConfig } from "@/lib/config";
+import { BROADCAST_MINUTES, istClock, istDate } from "@/lib/season";
 
 export const metadata: Metadata = {
   title: "Mahalaya",
@@ -183,7 +184,9 @@ const TIMELINE = [
 export default async function MahalayaPage() {
   const config = await getConfig();
   const { audioUrl, youtubeId, startSeconds, caption } = config.mahalaya;
-  const mahalaya = config.schedule.find((d) => d.id === "mahalaya");
+  const broadcast = Date.parse(config.dates.mahalaya);
+  const bodhon = Date.parse(config.dates.arrival);
+  const offAir = new Date(broadcast + BROADCAST_MINUTES * 60_000).toISOString();
 
   return (
     <>
@@ -199,10 +202,34 @@ export default async function MahalayaPage() {
 
           <Reveal className="mt-[2.618rem]">
             <div className="surface p-6 sm:p-8">
-              <Countdown target={config.dates.countdownTo} />
-              <p className="mt-6 text-center text-[0.72rem] uppercase tracking-[0.24em] text-ink-faint">
-                until the broadcast, {mahalaya?.date ?? "10 October 2026"}
-              </p>
+              <Countdown
+                stages={[
+                  {
+                    at: config.dates.mahalaya,
+                    label: `until Mahishasuramardini, ${istDate(broadcast)}, ${istClock(broadcast)}`,
+                    until: offAir,
+                    live: {
+                      text: "Mahishasuramardini is on air",
+                      bangla: "শুভ মহালয়া",
+                      href: "#listen",
+                    },
+                  },
+                  {
+                    at: config.dates.arrival,
+                    label: `until Bodhon at the TMC Ground, ${istDate(bodhon)}`,
+                  },
+                ]}
+              />
+              <div className="mt-6 flex flex-col items-center gap-2 border-t border-line pt-6 text-center">
+                <a href="/calendar.ics" className="btn btn-ghost">
+                  <CalendarPlus size={15} /> Add Mahalaya and the five days to your calendar
+                </a>
+                <p className="max-w-[52ch] text-[0.72rem] leading-relaxed text-ink-faint">
+                  One file with the broadcast and every Puja day in it. The
+                  broadcast carries a reminder ten minutes before four, which
+                  is the closest a website can get to setting your alarm.
+                </p>
+              </div>
             </div>
           </Reveal>
         </Container>
@@ -237,7 +264,7 @@ export default async function MahalayaPage() {
       </Section>
 
       {/* ---------------- listen ---------------- */}
-      <Section className="!pt-0">
+      <Section id="listen" className="!pt-0 scroll-mt-28">
         <Container>
           <Reveal>
             <div className="surface overflow-hidden">
@@ -339,8 +366,8 @@ export default async function MahalayaPage() {
                   she can be seen, and can see.
                 </p>
                 <p className="lede text-[0.96rem]">
-                  Which is the honest reason the countdown on this site runs to
-                  Mahalaya rather than to the first day of the Puja. Nothing has
+                  Which is why the countdown on this page runs to Mahalaya
+                  first, and only then to the first day of the Puja. Nothing has
                   begun yet. Everything is about to.
                 </p>
               </div>

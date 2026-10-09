@@ -10,18 +10,31 @@ import { TitleSponsorStrip } from "@/components/Sponsors";
 import { getConfig } from "@/lib/config";
 import { ART_FORMS } from "@/lib/content/artforms";
 import TitleCard from "@/components/TitleCard";
+import CopyField from "@/components/CopyField";
+import FaqList from "@/components/Faq";
+import { pujaFaq } from "@/lib/faq";
+import { jsonLd, pujaGraph } from "@/lib/structured";
 
 export default async function Home() {
   const config = await getConfig();
 
   const bodhon = config.schedule.find((d) => d.id === "shashthi");
+  const faq = pujaFaq(config);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(pujaGraph(config, faq)) }}
+      />
       <Hero
         hero={config.hero}
         countdownTo={config.dates.arrival}
         bodhonLabel={`until Ma reaches the campus, ${bodhon?.date ?? "16 October 2026"}`}
+        dates={config.dates}
+        dayNames={Object.fromEntries(
+          config.schedule.map((d) => [d.id, { tithi: d.tithi, tithiBangla: d.tithiBangla }]),
+        )}
       />
 
       {/* ============================================================
@@ -330,6 +343,21 @@ export default async function Home() {
                     rupees from a first year and twenty thousand from an alumnus
                     get the same receipt, under the same rules.
                   </p>
+                  {config.bank.upiId && (
+                    <div className="border border-gold/40 bg-paper/60 p-4">
+                      <dl>
+                        <CopyField label="Pay by UPI" value={config.bank.upiId} mono />
+                      </dl>
+                      <p className="mt-2 text-[0.72rem] leading-relaxed text-ink-faint">
+                        The payee shows as {config.bank.merchantName}. Then
+                        record it on the{" "}
+                        <Link href="/daan" className="text-gold underline underline-offset-2 hover:text-sindoor">
+                          Donate page
+                        </Link>{" "}
+                        for your numbered receipt.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Reveal>
             </div>
@@ -378,6 +406,26 @@ export default async function Home() {
                   <WhatsappIcon size={14} /> Join the WhatsApp group
                 </a>
               </div>
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================================================
+          Questions people ask
+          ============================================================ */}
+      <Section>
+        <Container>
+          <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
+            <Reveal className="lg:sticky lg:top-28">
+              <SectionHeading
+                eyebrow="প্রশ্নোত্তর Questions"
+                title="What people ask before they come"
+                lede="Where, when, whether it is free, and how a donation becomes a receipt."
+              />
+            </Reveal>
+            <Reveal delay={0.08}>
+              <FaqList items={faq} />
             </Reveal>
           </div>
         </Container>

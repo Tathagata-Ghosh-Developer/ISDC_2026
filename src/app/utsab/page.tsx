@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { CalendarPlus, MapPin } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import Countdown from "@/components/Countdown";
+import TodayBadge from "@/components/TodayBadge";
 import { getConfig } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -33,6 +34,13 @@ export default async function UtsabPage() {
             <div className="surface p-6 sm:p-8">
               <Countdown target={config.dates.arrival} />
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.78rem] text-ink-soft">
+                <a
+                  href="/calendar.ics"
+                  className="inline-flex items-center gap-1.5 hover:text-sindoor"
+                >
+                  <CalendarPlus size={14} className="text-gold" />
+                  Add the dates to your calendar
+                </a>
                 <Link
                   href="/thikana"
                   className="inline-flex items-center gap-1.5 hover:text-sindoor"
@@ -69,6 +77,7 @@ export default async function UtsabPage() {
                       <p className="mt-1 text-[0.8rem] text-ink-soft">
                         {day.date} {day.weekday}
                       </p>
+                      <TodayBadge id={day.id} dates={config.dates} />
                     </div>
 
                     <div>

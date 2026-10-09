@@ -60,3 +60,21 @@ export function useMounted(): boolean {
     () => false,
   );
 }
+
+/**
+ * The time, read every `everyMs` and rounded down to it, so the value
+ * holds still between ticks and React can compare it. Null on the
+ * server and during hydration: a cached page cannot know when it is
+ * being read, and anything that depends on the hour must say so.
+ */
+export function useNow(everyMs: number): number | null {
+  return useSyncExternalStore(
+    (onChange) => {
+      if (typeof window === "undefined") return noop();
+      const id = window.setInterval(onChange, Math.min(everyMs, 1000));
+      return () => window.clearInterval(id);
+    },
+    () => Math.floor(Date.now() / everyMs) * everyMs,
+    () => null,
+  );
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { PUJA_DATES } from "@/lib/site";
+import { useNow } from "@/lib/browser";
 
 const UNITS = [
   { key: "days", label: "Days", bangla: "দিন" },
@@ -9,6 +9,18 @@ const UNITS = [
   { key: "minutes", label: "Minutes", bangla: "মিনিট" },
   { key: "seconds", label: "Seconds", bangla: "সেকেন্ড" },
 ] as const;
+
+/**
+ * One thing to count down to. A stage can also hold the floor for a
+ * while once it arrives: Mahalaya morning shows "on air" for the
+ * length of the broadcast before the count moves on to Bodhon.
+ */
+export type Stage = {
+  at: string;
+  label?: string;
+  until?: string;
+  live?: { text: string; bangla?: string; href?: string };
+};
 
 function split(ms: number) {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -20,27 +32,54 @@ function split(ms: number) {
   };
 }
 
+/** The stage to count to, the stage on air, or neither once all have passed. */
+function current(stages: Stage[], now: number) {
+  for (const s of stages) {
+    if (now < Date.parse(s.at)) return { counting: s, live: null };
+    if (s.live && s.until && now < Date.parse(s.until)) return { counting: null, live: s };
+  }
+  return { counting: null, live: null };
+}
+
 export default function Countdown({
   target = PUJA_DATES.countdownTo,
+  stages,
 }: {
   target?: string;
+  stages?: Stage[];
 }) {
-  const [left, setLeft] = useState<ReturnType<typeof split> | null>(null);
-  const [done, setDone] = useState(false);
-  const at = new Date(target).getTime();
+  const now = useNow(1000);
+  const list = stages ?? [{ at: target }];
+  const state = now === null ? { counting: list[0], live: null } : current(list, now);
+  const showLabels = list.some((s) => s.label);
 
-  useEffect(() => {
-    const tick = () => {
-      const remaining = at - Date.now();
-      setLeft(split(remaining));
-      setDone(remaining <= 0);
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [at]);
+  if (state.live?.live) {
+    const { text, bangla, href } = state.live.live;
+    const body = (
+      <span className="flex flex-col items-center gap-2 text-center">
+        <span className="flex items-center gap-2 text-[0.66rem] uppercase tracking-[0.28em] text-sindoor">
+          <span className="relative flex h-2 w-2" aria-hidden>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sindoor opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-sindoor" />
+          </span>
+          On air
+        </span>
+        <span className="font-display text-[1.618rem] leading-snug text-ink sm:text-[2.058rem]">
+          {text}
+        </span>
+        {bangla && <span className="bangla text-[1.05rem] text-gold">{bangla}</span>}
+      </span>
+    );
+    return href ? (
+      <a href={href} className="block hover:opacity-90">
+        {body}
+      </a>
+    ) : (
+      body
+    );
+  }
 
-  if (done) {
+  if (!state.counting) {
     return (
       <p className="bangla text-center text-[1.272rem] text-gold">
         মা এসেছেন। <span className="font-body text-ink-soft">Ma is here.</span>
@@ -48,30 +87,39 @@ export default function Countdown({
     );
   }
 
+  const left = now === null ? null : split(Date.parse(state.counting.at) - now);
+
   return (
-    <div
-      className="flex items-stretch justify-center gap-0"
-      role="timer"
-      aria-live="off"
-      aria-label="Time remaining"
-    >
-      {UNITS.map((u) => (
-        <div key={u.key} className="flex items-stretch">
-                    <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
-            <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">
-              {left === null
-                ? "––"
-                : String(left[u.key]).padStart(2, "0")}
-            </span>
-            <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.22em] text-ink-faint">
-              {u.label}
-            </span>
-            <span className="bangla block text-[0.66rem] text-gold/70">
-              {u.bangla}
-            </span>
+    <div>
+      <div
+        className="flex items-stretch justify-center gap-0"
+        role="timer"
+        aria-live="off"
+        aria-label={state.counting.label ? `Time remaining ${state.counting.label}` : "Time remaining"}
+      >
+        {UNITS.map((u) => (
+          <div key={u.key} className="flex items-stretch">
+            <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
+              <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">
+                {left === null ? "––" : String(left[u.key]).padStart(2, "0")}
+              </span>
+              <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.12em] text-ink-faint sm:tracking-[0.22em]">
+                {u.label}
+              </span>
+              <span className="bangla block text-[0.66rem] text-gold/70">{u.bangla}</span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      {showLabels && (
+        <p
+          className={`mt-6 min-h-[1.2em] text-center text-[0.72rem] uppercase tracking-[0.24em] text-ink-faint transition-opacity ${
+            now === null ? "opacity-0" : "opacity-100"
+          }`}
+        >
+          {state.counting.label}
+        </p>
+      )}
     </div>
   );
 }

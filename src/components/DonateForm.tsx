@@ -33,6 +33,8 @@ export default function DonateForm({ suggested, note }: Props) {
   const [state, setState] = useState<State>({ kind: "idle" });
   const [category, setCategory] = useState("student");
   const [amount, setAmount] = useState("");
+  // UPI is how nearly everyone pays, so it is chosen until someone says otherwise.
+  const [method, setMethod] = useState("upi");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -66,6 +68,7 @@ export default function DonateForm({ suggested, note }: Props) {
         amount: Number(fd.get("amount") ?? 0),
       });
       form.reset();
+      setMethod("upi");
     } catch {
       setState({
         kind: "error",
@@ -94,8 +97,8 @@ export default function DonateForm({ suggested, note }: Props) {
         <p className="lede mx-auto mt-5 max-w-[46ch] text-[0.9rem]">
           We have your entry for {formatINR(state.amount)}. The treasurer checks
           it against the bank statement, usually within a day. Once it clears,
-          a numbered receipt reaches your WhatsApp and your name appears on the
-          donation board.
+          a numbered receipt reaches your WhatsApp and your name is added to
+          the donation board.
         </p>
 
         {state.token && (
@@ -258,22 +261,43 @@ export default function DonateForm({ suggested, note }: Props) {
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Paid by" required>
-            <select name="method" required className="field" defaultValue="upi">
-              {METHODS.map((m) => (
-                <option key={m.value} value={m.value}>
+        <div>
+          <Label required>Paid by</Label>
+          <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Paid by">
+            {METHODS.map((m) => (
+              <label key={m.value} className="cursor-pointer">
+                <input
+                  type="radio"
+                  name="method"
+                  value={m.value}
+                  checked={method === m.value}
+                  onChange={() => setMethod(m.value)}
+                  className="peer sr-only"
+                />
+                <span className="block border border-line px-3 py-2 text-[0.78rem] transition-colors peer-checked:border-sindoor peer-checked:bg-sindoor peer-checked:text-paper-3 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-gold">
                   {m.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
 
+        <div className="grid gap-5 sm:grid-cols-2">
           <Field
-            label="Transaction reference"
-            hint="UTR, UPI reference or receipt number. Speeds up verification."
+            label={method === "upi" ? "UPI reference (UTR)" : "Transaction reference"}
+            hint={
+              method === "upi"
+                ? "The 12-digit number under the payment in your UPI app. Makes the match immediate."
+                : "UTR, cheque number or receipt number. Speeds up verification."
+            }
           >
-            <input name="reference" className="field" placeholder="e.g. 4312XXXXXXXX" />
+            <input
+              name="reference"
+              className="field"
+              placeholder={method === "upi" ? "e.g. 4312XXXXXXXX" : "Optional"}
+              inputMode={method === "upi" ? "numeric" : undefined}
+              autoComplete="off"
+            />
           </Field>
 
           <Field label="Date and time of payment" hint="Filled in for now. Change it if you paid earlier.">
@@ -292,13 +316,13 @@ export default function DonateForm({ suggested, note }: Props) {
 
         {/* board */}
         <div className="border-t border-line pt-5">
-          <Label>On the public donation board</Label>
+          <Label>On the donation board</Label>
           <p className="mt-2 text-[0.82rem] leading-relaxed text-ink-soft">
-            Everyone who gives goes on the board. That is the whole point of
-            it: the accounts are public, and a public account with names
-            missing from it is not a public account. Your name and the amount
-            appear there once the treasurer has matched the payment. Your
-            email, phone number and SR number never do.
+            Everyone who gives goes on the board, by name and amount, once the
+            treasurer has matched the payment. An account with names missing
+            from it is not an account. The board is open to the committee and
+            signed-in members, and your email, phone number and SR number never
+            appear on it.
           </p>
 
         </div>

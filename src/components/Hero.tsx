@@ -8,7 +8,9 @@ import { ChevronDown } from "lucide-react";
 import Countdown from "./Countdown";
 import Kash from "./Kash";
 import { PoweredBy } from "./Sponsors";
+import SeasonLine from "./SeasonLine";
 import type { Config } from "@/lib/config";
+import type { DayNames } from "@/lib/season";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -16,10 +18,14 @@ export default function Hero({
   hero,
   bodhonLabel,
   countdownTo,
+  dates,
+  dayNames,
 }: {
   hero: Config["hero"];
   bodhonLabel: string;
   countdownTo: string;
+  dates: Config["dates"];
+  dayNames: DayNames;
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
@@ -37,7 +43,7 @@ export default function Hero({
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-24"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-24 lg:pt-[11.5rem]"
     >
       {/* Layer 1, the campus, sunk into the paper */}
       <motion.div
@@ -144,8 +150,9 @@ export default function Hero({
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.7, ease: EASE }}
-          className="mt-[2.618rem] w-full"
+          className="mt-[1.618rem] w-full"
         >
+          <SeasonLine dates={dates} names={dayNames} className="mb-4" />
           <Countdown target={countdownTo} />
           <p className="mt-4 text-[0.7rem] uppercase tracking-[0.28em] text-ink-faint">
             {bodhonLabel}

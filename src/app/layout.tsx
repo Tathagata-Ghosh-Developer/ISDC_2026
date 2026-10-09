@@ -18,6 +18,7 @@ import PujoGuide from "@/components/PujoGuide";
 import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShlokaBand from "@/components/ShlokaBand";
+import { jsonLd, siteGraph } from "@/lib/structured";
 import { getConfig } from "@/lib/config";
 
 /**
@@ -135,6 +136,10 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
       <body className="min-h-dvh antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(siteGraph(config)) }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-sindoor focus:px-4 focus:py-2 focus:text-paper-3"

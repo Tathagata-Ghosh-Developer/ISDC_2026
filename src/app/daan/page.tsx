@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import fs from "node:fs";
 import path from "node:path";
-import { Building2, QrCode, ShieldCheck } from "lucide-react";
+import { Building2, Download, Plus, QrCode, ShieldCheck, Smartphone } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import DonateForm from "@/components/DonateForm";
@@ -36,6 +36,21 @@ export default async function DonatePage() {
     path.join(process.cwd(), "public", config.bank.qrImage.replace(/^\//, "")),
   );
 
+  // A UPI intent: on a phone it opens the payer's own UPI app with the
+  // payee filled in. No amount, because the amount is theirs to choose.
+  // Percent-encoded by hand: URLSearchParams turns spaces into "+",
+  // which some UPI apps print literally in the payee name.
+  const upiLink =
+    "upi://pay?" +
+    Object.entries({
+      pa: config.bank.upiId,
+      pn: config.bank.merchantName,
+      cu: "INR",
+      tn: "IISc Durga Puja 2026",
+    })
+      .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+      .join("&");
+
   return (
     <>
       {/* The bank account on this page is real and works whether or not
@@ -66,7 +81,7 @@ export default async function DonatePage() {
             eyebrow="দান Donate"
             title="Every rupee, on the record"
             bangla="স্বচ্ছ হিসেব, প্রকাশ্য খাতা"
-            lede="There is no payment gateway here, which means no percentage disappears into processing fees. You transfer straight into the committee's bank account. We check it against the statement, send you a numbered receipt on WhatsApp, and publish your name and amount on the donation board."
+            lede="No payment gateway, so nothing is lost to fees. Pay the committee's account by UPI, tell us about it below, and we match it against the bank statement and send a numbered receipt to your WhatsApp. Your name and amount go on the donation board, open to the committee and signed-in members."
           />
 
         </Container>
@@ -76,58 +91,103 @@ export default async function DonatePage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
             {/* -------- how to pay -------- */}
+            {/* UPI first, because that is how nearly everyone pays. The
+                bank details stay one tap away for NEFT and IMPS. */}
             <Reveal className="lg:sticky lg:top-24">
               <div className="surface p-6 sm:p-7">
                 <h2 className="font-display flex items-center gap-2 text-[1.272rem] text-ink">
-                  <Building2 size={17} className="text-gold" />
-                  Step one, transfer
+                  <Smartphone size={17} className="text-gold" />
+                  Step one, pay by UPI
                 </h2>
                 <p className="mt-2 text-[0.8rem] leading-relaxed text-ink-soft">
-                  Use your own banking app. Add your name in the remarks so the
+                  Any UPI app works: Google Pay, PhonePe, Paytm, BHIM or your
+                  bank&apos;s own. Add your name in the payment note so the
                   treasurer can match it quickly.
                 </p>
 
-                <dl className="mt-6 space-y-3">
-                  <CopyField label="Account name" value={config.bank.accountName} />
-                  <CopyField
-                    label="Account number"
-                    value={config.bank.accountNumber}
-                    mono
-                  />
-                  <CopyField label="IFSC" value={config.bank.ifsc} mono />
-                  <CopyField
-                    label="Bank"
-                    value={`${config.bank.bank}, ${config.bank.branch}`}
-                  />
-                  {config.bank.upiId && (
-                    <CopyField label="UPI ID" value={config.bank.upiId} mono />
-                  )}
-                  <CopyField label="Merchant name" value={config.bank.merchantName} />
-                </dl>
+                {config.bank.upiId && (
+                  <>
+                    <dl className="mt-6">
+                      <CopyField label="UPI ID" value={config.bank.upiId} mono />
+                    </dl>
+                    <p className="mt-2 text-[0.72rem] leading-relaxed text-ink-faint">
+                      Your app should show the payee as{" "}
+                      <span className="text-ink">{config.bank.merchantName}</span>.
+                      If it shows anything else, stop and ask a convenor.
+                    </p>
+                    <a
+                      href={upiLink}
+                      className="btn btn-primary mt-5 w-full lg:hidden"
+                    >
+                      <Smartphone size={15} /> Open my UPI app
+                    </a>
+                    <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint lg:hidden">
+                      Some apps refuse a payment started from a link. If yours
+                      does, copy the UPI ID above and paste it into the app.
+                    </p>
+                  </>
+                )}
 
                 <div className="mt-7 border-t border-line pt-6">
                   <h3 className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.22em] text-ink-soft">
                     <QrCode size={14} className="text-gold" />
-                    Scan to pay
+                    Or scan the QR
                   </h3>
                   {qrExists ? (
-                    <div className="mt-4 w-full max-w-[17rem] bg-white p-2">
-                      <Image
-                        src={config.bank.qrImage}
-                        alt="Bank issued UPI QR code for the committee account"
-                        width={976}
-                        height={1280}
-                        className="h-auto w-full"
-                      />
-                    </div>
+                    <>
+                      <div className="mt-4 w-full max-w-[17rem] bg-white p-2">
+                        <Image
+                          src={config.bank.qrImage}
+                          alt="Bank issued UPI QR code for the committee account"
+                          width={976}
+                          height={1280}
+                          className="h-auto w-full"
+                        />
+                      </div>
+                      <a
+                        href={config.bank.qrImage}
+                        download="iisc-durgotsab-upi-qr.jpg"
+                        className="mt-3 inline-flex items-center gap-1.5 text-[0.75rem] text-gold underline-offset-4 hover:text-sindoor hover:underline"
+                      >
+                        <Download size={13} /> Save the QR, then scan it from
+                        your gallery
+                      </a>
+                    </>
                   ) : (
                     <p className="mt-3 border border-solid border-line p-4 text-[0.78rem] leading-relaxed text-ink-faint">
                       The QR code is being issued by the bank and will appear
-                      here. Until then, please use the account details above,
-                      which reach the same account.
+                      here. Until then, please use the UPI ID above or the
+                      account details below, which reach the same account.
                     </p>
                   )}
                 </div>
+
+                <details className="group mt-7 border-t border-line pt-6">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+                    <span className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.22em] text-ink-soft">
+                      <Building2 size={14} className="text-gold" />
+                      Bank transfer instead (NEFT, IMPS)
+                    </span>
+                    <Plus
+                      size={14}
+                      className="shrink-0 text-gold transition-transform duration-300 group-open:rotate-45"
+                      aria-hidden
+                    />
+                  </summary>
+                  <dl className="mt-5 space-y-3">
+                    <CopyField label="Account name" value={config.bank.accountName} />
+                    <CopyField
+                      label="Account number"
+                      value={config.bank.accountNumber}
+                      mono
+                    />
+                    <CopyField label="IFSC" value={config.bank.ifsc} mono />
+                    <CopyField
+                      label="Bank"
+                      value={`${config.bank.bank}, ${config.bank.branch}`}
+                    />
+                  </dl>
+                </details>
 
                 <div className="mt-7 flex gap-2 border-t border-line pt-6 text-[0.75rem] leading-relaxed text-ink-soft">
                   <ShieldCheck size={15} className="mt-0.5 shrink-0 text-leaf" />
