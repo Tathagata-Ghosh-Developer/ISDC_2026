@@ -11,7 +11,7 @@
 
 import type { Config } from "./config";
 import { istClock, istDate } from "./season";
-import { SITE, TITLE_SPONSOR, VOLUNTEER_ROLES } from "./site";
+import { MERCH, SITE, TITLE_SPONSOR, VOLUNTEER_ROLES } from "./site";
 
 export type Faq = { q: string; a: string; href?: string; cta?: string };
 
@@ -69,6 +69,12 @@ export function pujaFaq(config: Config): Faq[] {
       a: `Pay by UPI to ${bank.upiId}; the payee name shows as ${bank.merchantName}. Then record the payment on the Donate page with your name, WhatsApp number and UPI reference. The treasurer matches it against the bank statement and sends a numbered receipt to your WhatsApp. There is no payment gateway, so nothing is lost to fees.`,
       href: "/daan",
       cta: "Donate",
+    },
+    {
+      q: "Is there an official Durga Puja T-shirt?",
+      a: `Yes. ${MERCH.title}, the official T-shirt, is ₹${MERCH.price} in ${MERCH.fits.join(" or ").toLowerCase()} fit, sizes ${MERCH.sizes.join(", ")}. It is made, sold and delivered by the merchandise partner, Meme Theory: ${MERCH.delivery}`,
+      href: "/merch",
+      cta: "See the T-shirt",
     },
     {
       q: "How can I volunteer?",

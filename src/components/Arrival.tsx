@@ -148,6 +148,8 @@ export default function Arrival({ oncePerSession = true }: Props) {
     }
     cleanup();
     setVisible(false);
+    // The merchandise popup waits for this.
+    window.dispatchEvent(new Event("isdc-arrived"));
   }
 
   /**

@@ -3,7 +3,7 @@ import { MapPin, Mail } from "lucide-react";
 import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
 import { SITE, LINKS, CONTACTS, NAV } from "@/lib/site";
 import Logo from "./Logo";
-import { TitleSponsorStrip } from "./Sponsors";
+import { PartnerStrip, TitleSponsorStrip } from "./Sponsors";
 
 const SOCIALS = [
   { href: LINKS.instagram, label: "Instagram", Icon: InstagramIcon },
@@ -61,7 +61,7 @@ export default function SiteFooter() {
             <ul className="mt-5 space-y-2">
               {NAV.map((n) => (
                 <li key={n.href}>
-                  <Link
+                  <Link prefetch={false}
                     href={n.href}
                     className="group inline-flex items-baseline gap-2 text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                   >
@@ -73,7 +73,7 @@ export default function SiteFooter() {
                 </li>
               ))}
               <li>
-                <Link
+                <Link prefetch={false}
                   href="/sponsors"
                   className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                 >
@@ -81,7 +81,7 @@ export default function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch={false}
                   href="/thikana#committee"
                   className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                 >
@@ -89,7 +89,7 @@ export default function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch={false}
                   href="/sponsors/proposal"
                   className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                 >
@@ -97,7 +97,7 @@ export default function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch={false}
                   href="/thikana#write-to-us"
                   className="text-[0.92rem] text-ink-soft transition-colors hover:text-sindoor"
                 >
@@ -112,7 +112,7 @@ export default function SiteFooter() {
             <ul className="mt-5 space-y-3 text-[0.92rem] text-ink-soft">
               <li className="flex gap-2">
                 <MapPin size={15} className="mt-1 shrink-0 text-gold" />
-                <Link href="/thikana" className="hover:text-sindoor">
+                <Link prefetch={false} href="/thikana" className="hover:text-sindoor">
                   {SITE.venue}
                 </Link>
               </li>
@@ -141,6 +141,9 @@ export default function SiteFooter() {
         {/* the title sponsor, a band of its own above the small print */}
         <div className="mt-[2.618rem] border-t border-line pt-[2.618rem]">
           <TitleSponsorStrip compact />
+          <div className="mt-6 lg:flex lg:justify-end">
+            <PartnerStrip compact />
+          </div>
         </div>
 
         <div className="my-[2.618rem] h-px w-full bg-line" />
@@ -150,10 +153,10 @@ export default function SiteFooter() {
             © {SITE.year} {SITE.name}. Run by students, funded by the community.
           </p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <Link href="/thikana#write-to-us" className="hover:text-gold">
+            <Link prefetch={false} href="/thikana#write-to-us" className="hover:text-gold">
               Tell us what is wrong
             </Link>
-            <Link href="/admin" className="hover:text-gold">
+            <Link prefetch={false} href="/admin" className="hover:text-gold">
               Sign in
             </Link>
           </p>

@@ -10,6 +10,7 @@ import {
   SPONSOR_TIERS,
   SITE,
   TITLE_SPONSOR,
+  PARTNERS,
 } from "@/lib/site";
 import { IISC_FIGURES } from "@/lib/content/neighbours";
 import { formatINR } from "@/lib/format";
@@ -18,6 +19,7 @@ import {
   LogoTile,
   TakenBadge,
   TitleSponsorStrip,
+  PartnerStrip,
   TITLE_TAKEN,
 } from "@/components/Sponsors";
 
@@ -76,6 +78,27 @@ export default async function SponsorsPage() {
               The title sponsorship for 2026 is taken. The five levels below
               are open, and so is anything that does not appear on this list.
             </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ---------------- the partners ---------------- */}
+      <Section>
+        <Container>
+          <Reveal>
+            <PartnerStrip heading />
+            <ul className="mt-6 max-w-[62ch] space-y-2 text-[0.85rem] leading-relaxed text-ink-soft">
+              {PARTNERS.filter((p) => p.note).map((p) => (
+                <li key={p.id}>
+                  <span className="text-ink">{p.name}.</span> {p.note}{" "}
+                  {p.id === "merchandise" && (
+                    <Link href="/merch" className="text-gold underline underline-offset-2 hover:text-sindoor">
+                      See the T-shirt
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
           </Reveal>
         </Container>
       </Section>

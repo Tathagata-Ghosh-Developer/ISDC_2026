@@ -319,7 +319,7 @@ export const SPONSOR_TIERS = [
       "Brand presence in the magazine, invitation cards and brochures",
       "Promotional video on the venue LED display at peak hours",
       "Dedicated sponsor showcase across our social media",
-      "On stage acknowledgement at every cultural programme",
+      "On-stage acknowledgement at every cultural programme",
     ],
   },
   {
@@ -440,6 +440,67 @@ export const TITLE_SPONSOR = {
       url: "https://www.qtlomics.com/",
     },
   ],
+} as const;
+
+/**
+ * The partners after the title sponsor, in the order of what they put
+ * in, and given room on the page in that order. `contribution` is in
+ * rupees; 0 means in kind. An empty url means no link: nothing about
+ * IITxIIM Jewels could be verified online on 12 October 2026, so the
+ * tile is the name and the mark and nothing is guessed. Both marks are
+ * drawn on black, so their tiles are black on either theme.
+ */
+export const PARTNERS = [
+  {
+    id: "jewellery",
+    role: "Jewellery Partner",
+    bangla: "অলংকার সহযোগী",
+    name: "IITxIIM Jewels",
+    logo: "/media/sponsors/iitxiim-jewels.jpg",
+    width: 869,
+    height: 580,
+    url: "",
+    contribution: 15000,
+    note: "",
+  },
+  {
+    id: "merchandise",
+    role: "Merchandise Partner",
+    bangla: "মার্চেন্ডাইজ সহযোগী",
+    name: "Meme Theory",
+    logo: "/media/sponsors/meme-theory.png",
+    width: 512,
+    height: 512,
+    url: "https://www.memetheory.in/",
+    contribution: 0,
+    note: "A bootstrapped start-up by IISc students. They make, sell and deliver the official T-shirt; no money passes between them and the committee.",
+  },
+] as const;
+
+/**
+ * The official merchandise. Sold, paid for and delivered entirely by
+ * the merchandise partner, under their terms; the committee takes no
+ * orders and no money. Read off the product and policy pages on 12
+ * October 2026. Price and delivery are theirs to change, so check the
+ * product page before quoting them anywhere else.
+ */
+export const MERCH = {
+  title: "Pujo Hits IISc",
+  line: "The official T-shirt of the IISc Sharodiya Durgotsab",
+  lineBangla: "পুজোর অফিসিয়াল টি-শার্ট",
+  url: "https://www.memetheory.in/product/6aca697a15387416873f0e0d",
+  price: 449,
+  fits: ["Regular", "Oversized"],
+  sizes: ["S", "M", "L", "XL"],
+  colour: "Petrol blue",
+  front: "Durga in white alpona with a floral border, the committee crest on the chest, and the title sponsor's four marks on the sleeves.",
+  back: "Durga in a half-sun of gold and red, the trishul, দেবী, and the Institute's crest at the collar.",
+  delivery: "Free delivery to IISc hostel blocks, or collect at Aryabhatta or NGH. Campus orders only.",
+  seller: "Meme Theory Apparel",
+  support: "support@memetheory.in",
+  terms: "https://www.memetheory.in/terms",
+  refunds: "https://www.memetheory.in/refund-policy",
+  shipping: "https://www.memetheory.in/shipping-policy",
 } as const;
 
 /**

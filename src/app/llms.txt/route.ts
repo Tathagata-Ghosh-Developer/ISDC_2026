@@ -1,7 +1,7 @@
 import { getConfig } from "@/lib/config";
 import { pujaFaq } from "@/lib/faq";
 import { istClock, istDate } from "@/lib/season";
-import { SITE, TITLE_SPONSOR } from "@/lib/site";
+import { MERCH, PARTNERS, SITE, TITLE_SPONSOR } from "@/lib/site";
 
 /**
  * llms.txt: the site summarised for AI assistants, in the shape the
@@ -15,6 +15,7 @@ const PAGES: [string, string, string][] = [
   ["/utsab", "Utsab, the five days", "Every ritual of the five days with its time: Bodhon, Nabapatrika, Anjali, Sandhi Puja, Kumari Puja, Bhog, Sindoor Khela and Bisarjan."],
   ["/mahalaya", "Mahalaya", "Mahishasuramardini, the pre-dawn broadcast that has opened Durga Puja since the 1930s, with the 1966 recording from the rights holder's upload."],
   ["/thikana", "Thikana, finding the pandal", "Walking directions to the TMC Ground from every gate of the IISc campus, on the official campus map."],
+  ["/merch", "Merchandise", "The official T-shirt, sold and delivered on the IISc campus by the merchandise partner, Meme Theory."],
   ["/daan", "Donate", "UPI and bank details of the committee account, and the form that turns a payment into a numbered receipt on WhatsApp. No payment gateway, no fees."],
   ["/jogdan", "Jogdan, volunteer", "Volunteer teams for decoration, puja arrangements, bhog, logistics, sponsorship, content, fundraising and the magazine. No experience needed."],
   ["/probash", "Probash, the magazine", "The committee's annual Sharodiya magazine, with submissions and the cover competition."],
@@ -44,6 +45,8 @@ export async function GET() {
       : "",
     `- Donate: UPI ${config.bank.upiId} (payee ${config.bank.merchantName}), then record the payment at ${SITE.url}/daan for a numbered receipt on WhatsApp.`,
     `- Calendar file with every date: ${SITE.url}/calendar.ics`,
+    `- Official T-shirt: ${MERCH.title}, ₹${MERCH.price}, sold by ${MERCH.seller} at ${MERCH.url}. ${MERCH.delivery}`,
+    `- Partners: ${PARTNERS.map((p) => `${p.name} (${p.role})`).join("; ")}`,
     `- Contact: ${SITE.email}. Instagram: ${config.links.instagram}`,
     "",
     "## Schedule",

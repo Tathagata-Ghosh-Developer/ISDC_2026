@@ -6,12 +6,14 @@ import Hero from "@/components/Hero";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import { FactMarquee, FactGrid } from "@/components/Facts";
-import { TitleSponsorStrip } from "@/components/Sponsors";
+import { PartnerStrip, TitleSponsorStrip } from "@/components/Sponsors";
 import { getConfig } from "@/lib/config";
 import { ART_FORMS } from "@/lib/content/artforms";
 import TitleCard from "@/components/TitleCard";
 import CopyField from "@/components/CopyField";
 import FaqList from "@/components/Faq";
+import MerchStage from "@/components/merch/MerchStage";
+import { MERCH } from "@/lib/site";
 import { pujaFaq } from "@/lib/faq";
 import { jsonLd, pujaGraph } from "@/lib/structured";
 
@@ -85,7 +87,7 @@ export default async function Home() {
                 <div className="vignette absolute inset-0" />
               </div>
               <p className="mt-3 text-[0.68rem] uppercase tracking-[0.22em] text-ink-faint">
-                A Puja at night, Calcutta nineteenth century
+                A Puja at night, Calcutta, nineteenth century
               </p>
             </Reveal>
           </div>
@@ -99,6 +101,9 @@ export default async function Home() {
         <Container>
           <Reveal>
             <TitleSponsorStrip heading />
+          </Reveal>
+          <Reveal delay={0.06} className="mt-10">
+            <PartnerStrip heading />
           </Reveal>
           <Reveal
             delay={0.1}
@@ -366,46 +371,50 @@ export default async function Home() {
       </Section>
 
       {/* ============================================================
-          Merchandise, soon
+          The official T-shirt
           ============================================================ */}
       <Section className="!pt-0">
         <Container>
-          <div className="surface relative overflow-hidden p-7 sm:p-[2.618rem] lg:p-[4.236rem]">
-            <div
-              className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full opacity-40 blur-3xl"
-              style={{ background: "var(--c-glow)" }}
-            />
-            <Reveal className="relative">
-              <p className="eyebrow">শীঘ্রই আসছে Coming soon</p>
+          <div className="surface relative grid overflow-hidden lg:grid-cols-[1.25fr_1fr]">
+            <MerchStage className="aspect-[4/5] w-full sm:aspect-[4/3] lg:aspect-auto lg:min-h-[520px]" />
+            <Reveal className="relative p-7 sm:p-[2.618rem]">
+              <p className="eyebrow">শারদ সম্ভার Official merchandise</p>
               <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
-                Official Durga Puja merchandise
+                The Puja T-shirt is here
               </h2>
               <p className="bangla-display mt-3 text-[1.618rem] text-sindoor">
-                পুজোর অফিসিয়াল মার্চেন্ডাইজ
+                {MERCH.lineBangla}
               </p>
-              <p className="lede mt-6 max-w-[54ch]">
-                Something to wear home from the pandal this year, and a few
-                surprises we are not telling you about yet. Watch this page
-                and our Instagram.
+              <p className="lede mt-5 max-w-[46ch]">
+                {MERCH.title}: Durga in alpona on the front, দেবী in gold on
+                the back, ₹{MERCH.price}. {MERCH.delivery}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={MERCH.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  Buy on Meme Theory <ArrowUpRight size={14} />
+                </a>
+                <Link href="/merch" className="btn btn-ghost">
+                  See it up close
+                </Link>
+              </div>
+              <p className="mt-6 text-[0.75rem] leading-relaxed text-ink-faint">
+                Made, sold and delivered by our merchandise partner, Meme
+                Theory. More surprises before Shashthi; watch our{" "}
                 <a
                   href={config.links.instagram}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="btn btn-ghost"
+                  className="text-gold underline underline-offset-2 hover:text-sindoor"
                 >
-                  <InstagramIcon size={14} /> Follow on Instagram
+                  Instagram
                 </a>
-                <a
-                  href={config.links.whatsappGroup}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="btn btn-ghost"
-                >
-                  <WhatsappIcon size={14} /> Join the WhatsApp group
-                </a>
-              </div>
+                .
+              </p>
             </Reveal>
           </div>
         </Container>

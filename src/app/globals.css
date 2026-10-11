@@ -774,3 +774,35 @@ body::before {
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
 }
+
+/* ---------------- merchandise stage: kash and cloud ---------------- */
+.kash-stalk {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation-name: kash-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes kash-sway {
+  from { transform: rotate(calc(var(--sway) * -1)); }
+  to { transform: rotate(var(--sway)); }
+}
+.merch-cloud {
+  background: radial-gradient(ellipse at 50% 60%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.55) 45%, transparent 70%);
+  filter: blur(6px);
+  animation-name: cloud-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes cloud-drift {
+  from { transform: translateX(-8%); }
+  to { transform: translateX(18%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kash-stalk,
+  .merch-cloud {
+    animation: none;
+  }
+}

@@ -18,6 +18,7 @@ import PujoGuide from "@/components/PujoGuide";
 import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShlokaBand from "@/components/ShlokaBand";
+import MerchPopup from "@/components/merch/MerchPopup";
 import { jsonLd, siteGraph } from "@/lib/structured";
 import { getConfig } from "@/lib/config";
 
@@ -160,6 +161,7 @@ export default async function RootLayout({
         </Suspense>
         <ConsentNotice />
         <PujoGuide />
+        <MerchPopup waitForArrival={config.arrival.enabled} />
       </body>
     </html>
   );
