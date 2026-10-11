@@ -203,18 +203,20 @@ describe("POST /api/donations validation", () => {
       "Enter the amount",
     ));
 
-  it("rejects a proof file over five megabytes", async () => {
+  // Four, under Vercel's 4.5 MB body ceiling: past that the platform
+  // answers 413 before this route runs, and the form says so itself.
+  it("rejects a proof file over four megabytes", async () => {
     const form = donationForm(VALID_DONATION);
     form.append(
       "proof",
-      new File([new Uint8Array(5 * 1024 * 1024 + 16)], "huge.jpg", { type: "image/jpeg" }),
+      new File([new Uint8Array(4 * 1024 * 1024 + 16)], "huge.jpg", { type: "image/jpeg" }),
       "huge.jpg",
     );
     const res = await post(form);
     const body = await res.text();
     expect(res.status).toBe(400);
     expectHumanError(body, "oversize-proof");
-    expect(body).toContain("5 MB");
+    expect(body).toContain("4 MB");
   });
 
   it("rejects a proof that is not an image or a PDF", async () => {
