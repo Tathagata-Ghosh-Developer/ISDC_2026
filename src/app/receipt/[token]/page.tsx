@@ -178,9 +178,11 @@ export default async function ReceiptPage({
                     </p>
                   ))}
                 </div>
+                {/* Who verified it stays in the ledger. A public receipt
+                    names the committee, not a member's sign-in name. */}
                 {donation.verified_by && (
                   <p className="mt-1 text-[0.66rem] text-ink-faint">
-                    entered by {donation.verified_by}
+                    entered by the ISDC committee
                   </p>
                 )}
               </div>

@@ -10,7 +10,9 @@ export const dynamic = "force-dynamic";
 
 const CATEGORIES = new Set(["student", "faculty", "alumni", "guest"]);
 const METHODS = new Set(["upi", "neft", "imps", "cash", "cheque", "other"]);
-const MAX_PROOF_BYTES = 5 * 1024 * 1024;
+// Under Vercel's 4.5 MB request ceiling, with room for the other fields;
+// a bigger body is refused by the platform before this code ever runs.
+const MAX_PROOF_BYTES = 4 * 1024 * 1024;
 const PROOF_TYPES = new Set([
   "image/jpeg",
   "image/png",
@@ -37,7 +39,10 @@ export async function POST(req: Request) {
   // donor in ten minutes. So the address gets a generous ceiling that
   // only a script reaches, and each donor's own number gets the tight one.
   const limit = rateLimit(clientKey(req, "donate"), {
-    max: 120,
+    // ponytail: per-instance memory, so a ceiling not a wall. Campus
+    // Wi-Fi and Jio put hundreds of donors behind a few addresses; the
+    // phone-and-address limit below stops repeats from one person.
+    max: 1000,
     windowMs: 10 * 60_000,
   });
   if (!limit.ok) {
@@ -114,7 +119,7 @@ export async function POST(req: Request) {
   const proof = form.get("proof");
   if (proof instanceof File && proof.size > 0) {
     if (proof.size > MAX_PROOF_BYTES) {
-      return bad("That screenshot is over 5 MB. Please compress it.");
+      return bad("That screenshot is over 4 MB. Please send a smaller one, or record the payment without it.");
     }
     if (!PROOF_TYPES.has(proof.type)) {
       return bad("Upload an image or a PDF.");

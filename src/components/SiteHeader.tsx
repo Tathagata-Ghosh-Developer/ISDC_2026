@@ -213,6 +213,7 @@ export default function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={false}
               className="group flex items-baseline justify-between gap-4 border-b border-line py-3.5 transition-all duration-500"
               style={{
                 opacity: menuOpen ? 1 : 0,
@@ -260,9 +261,12 @@ function NavLink({
 }) {
   const active = pathname?.startsWith(item.href) ?? false;
 
+  // No prefetch: the masthead is on every page, and nine prefetches per
+  // page view are most of the site's request budget on a free plan.
   return (
     <Link
       href={item.href}
+      prefetch={false}
       className={`group relative block text-center transition-colors ${
         compact ? "px-2.5 py-1.5" : "px-1 pb-1.5"
       } ${active ? "text-sindoor" : "text-ink-soft hover:text-ink"}`}

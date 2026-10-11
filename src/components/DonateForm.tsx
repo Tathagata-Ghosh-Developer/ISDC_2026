@@ -20,6 +20,11 @@ type State =
       token: string | null; name: string; amount: number }
   | { kind: "error"; message: string };
 
+/** Same ceiling as the server's; see /api/donations. */
+const MAX_PROOF_BYTES = 4 * 1024 * 1024;
+const proofTooLarge =
+  "That screenshot is over 4 MB. Choose a smaller one, or leave it out: the treasurer matches payments against the bank statement anyway.";
+
 const METHODS = [
   { value: "upi", label: "UPI" },
   { value: "neft", label: "NEFT" },
@@ -44,9 +49,22 @@ export default function DonateForm({ suggested, note }: Props) {
     const fd = new FormData(form);
     fd.set("phone", normalisePhone(String(fd.get("phone") ?? "")));
 
+    // Checked here because the platform refuses a body over 4.5 MB
+    // before the server can say why, and the donor would see only
+    // "network trouble".
+    const proof = fd.get("proof");
+    if (proof instanceof File && proof.size > MAX_PROOF_BYTES) {
+      setState({ kind: "error", message: proofTooLarge });
+      return;
+    }
+
     setState({ kind: "sending" });
     try {
       const res = await fetch("/api/donations", { method: "POST", body: fd });
+      if (res.status === 413) {
+        setState({ kind: "error", message: proofTooLarge });
+        return;
+      }
       const data = (await res.json()) as {
         ok?: boolean;
         id?: string;
@@ -304,7 +322,7 @@ export default function DonateForm({ suggested, note }: Props) {
             <PaidAt />
           </Field>
 
-          <Field label="Screenshot of payment" hint="Optional. Helps us match it faster.">
+          <Field label="Screenshot of payment" hint="Optional, up to 4 MB. Helps us match it faster.">
             <input
               name="proof"
               type="file"

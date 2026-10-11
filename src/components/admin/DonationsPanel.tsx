@@ -123,7 +123,9 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
     if (!quiet) return;
     const id = setInterval(() => {
       if (document.visibilityState === "visible") void load(true);
-    }, 15_000);
+      // A minute, not fifteen seconds: every open console phone polls,
+      // and during the Puja that is most of the function budget.
+    }, 60_000);
     return () => clearInterval(id);
   }, [load, quiet]);
 
@@ -298,7 +300,7 @@ export default function DonationsPanel({ role, user }: { role: DeskRole; user: s
             <Cell label="Rows shown" value={String(totals.count)} />
             <Cell label="Receipts to send, in view" value={String(totals.toSend)} tone="sindoor" />
             <Cell label="Awaiting check, in view" value={String(totals.awaiting)} />
-            <Cell label="Verified in view" value={formatINR(totals.verified)} />
+            <Cell label="Verified, in view" value={formatINR(totals.verified)} />
           </div>
           <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint">
             These figures are for the committee. The public board carries names
