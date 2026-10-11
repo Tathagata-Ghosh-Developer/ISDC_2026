@@ -280,7 +280,7 @@ export const BENGALI_ORGS: BengaliOrg[] = [
     founded: "2006",
     area: "Puja at Palace Grounds, Gate 9 (Princess Green), Bellary Road; registered at No. 17, 10th Cross, Manorayanapalya, Sultanpalya Main Road, R T Nagar PO, Bengaluru 560032",
     url: "https://rtnagardurgapuja.org/",
-    note: "The Palace Grounds Puja. One of the few that runs Jagadhatri Puja as well as Saraswati, Durga, Kali and Lakshmi. Blood-donation camps, hosts around 50 NGO children, wheelchair access for seniors, and its own mobile app. 'R T Nagar Bengali Association' and the Samiti are the same body, not three organisations.",
+    note: "The Palace Grounds Puja. One of the few that runs Jagadhatri Puja as well as Saraswati, Durga, Kali and Lakshmi. Blood-donation camps, hosts around 50 NGO children, wheelchair access for seniors, and its own mobile app. 'R T Nagar Bengali Association' and the Samiti are the same body, not two organisations.",
   },
   {
     id: "oikotan-hebbal",

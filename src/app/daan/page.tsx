@@ -138,7 +138,7 @@ export default async function DonatePage() {
                       <div className="mt-4 w-full max-w-[17rem] bg-white p-2">
                         <Image
                           src={config.bank.qrImage}
-                          alt="Bank issued UPI QR code for the committee account"
+                          alt="Bank-issued UPI QR code for the committee account"
                           width={976}
                           height={1280}
                           className="h-auto w-full"

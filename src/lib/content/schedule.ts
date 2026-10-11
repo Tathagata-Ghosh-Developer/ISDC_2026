@@ -76,7 +76,7 @@ export const SCHEDULE: PujaDay[] = [
     rituals: [
       {
         time: "17 Oct, 7:00 AM",
-        title: "Nabapatrika Sthapan and Prabesh",
+        title: "Nabapatrika Snan and Prabesh",
         bangla: "নবপত্রিকা স্নান ও প্রবেশ",
       },
       {
@@ -104,13 +104,13 @@ export const SCHEDULE: PujaDay[] = [
       {
         time: "6:00 AM",
         title: "Maha Ashtami Puja and Pushpanjali",
-        bangla: "মহাষ্টমী পূজো, পুষ্পাঞ্জলি",
+        bangla: "মহাষ্টমী পুজো, পুষ্পাঞ্জলি",
       },
       {
         time: "7:26 to 8:14 AM",
         title: "Sandhi Puja",
-        bangla: "সন্ধি পূজো",
-        note: "The last twenty four minutes of Ashtami and the first twenty four of Nabami.",
+        bangla: "সন্ধি পুজো",
+        note: "The last twenty-four minutes of Ashtami and the first twenty-four of Nabami.",
       },
       {
         time: "6:30 PM",
@@ -132,7 +132,7 @@ export const SCHEDULE: PujaDay[] = [
       {
         time: "8:30 AM",
         title: "Nabami Puja and Homa",
-        bangla: "নবমী পূজো ও হোম",
+        bangla: "নবমী পুজো ও হোম",
       },
       {
         time: "6:30 PM",
@@ -154,7 +154,7 @@ export const SCHEDULE: PujaDay[] = [
       {
         time: "by 8:31 AM",
         title: "Dashami Puja",
-        bangla: "বিজয়া দশমী পূজো",
+        bangla: "বিজয়া দশমী পুজো",
       },
       {
         time: "12:00 PM",

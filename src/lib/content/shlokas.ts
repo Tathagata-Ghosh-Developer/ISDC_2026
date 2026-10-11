@@ -36,7 +36,7 @@ export const SHLOKAS: Shloka[] = [
     transliteration:
       "sarva-maṅgala-māṅgalye śive sarvārtha-sādhike\nśaraṇye tryambake gauri nārāyaṇi namo'stu te",
     meaning:
-      "Auspiciousness of all that is auspicious, fulfiller of every purpose, refuge, three eyed Gauri, Narayani, salutation to you.",
+      "Auspiciousness of all that is auspicious, fulfiller of every purpose, refuge, three-eyed Gauri, Narayani, salutation to you.",
     meaningBangla:
       "হে নারায়ণি, হে গৌরি, তুমি সর্বমঙ্গলের উৎস, সর্বার্থসাধিকা, আমরা তোমার শরণ নিই।",
     source: "Devi Mahatmya 11.10",

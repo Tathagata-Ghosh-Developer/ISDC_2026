@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 const EVENT_LABEL: Record<string, string> = {
   "donate-form-opened": "Opened the donation form",
   "donate-form-submitted": "Completed the donation form",
-  "upi-copied": "Copied the UPI id",
+  "upi-copied": "Copied the UPI ID",
   "account-copied": "Copied the account number",
   "receipt-printed": "Printed a receipt",
   "magazine-opened": "Opened Probash",
@@ -85,9 +85,9 @@ export default async function AdminVisitsPage({
             />
             <Cell
               label="Finished it"
-              value={`${a.funnel.submitted.toLocaleString("en-IN")}  ${
+              value={`${a.funnel.submitted.toLocaleString("en-IN")}${
                 a.funnel.reachedForm
-                  ? `(${Math.round(a.funnel.rate * 100)}%)`
+                  ? ` (${Math.round(a.funnel.rate * 100)}%)`
                   : ""
               }`}
               tone="sindoor"
@@ -101,7 +101,7 @@ export default async function AdminVisitsPage({
               {a.byDay.map((d) => (
                 <div
                   key={d.day}
-                  title={`${d.day}  ${d.views} views, ${d.sessions} visits`}
+                  title={`${d.day}: ${d.views} ${d.views === 1 ? "view" : "views"}, ${d.sessions} ${d.sessions === 1 ? "visit" : "visits"}`}
                   className="min-w-0 flex-1 bg-gold/70 transition-colors hover:bg-sindoor"
                   style={{ height: `${Math.max(2, (d.views / peak) * 100)}%` }}
                 />
@@ -163,7 +163,8 @@ export default async function AdminVisitsPage({
                   Everything below comes only from people who agreed to it
                   when the notice appeared. It is deleted after six months,
                   and anyone who changes their mind erases their own visit at
-                  once. {j.sessions.toLocaleString("en-IN")} visits so far.
+                  once. {j.sessions.toLocaleString("en-IN")}{" "}
+                  {j.sessions === 1 ? "visit" : "visits"} so far.
                 </p>
               </div>
 

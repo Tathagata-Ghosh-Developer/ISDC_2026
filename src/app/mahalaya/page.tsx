@@ -258,7 +258,7 @@ export default async function MahalayaPage() {
 
           <RadioSet
             stations={STATIONS}
-            broadcast="Mahishasuramardini runs about ninety minutes from four in the morning, and Mahalaya falls on Saturday 10 October 2026. Akashvani Kolkata originates it and other stations carry it. Prasar Bharati has not published this year's schedule yet, so treat the hour as the one it has always been rather than as an announcement."
+            broadcast="Mahishasuramardini runs about ninety minutes from four in the morning on Mahalaya. Akashvani Kolkata originates it and other stations carry it, and the 1966 recording plays below at any hour."
           />
         </Container>
       </Section>

@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       {
         ok: false,
         error:
-          "Sign in is not configured. Set AUTH_SECRET and at least one of ADMIN_USERS, COMMITTEE_USERS, FUNDRAISER_USERS or VIEWER_USERS.",
+          "Sign-in is not configured. Set AUTH_SECRET and at least one of ADMIN_USERS, COMMITTEE_USERS, FUNDRAISER_USERS or VIEWER_USERS.",
       },
       { status: 503 },
     );

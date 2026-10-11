@@ -81,7 +81,7 @@ export function buildCalendar({ dates, schedule, venue, siteUrl, now }: Input): 
     `DTEND:${utcStamp(broadcast + BROADCAST_MINUTES * 60_000)}`,
     `SUMMARY:${escapeText("Mahalaya: Mahishasuramardini on the radio")}`,
     `DESCRIPTION:${escapeText(
-      `Birendra Krishna Bhadra's recitation, on Akashvani Kolkata at four in the morning as every Mahalaya since the 1930s. The 1966 recording also plays at ${siteUrl}/mahalaya`,
+      `Birendra Krishna Bhadra's recitation, on Akashvani Kolkata at four in the morning, as on every Mahalaya since the 1930s. The 1966 recording also plays at ${siteUrl}/mahalaya`,
     )}`,
     `URL:${siteUrl}/mahalaya`,
     "BEGIN:VALARM",

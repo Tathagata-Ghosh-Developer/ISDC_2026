@@ -222,7 +222,7 @@ export default function MagazineReader({
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-3.5">
           <span className="text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
             {pages > 0
-              ? `Page ${index + 1}${spread && index + 1 < pages ? ` and ${index + 2}` : ""} of ${pages}`
+              ? `${spread && index + 1 < pages ? `Pages ${index + 1} and ${index + 2}` : `Page ${index + 1}`} of ${pages}`
               : "Loading"}
           </span>
 

@@ -115,7 +115,7 @@ function GroupCard({
           <span className="block text-[1rem] text-ink">{group.label}</span>
           <span className="block text-[0.62rem] uppercase tracking-[0.2em] text-ink-faint">
             {group.key}
-            {group.form === "json" ? " raw JSON" : ""}
+            {group.form === "json" ? " · raw JSON" : ""}
           </span>
         </span>
         <span className="text-[0.7rem] uppercase tracking-[0.2em] text-gold">

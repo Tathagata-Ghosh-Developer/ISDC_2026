@@ -87,7 +87,7 @@ const SCENES: Scene[] = [
     src: "/media/puja2025/12.jpg",
     alt: "Evening arati in front of the idol, the lamp lit",
     bangla: "সন্ধ্যারতি",
-    caption: "Sandhya arati, the hour the pandal starts to fill",
+    caption: "Sandhya Arati, the hour the pandal starts to fill",
     pull: { sandhya_arati: 1.6, kanshor_ghanta: 0.7, mandir_ghanta: 0.5 },
     place: 30,
   },
@@ -133,7 +133,7 @@ const SCENES: Scene[] = [
   {
     id: "sindoor",
     src: "/media/video/sindoor-khela.jpg",
-    alt: "Sindoor khela on Dashami morning",
+    alt: "Sindoor Khela on Dashami morning",
     bangla: "সিঁদুর খেলা",
     caption: "Dashami morning, vermilion, and then she goes",
     pull: { shankha: 1.5, kanshor_ghanta: 0.6 },

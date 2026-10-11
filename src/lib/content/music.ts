@@ -200,7 +200,7 @@ export const COLLECTIONS: Collection[] = [
     id: "mahalaya",
     bangla: "মহালয়া",
     roman: "Mahalaya",
-    blurb: "Four in the morning, the radio already on, and a voice that has been waking Bengal since before most of us were born. The whole Mahishasuramardini, and the songs inside it taken one at a time. Every track here is Saregama's own upload of the 1966 All India Radio master - embedded, never hosted.",
+    blurb: "Four in the morning, the radio already on, and a voice that has been waking Bengal since before most of us were born. The whole Mahishasuramardini, and the songs inside it taken one at a time. Every track here is Saregama's own upload of the 1966 All India Radio master — embedded, never hosted.",
     tracks: [
       {
         titleBangla: "মহিষাসুরমর্দিনী (সম্পূর্ণ)",
@@ -720,7 +720,7 @@ export const COLLECTIONS: Collection[] = [
     id: "city",
     bangla: "শহরের পুজো",
     roman: "Sohorer Pujo",
-    blurb: "Kolkata in the Puja week: the pandal-hopping, the new clothes, the coffee house, the rock band at a volume nobody licensed. This is the HMV Pujor gaan tradition and everything it turned into - Hemanta, Manna Dey, Sandhya, Kishore, Cactus, Fossils, Bhoomi, Anjan Dutt, Anupam Roy, Lakkhichhara.",
+    blurb: "Kolkata in the Puja week: the pandal-hopping, the new clothes, the coffee house, the rock band at a volume nobody licensed. This is the HMV Pujor gaan tradition and everything it turned into — Hemanta, Manna Dey, Sandhya, Kishore, Cactus, Fossils, Bhoomi, Anjan Dutt, Anupam Roy, Lakkhichhara.",
     tracks: [
       {
         titleBangla: "কফি হাউসের সেই আড্ডাটা",
@@ -1031,7 +1031,7 @@ export const COLLECTIONS: Collection[] = [
       {
         titleBangla: "লাটাই",
         titleRoman: "Latai",
-        artist: "Vinod Rathod & Akriti Kakkar",
+        artist: "Vinod Rathod & Akriti Kakar",
         year: 2014,
         note: "Bachchan's kite-string song, Jeet Gannguli writing for Jeet the actor. Solid mid-period Tollywood — the sort of track that fills the gap between two better-known ones.",
         youtubeId: "xcIR08WEdrE",
@@ -1392,7 +1392,7 @@ export const COLLECTIONS: Collection[] = [
         titleRoman: "Dekhechhi Rup-Sagare Moner Manush",
         artist: "Purna Das Baul",
         year: null,
-        note: "Lalan's moner manush, the person of the heart, glimpsed in an ocean of form. The central idea of Baul thought, sung by its most travelled voice.",
+        note: "Lalon's moner manush, the person of the heart, glimpsed in an ocean of form. The central idea of Baul thought, sung by its most travelled voice.",
         youtubeId: "8Edxs3WVMyQ",
         channel: "Saregama Bengali",
       },
@@ -1874,9 +1874,9 @@ export const COLLECTIONS: Collection[] = [
       {
         titleBangla: "চাঁদ কেন আসেনা আমার ঘরে",
         titleRoman: "Chand Keno Asena Amar Ghore",
-        artist: "Raghab Chattarjee",
+        artist: "Raghab Chatterjee",
         year: null,
-        note: "Raghab Chattarjee asking why the moon won't come to his room. Nineties Bengali modern song at its most unguarded — big melody, no irony, and it still lands.",
+        note: "Raghab Chatterjee asking why the moon won't come to his room. Nineties Bengali modern song at its most unguarded — big melody, no irony, and it still lands.",
         youtubeId: "rrophy3FXF0",
         channel: "MULTIPLEX BANGLA",
       },
@@ -2035,7 +2035,7 @@ export const COLLECTIONS: Collection[] = [
       },
       {
         titleBangla: "যেন কিছু মনে কোরো না",
-        titleRoman: "Jeno Kichu Mone Kono Na",
+        titleRoman: "Jeno Kichu Mone Koro Na",
         artist: "Srikanto Acharya",
         year: null,
         note: "From the Moner Janala album. An apology song, delivered without a trace of the self-pity the form usually invites — he simply says it and lets the melody carry the rest.",
@@ -2068,4 +2068,4 @@ export const EMBED_BLOCKED = [
   { youtubeId: "7gbfDlIs3hg", title: "Tumi Ashbe Bole" },
 ] as const;
 
-export const MAHALAYA_RIGHTS = "Mahishasuramardini cannot be self-hosted, and the IISc site should not put an audio file of it on its own server. The chain of rights is unusually well documented. The script is by Bani Kumar, the music by Pankaj Kumar Mullick and the narration by Birendra Krishna Bhadra; the programme went out live on All India Radio from the mid-1930s and was committed to a definitive studio recording in 1966, which is the version broadcast ever since. Copyright therefore sits in two places at once. Prasar Bharati / All India Radio holds the broadcast and the underlying programme, and its published copyright policy (prasarbharati.gov.in/copyright-policy/) is restrictive and explicit: \"You may only access and use the material for personal or educational purposes\" and \"you may not reproduce, republish, post, transmit or distribute any material\" without written consent. That is not a licence to host or to re-serve an audio file. Separately, the commercial sound-recording rights to the 1966 master were acquired from AIR by HMV-RPG, now Saregama India Ltd, which has released it on LP, cassette, CD and digitally, and which operates the Saregama Bengali YouTube channel. Nothing in this is public domain: the 1966 recording is comfortably inside the Indian sound-recording term, and the compositions of Pankaj Mullick (d. 1978) and the text of Bani Kumar (d. 1980) are still in copyright in India as well. The one legal, zero-cost route is to EMBED the rights-holder's own YouTube upload, which is what this research recommends. Saregama Bengali's full-programme upload at youtube.com/watch?v=YQyo8QeoYhc is the rights holder publishing its own master, embedding is enabled on it (verified), and the YouTube embed carries the licence with it. There is also a channel called \"Akashvani AIR\" (UCdwm5QNss1TpY_whBkql0dw) carrying a 1966 Mahishasuramardini and a Bengali full version; it presents itself as All India Radio, but I could NOT confirm from Prasar Bharati's own site that it is an official Prasar Bharati channel, so it is listed here only as a secondary option and the Saregama upload should be preferred. Practical rule for the build: embed, never download; never rip to MP3 and serve it from the IISc domain; never put it behind a wall or over a donation prompt; and credit it on the page as \"Mahishasuramardini, All India Radio, 1966. Narration Birendra Krishna Bhadra, script Bani Kumar, music Pankaj Kumar Mullick. Recording courtesy Saregama India Ltd.\"";
+export const MAHALAYA_RIGHTS = "Mahishasuramardini cannot be self-hosted, and the IISc site should not put an audio file of it on its own server. The chain of rights is unusually well documented. The script is by Bani Kumar, the music by Pankaj Kumar Mullick and the narration by Birendra Krishna Bhadra; the programme went out live on All India Radio from the mid-1930s and was committed to a definitive studio recording in 1966, which is the version broadcast ever since. Copyright therefore sits in two places at once. Prasar Bharati / All India Radio holds the broadcast and the underlying programme, and its published copyright policy (prasarbharati.gov.in/copyright-policy/) is restrictive and explicit: \"You may only access and use the material for personal or educational purposes\" and \"you may not reproduce, republish, post, transmit or distribute any material\" without written consent. That is not a licence to host or to re-serve an audio file. Separately, the commercial sound-recording rights to the 1966 master were acquired from AIR by HMV-RPG, now Saregama India Ltd, which has released it on LP, cassette, CD and digitally, and which operates the Saregama Bengali YouTube channel. Nothing in this is public domain: the 1966 recording is comfortably inside the Indian sound-recording term, and the compositions of Pankaj Mullick (d. 1978) and the text of Bani Kumar (d. 1980) are still in copyright in India as well. The one legal, zero-cost route is to EMBED the rights holder's own YouTube upload, which is what this research recommends. Saregama Bengali's full-programme upload at youtube.com/watch?v=YQyo8QeoYhc is the rights holder publishing its own master, embedding is enabled on it (verified), and the YouTube embed carries the licence with it. There is also a channel called \"Akashvani AIR\" (UCdwm5QNss1TpY_whBkql0dw) carrying a 1966 Mahishasuramardini and a Bengali full version; it presents itself as All India Radio, but I could NOT confirm from Prasar Bharati's own site that it is an official Prasar Bharati channel, so it is listed here only as a secondary option and the Saregama upload should be preferred. Practical rule for the build: embed, never download; never rip to MP3 and serve it from the IISc domain; never put it behind a wall or over a donation prompt; and credit it on the page as \"Mahishasuramardini, All India Radio, 1966. Narration Birendra Krishna Bhadra, script Bani Kumar, music Pankaj Kumar Mullick. Recording courtesy Saregama India Ltd.\"";

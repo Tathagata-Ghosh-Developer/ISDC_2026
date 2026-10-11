@@ -16,7 +16,7 @@ const ALBUMS = [
     dir: "puja2025",
     title: "Last year on this ground",
     bangla: "গত বছরের পুজো",
-    note: "Forty four photographs from the 2025 Puja, taken by people who were standing in the queue themselves.",
+    note: "Forty-four photographs from the 2025 Puja, taken by people who were standing in the queue themselves.",
     sepia: false,
     aspect: "4/5",
   },
@@ -123,13 +123,17 @@ function readAlbum(dir: string): Shot[] {
   } catch {
     return [];
   }
-  return files.map((f) => ({
-    src: `/media/${dir}/${f}`,
-    alt: f
-      .replace(/\.[a-z]+$/i, "")
-      .replace(/[-_]/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase()),
-  }));
+  const year = dir.match(/\d{4}/)?.[0];
+  return files.map((f) => {
+    const name = f.replace(/\.[a-z]+$/i, "");
+    // Numbered files would otherwise be read aloud as "01", "02"...
+    return {
+      src: `/media/${dir}/${f}`,
+      alt: /^\d+$/.test(name)
+        ? `IISc Durga Puja${year ? ` ${year}` : ""}, photograph ${Number(name)}`
+        : name.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    };
+  });
 }
 
 export default function GalleryPage() {

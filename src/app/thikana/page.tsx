@@ -48,7 +48,7 @@ export default async function ThikanaPage() {
           <SectionHeading
             as="h1"
             eyebrow="ঠিকানা Finding us"
-            title="The pandal stands on the TMC ground"
+            title="The pandal stands on the TMC Ground"
             bangla="টিএমসি মাঠ, এসবিআই-এর উল্টোদিকে"
             lede="Tata Memorial Club ground, directly opposite the State Bank of India branch on campus. On the Institute's own map it is grid F3, building 126. If you are already inside the campus, walk towards the bank and you will hear it before you see it."
           />
