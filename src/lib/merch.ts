@@ -1,15 +1,7 @@
 /* ================================================================
-   The merchandise's two pieces of logic, kept free of React and
-   three.js so the tests can hold them still.
+   When the merchandise popup opens, kept free of React so the tests
+   can hold it still.
    ================================================================ */
-
-/**
- * The height field scripts/merch-assets.py writes: columns, rows, its
- * tallest point in shirt widths, and the textured plane's height over
- * width. They change only if the script's resolution does, and a test
- * checks them against public/media/merch/shirt.bin.
- */
-export const SHIRT = { nx: 256, ny: 235, hmax: 0.1248, aspect: 0.9185 } as const;
 
 /**
  * Pages the popup leaves alone: someone paying, reading a receipt,

@@ -1,4 +1,4 @@
-"""Build the 3D merchandise assets from the committee's flat T-shirt mockup.
+"""Cut the prints out of the committee's flat T-shirt mockup.
 
     python scripts/merch-assets.py <canva-page-png> <out-dir>
 
@@ -9,13 +9,13 @@ side by side). Output, into <out-dir>:
                           silhouette; nothing is redrawn, so no logo smudges
     mask-front.png        the silhouette (alpha) for the front surface
     mask-back.png         the same silhouette mirrored, for the back surface
-    shirt.bin             Uint16 height field, row-major, NX x NY, for
-                          "inflating" the flat shirt into a soft 3D garment
+    shirt.bin             Uint16 height field, row-major, NX x NY (unused
+                          since the cloth-simulated shirt replaced it)
     fabric-normal.png     a small tileable knit normal map
 
-The geometry is a height field rather than a modelled shirt on purpose:
-the print is mapped straight from the mockup, so every logo lands exactly
-where the designer put it. Run it again whenever the design changes.
+These are the first step of scripts/tee3d, which sews the prints into a
+real garment in Blender; nothing here goes into public/ any more. Run it
+again whenever the design changes.
 """
 import sys
 from pathlib import Path

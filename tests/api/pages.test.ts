@@ -67,9 +67,9 @@ describe("the merchandise", () => {
     expect(product!.offers.url).toMatch(/^https:\/\/www\.memetheory\.in\//);
   });
 
-  it("serves every 3D asset the viewer asks for", async () => {
-    for (const f of ["front.jpg", "back.jpg", "mask-front.png", "mask-back.png", "fabric-normal.png", "shirt.bin", "flat-front.webp", "flat-back.webp"]) {
-      const res = await fetch(`${BASE_NO_DB}/media/merch/${f}?v=1`);
+  it("serves the film, the posters and the 3D shirt", async () => {
+    for (const f of ["tee-loop-720p30.webm", "tee-loop-720p30.mp4", "tee-loop-1080p60.webm", "tee-loop-1080p60.mp4", "tee-poster-720.webp", "tee-poster.webp", "tee.glb?v=2", "kash-sky.webp", "flat-front.webp", "flat-back.webp"]) {
+      const res = await fetch(`${BASE_NO_DB}/media/merch/${f}`);
       expect(res.status, f).toBe(200);
       expect(res.headers.get("cache-control"), f).toContain("max-age=31536000");
     }

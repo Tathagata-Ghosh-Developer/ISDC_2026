@@ -12,11 +12,13 @@ import MerchStage from "./MerchStage";
 /* ================================================================
    The official T-shirt, once per visit, just after the arrival.
 
-   Native <dialog>: Escape, focus and the backdrop are the browser's.
-   It waits for the arrival sequence to finish (Arrival dispatches
-   "isdc-arrived"), and gives up waiting after nine seconds in case
-   the sequence never played on this page. Pages where someone is
-   paying, reading a receipt or working the console are left alone.
+   A dark product card on either theme: the floating-shirt film in a
+   rounded frame, the sizes as chips that say their chest, and one
+   way to buy. Native <dialog>: Escape, focus and the backdrop are the
+   browser's. It waits for the arrival sequence (Arrival dispatches
+   "isdc-arrived") and gives up waiting after nine seconds. Pages where
+   someone is paying, reading a receipt or working the console are
+   left alone.
    ================================================================ */
 
 const SEEN = "isdc-merch-seen";
@@ -25,14 +27,14 @@ const PARTNER = PARTNERS.find((p) => p.id === "merchandise");
 
 /**
  * The off switch: NEXT_PUBLIC_MERCH_POPUP=off in Vercel, then redeploy.
- * For the night the request budget runs short; the merchandise page
- * and the home section stay up either way.
+ * The merchandise page and the home section stay up either way.
  */
 const ENABLED = process.env.NEXT_PUBLIC_MERCH_POPUP !== "off";
 
 export default function MerchPopup({ waitForArrival = true }: { waitForArrival?: boolean }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [size, setSize] = useState<string>("M");
 
   useEffect(() => {
     if (!ENABLED) return;
@@ -80,6 +82,7 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
   }, [open]);
 
   if (!open) return null;
+  const chest = MERCH.chart.find((c) => c.size === size)?.chest;
 
   return (
     <dialog
@@ -91,64 +94,97 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
         if (e.target === e.currentTarget) setOpen(false);
       }}
       aria-labelledby="merch-popup-title"
-      className="m-auto w-[min(96vw,1040px)] max-w-none overflow-hidden border border-line bg-paper p-0 text-ink shadow-2xl backdrop:bg-[#0b0709]/70 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(96vw,1060px)] max-w-none overflow-hidden rounded-[28px] border border-white/10 bg-[#0d0b0c] p-0 text-[#f2e5d0] shadow-[0_40px_120px_rgba(0,0,0,0.6)] backdrop:bg-[#05070a]/75 backdrop:backdrop-blur-sm"
     >
-      {/* First in the dialog, so it is what the browser focuses on
-          open: focusing the Buy link instead scrolled a phone past the
-          title and price. */}
+      {/* First in the dialog, so it is what the browser focuses on open:
+          focusing the Buy link instead scrolled a phone past the title. */}
       <button
         type="button"
         onClick={() => setOpen(false)}
         aria-label="Close"
-        className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/35 text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+        className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
       >
         <X size={18} />
       </button>
-      <div className="flex max-h-[92dvh] flex-col overflow-y-auto lg:grid lg:grid-cols-[1.3fr_1fr]">
-        <MerchStage eager className="aspect-square w-full shrink-0 sm:aspect-[4/3] lg:aspect-auto lg:min-h-[580px]" />
 
-        <div className="flex flex-col p-6 sm:p-8">
-          <p className="eyebrow">শারদ সম্ভার Official merchandise</p>
-          <h2 id="merch-popup-title" className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink">
+      <div className="flex max-h-[92dvh] flex-col overflow-y-auto p-3 sm:p-4 lg:grid lg:grid-cols-[1.15fr_1fr] lg:gap-2">
+        <MerchStage eager className="aspect-square w-full shrink-0 lg:self-center" />
+
+        <div className="flex flex-col px-3 pb-3 pt-5 sm:px-5 lg:py-6">
+          <p className="text-[0.62rem] font-medium uppercase tracking-[0.26em] text-[#d8b45e] lg:pr-12">
+            Official merch · ISDC × Meme Theory
+          </p>
+          <h2 id="merch-popup-title" className="font-display mt-3 text-[2.3rem] font-normal leading-[1.05] sm:text-[2.6rem]">
             {MERCH.title}
           </h2>
-          <p className="bangla-display mt-1 text-[1.272rem] text-sindoor">{MERCH.lineBangla}</p>
-          <p className="mt-4 text-[0.92rem] leading-relaxed text-ink-soft">
-            {MERCH.line}, in {MERCH.colour.toLowerCase()}, is on sale now. Durga in alpona on the front, দেবী in
-            gold on the back.
+          <p className="bangla-display mt-1 text-[1.3rem] text-[#e35b43]">{MERCH.lineBangla}</p>
+          <p className="mt-4 text-[0.92rem] leading-relaxed text-[#c9b295]">
+            Durga in white alpona on the front, দেবী in gold on the back, in {MERCH.colour.toLowerCase()}. Wear
+            the Puja home from the pandal.
           </p>
 
-          <dl className="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[0.82rem]">
-            <dt className="text-ink-faint">Price</dt>
-            <dd className="font-display text-[1.1rem] text-ink">₹{MERCH.price}</dd>
-            <dt className="text-ink-faint">Fit</dt>
-            <dd className="text-ink-soft">{MERCH.fits.join(" or ")}</dd>
-            <dt className="text-ink-faint">Sizes</dt>
-            <dd className="text-ink-soft">{MERCH.sizes.join(", ")}</dd>
-          </dl>
-          <p className="mt-4 border-l-2 border-gold pl-3 text-[0.78rem] leading-relaxed text-ink-soft">
+          <div className="mt-6 flex items-baseline gap-3">
+            <span className="font-display text-[2rem] leading-none">₹{MERCH.price}</span>
+            <span className="text-[0.75rem] text-[#93806c]">{MERCH.fits.join(" or ")} fit</span>
+          </div>
+
+          <div className="mt-5">
+            <p className="text-[0.62rem] uppercase tracking-[0.22em] text-[#93806c]">Size guide</p>
+            <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Size guide">
+              {MERCH.chart.map((c) => (
+                <button
+                  key={c.size}
+                  type="button"
+                  role="radio"
+                  aria-checked={size === c.size}
+                  onClick={() => setSize(c.size)}
+                  className={`min-w-[3rem] rounded-full border px-3 py-1.5 text-[0.8rem] transition-colors ${
+                    size === c.size
+                      ? "border-[#d8b45e] bg-[#d8b45e] text-[#0d0b0c]"
+                      : "border-white/25 text-[#f2e5d0] hover:border-[#d8b45e]/70"
+                  }`}
+                >
+                  {c.size}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-[0.75rem] text-[#c9b295]" aria-live="polite">
+              {size}: {chest} inch chest, regular fit. You pick the size on Meme Theory.
+            </p>
+          </div>
+
+          <p className="mt-5 rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-3 text-[0.78rem] leading-relaxed text-[#c9b295]">
             {MERCH.delivery}
           </p>
 
           <div className="mt-6 flex flex-col gap-2.5">
-            <a href={MERCH.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary w-full">
-              Buy on Meme Theory <ArrowUpRight size={14} />
+            <a
+              href={MERCH.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e35b43] px-6 py-3.5 text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#cf4a33]"
+            >
+              Buy on Meme Theory <ArrowUpRight size={15} />
             </a>
-            <Link href="/merch" onClick={() => setOpen(false)} className="btn btn-ghost w-full">
-              See it up close
+            <Link
+              href="/merch"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-[0.74rem] uppercase tracking-[0.2em] text-[#f2e5d0] transition-colors hover:border-[#d8b45e]"
+            >
+              See it in 3D
             </Link>
           </div>
 
           {PARTNER && (
-            <div className="mt-auto flex items-center gap-3 border-t border-line pt-5 text-[0.7rem] leading-relaxed text-ink-faint">
+            <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5 text-[0.7rem] leading-relaxed text-[#93806c]">
               <Image src={PARTNER.logo} alt="" width={36} height={36} className="shrink-0 rounded-full" />
               <p>
                 Made, sold and delivered by our merchandise partner, {PARTNER.name}, under their{" "}
-                <a href={MERCH.terms} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-gold">
+                <a href={MERCH.terms} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#d8b45e]">
                   terms
                 </a>{" "}
                 and{" "}
-                <a href={MERCH.refunds} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-gold">
+                <a href={MERCH.refunds} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#d8b45e]">
                   refund policy
                 </a>
                 . The committee takes no orders and no payment.
@@ -157,7 +193,6 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
           )}
         </div>
       </div>
-
     </dialog>
   );
 }

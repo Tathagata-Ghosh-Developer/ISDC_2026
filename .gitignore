@@ -58,3 +58,6 @@ graphify-out/
 
 # Committee data that must never reach the public repository
 private/
+
+# Claude Code agent worktrees
+.claude/worktrees/

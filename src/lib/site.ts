@@ -491,7 +491,16 @@ export const MERCH = {
   url: "https://www.memetheory.in/product/6aca697a15387416873f0e0d",
   price: 449,
   fits: ["Regular", "Oversized"],
-  sizes: ["S", "M", "L", "XL"],
+  sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+  /** Regular fit, chest in inches, from the committee's size sheet. */
+  chart: [
+    { size: "S", chest: 38 },
+    { size: "M", chest: 40 },
+    { size: "L", chest: 42 },
+    { size: "XL", chest: 44 },
+    { size: "2XL", chest: 46 },
+    { size: "3XL", chest: 48 },
+  ],
   colour: "Petrol blue",
   front: "Durga in white alpona with a floral border, the committee crest on the chest, and the title sponsor's four marks on the sleeves.",
   back: "Durga in a half-sun of gold and red, the trishul, দেবী, and the Institute's crest at the collar.",

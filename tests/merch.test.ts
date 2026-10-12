@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { MERCH, PARTNERS, PUJA_DATES, TITLE_SPONSOR } from "@/lib/site";
-import { SHIRT, shouldOffer } from "@/lib/merch";
+import { shouldOffer } from "@/lib/merch";
 import { SCHEDULE } from "@/lib/content/schedule";
 import { BROADCAST_MINUTES, pujaDayAt, seasonNote } from "@/lib/season";
 import { buildCalendar } from "@/lib/calendar";
@@ -17,13 +17,6 @@ import { pujaFaq } from "@/lib/faq";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const pub = (p: string) => join(ROOT, "public", p.replace(/^\//, ""));
-
-/** Width and height from a PNG's IHDR, without an image library. */
-function pngSize(file: string) {
-  const b = readFileSync(file);
-  expect(b.subarray(1, 4).toString("ascii")).toBe("PNG");
-  return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
-}
 
 describe("the merchandise popup", () => {
   it("opens on ordinary pages, once", () => {
@@ -46,33 +39,32 @@ describe("the merchandise popup", () => {
   });
 });
 
-describe("the 3D assets", () => {
-  it("the height field is exactly the grid the viewer reads", () => {
-    const size = statSync(pub("/media/merch/shirt.bin")).size;
-    expect(size).toBe(SHIRT.nx * SHIRT.ny * 2);
-  });
+describe("the film and the 3D shirt", () => {
+  const size = (f: string) => statSync(pub(`/media/merch/${f}`)).size;
+  const PHONE = ["tee-loop-720p30.webm", "tee-loop-720p30.mp4", "tee-poster-720.webp"];
+  const DESK = ["tee-loop-1080p60.webm", "tee-loop-1080p60.mp4", "tee-poster.webp"];
 
-  it("the grid, the masks and the textures share one aspect", () => {
-    expect(SHIRT.ny / SHIRT.nx).toBeCloseTo(SHIRT.aspect, 2);
-    for (const f of ["mask-front.png", "mask-back.png"]) {
-      const { w, h } = pngSize(pub(`/media/merch/${f}`));
-      expect(h / w, f).toBeCloseTo(SHIRT.aspect, 2);
+  it("every file the stage, the viewer and the pages load is present and not empty", () => {
+    for (const f of [...PHONE, ...DESK, "tee.glb", "kash-sky.webp", "flat-front.webp", "flat-back.webp"]) {
+      expect(existsSync(pub(`/media/merch/${f}`)), f).toBe(true);
+      expect(size(f), f).toBeGreaterThan(1000);
     }
   });
 
-  it("every file the viewer and the pages load is present and not empty", () => {
-    for (const f of ["front.jpg", "back.jpg", "mask-front.png", "mask-back.png", "fabric-normal.png", "shirt.bin", "flat-front.webp", "flat-back.webp"]) {
-      const p = pub(`/media/merch/${f}`);
-      expect(existsSync(p), f).toBe(true);
-      expect(statSync(p).size, f).toBeGreaterThan(1000);
-    }
+  it("a phone on Jio gets the film for well under a megabyte", () => {
+    // the popup plays one source, never both
+    expect(Math.max(size(PHONE[0]), size(PHONE[1])) + size(PHONE[2])).toBeLessThan(600 * 1024);
   });
 
-  it("textures stay small enough for a phone on Jio", () => {
-    const total = ["front.jpg", "back.jpg", "mask-front.png", "mask-back.png", "fabric-normal.png", "shirt.bin"]
-      .map((f) => statSync(pub(`/media/merch/${f}`)).size)
-      .reduce((a, b) => a + b, 0);
-    expect(total).toBeLessThan(1.2 * 1024 * 1024);
+  it("the full-size film and the 3D model stay small", () => {
+    expect(Math.max(size(DESK[0]), size(DESK[1]))).toBeLessThan(2 * 1024 * 1024);
+    expect(size("tee.glb")).toBeLessThan(2 * 1024 * 1024);
+  });
+
+  it("the model is a binary glTF", () => {
+    const head = readFileSync(pub("/media/merch/tee.glb")).subarray(0, 8);
+    expect(head.subarray(0, 4).toString("ascii")).toBe("glTF");
+    expect(head.readUInt32LE(4)).toBe(2);
   });
 });
 
@@ -90,6 +82,11 @@ describe("the merchandise listing", () => {
     expect(MERCH.price).toBeLessThan(5000);
     expect(MERCH.sizes.length).toBeGreaterThan(0);
     expect(MERCH.delivery).toMatch(/Campus orders only/);
+  });
+
+  it("charts every size it sells, chest growing two inches a size", () => {
+    expect(MERCH.chart.map((c) => c.size)).toEqual([...MERCH.sizes]);
+    MERCH.chart.forEach((c, i) => expect(c.chest).toBe(38 + 2 * i));
   });
 
   it("is in the answers people and assistants read", () => {

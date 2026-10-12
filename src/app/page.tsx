@@ -376,7 +376,7 @@ export default async function Home() {
       <Section className="!pt-0">
         <Container>
           <div className="surface relative grid overflow-hidden lg:grid-cols-[1.25fr_1fr]">
-            <MerchStage className="aspect-[4/5] w-full sm:aspect-[4/3] lg:aspect-auto lg:min-h-[520px]" />
+            <MerchStage className="m-3 aspect-square sm:m-4 lg:aspect-auto lg:min-h-[520px]" />
             <Reveal className="relative p-7 sm:p-[2.618rem]">
               <p className="eyebrow">শারদ সম্ভার Official merchandise</p>
               <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">

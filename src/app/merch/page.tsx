@@ -43,7 +43,7 @@ export default function MerchPage() {
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.4fr_1fr] lg:items-center">
             <Reveal>
-              <MerchStage eager className="aspect-[4/5] w-full border border-line sm:aspect-[4/3]" />
+              <MerchStage eager interactive className="aspect-square w-full" />
             </Reveal>
 
             <Reveal delay={0.08}>
@@ -66,6 +66,24 @@ export default function MerchPage() {
                 <dt className="text-ink-faint">Delivery</dt>
                 <dd className="text-ink-soft">{MERCH.delivery}</dd>
               </dl>
+
+              <table className="mt-6 w-full max-w-[26rem] text-center text-[0.8rem]">
+                <caption className="eyebrow mb-2 text-left">Size guide · regular fit</caption>
+                <tbody>
+                  <tr className="border-b border-line">
+                    <th scope="row" className="py-1.5 pr-3 text-left font-normal text-ink-faint">Size</th>
+                    {MERCH.chart.map((c) => (
+                      <td key={c.size} className="py-1.5 text-ink">{c.size}</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th scope="row" className="py-1.5 pr-3 text-left font-normal text-ink-faint">Chest, inches</th>
+                    {MERCH.chart.map((c) => (
+                      <td key={c.size} className="py-1.5 text-ink-soft">{c.chest}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href={MERCH.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
@@ -115,7 +133,7 @@ export default function MerchPage() {
               <h2 className="font-display text-[1.618rem] font-normal text-ink">How ordering works</h2>
               <ol className="mt-6 space-y-4">
                 {[
-                  { n: "01", t: "Pick your fit and size on Meme Theory.", d: `${MERCH.fits.join(" or ")}, ${MERCH.sizes.join(", ")}. Check the size chart there first.` },
+                  { n: "01", t: "Pick your fit and size on Meme Theory.", d: `${MERCH.fits.join(" or ")}, ${MERCH.sizes.join(", ")}. Measure a T-shirt that fits you across the chest and match it to the guide above.` },
                   { n: "02", t: "Pay on their site.", d: "Payment goes to Meme Theory, not to the committee, and their terms apply." },
                   { n: "03", t: "It comes to you on campus.", d: MERCH.delivery },
                 ].map((s) => (

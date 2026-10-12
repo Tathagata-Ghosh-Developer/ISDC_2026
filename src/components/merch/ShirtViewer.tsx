@@ -2,28 +2,20 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { SHIRT } from "@/lib/merch";
 
 /* ================================================================
-   The official T-shirt, in 3D.
+   The official T-shirt as a real 3D garment.
 
-   Not a modelled shirt with a decal on it: the committee's own flat
-   mockup, front and back, inflated into a soft garment. The print is
-   mapped one to one from the Canva export, so every logo sits exactly
-   where the designer put it and nothing is redrawn. The assets come
-   from scripts/merch-assets.py; the grid it used is SHIRT in
-   src/lib/merch.ts.
+   tee.glb is the committee's own artwork on a shirt sewn and draped
+   in Blender's cloth solver (scripts/tee3d), so the print folds with
+   the fabric. It carries its own six-second float: a slow sway, a
+   hover, and sleeves and hem that trail the body. This plays it,
+   lights it like the studio render, and lets a visitor turn it.
    ================================================================ */
 
-const { nx: NX, ny: NY, hmax: HMAX, aspect: ASPECT } = SHIRT;
-const BASE = "/media/merch/";
-// /media is cached for a year as immutable; bump this when the script's
-// output changes, or phones keep the old shirt.
-const V = "?v=1";
-
-/** Smootherstep, for turns that start and stop without a jolt. */
-const ease = (x: number) => x * x * x * (x * (x * 6 - 15) + 10);
+const GLB = "/media/merch/tee.glb?v=2";
 
 export default function ShirtViewer({
   onReady,
@@ -32,7 +24,7 @@ export default function ShirtViewer({
 }: {
   onReady?: () => void;
   onFail?: () => void;
-  /** No auto-rotation or bobbing: reduced motion, or a poster capture. */
+  /** Hold the first pose: reduced motion. */
   still?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
@@ -56,130 +48,90 @@ export default function ShirtViewer({
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    // Neutral keeps the print's colours honest: the reds and golds of
-    // the logos should come out as the designer chose them.
-    renderer.toneMapping = THREE.NeutralToneMapping;
-    renderer.toneMappingExposure = 1.05;
-    renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab";
-    el.appendChild(renderer.domElement);
+    // The studio render used no tone curve, so the print's colours stay the designer's.
+    renderer.toneMapping = THREE.NoToneMapping;
+    const canvas = renderer.domElement;
+    canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab";
+    el.appendChild(canvas);
 
     const scene = new THREE.Scene();
     const pmrem = new THREE.PMREMGenerator(renderer);
     const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     scene.environment = env;
-    scene.environmentIntensity = 0.55;
+    scene.environmentIntensity = 0.22;
 
-    const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
-    scene.add(new THREE.HemisphereLight(0xd8ecff, 0xf3e6c4, 0.9));
-    const key = new THREE.DirectionalLight(0xfff3e0, 2.1);
-    key.position.set(-2.5, 3, 4);
-    const rim = new THREE.DirectionalLight(0xc6e0ff, 1.4);
-    rim.position.set(3, 1.5, -3.5);
-    scene.add(key, rim);
+    // Three-point light, as in the render: key top left, fill right, rim behind.
+    scene.add(new THREE.HemisphereLight(0xbcd6f2, 0x5f7a4a, 0.55));
+    const key = new THREE.DirectionalLight(0xfff4e6, 2.2);
+    key.position.set(-1.5, 1.3, 1.7);
+    const fill = new THREE.DirectionalLight(0xf2f6ff, 0.7);
+    fill.position.set(1.7, 0.15, 1.4);
+    const rim = new THREE.DirectionalLight(0xeaf2ff, 2.0);
+    rim.position.set(0.35, 1.0, -1.3);
+    scene.add(key, fill, rim);
 
-    const manager = new THREE.LoadingManager();
-    const loader = new THREE.TextureLoader(manager);
-    const textures: THREE.Texture[] = [];
-    const tex = (file: string, colour = true) => {
-      const t = loader.load(BASE + file + V);
-      if (colour) t.colorSpace = THREE.SRGBColorSpace;
-      t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-      textures.push(t);
-      return t;
-    };
-    const fabric = tex("fabric-normal.png", false);
-    fabric.wrapS = fabric.wrapT = THREE.RepeatWrapping;
-    fabric.repeat.set(26, 24);
+    const camera = new THREE.PerspectiveCamera(23.9, 1, 0.05, 20);
+    const turn = new THREE.Group();
+    scene.add(turn);
 
-    const material = (map: string, mask: string) =>
-      new THREE.MeshPhysicalMaterial({
-        map: tex(map),
-        alphaMap: tex(mask, false),
-        alphaTest: 0.5,
-        alphaToCoverage: true,
-        roughness: 0.84,
-        metalness: 0,
-        sheen: 0.55,
-        sheenRoughness: 0.7,
-        sheenColor: new THREE.Color("#8fb4d6"),
-        normalMap: fabric,
-        normalScale: new THREE.Vector2(0.22, 0.22),
-      });
-    const frontMat = material("front.jpg", "mask-front.png");
-    const backMat = material("back.jpg", "mask-back.png");
-
-    const shirt = new THREE.Group();
-    scene.add(shirt);
-    const geometries: THREE.BufferGeometry[] = [];
-
-    function surface(h: Uint16Array, mirror: boolean) {
-      const g = new THREE.PlaneGeometry(2, 2 * ASPECT, NX - 1, NY - 1);
-      const pos = g.attributes.position;
-      for (let j = 0; j < NY; j++) {
-        for (let i = 0; i < NX; i++) {
-          const src = j * NX + (mirror ? NX - 1 - i : i);
-          pos.setZ(j * NX + i, (h[src] / 65535) * HMAX * 2);
-        }
-      }
-      g.computeVertexNormals();
-      geometries.push(g);
-      return g;
-    }
-
+    let mixer: THREE.AnimationMixer | null = null;
     let disposed = false;
-    let heightsReady = false;
-    let texturesReady = false;
-    const announce = () => {
-      if (heightsReady && texturesReady && !disposed) ready.current?.();
-    };
-    manager.onLoad = () => {
-      texturesReady = true;
-      announce();
-    };
-    manager.onError = () => fail.current?.();
+    let shirtSize = new THREE.Vector3(0.8, 0.8, 0.3);
 
-    fetch(BASE + "shirt.bin" + V)
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status));
-        return r.arrayBuffer();
-      })
-      .then((buf) => {
-        if (disposed) return;
-        const h = new Uint16Array(buf);
-        if (h.length !== NX * NY) throw new Error("height field size");
-        const front = new THREE.Mesh(surface(h, false), frontMat);
-        // The back is the same surface turned round, so its silhouette
-        // is the front's mirrored and its print reads the right way.
-        const back = new THREE.Mesh(surface(h, true), backMat);
-        back.rotation.y = Math.PI;
-        shirt.add(front, back);
-        heightsReady = true;
-        announce();
-      })
-      .catch(() => fail.current?.());
-
-    // ---- size ----
-    const fit = () => {
+    const fit = (size?: THREE.Vector3) => {
+      if (size) shirtSize = size;
       const w = el.clientWidth || 1;
       const h = el.clientHeight || 1;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      // the whole shirt, with room to turn and bob
-      const byHeight = (2 * ASPECT * 1.32) / (2 * half);
-      const byWidth = (2 * 1.22) / (2 * half * camera.aspect);
-      camera.position.set(0, 0, Math.max(byHeight, byWidth));
+      const byHeight = (shirtSize.y * 1.3) / (2 * half);
+      const byWidth = (shirtSize.x * 1.25) / (2 * half * camera.aspect);
+      camera.position.set(0, 0.01, Math.max(byHeight, byWidth));
+      camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     };
-    const resize = new ResizeObserver(fit);
+
+    new GLTFLoader().load(
+      GLB,
+      (gltf) => {
+        if (disposed) return;
+        const root = gltf.scene;
+        // Blender writes the cotton's sheen at full strength, not the 0.15
+        // it rendered with; at full strength the blue washes out to grey.
+        root.traverse((o) => {
+          const mat = (o as THREE.Mesh).material as THREE.MeshPhysicalMaterial | undefined;
+          if (mat?.sheenColor) mat.sheenColor.setScalar(0.15);
+        });
+        // centre the shirt on the turntable
+        const box = new THREE.Box3().setFromObject(root);
+        root.position.sub(box.getCenter(new THREE.Vector3()));
+        turn.add(root);
+        fit(box.getSize(new THREE.Vector3()));
+        if (gltf.animations.length) {
+          mixer = new THREE.AnimationMixer(root);
+          for (const clip of gltf.animations) {
+            // Blender starts the clip one frame in; start it at zero so
+            // the last pose meets the first with no held frame between.
+            for (const track of clip.tracks) track.shift(-track.times[0]);
+            clip.resetDuration();
+            mixer.clipAction(clip).play();
+          }
+          mixer.update(0);
+        }
+        ready.current?.();
+      },
+      undefined,
+      () => fail.current?.(),
+    );
+
+    const resize = new ResizeObserver(() => fit());
     resize.observe(el);
     fit();
 
-    // ---- drag to turn ----
-    let offset = 0;
+    // drag to turn; the float keeps playing underneath
     let dragX: number | null = null;
-    let lastDrag = -Infinity;
-    const canvas = renderer.domElement;
+    let velocity = 0;
     const down = (e: PointerEvent) => {
       dragX = e.clientX;
       canvas.setPointerCapture(e.pointerId);
@@ -187,9 +139,10 @@ export default function ShirtViewer({
     };
     const move = (e: PointerEvent) => {
       if (dragX === null) return;
-      offset += (e.clientX - dragX) * 0.012;
+      const dx = (e.clientX - dragX) * 0.01;
+      turn.rotation.y += dx;
+      velocity = dx;
       dragX = e.clientX;
-      lastDrag = performance.now();
     };
     const up = () => {
       dragX = null;
@@ -200,38 +153,26 @@ export default function ShirtViewer({
     canvas.addEventListener("pointerup", up);
     canvas.addEventListener("pointercancel", up);
 
-    // ---- the float ----
-    // Five seconds on each face, swaying, then a half turn. The clock
-    // only runs while nobody is dragging, so the shirt picks up from
-    // wherever it was left.
-    let auto = 0;
-    let last = performance.now();
-    let frame = 0;
+    const clock = new THREE.Clock();
     let visible = true;
-    const DWELL = 5;
-    const TURN = 2.2;
-    const tick = (now: number) => {
+    let frame = 0;
+    const tick = () => {
       frame = requestAnimationFrame(tick);
+      const dt = Math.min(clock.getDelta(), 0.05);
       if (!visible) return;
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
-      const idle = dragX === null && now - lastDrag > 2500;
-      if (!still && idle) auto += dt;
-      const cycle = DWELL + TURN;
-      const k = Math.floor(auto / cycle);
-      const f = auto % cycle;
-      const turn = f < DWELL ? 0 : ease((f - DWELL) / TURN);
-      const t = now / 1000;
-      const sway = still ? 0 : Math.sin(t * 0.8) * 0.28 * (1 - Math.sin(turn * Math.PI));
-      shirt.rotation.y = (k + turn) * Math.PI + sway + offset;
-      shirt.rotation.x = still ? 0 : Math.sin(t * 0.7) * 0.05;
-      shirt.rotation.z = still ? 0 : Math.sin(t * 0.5) * 0.025;
-      shirt.position.y = still ? 0 : Math.sin(t * 1.1) * 0.05;
+      if (mixer && !still) mixer.update(dt);
+      if (dragX === null) {
+        // let go: glide, then ease back to face the camera
+        turn.rotation.y += velocity;
+        velocity *= 0.92;
+        if (Math.abs(velocity) < 1e-4) {
+          const r = turn.rotation.y;
+          turn.rotation.y += (Math.round(r / (2 * Math.PI)) * 2 * Math.PI - r) * 0.04;
+        }
+      }
       renderer.render(scene, camera);
     };
     frame = requestAnimationFrame(tick);
-
-    // Off screen or in a background tab, stop drawing.
     const seen = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
     seen.observe(el);
 
@@ -244,10 +185,16 @@ export default function ShirtViewer({
       canvas.removeEventListener("pointermove", move);
       canvas.removeEventListener("pointerup", up);
       canvas.removeEventListener("pointercancel", up);
-      geometries.forEach((g) => g.dispose());
-      textures.forEach((t) => t.dispose());
-      frontMat.dispose();
-      backMat.dispose();
+      mixer?.stopAllAction();
+      scene.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (!m.isMesh) return;
+        m.geometry.dispose();
+        for (const mat of Array.isArray(m.material) ? m.material : [m.material]) {
+          for (const v of Object.values(mat)) if (v instanceof THREE.Texture) v.dispose();
+          mat.dispose();
+        }
+      });
       env.dispose();
       pmrem.dispose();
       renderer.dispose();
@@ -260,7 +207,7 @@ export default function ShirtViewer({
       ref={host}
       className="absolute inset-0"
       role="img"
-      aria-label="The official T-shirt in 3D, turning slowly. Drag to turn it."
+      aria-label="The official T-shirt in 3D, floating and turning gently. Drag to turn it."
     />
   );
 }
