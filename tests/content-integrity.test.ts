@@ -6,7 +6,7 @@
  * that was never committed does not fail the build and does not fail
  * type checking. It fails in front of a visitor.
  */
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -371,7 +371,42 @@ describe("the title sponsor", () => {
   });
 
   it("says who powers the site, in those words", () => {
-    expect(TITLE_SPONSOR.line).toBe("Powered by Genotypic Technologies");
+    expect(TITLE_SPONSOR.line).toBe("Powered by Genotypic Group");
+    expect(TITLE_SPONSOR.lineBangla).toBe("নিবেদনে জেনোটাইপিক গ্রুপ");
+    expect(TITLE_SPONSOR.logos[0].name).toBe(TITLE_SPONSOR.name);
+  });
+
+  it("keeps the display name in one place, so changing it is one line", () => {
+    // Every page reads the name from TITLE_SPONSOR. A copy typed out
+    // anywhere else would be the one place left saying the old name.
+    const copies: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const path = join(dir, entry.name);
+        if (entry.isDirectory()) walk(path);
+        else if (/\.(tsx?|mdx?|txt|json)$/.test(entry.name)) {
+          const text = readFileSync(path, "utf8");
+          if (text.includes(TITLE_SPONSOR.name) || text.includes(TITLE_SPONSOR.nameBangla)) {
+            copies.push(path.slice(ROOT.length));
+          }
+        }
+      }
+    };
+    walk(join(ROOT, "src"));
+    expect(copies.map((c) => c.replaceAll("\\", "/"))).toEqual(["src/lib/site.ts"]);
+  });
+
+  it("has the negative mark for dark grounds on disk, in the same 5:2 shape", () => {
+    const file = publicFile(TITLE_SPONSOR.logos[0].logoOnDark);
+    expect(existsSync(file)).toBe(true);
+    const bytes = readFileSync(file);
+    expect(bytes.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+    expect(bytes.readUInt32BE(16) / bytes.readUInt32BE(20)).toBe(2.5);
+  });
+
+  it("carries the sponsor's trademark notice for this year, naming the registered company", () => {
+    expect(TITLE_SPONSOR.notice.startsWith(`© ${TITLE_SPONSOR.year} `)).toBe(true);
+    expect(TITLE_SPONSOR.notice).toContain("Genotypic Technology Pvt Ltd. All rights reserved.");
   });
 
   it("takes the first tier on the list, which is the title", () => {

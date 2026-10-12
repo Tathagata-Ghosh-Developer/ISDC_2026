@@ -241,7 +241,7 @@ export default function SponsorshipProposalPage() {
           <SectionHeading
             eyebrow="স্তর The levels"
             title="Six levels, the title one taken"
-            lede="The title level is taken for 2026 by Genotypic Technologies. Take one of the other five as written, or take the parts of it you want and tell us what the rest should be. We would rather build something that suits you than sell you a tier you half need."
+            lede={`The title level is taken for ${TITLE_SPONSOR.year} by ${TITLE_SPONSOR.name}. Take one of the other five as written, or take the parts of it you want and tell us what the rest should be. We would rather build something that suits you than sell you a tier you half need.`}
           />
 
           <div className="mt-[2.618rem] space-y-px bg-line">

@@ -122,13 +122,16 @@ export default function SiteHeader() {
               <Link href="/" className="min-w-0">
                 <Wordmark size={solid ? 32 : 40} />
               </Link>
-              {/* The title sponsor's mark rides beside the wordmark while
-                  the header is at rest. Once the navigation has folded up
-                  into this row it needs the room more than the mark does,
-                  and below a laptop there was never room to begin with. */}
+              {/* The title sponsor rides beside the wordmark while the
+                  header is at rest, by name rather than by mark: the
+                  sponsor's guidelines put the mark at 150 px or more
+                  with its clear space, a plate taller than this row.
+                  Once the navigation has folded up into this row it
+                  needs the room more than the line does, and below a
+                  laptop there was never room to begin with. */}
               <div className={solid ? "hidden" : "hidden lg:flex items-center"}>
                 <span className="mx-4 h-6 w-px bg-line" aria-hidden />
-                <PoweredBy size="sm" />
+                <PoweredBy mark={false} />
               </div>
             </div>
 
@@ -207,7 +210,7 @@ export default function SiteHeader() {
             style={{ opacity: menuOpen ? 1 : 0 }}
           >
             <Logo size={54} className="mb-4" />
-            <PoweredBy size="sm" />
+            <PoweredBy />
           </div>
           {NAV.map((item, i) => (
             <Link

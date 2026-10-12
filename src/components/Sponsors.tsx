@@ -9,6 +9,18 @@ import { PARTNERS, TITLE_SPONSOR } from "@/lib/site";
    sponsors pages are not; and all of them show the same mark from the
    same file. Everything below reads from TITLE_SPONSOR and nothing
    else, so a change there is a change everywhere.
+
+   The first mark is the one the site is "Powered by", and its owner's
+   brand guidelines hold it to rules the other three are not:
+
+   - never narrower than 150 px, at any width of screen. Where that
+     does not fit, the name goes in as text and the mark stays out;
+   - clear space on every side at least the height of its "G". The
+     files carry that space inside them, so a tile around the mark
+     needs no padding of its own, and nothing else may sit inside it;
+   - the full-colour version only on a light ground, and on a dark one
+     the negative version, white on their sky blue;
+   - never a filter, a shadow, a tilt or a fade on the mark itself.
    ================================================================ */
 
 /**
@@ -16,9 +28,17 @@ import { PARTNERS, TITLE_SPONSOR } from "@/lib/site";
  * wordmarks are black or dark blue on nothing, and a mark you cannot
  * see is worse than a tile that is the wrong colour for the page. It is
  * a literal rather than a token because the tokens follow the theme and
- * this must not.
+ * this must not. It is also why the first mark may stay in full colour
+ * on its tile at night: the ground under it is still light.
  */
 const TILE_BACKGROUND = "#fbf6ea";
+
+/**
+ * The narrowest the first mark's tile may ever be. Its artwork is 62.5
+ * per cent of the tile's width, so 250 px of tile, less a pixel of
+ * border each side, is 153 px of artwork: over the 150 px floor.
+ */
+const LEAD_MIN_WIDTH = "min-w-[250px]";
 
 /** The copy for the level that is no longer on offer. */
 export const TITLE_TAKEN = `Taken for ${TITLE_SPONSOR.year} by ${TITLE_SPONSOR.name}`;
@@ -27,48 +47,75 @@ export const TITLE_TAKEN = `Taken for ${TITLE_SPONSOR.year} by ${TITLE_SPONSOR.n
 const MARK = TITLE_SPONSOR.logos[0];
 
 /**
- * The inline lockup: "Powered by" and the mark, for the title block on
- * the home page and the masthead. It sits straight on the page; the
- * mark is blue and red and reads on both themes.
+ * The first mark on its own plate, for the hero and the phone menu,
+ * which sit on the page's own ground and so change with the theme.
+ * By day it is the full-colour version on the light tile; by night,
+ * the negative version, white on sky blue. The two files have the same
+ * shape, so the plate does not move when the theme does. 256 px wide
+ * is 157 px of artwork, whatever the size of the root font. The day
+ * ground is TILE_BACKGROUND, written out because the class has to be
+ * a literal for Tailwind to find it.
+ */
+function TitleMark() {
+  return (
+    <span className="relative block aspect-[5/2] w-[256px] shrink-0 border border-line bg-[#fbf6ea] dark:border-[#1f9cd6] dark:bg-[#1f9cd6]">
+      <Image
+        src={MARK.logo}
+        alt={MARK.name}
+        fill
+        sizes="256px"
+        className="object-contain dark:hidden"
+      />
+      <Image
+        src={MARK.logoOnDark}
+        alt={MARK.name}
+        fill
+        sizes="256px"
+        className="hidden object-contain dark:block"
+      />
+    </span>
+  );
+}
+
+/**
+ * "Powered by" and the sponsor. With the mark, for the title block on
+ * the home page and the phone menu. Without it, as words, for the
+ * masthead: a mark of 150 px with its clear space is a plate nearly a
+ * hundred pixels tall, which the masthead has no room for.
  */
 export function PoweredBy({
-  size = "md",
+  mark = true,
   className = "",
 }: {
-  size?: "md" | "sm";
+  mark?: boolean;
   className?: string;
 }) {
-  // The source is 1200 by 480, so the width is always two and a half
-  // times the height: 100 by 40, or 65 by 26.
-  const height = size === "md" ? 40 : 26;
-  const width = height * 2.5;
+  if (!mark) {
+    return (
+      <span className={`inline-flex items-baseline gap-2.5 whitespace-nowrap ${className}`}>
+        <span className="text-[0.56rem] font-medium uppercase tracking-[0.24em] text-gold">
+          Powered by
+        </span>
+        <span className="font-display text-[0.95rem] text-ink">
+          {TITLE_SPONSOR.name}
+        </span>
+      </span>
+    );
+  }
 
   return (
-    <span className={`inline-flex items-center ${className}`}>
+    <span className={`inline-flex flex-wrap items-center gap-x-3 gap-y-2 ${className}`}>
       {/* One sentence for a screen reader, instead of a label and then
           a picture of the same name; the visible pair is hidden from it. */}
       <span className="sr-only">{TITLE_SPONSOR.line}</span>
       <span
         aria-hidden
-        className={`flex items-center ${size === "md" ? "gap-3" : "gap-2.5"}`}
+        className="whitespace-nowrap text-[0.66rem] font-medium uppercase tracking-[0.28em] text-gold"
       >
-        <span
-          className={`whitespace-nowrap font-medium uppercase text-gold ${
-            size === "md"
-              ? "text-[0.66rem] tracking-[0.28em]"
-              : "text-[0.56rem] tracking-[0.24em]"
-          }`}
-        >
-          Powered by
-        </span>
-        <Image
-          src={MARK.logo}
-          alt={MARK.name}
-          width={width}
-          height={height}
-          className="w-auto shrink-0"
-          style={{ height }}
-        />
+        Powered by
+      </span>
+      <span aria-hidden>
+        <TitleMark />
       </span>
     </span>
   );
@@ -77,12 +124,15 @@ export function PoweredBy({
 /**
  * One mark on a light card. A link when the company has a site we have
  * checked, a plain tile when it does not. The url is never guessed.
+ * `lead` is the first mark: no padding, because its clear space is in
+ * the file, and a floor on its width.
  */
 export function LogoTile({
   name,
   logo,
   url = "",
   compact = false,
+  lead = false,
   sizes,
   className = "",
 }: {
@@ -90,12 +140,13 @@ export function LogoTile({
   logo: string;
   url?: string;
   compact?: boolean;
-  /** What next/image should plan for; defaults to the four-up grid. */
+  lead?: boolean;
+  /** What next/image should plan for; defaults to the strip's grid. */
   sizes?: string;
   className?: string;
 }) {
   const shape = `grid aspect-[5/2] border border-line ${
-    compact ? "p-2" : "p-3 sm:p-4"
+    lead ? LEAD_MIN_WIDTH : compact ? "p-2" : "p-3 sm:p-4"
   } ${className}`;
 
   const mark = (
@@ -106,9 +157,11 @@ export function LogoTile({
         fill
         sizes={
           sizes ??
-          (compact
-            ? "(max-width: 640px) 50vw, 11rem"
-            : "(max-width: 640px) 50vw, (max-width: 1180px) 25vw, 280px")
+          (lead
+            ? "(max-width: 1023px) 30rem, 27rem"
+            : compact
+              ? "(max-width: 640px) 50vw, 11rem"
+              : "(max-width: 640px) 50vw, (max-width: 1180px) 25vw, 280px")
         }
         className="object-contain"
       />
@@ -127,7 +180,7 @@ export function LogoTile({
     <a
       href={url}
       target="_blank"
-      rel="noreferrer noopener"
+      rel="noopener noreferrer"
       aria-label={name}
       className={`${shape} transition-all duration-500 hover:-translate-y-1 hover:border-gold`}
       style={{ background: TILE_BACKGROUND }}
@@ -140,8 +193,14 @@ export function LogoTile({
 /**
  * The line and the four marks. `heading` adds the eyebrow, for the
  * pages where the strip is a section of its own. `compact` is the
- * footer, where it is a band and sits beside its own title on a
- * laptop rather than under it.
+ * footer, where it is a band and sits beside its own title on a wide
+ * screen rather than under it.
+ *
+ * The first mark leads at twice the width of the other three, because
+ * at a quarter of the row it would fall under its 150 px floor on
+ * anything narrower than a wide laptop. Below a laptop it takes a row
+ * of its own and the other three sit two and one beneath it, which
+ * also keeps those three at a size that can be read.
  */
 export function TitleSponsorStrip({
   compact = false,
@@ -155,10 +214,10 @@ export function TitleSponsorStrip({
   return (
     <div
       className={
-        compact ? "lg:flex lg:items-center lg:justify-between lg:gap-[2.618rem]" : ""
+        compact ? "xl:flex xl:items-center xl:justify-between xl:gap-[2.618rem]" : ""
       }
     >
-      <div className={compact ? "lg:shrink-0" : ""}>
+      <div className={compact ? "xl:shrink-0" : ""}>
         {heading && <p className="eyebrow">শিরোনাম পৃষ্ঠপোষক Title sponsor</p>}
         <Line
           className={`font-display font-normal text-ink ${heading ? "mt-3" : ""} ${
@@ -179,13 +238,29 @@ export function TitleSponsorStrip({
       </div>
 
       <ul
-        className={`grid grid-cols-2 sm:grid-cols-4 ${
-          compact ? "mt-5 gap-2 lg:mt-0 lg:w-full lg:max-w-[44rem]" : "mt-8 gap-3"
+        className={`grid max-w-[30rem] grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:items-center ${
+          compact
+            ? "mt-5 gap-2 lg:max-w-[48rem] xl:mt-0 xl:w-full"
+            : "mt-8 gap-3 lg:max-w-none"
         }`}
       >
-        {TITLE_SPONSOR.logos.map((l) => (
-          <li key={l.id}>
-            <LogoTile {...l} compact={compact} />
+        {TITLE_SPONSOR.logos.map((l, i) => (
+          <li
+            key={l.id}
+            className={
+              i === 0
+                ? "col-span-4 lg:col-span-1"
+                : // the last of the three is centred under the two on a phone
+                  `col-span-2 lg:col-span-1 ${i === 3 ? "col-start-2 lg:col-start-auto" : ""}`
+            }
+          >
+            <LogoTile
+              name={l.name}
+              logo={l.logo}
+              url={l.url}
+              compact={compact}
+              lead={i === 0}
+            />
           </li>
         ))}
       </ul>

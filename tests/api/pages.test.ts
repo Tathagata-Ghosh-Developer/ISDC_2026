@@ -7,6 +7,7 @@
  * content, carry the security headers, and leak nothing.
  */
 import { describe, expect, it } from "vitest";
+import { TITLE_SPONSOR } from "@/lib/site";
 import { BASE_NO_DB } from "./servers";
 
 async function get(path: string) {
@@ -36,7 +37,10 @@ describe("every public page", () => {
   it("names the title sponsor and both partners on every page, in the footer", async () => {
     for (const path of ["/", "/merch", "/utsab"]) {
       const { body } = await get(path);
-      expect(body, path).toContain("Powered by Genotypic Technologies");
+      expect(body, path).toContain(TITLE_SPONSOR.line);
+      // the sponsor's trademark notice, which their guidelines ask for
+      // wherever their name or mark appears
+      expect(body, path).toContain(TITLE_SPONSOR.notice);
       expect(body, path).toContain("/media/sponsors/iitxiim-jewels.jpg");
       expect(body, path).toContain("/media/sponsors/meme-theory.png");
     }

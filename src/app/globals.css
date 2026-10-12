@@ -133,6 +133,23 @@
   }
 }
 
+/* Tailwind's dark: variant, made to follow the site's own switch: the
+   visitor's choice in data-theme first, the system setting otherwise.
+   Without this, dark: would follow the system alone and disagree with
+   the toggle. Used where something must change with the theme and a
+   colour token cannot do it, such as the title sponsor's mark, which
+   has a different file for a dark ground. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-theme="dark"] *) {
+    @slot;
+  }
+}
+
 :root[data-theme="dark"] {
   --c-paper: #140d13;
   --c-paper-2: #1d1520;
