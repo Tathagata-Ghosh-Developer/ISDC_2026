@@ -228,7 +228,7 @@ export default function Arrival({ oncePerSession = true }: Props) {
           </div>
 
           {!reduce && (
-            <div className="relative z-20 w-full max-w-[44rem] px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] short:pb-2">
+            <div className="relative z-20 w-full max-w-[44rem] px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] short:pb-[max(0.875rem,env(safe-area-inset-bottom))]">
               <Ticker facts={tickerFacts} act={act} />
               <div
                 className="mt-4 h-px w-full short:mt-1"

@@ -163,9 +163,9 @@ export default function Hero({
             transition={{ duration: 1, delay: 0.7, ease: EASE }}
             className="mt-[1.618rem] w-full short:mt-0 wide-short:mt-4 compact:mt-5"
           >
-            <SeasonLine dates={dates} names={dayNames} className="mb-4 short:mb-2 wide-short:mb-2 compact:mb-2" />
+            <SeasonLine dates={dates} names={dayNames} className="mb-4 short:mb-1 wide-short:mb-2 compact:mb-2" />
             <Countdown target={countdownTo} />
-            <p className="mt-4 text-[0.7rem] uppercase tracking-[0.28em] text-ink-faint short:mt-2 short:tracking-[0.14em] wide-short:mt-2">
+            <p className="mt-4 text-[0.7rem] uppercase tracking-[0.28em] text-ink-faint short:mt-1 short:tracking-[0.14em] wide-short:mt-2">
               {bodhonLabel}
             </p>
           </motion.div>
@@ -174,7 +174,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.82, ease: EASE }}
-            className="mt-[2.618rem] flex flex-wrap items-center justify-center gap-3 short:mt-4 wide-short:mt-5 compact:mt-6"
+            className="mt-[2.618rem] flex flex-wrap items-center justify-center gap-3 short:mt-3 wide-short:mt-5 compact:mt-6"
           >
             <Link href={hero.ctaPrimary.href} className="btn btn-primary">
               {hero.ctaPrimary.label}

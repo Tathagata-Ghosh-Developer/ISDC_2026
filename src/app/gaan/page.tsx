@@ -94,9 +94,9 @@ export default function GaanPage() {
                   src={f.src}
                   alt={f.sub}
                   fill
-                  // a fifth of the width, but cropped from landscape
-                  // frames into an upright one, so it needs about 2.4x
-                  sizes="45vw"
+                  // a fifth of the width, but most frames are landscape
+                  // and cropped into an upright one, so it asks for more
+                  sizes="(max-width: 1024px) 30vw, 25vw"
                   className={`object-cover ${i % 2 ? "sepia-plate" : ""}`}
                 />
                 <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-1.5 sm:p-3">

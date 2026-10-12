@@ -146,7 +146,7 @@ export default function SiteHeader() {
                 held its width pushed the menu button off the right-hand
                 edge, and a phone has no other way into the site. */}
             <div className="flex min-w-0 items-center">
-              <Link href="/" className="min-w-0 pointer-coarse:min-w-[44px]">
+              <Link href="/" className="flex min-w-0 items-center pointer-coarse:min-h-[44px] pointer-coarse:min-w-[44px]">
                 <Wordmark size={solid ? 32 : 40} />
               </Link>
               {/* The title sponsor rides beside the wordmark while the
