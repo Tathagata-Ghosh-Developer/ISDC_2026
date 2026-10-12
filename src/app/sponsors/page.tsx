@@ -225,7 +225,7 @@ export default async function SponsorsPage() {
           </div>
 
           <Reveal className="mt-8">
-            <p className="max-w-[70ch] text-[0.82rem] leading-relaxed text-ink-faint">
+            <p className="max-w-[66ch] text-[0.82rem] leading-relaxed text-ink-faint">
               Other arrangements are possible, including in-kind support,
               stall-only partnerships and support for a single evening. Every
               sponsorship received is entered in the same ledger as individual

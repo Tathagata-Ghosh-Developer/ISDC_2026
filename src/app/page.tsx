@@ -81,7 +81,7 @@ export default async function Home() {
                   src="/media/art/old-kolkata-puja-night.jpg"
                   alt="A nineteenth-century painting of a Durga Puja at night in Kolkata"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 38vw"
+                  sizes="(max-width: 1024px) 100vw, (max-width: 1800px) 38vw, 680px"
                   className="sepia-plate object-cover"
                 />
                 <div className="vignette absolute inset-0" />
@@ -181,7 +181,7 @@ export default async function Home() {
                     src="/media/iisc/main-building-front.jpg"
                     alt="The Main Building of the Indian Institute of Science"
                     fill
-                    sizes="(max-width: 1024px) 100vw, 38vw"
+                    sizes="(max-width: 1024px) 100vw, (max-width: 1800px) 38vw, 680px"
                     className="sepia-plate object-cover"
                   />
                 </div>
@@ -190,7 +190,7 @@ export default async function Home() {
                     src="/media/art/company-school-puja.jpg"
                     alt="A Company-school painting of a household Durga Puja"
                     fill
-                    sizes="(max-width: 1024px) 100vw, 38vw"
+                    sizes="(max-width: 1024px) 100vw, (max-width: 1800px) 38vw, 680px"
                     className="sepia-plate object-cover"
                   />
                 </div>

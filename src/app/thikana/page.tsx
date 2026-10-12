@@ -92,7 +92,7 @@ export default async function ThikanaPage() {
           </Reveal>
 
           <Reveal className="mt-4">
-            <p className="max-w-[78ch] text-[0.78rem] leading-relaxed text-ink-faint">
+            <p className="max-w-[66ch] text-[0.78rem] leading-relaxed text-ink-faint">
               That is the Institute&apos;s own map, unaltered underneath. The
               pandal, the gates and the walks are drawn over it by the
               committee, and every distance is measured off the traced path
@@ -135,7 +135,7 @@ export default async function ThikanaPage() {
           </Reveal>
 
           <Reveal className="mt-4">
-            <p className="text-[0.78rem] leading-relaxed text-ink-faint">
+            <p className="max-w-[66ch] text-[0.78rem] leading-relaxed text-ink-faint">
               The Institute&apos;s own map is the one to carry. It names every
               building and marks all the gates, and the Tata Memorial Club is at{" "}
               <span className="text-gold">{config.venue.mapRef}</span>. A copy is
@@ -190,7 +190,7 @@ export default async function ThikanaPage() {
           </Stagger>
 
           <Reveal className="mt-8">
-            <p className="max-w-[70ch] text-[0.8rem] leading-relaxed text-ink-faint">
+            <p className="max-w-[66ch] text-[0.8rem] leading-relaxed text-ink-faint">
               Gate opening hours change during the festival, and vehicle entry is
               restricted on the busiest evenings. Watch the WhatsApp group and
               Instagram for the notice, and come on foot from the nearest gate if

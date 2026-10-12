@@ -308,7 +308,7 @@ export default async function MahalayaPage() {
                   </p>
                 )}
 
-                <p className="mt-4 text-[0.75rem] leading-relaxed text-ink-faint">
+                <p className="mt-4 max-w-[68ch] text-[0.75rem] leading-relaxed text-ink-faint">
                   {caption}
                 </p>
               </div>

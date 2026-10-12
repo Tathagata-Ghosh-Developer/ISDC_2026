@@ -76,7 +76,9 @@ export default function PaidAt({
   };
 
   return (
-    <div className="grid grid-cols-[1.4fr_1fr] gap-2">
+    // minmax(0, …): a time input's own minimum width pushed the pair
+    // past the form on a 1024px tablet.
+    <div className="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-2">
       <input
         ref={dateInput}
         name="paid_on"

@@ -277,6 +277,13 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
+/* A fieldset's default minimum is its content's widest line, which let
+   the donation form hold its column ten pixels wider than a 360px
+   phone and zoom the whole page out. */
+fieldset {
+  min-width: 0;
+}
+
 body {
   background-color: var(--c-paper);
   color: var(--c-ink);

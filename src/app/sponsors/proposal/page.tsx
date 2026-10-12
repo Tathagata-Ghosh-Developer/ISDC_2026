@@ -376,7 +376,7 @@ export default function SponsorshipProposalPage() {
                     </span>
                     <div>
                       <h4 className="text-[0.92rem] text-ink">{c.head}</h4>
-                      <p className="mt-1.5 text-[0.84rem] leading-relaxed text-ink-soft">
+                      <p className="mt-1.5 max-w-[68ch] text-[0.84rem] leading-relaxed text-ink-soft">
                         {c.body}
                       </p>
                     </div>
@@ -405,7 +405,7 @@ export default function SponsorshipProposalPage() {
                 </div>
               </div>
 
-              <p className="mt-8 text-[0.7rem] leading-relaxed text-ink-faint">
+              <p className="mt-8 max-w-[68ch] text-[0.7rem] leading-relaxed text-ink-faint">
                 This draft is written to be read rather than to be won with. It
                 is not legal advice, and a sponsor with a legal team should send
                 it to them. If your own template is better, send it and we will

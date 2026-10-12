@@ -166,7 +166,7 @@ export default function SiteFooter() {
             it in the footer of anything that carries their name or
             mark, and the mark is on every page. Ink-soft, not ink-faint:
             faint falls under 4.5:1 on this band by day. */}
-        <p className="mt-5 max-w-[120ch] text-[0.72rem] leading-relaxed text-ink-soft">
+        <p className="mt-5 max-w-[68ch] text-[0.72rem] leading-relaxed text-ink-soft">
           {TITLE_SPONSOR.notice}
         </p>
       </div>

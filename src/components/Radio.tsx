@@ -531,11 +531,11 @@ export default function Radio({
           <span className="text-gold">{station?.frequency}</span> {station?.note}
         </p>
 
-        <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-faint">
+        <p className="mt-2 max-w-[68ch] text-[0.75rem] leading-relaxed text-ink-faint">
           {broadcast}
         </p>
 
-        <p className="mt-3 text-[0.72rem] leading-relaxed text-ink-faint">
+        <p className="mt-3 max-w-[68ch] text-[0.72rem] leading-relaxed text-ink-faint">
           The hiss is generated here. The programme is Saregama&apos;s own
           upload, whose volume the dial controls, because the recording is
           theirs and the broadcast is Prasar Bharati&apos;s. For the live

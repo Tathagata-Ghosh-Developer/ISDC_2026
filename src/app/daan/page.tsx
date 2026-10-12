@@ -50,7 +50,7 @@ export default async function DonatePage() {
             <p className="font-display text-[1.05rem] text-sindoor">
               Please do not send money yet.
             </p>
-            <p className="mt-1.5 max-w-[80ch] text-[0.85rem] leading-relaxed text-ink">
+            <p className="mt-1.5 max-w-[68ch] text-[0.85rem] leading-relaxed text-ink">
               The committee is still connecting the ledger, so a payment made
               now would not be recorded and no receipt could be issued. The
               account details below are correct and the account is live, which
@@ -77,7 +77,7 @@ export default async function DonatePage() {
 
       <Section className="!pt-0">
         <Container>
-          <div className="grid gap-[2.618rem] lg:grid-cols-[1fr_1.618fr] lg:items-start">
+          <div className="grid grid-cols-1 gap-[2.618rem] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.618fr)] lg:items-start">
             {/* -------- how to pay -------- */}
             {/* UPI first, because that is how nearly everyone pays. The
                 bank details stay one tap away for NEFT and IMPS. */}
@@ -131,6 +131,7 @@ export default async function DonatePage() {
                           alt="Bank-issued UPI QR code for the committee account"
                           width={976}
                           height={1280}
+                          sizes="(max-width: 640px) 70vw, 17rem"
                           className="h-auto w-full"
                         />
                       </div>

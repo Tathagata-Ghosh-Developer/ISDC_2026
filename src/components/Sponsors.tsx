@@ -264,7 +264,7 @@ export function PartnerStrip({
                 src={p.logo}
                 alt={p.name}
                 fill
-                sizes={compact ? "16rem" : "(max-width: 640px) 60vw, 26rem"}
+                sizes={compact ? "(max-width: 640px) 45vw, 16rem" : "(max-width: 640px) 60vw, 26rem"}
                 className="object-contain"
               />
             </span>

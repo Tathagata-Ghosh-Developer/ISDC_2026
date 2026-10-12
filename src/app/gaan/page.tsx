@@ -94,11 +94,13 @@ export default function GaanPage() {
                   src={f.src}
                   alt={f.sub}
                   fill
-                  sizes="20vw"
+                  // a fifth of the width, but cropped from landscape
+                  // frames into an upright one, so it needs about 2.4x
+                  sizes="45vw"
                   className={`object-cover ${i % 2 ? "sepia-plate" : ""}`}
                 />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-3">
-                  <span className="bangla-display block text-[1rem] leading-tight text-paper-3">
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-1.5 sm:p-3">
+                  <span className="bangla-display block text-[0.85rem] leading-tight text-paper-3 sm:text-[1rem]">
                     {f.cap}
                   </span>
                   <span className="hidden text-[0.55rem] uppercase tracking-[0.16em] text-paper-3/70 sm:block">

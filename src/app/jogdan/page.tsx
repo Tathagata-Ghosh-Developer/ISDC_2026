@@ -150,7 +150,7 @@ export default async function JogdanPage() {
                 </StaggerItem>
               ))}
             </Stagger>
-            <p className="mt-6 max-w-[70ch] text-[0.78rem] leading-relaxed text-ink-faint">
+            <p className="mt-6 max-w-[66ch] text-[0.78rem] leading-relaxed text-ink-faint">
               If your association or Puja belongs on this list and is not here,
               tell a convenor and it goes up. We only list organisations whose
               details we could actually verify.

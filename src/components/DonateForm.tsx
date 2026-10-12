@@ -183,7 +183,7 @@ export default function DonateForm({ suggested, note }: Props) {
           </div>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Field
             label="SR number"
             hint={
@@ -300,7 +300,7 @@ export default function DonateForm({ suggested, note }: Props) {
           </div>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Field
             label={method === "upi" ? "UPI reference (UTR)" : "Transaction reference"}
             hint={
@@ -370,7 +370,7 @@ export default function DonateForm({ suggested, note }: Props) {
           )}
         </button>
 
-        <div className="space-y-2 border-t border-line pt-5 text-[0.7rem] leading-relaxed text-ink-faint">
+        <div className="space-y-2 border-t border-line pt-5 text-[0.7rem] leading-relaxed text-ink-faint [&>p]:max-w-[68ch]">
           <p>
             Submitting this form records your declaration. It does not move
             money and it does not charge anything. Make the transfer first
