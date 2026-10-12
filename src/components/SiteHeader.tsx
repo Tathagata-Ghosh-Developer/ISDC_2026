@@ -131,7 +131,7 @@ export default function SiteHeader() {
                   laptop there was never room to begin with. */}
               <div className={solid ? "hidden" : "hidden lg:flex items-center"}>
                 <span className="mx-4 h-6 w-px bg-line" aria-hidden />
-                <PoweredBy mark={false} />
+                <PoweredBy />
               </div>
             </div>
 
@@ -213,7 +213,7 @@ export default function SiteHeader() {
             style={{ opacity: menuOpen ? 1 : 0 }}
           >
             <Logo size={54} className="mb-4" />
-            <PoweredBy />
+            <PoweredBy size="lg" />
           </div>
           {NAV.map((item, i) => (
             <Link

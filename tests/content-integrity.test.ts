@@ -373,7 +373,8 @@ describe("the title sponsor", () => {
   it("says who powers the site, in those words", () => {
     expect(TITLE_SPONSOR.line).toBe("Powered by Genotypic Group");
     expect(TITLE_SPONSOR.lineBangla).toBe("নিবেদনে জেনোটাইপিক গ্রুপ");
-    expect(TITLE_SPONSOR.logos[0].name).toBe(TITLE_SPONSOR.name);
+    // the line names the group; each mark keeps its own company's name
+    expect(TITLE_SPONSOR.logos[0].name).toBe("Genotypic Technology");
   });
 
   it("keeps the display name in one place, so changing it is one line", () => {
@@ -394,14 +395,6 @@ describe("the title sponsor", () => {
     };
     walk(join(ROOT, "src"));
     expect(copies.map((c) => c.replaceAll("\\", "/"))).toEqual(["src/lib/site.ts"]);
-  });
-
-  it("has the negative mark for dark grounds on disk, in the same 5:2 shape", () => {
-    const file = publicFile(TITLE_SPONSOR.logos[0].logoOnDark);
-    expect(existsSync(file)).toBe(true);
-    const bytes = readFileSync(file);
-    expect(bytes.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
-    expect(bytes.readUInt32BE(16) / bytes.readUInt32BE(20)).toBe(2.5);
   });
 
   it("carries the sponsor's trademark notice for this year, naming the registered company", () => {

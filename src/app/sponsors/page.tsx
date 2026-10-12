@@ -16,7 +16,7 @@ import { IISC_FIGURES } from "@/lib/content/neighbours";
 import { formatINR } from "@/lib/format";
 import EnquiryForm from "@/components/EnquiryForm";
 import {
-  LogoTile,
+  PoweredBy,
   TakenBadge,
   TitleSponsorStrip,
   PartnerStrip,
@@ -205,21 +205,7 @@ export default async function SponsorsPage() {
                       {tier.headline}
                     </p>
 
-                    {taken && (
-                      <div className="mt-4 flex flex-wrap items-center gap-4">
-                        <LogoTile
-                          name={TITLE_SPONSOR.logos[0].name}
-                          logo={TITLE_SPONSOR.logos[0].logo}
-                          url={TITLE_SPONSOR.logos[0].url}
-                          lead
-                          sizes="16rem"
-                          className="w-full max-w-[16rem]"
-                        />
-                        <span className="text-[0.8rem] text-ink-soft">
-                          {TITLE_SPONSOR.name}
-                        </span>
-                      </div>
-                    )}
+                    {taken && <PoweredBy className="mt-4" />}
 
                     <ul className="mt-5 space-y-2.5">
                       {tier.benefits.map((b) => (

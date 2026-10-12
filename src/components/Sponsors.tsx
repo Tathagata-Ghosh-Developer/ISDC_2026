@@ -10,16 +10,18 @@ import { PARTNERS, TITLE_SPONSOR } from "@/lib/site";
    same file. Everything below reads from TITLE_SPONSOR and nothing
    else, so a change there is a change everywhere.
 
-   The first mark is the one the site is "Powered by", and its owner's
-   brand guidelines hold it to rules the other three are not:
+   The site is "Powered by" the title sponsor's group, the umbrella
+   over the four companies whose marks are shown, in the committee's
+   order. The first mark's brand guidelines hold it to rules the other
+   three are not:
 
    - never narrower than 150 px, at any width of screen. Where that
      does not fit, the name goes in as text and the mark stays out;
    - clear space on every side at least the height of its "G". The
      files carry that space inside them, so a tile around the mark
      needs no padding of its own, and nothing else may sit inside it;
-   - the full-colour version only on a light ground, and on a dark one
-     the negative version, white on their sky blue;
+   - the full-colour version only on a light ground (the tiles stay
+     light on the night theme too);
    - never a filter, a shadow, a tilt or a fade on the mark itself.
    ================================================================ */
 
@@ -29,7 +31,8 @@ import { PARTNERS, TITLE_SPONSOR } from "@/lib/site";
  * see is worse than a tile that is the wrong colour for the page. It is
  * a literal rather than a token because the tokens follow the theme and
  * this must not. It is also why the first mark may stay in full colour
- * on its tile at night: the ground under it is still light.
+ * on its tile at night, as its guidelines require: the ground under it
+ * is still light.
  */
 const TILE_BACKGROUND = "#fbf6ea";
 
@@ -43,79 +46,33 @@ const LEAD_MIN_WIDTH = "min-w-[250px]";
 /** The copy for the level that is no longer on offer. */
 export const TITLE_TAKEN = `Taken for ${TITLE_SPONSOR.year} by ${TITLE_SPONSOR.name}`;
 
-/** The mark the site is "Powered by": the first of the four. */
-const MARK = TITLE_SPONSOR.logos[0];
-
 /**
- * The first mark on its own plate, for the hero and the phone menu,
- * which sit on the page's own ground and so change with the theme.
- * By day it is the full-colour version on the light tile; by night,
- * the negative version, white on sky blue. The two files have the same
- * shape, so the plate does not move when the theme does. 256 px wide
- * is 157 px of artwork, whatever the size of the root font. The day
- * ground is TILE_BACKGROUND, written out because the class has to be
- * a literal for Tailwind to find it.
- */
-function TitleMark() {
-  return (
-    <span className="relative block aspect-[5/2] w-[256px] shrink-0 border border-line bg-[#fbf6ea] dark:border-[#1f9cd6] dark:bg-[#1f9cd6]">
-      <Image
-        src={MARK.logo}
-        alt={MARK.name}
-        fill
-        sizes="256px"
-        className="object-contain dark:hidden"
-      />
-      <Image
-        src={MARK.logoOnDark}
-        alt={MARK.name}
-        fill
-        sizes="256px"
-        className="hidden object-contain dark:block"
-      />
-    </span>
-  );
-}
-
-/**
- * "Powered by" and the sponsor. With the mark, for the title block on
- * the home page and the phone menu. Without it, as words, for the
- * masthead: a mark of 150 px with its clear space is a plate nearly a
- * hundred pixels tall, which the masthead has no room for.
+ * "Powered by" and the group's name, in words. The group is the umbrella
+ * over all four companies whose marks follow, so the line names the
+ * group and no single mark stands in for it. `lg` is the size for the
+ * hero and the phone menu; the default is the masthead's.
  */
 export function PoweredBy({
-  mark = true,
+  size = "sm",
   className = "",
 }: {
-  mark?: boolean;
+  size?: "sm" | "lg";
   className?: string;
 }) {
-  if (!mark) {
-    return (
-      <span className={`inline-flex items-baseline gap-2.5 whitespace-nowrap ${className}`}>
-        <span className="text-[0.56rem] font-medium uppercase tracking-[0.24em] text-gold">
-          Powered by
-        </span>
-        <span className="font-display text-[0.95rem] text-ink">
-          {TITLE_SPONSOR.name}
-        </span>
-      </span>
-    );
-  }
-
+  const lg = size === "lg";
   return (
-    <span className={`inline-flex flex-wrap items-center gap-x-3 gap-y-2 ${className}`}>
-      {/* One sentence for a screen reader, instead of a label and then
-          a picture of the same name; the visible pair is hidden from it. */}
-      <span className="sr-only">{TITLE_SPONSOR.line}</span>
+    <span
+      className={`inline-flex flex-wrap items-baseline gap-x-2.5 ${lg ? "gap-x-3" : "whitespace-nowrap"} ${className}`}
+    >
       <span
-        aria-hidden
-        className="whitespace-nowrap text-[0.66rem] font-medium uppercase tracking-[0.28em] text-gold"
+        className={`font-medium uppercase text-gold ${
+          lg ? "text-[0.66rem] tracking-[0.28em]" : "text-[0.56rem] tracking-[0.24em]"
+        }`}
       >
         Powered by
       </span>
-      <span aria-hidden>
-        <TitleMark />
+      <span className={`font-display text-ink ${lg ? "text-[1.618rem] leading-tight" : "text-[0.95rem]"}`}>
+        {TITLE_SPONSOR.name}
       </span>
     </span>
   );

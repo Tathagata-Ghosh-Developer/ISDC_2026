@@ -410,17 +410,17 @@ export const SPONSOR_TIERS = [
  * the same scale in tiles of the same 5:2 shape. The order is the
  * committee's; keep it. An empty url means there is no link: the tile
  * renders plain, and an address is never guessed. The site is "Powered
- * by" the first of them.
+ * by" Genotypic Group, the umbrella over all four companies, so the
+ * line names the group and each mark carries its own company's name.
  *
  * The first mark follows the sponsor's brand guidelines (December
  * 2025), which are stricter than the others: never under 150 px wide,
  * clear space on every side at least the height of the "G", the
- * full-colour version only on a light ground, and on a dark one the
- * negative version, white on their sky blue #1F9CD6. So genotypic.png
+ * full-colour version only on a light ground (on a dark one, only the
+ * negative version, white on their sky blue #1F9CD6). So genotypic.png
  * carries its clear space in the file (the artwork is 750 wide,
- * centred), and genotypic-negative.png is the negative tile, 500 by
- * 200 in the same proportions. Both are cut from the master artwork
- * the sponsor sent; never redraw or recolour them.
+ * centred) and always sits on a light tile. It is cut from the master
+ * artwork the sponsor sent; never redraw or recolour it.
  */
 const TITLE_SPONSOR_NAME = "Genotypic Group";
 const TITLE_SPONSOR_NAME_BANGLA = "জেনোটাইপিক গ্রুপ";
@@ -443,9 +443,9 @@ export const TITLE_SPONSOR = {
   logos: [
     {
       id: "genotypic",
-      name: TITLE_SPONSOR_NAME,
+      // the company's own name, as its brand guidelines write it
+      name: "Genotypic Technology",
       logo: "/media/sponsors/genotypic.png",
-      logoOnDark: "/media/sponsors/genotypic-negative.png",
       url: "https://genotypic.co.in/",
     },
     {

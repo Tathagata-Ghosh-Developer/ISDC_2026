@@ -690,8 +690,8 @@ describe("the title sponsor", () => {
     expect(res.status).toBe(200);
     expect(body).toContain(TITLE_SPONSOR.line);
     expect(body).toContain("/media/sponsors/genotypic.png");
-    // and the negative version, white on sky blue, for the night theme
-    expect(body).toMatch(/media(\/|%2F)sponsors(\/|%2F)genotypic-negative\.png/);
+    // the line names the group, never one company's mark standing alone
+    expect(body).not.toMatch(/genotypic-negative/);
   });
 
   it("is in the title of the home page", async () => {
