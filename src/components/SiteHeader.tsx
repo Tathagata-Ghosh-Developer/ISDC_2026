@@ -135,9 +135,12 @@ export default function SiteHeader() {
               </div>
             </div>
 
-            {/* the navigation rides up here once the page has scrolled */}
+            {/* The navigation rides up here once the page has scrolled,
+                from 1280px. Between 1024 and 1280 nine links, the
+                wordmark, the toggle and Donate do not fit one row (they
+                overlapped), so there the menu button stays instead. */}
             <nav
-              className={`hidden min-w-0 flex-1 items-center justify-center gap-1 transition-opacity duration-300 lg:flex ${
+              className={`hidden min-w-0 flex-1 items-center justify-center gap-1 transition-opacity duration-300 xl:flex ${
                 solid ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
               aria-hidden={!solid}
@@ -162,7 +165,7 @@ export default function SiteHeader() {
                 onClick={() => (setOpenedAt(pathname), setOpen((v) => !v))}
                 aria-label="Menu"
                 aria-expanded={menuOpen}
-                className="grid h-11 w-11 place-items-center rounded-full border border-line text-ink lg:hidden"
+                className={`grid h-11 w-11 place-items-center rounded-full border border-line text-ink ${solid ? "xl:hidden" : "lg:hidden"}`}
               >
                 {menuOpen ? <X size={16} /> : <Menu size={16} />}
               </button>
@@ -190,7 +193,7 @@ export default function SiteHeader() {
 
       {/* ---------- the drawer ---------- */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden ${menuOpen ? "" : "pointer-events-none"}`}
+        className={`fixed inset-0 z-40 xl:hidden ${menuOpen ? "" : "pointer-events-none"}`}
         aria-hidden={!menuOpen}
       >
         <div
