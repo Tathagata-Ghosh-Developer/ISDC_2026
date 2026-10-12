@@ -39,9 +39,12 @@ export default function MerchPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(product) }} />
 
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
-          <div className="grid gap-[2.618rem] lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          {/* Side by side from a small tablet, a landscape phone and an
+              unfolded foldable up: stacked, the square film filled the
+              first screen and the name of the shirt started under it. */}
+          <div className="grid gap-[2.618rem] short:grid-cols-[0.9fr_1fr] short:gap-8 sm:grid-cols-2 sm:items-start lg:grid-cols-[1.4fr_1fr] lg:items-center">
             <Reveal>
               <MerchStage eager interactive className="aspect-square w-full" />
             </Reveal>

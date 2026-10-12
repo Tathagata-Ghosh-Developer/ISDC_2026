@@ -65,6 +65,21 @@
   --ease-dhak: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* A landscape phone: wide enough for two columns, too short for a
+   stacked hero or a full-height dialog. Tablets and laptops never
+   match; their shortest side is well over this. */
+@custom-variant short (@media (orientation: landscape) and (max-height: 540px));
+
+/* A laptop or a landscape tablet with a short screen (1280 x 720 up
+   to 1440 x 900, and 1024 x 768): the two-row masthead and a full-size
+   title left the buttons under the fold unless the rhythm tightens. */
+@custom-variant wide-short (@media (min-width: 64rem) and (max-height: 940px));
+
+/* A small phone held upright (320 x 568, 375 x 667, a folded cover
+   screen): the hero's rhythm closes up a step so the count is whole
+   on the first screen. */
+@custom-variant compact (@media (orientation: portrait) and (max-height: 700px));
+
 /* ---------- Light: aged paper, noon pandal ---------- */
 /* ================================================================
    Colour.

@@ -91,7 +91,7 @@ export default function PujoGuide() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? `Close ${GUIDE.name}` : `Ask ${GUIDE.name}, the ${GUIDE.tag}`}
         title={GUIDE.alt}
-        className="no-print fixed bottom-5 right-5 z-[90] grid h-14 w-14 place-items-center rounded-full border border-gold/50 bg-paper-3 text-gold shadow-lg transition-all duration-500 hover:scale-105 hover:border-gold sm:bottom-7 sm:right-7"
+        className="no-print fixed right-[max(1.25rem,env(safe-area-inset-right))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-[90] grid size-14 place-items-center rounded-full border border-gold/50 bg-paper-3 text-gold shadow-lg transition-all duration-500 hover:scale-105 hover:border-gold short:right-[max(0.75rem,env(safe-area-inset-right))] short:bottom-[max(0.75rem,env(safe-area-inset-bottom))] short:size-12 sm:right-[max(1.75rem,env(safe-area-inset-right))] sm:bottom-[max(1.75rem,env(safe-area-inset-bottom))]"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -113,7 +113,9 @@ export default function PujoGuide() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 18, scale: 0.97 }}
             transition={{ duration: 0.45, ease: EASE }}
-            className="no-print surface fixed bottom-20 right-4 z-[90] flex max-h-[min(30rem,70dvh)] w-[min(23rem,calc(100vw-2rem))] flex-col overflow-hidden sm:bottom-24 sm:right-7"
+            /* Above the button on a portrait screen; beside it on a
+               landscape phone, where above it there is no room. */
+            className="no-print surface fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[calc(max(1.25rem,env(safe-area-inset-bottom))+4rem)] z-[90] flex max-h-[min(30rem,70dvh)] w-[min(23rem,calc(100vw-2rem))] flex-col overflow-hidden sm:right-[max(1.75rem,env(safe-area-inset-right))] sm:bottom-[calc(max(1.75rem,env(safe-area-inset-bottom))+4.25rem)] short:!right-[calc(max(0.75rem,env(safe-area-inset-right))+3.75rem)] short:!bottom-[max(0.75rem,env(safe-area-inset-bottom))] short:!max-h-[calc(100dvh-var(--header-h)-1.25rem)] short:!w-[min(23rem,calc(100vw-6rem))]"
           >
             <header className="flex items-center gap-3 border-b border-line px-4 py-3">
               <DhakiDa size={40} />

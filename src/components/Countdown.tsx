@@ -99,11 +99,11 @@ export default function Countdown({
       >
         {UNITS.map((u) => (
           <div key={u.key} className="flex items-stretch">
-            <div className="min-w-[3.6rem] text-center sm:min-w-[4.8rem]">
-              <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem]">
+            <div className="min-w-[3.6rem] px-0.5 text-center sm:min-w-[4.8rem] short:!min-w-[3.9rem]">
+              <span className="block font-display text-[2.058rem] font-normal leading-none tabular-nums text-ink sm:text-[2.618rem] short:!text-[2.058rem] wide-short:!text-[2.3rem]">
                 {left === null ? "––" : String(left[u.key]).padStart(2, "0")}
               </span>
-              <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.12em] text-ink-faint sm:tracking-[0.22em]">
+              <span className="mt-2 block text-[0.6rem] uppercase tracking-[0.05em] text-ink-faint min-[360px]:tracking-[0.12em] sm:tracking-[0.22em] short:mt-1 short:tracking-[0.06em]">
                 {u.label}
               </span>
               <span className="bangla block text-[0.66rem] text-gold/70">{u.bangla}</span>

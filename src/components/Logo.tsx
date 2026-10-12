@@ -39,14 +39,18 @@ export function Wordmark({
   size?: number;
   className?: string;
 }) {
+  /* On the folded cover screen of a foldable (under 300px) the crest
+     stands alone and the name is left to the page and to the crest's
+     alt text; on the narrowest phones the name steps down a size so
+     it sets in two lines rather than running under the buttons. */
   return (
-    <span className={`flex items-center gap-3 ${className}`}>
+    <span className={`flex items-center gap-2.5 min-[360px]:gap-3 ${className}`}>
       <Logo size={size} priority />
-      <span className="leading-none">
-        <span className="block font-display text-[1.05rem] font-semibold tracking-tight text-ink">
+      <span className="leading-none max-[300px]:sr-only">
+        <span className="block font-display text-[0.95rem] font-semibold tracking-tight text-ink min-[360px]:text-[1.05rem]">
           Sharodiya Durgotsab
         </span>
-        <span className="bangla-display block text-[0.78rem] tracking-[0.18em] text-gold">
+        <span className="bangla-display block text-[0.78rem] tracking-[0.1em] text-gold min-[360px]:tracking-[0.18em]">
           আইআইএসসি {SITE.year}
         </span>
       </span>

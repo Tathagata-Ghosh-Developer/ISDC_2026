@@ -203,7 +203,7 @@ export default function Arrival({ oncePerSession = true }: Props) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.5, ease: EASE }}
-                className="mt-7 max-w-[38ch] text-center"
+                className="mt-7 max-w-[38ch] text-center short:mt-2"
               >
                 {act === 0 ? (
                   <>
@@ -228,10 +228,10 @@ export default function Arrival({ oncePerSession = true }: Props) {
           </div>
 
           {!reduce && (
-            <div className="relative z-20 w-full max-w-[44rem] px-5 pb-7">
+            <div className="relative z-20 w-full max-w-[44rem] px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] short:pb-2">
               <Ticker facts={tickerFacts} act={act} />
               <div
-                className="mt-4 h-px w-full"
+                className="mt-4 h-px w-full short:mt-1"
                 style={{ background: "rgba(246,234,210,0.12)" }}
               >
                 <motion.div
@@ -277,7 +277,9 @@ function Stage({ act, reduce }: { act: number; reduce: boolean }) {
   return (
     <svg
       viewBox="0 0 420 300"
-      className="w-full max-w-[30rem]"
+      // Held to half the screen's height, so on a landscape phone the
+      // stage, the line under it and the skip button all fit.
+      className="max-h-[52svh] w-full max-w-[30rem] short:max-h-[46svh]"
       role="img"
       aria-label="A rod-puppet stage with Durga and her four children"
     >
@@ -1168,7 +1170,9 @@ function Caption({ index }: { index: number }) {
 function Ticker({ facts, act }: { facts: typeof FACTS; act: number }) {
   const f = facts[Math.min(act, facts.length - 1)];
   return (
-    <div className="h-[3.2rem] overflow-hidden">
+    // Not on a landscape phone, where the stage and the skip button
+    // need the height more than a rotating fact does.
+    <div className="h-[3.2rem] overflow-hidden max-sm:h-[4rem] short:hidden">
       <AnimatePresence mode="wait">
         <motion.p
           key={f.id}

@@ -22,7 +22,14 @@ import { PoweredBy } from "./Sponsors";
    chrome.
    ================================================================ */
 
-function ThemeToggle() {
+function ThemeToggle({
+  labelled = false,
+  className = "",
+}: {
+  /** With the word beside the icon, for the phone menu. */
+  labelled?: boolean;
+  className?: string;
+}) {
   /**
    * The theme lives in two places that are not React: the visitor's
    * stored choice, and their system preference. Reading them in an
@@ -62,6 +69,21 @@ function ThemeToggle() {
     }
   }
 
+  const label = theme === "dark" ? "Switch to day" : "Switch to night";
+
+  if (labelled) {
+    return (
+      <button
+        onClick={toggle}
+        className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-full border border-line px-4 text-[0.8rem] text-ink-soft transition-colors hover:border-gold hover:text-gold ${className}`}
+      >
+        {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+        {label}
+      </button>
+    );
+  }
+
+  // 36px under a mouse, the full 44 under a thumb.
   return (
     <button
       onClick={toggle}
@@ -98,18 +120,22 @@ export default function SiteHeader() {
 
   return (
     <>
+      {/* The bar turns solid while the menu is open too, or the list
+          scrolling under it shows through the wordmark. */}
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-500 ${
-          solid
+          solid || menuOpen
             ? "border-b border-line bg-paper/88 backdrop-blur-xl"
             : "border-b border-transparent"
         }`}
       >
-        <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10">
+        {/* The side insets keep the mark and the buttons out of the
+            notch on a landscape phone; they are zero everywhere else. */}
+        <div className="mx-auto w-full max-w-wide px-[max(1rem,env(safe-area-inset-left),env(safe-area-inset-right))] min-[340px]:px-[max(1.25rem,env(safe-area-inset-left),env(safe-area-inset-right))] md:px-[max(2.5rem,env(safe-area-inset-left),env(safe-area-inset-right))]">
           {/* ---------- row one ---------- */}
           <div
-            className={`flex items-center justify-between gap-6 transition-[padding] duration-500 ${
-              solid ? "py-2.5" : "py-4 lg:py-5"
+            className={`flex items-center justify-between gap-3 transition-[padding] duration-500 sm:gap-6 ${
+              solid ? "py-2.5" : "py-4 short:py-2.5 lg:py-5 wide-short:!py-3"
             }`}
           >
             {/* Neither this wrapper nor the link may refuse to shrink.
@@ -151,7 +177,10 @@ export default function SiteHeader() {
             </nav>
 
             <div className="flex shrink-0 items-center gap-2">
-              <ThemeToggle />
+              {/* Under 400px the toggle moves into the menu: beside the
+                  mark, Donate and the menu button it left the name about
+                  thirty pixels, and the name ran under it. */}
+              <ThemeToggle className="max-[400px]:hidden" />
               {/* Visible at every width. This was hidden below 640px,
                   which is the width of every Android phone, on a site
                   whose main job is taking donations. */}
@@ -175,12 +204,14 @@ export default function SiteHeader() {
           {/* ---------- row two, the navigation at rest ---------- */}
           <nav
             className={`hidden items-center justify-center overflow-hidden border-t border-line/60 transition-[max-height,opacity,padding] duration-500 lg:flex ${
-              solid ? "max-h-0 py-0 opacity-0" : "max-h-24 py-3 opacity-100"
+              solid ? "max-h-0 py-0 opacity-0" : "max-h-24 py-3 opacity-100 wide-short:!py-2"
             }`}
             aria-label="Main"
             aria-hidden={solid}
           >
-            <ul className="flex items-baseline gap-[2.618rem] xl:gap-[3.4rem]">
+            {/* A phi step narrower until 1150px: at 1024 the full gap
+                pushed the first and last links past the row's edges. */}
+            <ul className="flex items-baseline gap-[1.618rem] min-[1150px]:gap-[2.618rem] xl:gap-[3.4rem]">
               {NAV.map((item) => (
                 <li key={item.href}>
                   <NavLink item={item} pathname={pathname} />
@@ -205,15 +236,21 @@ export default function SiteHeader() {
         {/* "safe" centring: on a short phone the list is taller than the
             screen, and plain centring would push the crest above the top
             where no amount of scrolling reaches it. */}
-        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto px-7 py-24">
+        {/* Scrolls on a landscape phone, where nine rows are taller than
+            the screen; the padding clears the masthead above, the notch
+            and home indicator around it, and the guide's button below,
+            so the last row never ends under it. */}
+        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto overscroll-contain pr-[max(1.75rem,env(safe-area-inset-right))] pl-[max(1.75rem,env(safe-area-inset-left))] pt-[calc(var(--header-h)+1rem+env(safe-area-inset-top))] pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
           {/* Fades with the links: the crest and the mark must not show
               through the header while the drawer is shut. */}
           <div
             className="mb-6 transition-opacity duration-500"
             style={{ opacity: menuOpen ? 1 : 0 }}
           >
-            <Logo size={54} className="mb-4" />
+            <Logo size={54} className="mb-4 short:hidden" />
             <PoweredBy size="lg" />
+            {/* The masthead has no room for it under 400px */}
+            <ThemeToggle labelled className="mt-5 min-[400px]:hidden" />
           </div>
           {NAV.map((item, i) => (
             <Link

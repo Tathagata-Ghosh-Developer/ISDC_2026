@@ -94,7 +94,7 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
         if (e.target === e.currentTarget) setOpen(false);
       }}
       aria-labelledby="merch-popup-title"
-      className="m-auto w-[min(96vw,1060px)] max-w-none overflow-hidden rounded-[28px] border border-white/10 bg-[#0d0b0c] p-0 text-[#f2e5d0] shadow-[0_40px_120px_rgba(0,0,0,0.6)] backdrop:bg-[#05070a]/75 backdrop:backdrop-blur-sm"
+      className="m-auto max-h-[calc(100dvh-1rem)] w-[min(96vw,calc(1060*var(--px)))] max-w-none overflow-hidden rounded-[28px] border border-white/10 bg-[#0d0b0c] p-0 text-[#f2e5d0] shadow-[0_40px_120px_rgba(0,0,0,0.6)] backdrop:bg-[#05070a]/75 backdrop:backdrop-blur-sm short:rounded-[20px]"
     >
       {/* First in the dialog, so it is what the browser focuses on open:
           focusing the Buy link instead scrolled a phone past the title. */}
@@ -107,14 +107,17 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
         <X size={18} />
       </button>
 
-      <div className="flex max-h-[92dvh] flex-col overflow-y-auto p-3 sm:p-4 lg:grid lg:grid-cols-[1.15fr_1fr] lg:gap-2">
-        <MerchStage eager className="aspect-square w-full shrink-0 lg:self-center" />
+      {/* Side by side from a laptop up, and on a landscape phone too,
+          where a square film stacked over the details was taller than
+          the whole screen and the title started below it. */}
+      <div className="flex max-h-[min(92dvh,calc(100dvh-1rem))] flex-col overflow-y-auto overscroll-contain p-3 sm:p-4 short:grid short:grid-cols-[minmax(0,0.8fr)_1fr] short:gap-2 short:p-2 lg:grid lg:grid-cols-[1.15fr_1fr] lg:gap-2">
+        <MerchStage eager className="aspect-square w-full shrink-0 short:sticky short:top-0 short:self-start lg:self-center" />
 
-        <div className="flex flex-col px-3 pb-3 pt-5 sm:px-5 lg:py-6">
-          <p className="text-[0.62rem] font-medium uppercase tracking-[0.26em] text-[#d8b45e] lg:pr-12">
+        <div className="flex flex-col px-3 pb-3 pt-5 short:pt-3 sm:px-5 lg:py-6">
+          <p className="text-[0.62rem] font-medium uppercase tracking-[0.26em] text-[#d8b45e] short:pr-12 lg:pr-12">
             Official merch · ISDC × Meme Theory
           </p>
-          <h2 id="merch-popup-title" className="font-display mt-3 text-[2.3rem] font-normal leading-[1.05] sm:text-[2.6rem]">
+          <h2 id="merch-popup-title" className="font-display mt-3 text-[2.3rem] font-normal leading-[1.05] sm:text-[2.6rem] short:!text-[1.9rem]">
             {MERCH.title}
           </h2>
           <p className="bangla-display mt-1 text-[1.3rem] text-[#e35b43]">{MERCH.lineBangla}</p>

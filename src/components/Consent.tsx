@@ -70,9 +70,15 @@ export default function ConsentNotice() {
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           role="dialog"
           aria-label="How this site counts visits"
-          className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4 sm:px-5 sm:pb-5"
+          /* Above the guide's button while it is asking (the button sat
+             on the Questions link on a phone), clear of the home
+             indicator, and scrollable on a landscape phone, where the
+             longer answer is taller than the screen. */
+          className="fixed inset-x-0 bottom-0 z-[95] pr-[max(1rem,env(safe-area-inset-right))] pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] sm:pr-[max(1.25rem,env(safe-area-inset-right))] sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:pl-[max(1.25rem,env(safe-area-inset-left))]"
         >
-          <div className="surface mx-auto max-w-[44rem] p-5 shadow-[0_-8px_40px_rgba(42,26,16,0.18)] sm:p-6">
+          {/* On a landscape phone the answers stand beside the question
+              rather than under it, which halves the card's height. */}
+          <div className="surface mx-auto max-h-[calc(100dvh-2rem)] max-w-[44rem] overflow-y-auto overscroll-contain p-5 shadow-[0_-8px_40px_rgba(42,26,16,0.18)] sm:p-6 short:grid short:grid-cols-[minmax(0,1fr)_auto] short:items-start short:gap-x-6 short:p-4">
             <p className="bangla-display text-[1.15rem] leading-tight text-sindoor">
               একটু জিজ্ঞেস করি
             </p>
@@ -127,7 +133,7 @@ export default function ConsentNotice() {
               </motion.div>
             )}
 
-            <div className="mt-5 flex flex-wrap items-center gap-3">
+            <div className="mt-5 flex flex-wrap items-center gap-3 short:col-start-2 short:row-span-4 short:row-start-1 short:mt-0 short:flex-col short:items-stretch short:self-center">
               <button onClick={() => answer("granted")} className="btn btn-primary">
                 Yes, that is fine
               </button>
