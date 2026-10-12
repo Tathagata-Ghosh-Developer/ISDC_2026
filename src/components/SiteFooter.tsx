@@ -4,6 +4,7 @@ import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
 import { SITE, LINKS, CONTACTS, NAV, TITLE_SPONSOR } from "@/lib/site";
 import Logo from "./Logo";
 import { PartnerStrip, TitleSponsorStrip } from "./Sponsors";
+import { InstallAppButton } from "./AppInstall";
 
 const SOCIALS = [
   { href: LINKS.instagram, label: "Instagram", Icon: InstagramIcon },
@@ -54,6 +55,8 @@ export default function SiteFooter() {
                 </a>
               ))}
             </div>
+
+            <InstallAppButton variant="footer" />
           </div>
 
           <nav aria-label="Footer">

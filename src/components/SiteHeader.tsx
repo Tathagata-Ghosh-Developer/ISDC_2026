@@ -8,6 +8,7 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { NAV } from "@/lib/site";
 import Logo, { Wordmark } from "./Logo";
 import { PoweredBy } from "./Sponsors";
+import { InstallAppButton } from "./AppInstall";
 
 /* ================================================================
    The masthead.
@@ -99,7 +100,7 @@ export default function SiteHeader() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-500 ${
+        className={`fixed inset-x-0 top-[env(safe-area-inset-top)] z-50 transition-[background-color,border-color] duration-500 ${
           solid
             ? "border-b border-line bg-paper/88 backdrop-blur-xl"
             : "border-b border-transparent"
@@ -205,7 +206,7 @@ export default function SiteHeader() {
         {/* "safe" centring: on a short phone the list is taller than the
             screen, and plain centring would push the crest above the top
             where no amount of scrolling reaches it. */}
-        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto px-7 py-24">
+        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto px-7 pb-24 pt-[calc(6rem+env(safe-area-inset-top))]">
           {/* Fades with the links: the crest and the mark must not show
               through the header while the drawer is shut. */}
           <div
@@ -250,6 +251,15 @@ export default function SiteHeader() {
           >
             Donate to the Puja
           </Link>
+          {/* Only where this browser can install the site, and never
+              inside the installed app. */}
+          <InstallAppButton
+            variant="drawer"
+            style={{
+              opacity: menuOpen ? 1 : 0,
+              transitionDelay: `${menuOpen ? 90 + NAV.length * 40 : 0}ms`,
+            }}
+          />
         </div>
       </div>
     </>

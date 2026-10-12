@@ -19,6 +19,8 @@ import Arrival from "@/components/Arrival";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import ShlokaBand from "@/components/ShlokaBand";
 import MerchPopup from "@/components/merch/MerchPopup";
+import { ServiceWorkerRegistration } from "@/components/AppInstall";
+import { INSTALL_BOOT } from "@/lib/install";
 import { jsonLd, siteGraph } from "@/lib/structured";
 import { getConfig } from "@/lib/config";
 
@@ -96,8 +98,25 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
   icons: {
     icon: [{ url: SITE.icon, type: "image/png" }],
-    apple: [{ url: SITE.icon }],
+    // Opaque, 180 px, on the night paper (scripts/app-icons.py). iOS
+    // paints a transparent icon's corners black and scales it itself.
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
+  /*
+    Added to an iPhone's home screen, the app opens full screen under a
+    translucent status bar, named as it is on Android. The page reaches
+    up under the clock, so the header and the body step down by
+    env(safe-area-inset-top) and a dark band keeps the white clock
+    readable on the paper theme (.status-scrim in globals.css).
+  */
+  appleWebApp: {
+    capable: true,
+    title: "Durgotsab",
+    statusBarStyle: "black-translucent",
+  },
+  // Next writes only the standard mobile-web-app-capable; iOS before
+  // 16.4 still reads Apple's own name for it.
+  other: { "apple-mobile-web-app-capable": "yes" },
   robots: { index: true, follow: true },
 };
 
@@ -135,8 +154,10 @@ export default async function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+        <script dangerouslySetInnerHTML={{ __html: INSTALL_BOOT }} />
       </head>
       <body className="min-h-dvh antialiased">
+        <div className="status-scrim" aria-hidden />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd(siteGraph(config)) }}
@@ -162,6 +183,7 @@ export default async function RootLayout({
         <ConsentNotice />
         <PujoGuide />
         <MerchPopup waitForArrival={config.arrival.enabled} />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );

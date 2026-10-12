@@ -30,7 +30,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-dvh">
-      <header className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl print:hidden">
+      <header className="sticky top-[env(safe-area-inset-top)] z-40 border-b border-line bg-paper/90 backdrop-blur-xl print:hidden">
         <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-3 px-5 py-3 md:px-8">
           <div className="flex items-baseline gap-3">
             <Link href="/" className="font-display text-[1.05rem] text-ink">

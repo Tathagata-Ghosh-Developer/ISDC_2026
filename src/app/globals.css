@@ -184,10 +184,35 @@ table {
   max-width: 100%;
 }
 
-/* Respect the notch and the home indicator. */
+/* Respect the notch and the home indicator. The top inset is zero in a
+   browser tab; it is the status bar's height only in the installed app
+   on an iPhone, where the page runs up under a translucent status bar. */
 body {
+  padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+}
+
+/* iOS draws the installed app's status bar in white over whatever is
+   beneath it, which on the paper theme is nothing you could read. A
+   band of the night paper sits under the clock, there and only there:
+   -webkit-touch-callout is iOS alone, and the inset is zero elsewhere. */
+.status-scrim {
+  display: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    .status-scrim {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: env(safe-area-inset-top);
+      background: #120d10;
+      z-index: 70;
+      pointer-events: none;
+    }
+  }
 }
 
 body {
