@@ -7,6 +7,7 @@ import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import DonateForm from "@/components/DonateForm";
 import CopyField from "@/components/CopyField";
+import UpiButtons from "@/components/UpiButtons";
 import { getConfig } from "@/lib/config";
 import { dbReady } from "@/lib/db";
 
@@ -35,21 +36,6 @@ export default async function DonatePage() {
   const qrExists = fs.existsSync(
     path.join(process.cwd(), "public", config.bank.qrImage.replace(/^\//, "")),
   );
-
-  // A UPI intent: on a phone it opens the payer's own UPI app with the
-  // payee filled in. No amount, because the amount is theirs to choose.
-  // Percent-encoded by hand: URLSearchParams turns spaces into "+",
-  // which some UPI apps print literally in the payee name.
-  const upiLink =
-    "upi://pay?" +
-    Object.entries({
-      pa: config.bank.upiId,
-      pn: config.bank.merchantName,
-      cu: "INR",
-      tn: "IISc Durga Puja 2026",
-    })
-      .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-      .join("&");
 
   return (
     <>
@@ -112,15 +98,17 @@ export default async function DonatePage() {
                     </dl>
                     <p className="mt-2 text-[0.72rem] leading-relaxed text-ink-faint">
                       Your app should show the payee as{" "}
-                      <span className="text-ink">{config.bank.merchantName}</span>.
-                      If it shows anything else, stop and ask a convenor.
+                      <span className="text-ink">{config.bank.merchantName}</span>,
+                      sometimes with &ldquo;Committee&rdquo; after it. If it shows
+                      anything else, stop and ask a convenor.
                     </p>
-                    <a
-                      href={upiLink}
-                      className="btn btn-primary mt-5 w-full lg:hidden"
-                    >
-                      <Smartphone size={15} /> Open my UPI app
-                    </a>
+                    {/* On a phone, open the payer's own UPI app with the
+                        payee filled in. No amount: that is theirs to choose. */}
+                    <UpiButtons
+                      vpa={config.bank.upiId}
+                      name={config.bank.merchantName}
+                      note="IISc Durga Puja 2026"
+                    />
                     <p className="mt-2 text-[0.68rem] leading-relaxed text-ink-faint lg:hidden">
                       Some apps refuse a payment started from a link. If yours
                       does, copy the UPI ID above and paste it into the app.
