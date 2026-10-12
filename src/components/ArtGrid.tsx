@@ -55,7 +55,7 @@ export default function ArtGrid({
             <button
               key={c}
               onClick={() => setFilter(c)}
-              className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[0.72rem] uppercase tracking-[0.16em] transition-colors ${
+              className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[0.72rem] pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:flex-col pointer-coarse:justify-center uppercase tracking-[0.16em] transition-colors ${
                 filter === c ? "text-sindoor" : "text-ink-faint hover:text-ink"
               }`}
             >

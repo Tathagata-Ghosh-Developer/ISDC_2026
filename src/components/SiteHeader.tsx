@@ -87,8 +87,8 @@ function ThemeToggle({
   return (
     <button
       onClick={toggle}
-      aria-label={theme === "dark" ? "Switch to day" : "Switch to night"}
-      className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold"
+      aria-label={label}
+      className={`grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold pointer-coarse:size-[44px] ${className}`}
     >
       {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
     </button>
@@ -145,7 +145,7 @@ export default function SiteHeader() {
                 held its width pushed the menu button off the right-hand
                 edge, and a phone has no other way into the site. */}
             <div className="flex min-w-0 items-center">
-              <Link href="/" className="min-w-0">
+              <Link href="/" className="min-w-0 pointer-coarse:min-w-[44px]">
                 <Wordmark size={solid ? 32 : 40} />
               </Link>
               {/* The title sponsor rides beside the wordmark while the
@@ -186,7 +186,7 @@ export default function SiteHeader() {
                   whose main job is taking donations. */}
               <Link
                 href="/daan"
-                className="btn btn-primary !px-4 !py-2.5 !text-[0.66rem] sm:!px-5"
+                className="btn btn-primary !px-4 !py-2.5 !text-[max(12px,0.66rem)] pointer-coarse:min-h-[44px] sm:!px-5"
               >
                 Donate
               </Link>
@@ -194,7 +194,7 @@ export default function SiteHeader() {
                 onClick={() => (setOpenedAt(pathname), setOpen((v) => !v))}
                 aria-label="Menu"
                 aria-expanded={menuOpen}
-                className={`grid h-11 w-11 place-items-center rounded-full border border-line text-ink ${solid ? "xl:hidden" : "lg:hidden"}`}
+                className={`grid size-[44px] place-items-center rounded-full border border-line text-ink ${solid ? "xl:hidden" : "lg:hidden"}`}
               >
                 {menuOpen ? <X size={16} /> : <Menu size={16} />}
               </button>

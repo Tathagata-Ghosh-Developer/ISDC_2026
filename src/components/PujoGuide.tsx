@@ -140,7 +140,7 @@ export default function PujoGuide() {
                       <button
                         key={q}
                         onClick={() => ask(q)}
-                        className="border border-line px-2.5 py-1.5 text-[0.7rem] text-ink-soft transition-colors hover:border-gold hover:text-gold"
+                        className="border border-line px-2.5 py-1.5 text-[0.7rem] text-ink-soft transition-colors hover:border-gold hover:text-gold pointer-coarse:min-h-[44px] pointer-coarse:px-3"
                       >
                         {q}
                       </button>
@@ -191,14 +191,14 @@ export default function PujoGuide() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={`Ask ${GUIDE.name}…`}
-                className="field !py-2 !text-[0.82rem]"
+                className="field !py-2 !text-[0.82rem] pointer-coarse:!text-[16px]"
                 aria-label="Your question"
               />
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
                 aria-label="Send"
-                className="grid h-9 w-9 shrink-0 place-items-center bg-sindoor text-paper-3 transition-opacity disabled:opacity-40"
+                className="grid size-9 shrink-0 place-items-center bg-sindoor text-paper-3 transition-opacity disabled:opacity-40 pointer-coarse:size-[44px]"
               >
                 <Send size={15} />
               </button>

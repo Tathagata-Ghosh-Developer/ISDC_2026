@@ -43,7 +43,7 @@ export default function EraRail({ eras }: { eras: readonly string[] }) {
             <a
               key={era}
               href={`#${id}`}
-              className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[0.72rem] uppercase tracking-[0.18em] transition-colors ${
+              className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[0.72rem] pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:flex-col pointer-coarse:justify-center uppercase tracking-[0.18em] transition-colors ${
                 on ? "text-sindoor" : "text-ink-faint hover:text-ink"
               }`}
             >

@@ -202,7 +202,7 @@ export default function MagazineReader({
                 onClick={() => go(-1)}
                 disabled={index === 0}
                 aria-label="Previous page"
-                className="absolute left-1 grid h-11 w-11 place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] disabled:opacity-25 sm:left-3"
+                className="absolute left-1 grid size-[44px] place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] disabled:opacity-25 sm:left-3"
               >
                 <ChevronLeft size={26} />
               </button>
@@ -210,7 +210,7 @@ export default function MagazineReader({
                 onClick={() => go(1)}
                 disabled={index + step > last}
                 aria-label="Next page"
-                className="absolute right-1 grid h-11 w-11 place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] disabled:opacity-25 sm:right-3"
+                className="absolute right-1 grid size-[44px] place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] disabled:opacity-25 sm:right-3"
               >
                 <ChevronRight size={26} />
               </button>
@@ -230,7 +230,7 @@ export default function MagazineReader({
             {wide && (
               <button
                 onClick={() => setSpread((v) => !v)}
-                className="btn btn-ghost !py-1.5 !text-[0.62rem]"
+                className="btn btn-ghost !py-1.5 !text-[max(12px,0.62rem)]"
               >
                 {spread ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
                 {spread ? "Single page" : "Two pages"}
@@ -239,7 +239,7 @@ export default function MagazineReader({
             <a
               href={file}
               download
-              className="btn btn-ghost !py-1.5 !text-[0.62rem]"
+              className="btn btn-ghost !py-1.5 !text-[max(12px,0.62rem)]"
             >
               <Download size={12} /> Download
             </a>

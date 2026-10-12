@@ -174,7 +174,7 @@ export default function GaanPage() {
                     href={l.sourceUrl}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="mt-4 text-[0.62rem] leading-relaxed text-ink-faint hover:text-gold"
+                    className="mt-4 text-[0.62rem] leading-relaxed text-ink-faint hover:text-gold pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:items-center"
                   >
                     {l.attribution}
                   </a>

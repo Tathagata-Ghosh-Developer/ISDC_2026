@@ -236,7 +236,7 @@ export default async function JogdanPage() {
                       target="_blank"
                       rel="noreferrer noopener"
                       aria-label={label}
-                      className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink-soft transition-all duration-500 hover:-translate-y-0.5 hover:border-gold hover:text-gold"
+                      className="grid size-10 place-items-center rounded-full border border-line text-ink-soft transition-all duration-500 pointer-coarse:size-[44px] hover:-translate-y-0.5 hover:border-gold hover:text-gold"
                     >
                       <Icon size={16} />
                     </a>

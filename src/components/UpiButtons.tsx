@@ -45,7 +45,7 @@ export default function UpiButtons(payee: UpiPayee) {
           <a
             key={a.label}
             href={a.href}
-            className="btn btn-ghost !px-2 !py-3 !text-[0.66rem]"
+            className="btn btn-ghost !px-2 !py-3 !text-[max(12px,0.66rem)]"
           >
             {a.label}
           </a>

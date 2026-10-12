@@ -42,7 +42,7 @@ export default function CopyField({
       <button
         onClick={copy}
         aria-label={`Copy ${label}`}
-        className="mt-3 grid h-7 w-7 shrink-0 place-items-center border border-line text-ink-faint transition-colors hover:border-gold hover:text-gold"
+        className="mt-3 grid size-7 shrink-0 place-items-center border border-line text-ink-faint transition-colors hover:border-gold hover:text-gold pointer-coarse:mt-0 pointer-coarse:size-[44px]"
       >
         {copied ? <Check size={12} className="text-leaf" /> : <Copy size={12} />}
       </button>

@@ -114,7 +114,7 @@ export default function Carousel({
         onClick={() => nudge(-1)}
         disabled={atStart}
         aria-label="Scroll left"
-        className="absolute -left-2 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-line bg-paper/90 text-ink-soft backdrop-blur transition-opacity hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        className="absolute -left-2 top-1/2 hidden size-10 -translate-y-1/2 pointer-coarse:size-[44px] place-items-center rounded-full border border-line bg-paper/90 text-ink-soft backdrop-blur transition-opacity hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         <ChevronLeft size={18} />
       </button>
@@ -122,7 +122,7 @@ export default function Carousel({
         onClick={() => nudge(1)}
         disabled={atEnd}
         aria-label="Scroll right"
-        className="absolute -right-2 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-line bg-paper/90 text-ink-soft backdrop-blur transition-opacity hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        className="absolute -right-2 top-1/2 hidden size-10 -translate-y-1/2 pointer-coarse:size-[44px] place-items-center rounded-full border border-line bg-paper/90 text-ink-soft backdrop-blur transition-opacity hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         <ChevronRight size={18} />
       </button>
@@ -143,7 +143,7 @@ export default function Carousel({
             <button
               onClick={close}
               aria-label="Close"
-              className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-[#f0dcc0]/30 text-[#f0dcc0] transition-colors hover:border-[#efb44a] hover:text-[#efb44a]"
+              className="absolute right-4 top-4 grid size-10 place-items-center rounded-full border border-[#f0dcc0]/30 pointer-coarse:size-[44px] text-[#f0dcc0] transition-colors hover:border-[#efb44a] hover:text-[#efb44a]"
             >
               <X size={18} />
             </button>
@@ -154,7 +154,7 @@ export default function Carousel({
                 step(-1);
               }}
               aria-label="Previous"
-              className="absolute left-2 grid h-11 w-11 place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] sm:left-6"
+              className="absolute left-2 grid size-[44px] place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] sm:left-6"
             >
               <ChevronLeft size={24} />
             </button>
@@ -188,7 +188,7 @@ export default function Carousel({
                 step(1);
               }}
               aria-label="Next"
-              className="absolute right-2 grid h-11 w-11 place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] sm:right-6"
+              className="absolute right-2 grid size-[44px] place-items-center rounded-full text-[#f0dcc0]/70 transition-colors hover:text-[#efb44a] sm:right-6"
             >
               <ChevronRight size={24} />
             </button>

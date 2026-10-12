@@ -46,7 +46,7 @@ export default function SongShelf({
                 setActive(c.id);
                 play(null);
               }}
-              className={`relative shrink-0 whitespace-nowrap px-3 py-2 text-left transition-colors ${
+              className={`relative min-h-[44px] shrink-0 whitespace-nowrap px-3 py-2 text-left transition-colors ${
                 c.id === active ? "text-sindoor" : "text-ink-faint hover:text-ink"
               }`}
             >

@@ -255,7 +255,7 @@ export default function DonateForm({ suggested, note }: Props) {
                 key={s}
                 type="button"
                 onClick={() => setAmount(String(s))}
-                className={`border px-3 py-2 text-[0.78rem] tabular-nums transition-colors ${
+                className={`border px-3 py-2 text-[0.78rem] tabular-nums transition-colors pointer-coarse:min-h-[44px] pointer-coarse:min-w-[44px] ${
                   amount === String(s)
                     ? "border-sindoor bg-sindoor text-paper-3"
                     : "border-line text-ink-soft hover:border-gold"

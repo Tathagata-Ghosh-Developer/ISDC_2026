@@ -380,7 +380,7 @@ export default function Desk({
           <div className="flex flex-wrap items-center gap-3 border-t border-line px-5 py-4">
             <button
               onClick={() => setMuted((m) => !m)}
-              className="btn btn-ghost !py-2 !text-[0.65rem]"
+              className="btn btn-ghost !py-2 !text-[max(12px,0.65rem)]"
             >
               {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
               {muted ? "Unmute" : "Mute"}
@@ -419,20 +419,20 @@ export default function Desk({
 
             <button
               onClick={() => setLiving((l) => !l)}
-              className={`btn btn-ghost !py-2 !text-[0.65rem] ${living ? "!border-gold !text-gold" : ""}`}
+              className={`btn btn-ghost !py-2 !text-[max(12px,0.65rem)] ${living ? "!border-gold !text-gold" : ""}`}
               title="Each sound rises and falls a little on its own"
             >
               <Sparkles size={13} /> {living ? "Living" : "Static"}
             </button>
 
-            <button onClick={silence} className="btn btn-ghost !py-2 !text-[0.65rem]">
+            <button onClick={silence} className="btn btn-ghost !py-2 !text-[max(12px,0.65rem)]">
               {anyOn ? "Silence" : "Undo"}
             </button>
 
             <button
               onClick={share}
               disabled={!anyOn}
-              className="btn btn-ghost !py-2 !text-[0.65rem] disabled:opacity-40"
+              className="btn btn-ghost !py-2 !text-[max(12px,0.65rem)] disabled:opacity-40"
             >
               {copied ? <Check size={13} /> : <Link2 size={13} />}
               {copied ? "Copied" : "Share this mix"}

@@ -438,7 +438,7 @@ export default function Radio({
             <button
               key={s.id}
               onClick={() => setSkin(s.id)}
-              className={`border px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.16em] transition-colors ${
+              className={`border px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.16em] transition-colors pointer-coarse:min-h-[44px] ${
                 skin === s.id
                   ? "border-[#e8a020] text-[#e8a020]"
                   : "border-[#e6d3ad]/25 text-[#e6d3ad]/50 hover:border-[#e8a020]/60"
@@ -493,7 +493,7 @@ export default function Radio({
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={power}
-            className={`btn !py-2 !text-[0.68rem] ${on ? "btn-ghost" : "btn-primary"}`}
+            className={`btn !py-2 !text-[max(12px,0.68rem)] ${on ? "btn-ghost" : "btn-primary"}`}
           >
             <Power size={13} /> {on ? "Switch off" : "Switch on"}
           </button>
@@ -503,7 +503,7 @@ export default function Radio({
               <button
                 key={s.id}
                 onClick={() => setTune(s.dial)}
-                className={`border px-2.5 py-1.5 text-[0.62rem] uppercase tracking-[0.12em] transition-colors ${
+                className={`border px-2.5 py-1.5 text-[0.62rem] uppercase tracking-[0.12em] transition-colors pointer-coarse:min-h-[44px] ${
                   s.id === station?.id && proximity > 0.5
                     ? "border-sindoor text-sindoor"
                     : "border-line text-ink-faint hover:border-gold hover:text-gold"
@@ -518,7 +518,7 @@ export default function Radio({
             href={station?.listenUrl}
             target="_blank"
             rel="noreferrer noopener"
-            className="btn btn-ghost !py-2 !text-[0.65rem]"
+            className="btn btn-ghost !py-2 !text-[max(12px,0.65rem)]"
           >
             <ExternalLink size={12} /> Akashvani live
           </a>

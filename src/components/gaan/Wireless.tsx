@@ -222,7 +222,7 @@ export default function Wireless({
             <button
               onClick={() => advance(-1)}
               aria-label="Previous"
-              className="grid h-11 w-11 place-items-center border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold"
+              className="grid size-[44px] place-items-center border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold"
             >
               <SkipBack size={16} />
             </button>
@@ -244,14 +244,14 @@ export default function Wireless({
             <button
               onClick={() => advance(1)}
               aria-label="Next"
-              className="grid h-11 w-11 place-items-center border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold"
+              className="grid size-[44px] place-items-center border border-line text-ink-soft transition-colors hover:border-gold hover:text-gold"
             >
               <SkipForward size={16} />
             </button>
 
             <button
               onClick={() => setShuffle((s) => !s)}
-              className={`btn btn-ghost !py-2 !text-[0.62rem] ${shuffle ? "!border-gold !text-gold" : ""}`}
+              className={`btn btn-ghost !py-2 !text-[max(12px,0.62rem)] ${shuffle ? "!border-gold !text-gold" : ""}`}
             >
               <Shuffle size={12} /> {shuffle ? "Shuffling" : "In order"}
             </button>

@@ -142,13 +142,13 @@ export default function ConsentNotice() {
               </button>
               <button
                 onClick={() => setDetail((d) => !d)}
-                className="text-[0.75rem] uppercase tracking-[0.16em] text-ink-faint underline-offset-4 hover:text-gold hover:underline"
+                className="text-[0.75rem] uppercase tracking-[0.16em] text-ink-faint underline-offset-4 hover:text-gold hover:underline pointer-coarse:min-h-[44px]"
               >
                 {detail ? "Less" : "What exactly?"}
               </button>
               <Link
                 href="/thikana#write-to-us"
-                className="ml-auto text-[0.7rem] text-ink-faint hover:text-gold"
+                className="ml-auto text-[0.7rem] text-ink-faint hover:text-gold short:ml-0 short:justify-center pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:items-center pointer-coarse:px-2"
               >
                 Questions
               </Link>

@@ -102,7 +102,7 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
         type="button"
         onClick={() => setOpen(false)}
         aria-label="Close"
-        className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+        className="absolute right-4 top-4 z-10 grid size-10 place-items-center rounded-full bg-black/45 pointer-coarse:size-[44px] text-white backdrop-blur-sm transition-colors hover:bg-black/70"
       >
         <X size={18} />
       </button>

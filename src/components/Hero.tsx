@@ -195,7 +195,7 @@ export default function Hero({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 1 }}
-        className="absolute bottom-6 z-10 text-gold"
+        className="absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-10 grid size-[44px] place-items-center text-gold short:hidden wide-short:hidden"
       >
         <ChevronDown size={22} className="animate-bounce" />
       </motion.a>

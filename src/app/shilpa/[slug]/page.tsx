@@ -302,17 +302,17 @@ export default async function ArtFormPage({
                 {detail.sources.length > 0 && (
                   <Reveal>
                     <details className="mt-[2.618rem] border-t border-line pt-5">
-                      <summary className="cursor-pointer text-[0.65rem] uppercase tracking-[0.2em] text-ink-faint hover:text-gold">
+                      <summary className="cursor-pointer text-[0.65rem] uppercase tracking-[0.2em] text-ink-faint hover:text-gold pointer-coarse:flex pointer-coarse:items-center">
                         Sources for this page
                       </summary>
-                      <ul className="mt-4 space-y-1.5">
+                      <ul className="mt-4 space-y-1.5 pointer-coarse:space-y-0">
                         {detail.sources.map((u) => (
                           <li key={u}>
                             <a
                               href={u}
                               target="_blank"
                               rel="noreferrer noopener"
-                              className="break-all text-[0.72rem] text-ink-faint hover:text-gold"
+                              className="break-all text-[0.72rem] text-ink-faint hover:text-gold pointer-coarse:inline-block pointer-coarse:py-3.5"
                             >
                               {u}
                             </a>

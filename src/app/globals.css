@@ -466,8 +466,12 @@ body::before {
   transition: filter 900ms var(--ease-silk);
 }
 
-.sepia-plate:hover {
-  filter: sepia(0.08) contrast(1.02) saturate(1) brightness(1.02);
+/* Hover only where there is a pointer that hovers: on a phone a tap
+   left the plate stuck in colour until the next tap elsewhere. */
+@media (hover: hover) {
+  .sepia-plate:hover {
+    filter: sepia(0.08) contrast(1.02) saturate(1) brightness(1.02);
+  }
 }
 
 /* Lamp glow behind hero art */
@@ -515,9 +519,11 @@ body::before {
   color: #fdf6e8;
 }
 
-.btn-primary:hover {
-  background: var(--c-alta);
-  box-shadow: 0 0.618rem 1.618rem -0.4rem var(--c-glow);
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: var(--c-alta);
+    box-shadow: 0 0.618rem 1.618rem -0.4rem var(--c-glow);
+  }
 }
 
 .btn-ghost {
@@ -525,9 +531,11 @@ body::before {
   color: var(--c-ink);
 }
 
-.btn-ghost:hover {
-  border-color: var(--c-gold);
-  color: var(--c-gold);
+@media (hover: hover) {
+  .btn-ghost:hover {
+    border-color: var(--c-gold);
+    color: var(--c-gold);
+  }
 }
 
 .field {
@@ -594,6 +602,14 @@ body::before {
   animation-play-state: paused;
 }
 
+/* A thumb cannot hover, so on a touch screen pressing and holding the
+   strip pauses it instead. */
+@media (hover: none) {
+  .marquee-host:active .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -655,6 +671,113 @@ body::before {
   /* a phone should never need two taps to read a heading */
   .font-display {
     letter-spacing: 0;
+  }
+}
+
+/*
+  A floor under the small print, on phones.
+
+  The labels on this site are set in rem off the golden-ratio scale,
+  and at a phone's 15px root the smallest of them came out at eight to
+  eleven pixels: the countdown's units, the eyebrows on cards, the
+  captions. On a phone (and on any touch screen: a landscape phone or
+  a tablet in the hand) every one of those sizes is held at 12px or
+  above. Larger sizes never change, and a laptop or a desktop keeps
+  the scale exactly as drawn. The few sizes set with ! to beat a
+  component class carry their own floor, max(12px, ...), where they
+  are written: an important utility sits in a cascade layer and
+  outranks anything written here.
+*/
+@media (width < 40rem) {
+  .text-\[0\.5rem\] { font-size: max(12px, 0.5rem); }
+  .text-\[0\.52rem\] { font-size: max(12px, 0.52rem); }
+  .text-\[0\.55rem\] { font-size: max(12px, 0.55rem); }
+  .text-\[0\.56rem\] { font-size: max(12px, 0.56rem); }
+  .text-\[0\.58rem\] { font-size: max(12px, 0.58rem); }
+  .text-\[0\.6rem\] { font-size: max(12px, 0.6rem); }
+  .text-\[0\.62rem\] { font-size: max(12px, 0.62rem); }
+  .text-\[0\.64rem\] { font-size: max(12px, 0.64rem); }
+  .text-\[0\.65rem\] { font-size: max(12px, 0.65rem); }
+  .text-\[0\.66rem\] { font-size: max(12px, 0.66rem); }
+  .text-\[0\.68rem\] { font-size: max(12px, 0.68rem); }
+  .text-\[0\.7rem\] { font-size: max(12px, 0.7rem); }
+  .text-\[0\.72rem\] { font-size: max(12px, 0.72rem); }
+  .text-\[0\.74rem\] { font-size: max(12px, 0.74rem); }
+  .text-\[0\.75rem\] { font-size: max(12px, 0.75rem); }
+  .text-\[0\.76rem\] { font-size: max(12px, 0.76rem); }
+  .text-\[0\.78rem\] { font-size: max(12px, 0.78rem); }
+  .text-sm, .eyebrow, .btn { font-size: max(12px, var(--text-sm)); }
+}
+
+/* Wider touch screens: the same floor, leaving alone anything that
+   sets its own size per breakpoint. */
+@media (width >= 40rem) and (pointer: coarse) {
+  .text-\[0\.5rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.5rem); }
+  .text-\[0\.52rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.52rem); }
+  .text-\[0\.55rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.55rem); }
+  .text-\[0\.56rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.56rem); }
+  .text-\[0\.58rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.58rem); }
+  .text-\[0\.6rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.6rem); }
+  .text-\[0\.62rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.62rem); }
+  .text-\[0\.64rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.64rem); }
+  .text-\[0\.65rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.65rem); }
+  .text-\[0\.66rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.66rem); }
+  .text-\[0\.68rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.68rem); }
+  .text-\[0\.7rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.7rem); }
+  .text-\[0\.72rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.72rem); }
+  .text-\[0\.74rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.74rem); }
+  .text-\[0\.75rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.75rem); }
+  .text-\[0\.76rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.76rem); }
+  .text-\[0\.78rem\]:not([class*=":text-["], [class*=":!text-["]) { font-size: max(12px, 0.78rem); }
+  .text-sm, .eyebrow, .btn { font-size: max(12px, var(--text-sm)); }
+}
+
+/*
+  Things to press, under a thumb.
+
+  A finger needs about 44px. Buttons and the small square controls get
+  that on a touch screen and keep their drawn size under a mouse.
+*/
+@media (pointer: coarse) {
+  /* Buttons, disclosure rows, sliders, and the links that stand on
+     their own line with an arrow or an icon (the inline-flex ones;
+     links inside running text are never inline-flex here). */
+  .btn,
+  summary,
+  a.inline-flex,
+  button.inline-flex,
+  input[type="range"] {
+    min-height: 44px;
+  }
+
+  /* An input set under 16px makes iOS zoom the page in on focus and
+     leave it zoomed. */
+  .field {
+    font-size: max(16px, 1rem) !important;
+    min-height: 44px;
+  }
+
+  /*
+    The footer is a list of places to go, and on a phone it is read
+    with a thumb: each link gets a full-height row, and the rows lose
+    the gap they no longer need. The round social buttons go to 44px.
+  */
+  footer li > a:not(.grid),
+  footer li > span > a,
+  footer p > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  footer ul > li {
+    margin-block: 0 !important;
+  }
+
+  footer a[aria-label].rounded-full {
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -780,10 +903,12 @@ body::before {
     drop-shadow(0 6px 14px rgb(72 44 20 / 0.07));
 }
 
-.art-card:hover {
-  transform: translateY(-4px);
-  filter: drop-shadow(0 2px 3px rgb(72 44 20 / 0.09))
-    drop-shadow(0 18px 34px rgb(72 44 20 / 0.14));
+@media (hover: hover) {
+  .art-card:hover {
+    transform: translateY(-4px);
+    filter: drop-shadow(0 2px 3px rgb(72 44 20 / 0.09))
+      drop-shadow(0 18px 34px rgb(72 44 20 / 0.14));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

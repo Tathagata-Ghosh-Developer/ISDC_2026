@@ -67,14 +67,14 @@ export default function ReceiptNotFound() {
                   href={`https://wa.me/91${c.phone}`}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-[0.85rem] text-gold hover:text-sindoor"
+                  className="text-[0.85rem] text-gold hover:text-sindoor pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:items-center"
                 >
                   {c.name} · +91 {c.phone}
                 </a>
               ))}
               <a
                 href={`mailto:${SITE.email}`}
-                className="text-[0.85rem] text-gold hover:text-sindoor"
+                className="text-[0.85rem] text-gold hover:text-sindoor pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:items-center"
               >
                 {SITE.email}
               </a>

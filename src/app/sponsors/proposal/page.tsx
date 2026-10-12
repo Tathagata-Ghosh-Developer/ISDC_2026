@@ -486,7 +486,7 @@ export default function SponsorshipProposalPage() {
               {SPONSOR_CONTACT.emails.map((e, i) => (
                 <span key={e}>
                   {i > 0 && ", "}
-                  <a href={`mailto:${e}`} className="text-gold hover:text-sindoor">
+                  <a href={`mailto:${e}`} className="text-gold hover:text-sindoor pointer-coarse:inline-flex pointer-coarse:min-h-[44px] pointer-coarse:items-center">
                     {e}
                   </a>
                 </span>

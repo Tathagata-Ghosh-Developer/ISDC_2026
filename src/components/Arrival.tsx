@@ -249,9 +249,10 @@ export default function Arrival({ oncePerSession = true }: Props) {
                 >
                   {["প্রস্তুতি", "আগমন", "মর্দিনী", "বোধন"][act]}
                 </span>
+                {/* 44px to press under a thumb; the word stays small */}
                 <button
                   onClick={finish}
-                  className="text-[0.6rem] uppercase tracking-[0.3em] transition-colors"
+                  className="-my-3 -mr-3 min-h-[44px] min-w-[44px] px-3 text-[0.6rem] uppercase tracking-[0.3em] transition-colors"
                   style={{ color: "rgba(246,234,210,0.55)" }}
                 >
                   Skip
