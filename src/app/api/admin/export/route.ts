@@ -1,25 +1,10 @@
 import { requireAdmin } from "@/lib/auth";
+import { toCsv } from "@/lib/csv";
 import { db, dbReady, type Donation } from "@/lib/db";
+import { expensesCsv, normaliseExpense } from "@/lib/expenses";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-/** RFC 4180 quoting, plus a guard against spreadsheet formula injection. */
-function csvCell(value: unknown): string {
-  if (value === null || value === undefined) return "";
-  let s = String(value);
-  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
-  return '"' + s.replace(/"/g, '""') + '"';
-}
-
-function toCsv(rows: Record<string, unknown>[], columns: string[]): string {
-  const head = columns.map(csvCell).join(",");
-  const body = rows
-    .map((r) => columns.map((c) => csvCell(r[c])).join(","))
-    .join("\r\n");
-  // BOM so Excel opens Bengali names and the rupee sign correctly.
-  return "﻿" + head + "\r\n" + body + "\r\n";
-}
 
 const DONATION_COLUMNS = [
   "receipt_no",
@@ -44,18 +29,6 @@ const DONATION_COLUMNS = [
   "id",
 ];
 
-const EXPENSE_COLUMNS = [
-  "spent_on",
-  "head",
-  "description",
-  "vendor",
-  "amount",
-  "published",
-  "bill_url",
-  "id",
-  "created_at",
-];
-
 export async function GET(req: Request) {
   try {
     await requireAdmin();
@@ -74,8 +47,9 @@ export async function GET(req: Request) {
       .order("spent_on", { ascending: false });
     if (error) return new Response(error.message, { status: 500 });
 
+    // The same columns as the console's own download of the ledger.
     return new Response(
-      toCsv(data as unknown as Record<string, unknown>[], EXPENSE_COLUMNS),
+      expensesCsv((data as unknown as Record<string, unknown>[]).map(normaliseExpense)),
       {
         headers: {
           "content-type": "text/csv; charset=utf-8",

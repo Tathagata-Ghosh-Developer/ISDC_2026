@@ -503,3 +503,44 @@ create unique index if not exists faculty_invites_email_unique
 alter table faculty_invites enable row level security;
 revoke all on table faculty_invites from public, anon, authenticated;
 grant all on table faculty_invites to service_role;
+
+-- ------------------------------------------------------------
+-- The expense ledger (2026-10-12).
+-- Also in supabase/migrations/2026-10-12-expense-ledger.sql.
+--
+-- Who paid the vendor, how, the bill itself, and whether a member
+-- who paid from their own pocket has been repaid. All of it stays in
+-- the committee console: the public read names head, amount and
+-- spent_on and nothing else. The bills live in the private proofs
+-- bucket under expenses/<expense id>/.
+-- ------------------------------------------------------------
+alter table expenses add column if not exists invoice_no text;
+alter table expenses add column if not exists paid_from text
+  check (paid_from is null or paid_from in ('committee_account', 'member', 'sponsor', 'other'));
+alter table expenses add column if not exists paid_by_name    text;
+alter table expenses add column if not exists paid_by_contact text;
+alter table expenses add column if not exists payment_mode text
+  check (payment_mode is null or payment_mode in ('upi', 'cash', 'bank', 'card', 'cheque', 'other'));
+alter table expenses add column if not exists payment_ref text;
+alter table expenses add column if not exists reimbursement_status text not null default 'not_needed'
+  check (reimbursement_status in ('not_needed', 'pending', 'reimbursed'));
+alter table expenses add column if not exists reimbursed_amount numeric(12,2)
+  check (reimbursed_amount is null or reimbursed_amount >= 0);
+alter table expenses add column if not exists reimbursed_on   date;
+alter table expenses add column if not exists reimbursed_mode text
+  check (reimbursed_mode is null or reimbursed_mode in ('upi', 'cash', 'bank', 'card', 'cheque', 'other'));
+alter table expenses add column if not exists reimbursed_ref  text;
+alter table expenses add column if not exists reimbursed_by   text;
+alter table expenses add column if not exists approved_by     text;
+alter table expenses add column if not exists receipt_keys    text[] not null default '{}';
+alter table expenses add column if not exists notes           text;
+alter table expenses add column if not exists created_by      text;
+alter table expenses add column if not exists updated_by      text;
+alter table expenses add column if not exists updated_at      timestamptz;
+
+create index if not exists expenses_spent_on_idx on expenses (spent_on desc);
+create index if not exists expenses_reimbursement_idx
+  on expenses (reimbursement_status) where reimbursement_status = 'pending';
+
+alter table expenses enable row level security;
+revoke all on table expenses from public, anon, authenticated;

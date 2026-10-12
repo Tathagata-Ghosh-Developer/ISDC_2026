@@ -82,13 +82,14 @@ Three kinds of account.
 
 **Administrator.** Everything. Approving and rejecting donations, which
 is what issues a receipt number, deleting an entry that has no number
-yet, the expense ledger, the site's own copy, the CSV export of the full
+yet or an expense line, the site's own copy, the CSV export of the full
 donor list, and the visit figures. This should be you and at most one
 other person.
 
 **Committee.** Enters donations collected in person, sees the running
-total, reads the enquiry inbox, reads the contact sheet, and can send a
-donor their receipt. Cannot approve anything, cannot delete anything,
+total, reads the enquiry inbox, reads the contact sheet, can send a
+donor their receipt, and keeps the expense ledger (bills, who paid, who
+is still owed). Cannot approve anything, cannot delete anything,
 cannot change the site, cannot export the donor list. This is the
 account for whoever is sitting at the desk taking cash. Give it to the
 convenors and the treasurers.

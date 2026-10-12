@@ -367,6 +367,161 @@ describe("the invitation tracker", () => {
   });
 });
 
+/* ================================================================
+   The expense ledger: the executive committee's alone
+   ================================================================ */
+
+describe("the expense ledger", () => {
+  const EXPENSES = "/api/admin/expenses";
+  const UPLOAD = "/api/admin/expenses/receipts";
+  const VIEW = "/api/admin/expenses/receipts/view";
+  const LINE = { head: "Pandal", amount: 1200, paid_from: "committee_account" };
+  const PATCHES = [
+    { id: ID, action: "edit", fields: LINE },
+    { id: ID, action: "reimburse", reimbursed_on: "2026-10-01", reimbursed_mode: "upi" },
+    { id: ID, action: "unreimburse" },
+    { id: ID, action: "approve" },
+    { id: ID, action: "unapprove" },
+    { id: ID, action: "remove-receipt", key: `expenses/${ID}/1-x.pdf` },
+  ];
+
+  /** A one-page PDF's worth of bytes, invented. */
+  const pdf = (size = 64) => {
+    const bytes = new Uint8Array(size);
+    bytes.set([...("%PDF-1.4")].map((c) => c.charCodeAt(0)));
+    return new File([bytes], "bill.pdf", { type: "application/pdf" });
+  };
+
+  async function upload(cookie: string | null, file: File, id = ID): Promise<{ status: number; body: string }> {
+    const form = new FormData();
+    form.append("id", id);
+    form.append("file", file);
+    const res = await fetch(`${BASE_ROLES}${UPLOAD}`, {
+      method: "POST",
+      headers: { "x-forwarded-for": freshIp(), ...(cookie ? { cookie } : {}) },
+      body: form,
+    });
+    return { status: res.status, body: await res.text() };
+  }
+
+  it("refuses a stranger every method, 401", async () => {
+    expect(await call(null, "GET", EXPENSES)).toBe(401);
+    expect(await call(null, "POST", EXPENSES, LINE)).toBe(401);
+    expect(await call(null, "PATCH", EXPENSES, PATCHES[0])).toBe(401);
+    expect(await call(null, "DELETE", `${EXPENSES}?id=${ID}`)).toBe(401);
+    expect(await call(null, "DELETE", EXPENSES, { id: ID })).toBe(401);
+    expect((await upload(null, pdf())).status).toBe(401);
+    expect(await call(null, "POST", VIEW, { id: ID })).toBe(401);
+  });
+
+  for (const role of ["fundraiser", "viewer"] as const) {
+    it(`refuses a ${role} every method, 403`, async () => {
+      const cookie = await session(role);
+      expect(await call(cookie, "GET", EXPENSES)).toBe(403);
+      expect(await call(cookie, "POST", EXPENSES, LINE)).toBe(403);
+      for (const body of PATCHES) {
+        expect(await call(cookie, "PATCH", EXPENSES, body), body.action).toBe(403);
+      }
+      expect(await call(cookie, "DELETE", `${EXPENSES}?id=${ID}`)).toBe(403);
+      expect((await upload(cookie, pdf())).status).toBe(403);
+      expect(await call(cookie, "POST", VIEW, { id: ID })).toBe(403);
+      expect(await call(cookie, "POST", VIEW, { id: ID, key: `expenses/${ID}/1-x.pdf` })).toBe(403);
+    });
+
+    it(`sends a ${role} away from the page and gives them no export`, async () => {
+      const cookie = await session(role);
+      expect([307, 308]).toContain(await call(cookie, "GET", "/admin/expenses"));
+      expect(DENIED).toContain(await call(cookie, "GET", "/api/admin/export?what=expenses"));
+    }, 60_000);
+  }
+
+  it("refuses an oversize bill before it is read, even from a fund raiser", async () => {
+    // The role check comes first, so a fund raiser learns nothing about
+    // the size rule either.
+    const cookie = await session("fundraiser");
+    expect((await upload(cookie, pdf(4 * 1024 * 1024 + 1))).status).toBe(403);
+  });
+
+  // Each of these gets past the role check and then waits on the dead
+  // database address, which takes several seconds a request; hence one
+  // request a test and a longer allowance.
+  const SLOW = 60_000;
+
+  it("lets a committee member list the ledger", async () => {
+    expect(DENIED).not.toContain(await call(await session("committee"), "GET", EXPENSES));
+  }, SLOW);
+
+  it("lets a committee member add a line", async () => {
+    expect(DENIED).not.toContain(await call(await session("committee"), "POST", EXPENSES, LINE));
+  }, SLOW);
+
+  for (const body of PATCHES) {
+    it(`lets a committee member ${body.action}`, async () => {
+      expect(DENIED).not.toContain(await call(await session("committee"), "PATCH", EXPENSES, body));
+    }, SLOW);
+  }
+
+  it("lets a committee member attach a bill", async () => {
+    expect(DENIED).not.toContain((await upload(await session("committee"), pdf())).status);
+  }, SLOW);
+
+  it("lets a committee member open a bill", async () => {
+    expect(DENIED).not.toContain(await call(await session("committee"), "POST", VIEW, { id: ID }));
+  }, SLOW);
+
+  it("does not let a committee member delete a line", async () => {
+    const cookie = await session("committee");
+    expect(await call(cookie, "DELETE", `${EXPENSES}?id=${ID}`)).toBe(403);
+    expect(await call(cookie, "DELETE", EXPENSES, { id: ID })).toBe(403);
+  });
+
+  it("lets the administrator list and add", async () => {
+    const cookie = await session("admin");
+    expect(DENIED).not.toContain(await call(cookie, "GET", EXPENSES));
+    expect(DENIED).not.toContain(await call(cookie, "POST", EXPENSES, LINE));
+  }, SLOW);
+
+  it("lets the administrator approve and delete", async () => {
+    const cookie = await session("admin");
+    expect(DENIED).not.toContain(await call(cookie, "PATCH", EXPENSES, PATCHES[3]));
+    expect(DENIED).not.toContain(await call(cookie, "DELETE", `${EXPENSES}?id=${ID}`));
+  }, SLOW);
+
+  it("opens the page for the committee and the administrator", async () => {
+    expect(await call(await session("committee"), "GET", "/admin/expenses")).toBe(200);
+    expect(await call(await session("admin"), "GET", "/admin/expenses")).toBe(200);
+  }, SLOW);
+
+  it("checks what it is given before it touches the database", async () => {
+    const cookie = await session("committee");
+    expect(await call(cookie, "POST", EXPENSES, { head: "", amount: 10 })).toBe(400);
+    expect(await call(cookie, "POST", EXPENSES, { ...LINE, amount: -1 })).toBe(400);
+    expect(await call(cookie, "POST", EXPENSES, { ...LINE, amount: "NaN" })).toBe(400);
+    expect(await call(cookie, "POST", EXPENSES, { ...LINE, spent_on: "2026-02-30" })).toBe(400);
+    expect(await call(cookie, "POST", EXPENSES, { ...LINE, paid_from: "treasury" })).toBe(400);
+    expect(await call(cookie, "POST", EXPENSES, { ...LINE, head: "x".repeat(81) })).toBe(400);
+    expect(await call(cookie, "PATCH", EXPENSES, { id: "not-a-uuid", action: "approve" })).toBe(400);
+    expect(await call(cookie, "PATCH", EXPENSES, { id: ID, action: "delete-everything" })).toBe(400);
+    expect(await call(cookie, "POST", VIEW, { id: "../proofs" })).toBe(400);
+  });
+
+  it("refuses an oversize or disguised bill with a sentence", async () => {
+    const cookie = await session("committee");
+    const big = await upload(cookie, pdf(4 * 1024 * 1024 + 1));
+    expect(big.status).toBe(413);
+    expect(JSON.parse(big.body).error).toMatch(/4 MB/);
+
+    const exe = await upload(cookie, new File(["MZ"], "bill.exe", { type: "application/x-msdownload" }));
+    expect(exe.status).toBe(400);
+
+    const disguised = await upload(cookie, new File(["<html><script>"], "bill.pdf", { type: "application/pdf" }));
+    expect(disguised.status).toBe(400);
+    expect(JSON.parse(disguised.body).error).toMatch(/does not look like/);
+
+    expect((await upload(cookie, pdf(), "not-a-uuid")).status).toBe(400);
+  });
+});
+
 describe("donations by date", () => {
   it("accepts a date range for every desk account, and refuses a stranger", async () => {
     for (const role of ["fundraiser", "committee", "admin"] as const) {

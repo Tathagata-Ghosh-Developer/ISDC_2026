@@ -102,7 +102,8 @@ appear in one list only; if it appears in two, the stronger role wins.
 | Read the enquiry inbox | yes | yes | no |
 | Read the committee contact sheet | yes | yes | no |
 | Edit the site's copy | yes | no | no |
-| The expense ledger | yes | no | no |
+| The expense ledger: add, edit, attach bills, mark repaid | yes | yes | no |
+| Delete an expense line | yes | no | no |
 | Export the donor list | yes | no | no |
 | Visit figures | yes | no | no |
 | The public board | yes | yes | yes |
@@ -205,9 +206,26 @@ deleting the row. Nothing is ever silently removed.
 
 ### Recording what was spent
 
-Under **Expenses**, add each payment with its head, vendor and date. These
-are recorded for the committee's own accounts and the CSV export. They
-are not currently published on the public site.
+Under **Expenses**, the executive committee (committee and administrator
+accounts; never a fund raiser or a viewer) records each payment: head,
+amount, date, vendor, bill number, who paid the vendor (the committee
+account, a member from their own pocket, a sponsor directly, or someone
+else), how and with what UTR, and a photo or PDF of the bill. A line a
+member paid for stays "still owed" until somebody presses **Mark
+reimbursed** with the date, mode and reference; the console records who
+did. The page totals what was spent, what came from the committee
+account, what members paid, what has been repaid and what is still owed,
+lists who is owed what, and downloads or prints the filtered ledger for
+the auditors.
+
+The bills sit in the same private bucket as the donation screenshots,
+under `expenses/<id>/`, and open on a two-minute signed link. Payer
+names, contacts, bills and repayments never leave the console; at most
+the head, amount and date of a published line are read by any other page.
+
+This needs [`supabase/migrations/2026-10-12-expense-ledger.sql`](supabase/migrations/2026-10-12-expense-ledger.sql)
+run once in the Supabase SQL editor. Until then the page shows the older
+columns and says so, and refuses changes.
 
 ### Changing the site
 
