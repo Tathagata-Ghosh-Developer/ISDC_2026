@@ -252,13 +252,12 @@ html {
   }
 }
 
-/* The first section of every inner page: below the masthead (and the
-   status bar, when installed as an app) by a step that follows the
-   height of the screen. A fixed 9rem put the eyebrow against the
-   masthead's rule on a laptop and spent half a landscape phone on
-   empty paper. */
+/* The first section of every inner page: below the masthead by a step
+   that follows the height of the screen. A fixed 9rem put the eyebrow
+   against the masthead's rule on a laptop and spent half a landscape
+   phone on empty paper. */
 .page-top {
-  padding-top: calc(var(--header-h) + env(safe-area-inset-top) + clamp(1.25rem, 5svh, 3.5rem));
+  padding-top: calc(var(--header-h) + clamp(1.25rem, 5svh, 3.5rem));
 }
 
 /* The masthead is solid while the phone menu is open, as it is once
@@ -270,6 +269,13 @@ header[data-menu-open] {
   backdrop-filter: blur(24px);
 }
 
+/* A fieldset's default minimum is its content's widest line, which let
+   the donation form hold its column ten pixels wider than a 360px
+   phone and zoom the whole page out. */
+fieldset {
+  min-width: 0;
+}
+
 /* Nothing is allowed to push the page sideways. */
 img,
 svg,
@@ -278,13 +284,6 @@ canvas,
 iframe,
 table {
   max-width: 100%;
-}
-
-/* A fieldset's default minimum is its content's widest line, which let
-   the donation form hold its column ten pixels wider than a 360px
-   phone and zoom the whole page out. */
-fieldset {
-  min-width: 0;
 }
 
 /* Respect the notch and the home indicator. */

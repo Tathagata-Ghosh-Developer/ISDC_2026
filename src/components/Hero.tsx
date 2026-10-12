@@ -49,7 +49,7 @@ export default function Hero({
        the title down a size so the buttons still clear the fold. */
     <section
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-[calc(var(--header-h)+env(safe-area-inset-top)+1rem)] pb-[4.5rem] short:pt-[calc(var(--header-h)+env(safe-area-inset-top)+0.5rem)] short:pb-4 lg:pt-[calc(var(--header-h)+env(safe-area-inset-top)+1.5rem)] wide-short:pt-[calc(var(--header-h)+env(safe-area-inset-top)+0.5rem)] wide-short:pb-8"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden pt-[calc(var(--header-h)+1rem)] pb-[4.5rem] short:pt-[calc(var(--header-h)+0.5rem)] short:pb-4 lg:pt-[calc(var(--header-h)+1.5rem)] wide-short:pt-[calc(var(--header-h)+0.5rem)] wide-short:pb-8"
     >
       {/* Layer 1, the campus, sunk into the paper */}
       <motion.div
