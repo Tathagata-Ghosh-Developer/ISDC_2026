@@ -120,14 +120,15 @@ export default function SiteHeader() {
 
   return (
     <>
-      {/* The bar turns solid while the menu is open too, or the list
-          scrolling under it shows through the wordmark. */}
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-500 ${
-          solid || menuOpen
+          solid
             ? "border-b border-line bg-paper/88 backdrop-blur-xl"
             : "border-b border-transparent"
         }`}
+        // Solid while the menu is open too (globals.css), or the list
+        // scrolling under it shows through the wordmark.
+        data-menu-open={menuOpen || undefined}
       >
         {/* The side insets keep the mark and the buttons out of the
             notch on a landscape phone; they are zero everywhere else. */}
@@ -236,11 +237,7 @@ export default function SiteHeader() {
         {/* "safe" centring: on a short phone the list is taller than the
             screen, and plain centring would push the crest above the top
             where no amount of scrolling reaches it. */}
-        {/* Scrolls on a landscape phone, where nine rows are taller than
-            the screen; the padding clears the masthead above, the notch
-            and home indicator around it, and the guide's button below,
-            so the last row never ends under it. */}
-        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto overscroll-contain pr-[max(1.75rem,env(safe-area-inset-right))] pl-[max(1.75rem,env(safe-area-inset-left))] pt-[calc(var(--header-h)+1rem+env(safe-area-inset-top))] pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
+        <div className="relative flex h-full flex-col justify-center-safe overflow-y-auto px-7 py-24">
           {/* Fades with the links: the crest and the mark must not show
               through the header while the drawer is shut. */}
           <div
