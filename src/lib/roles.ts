@@ -8,9 +8,10 @@
  *   admin       one person. Everything, including deciding that an
  *               online declaration counts, deleting, exporting, and the
  *               site's copy.
- *   committee   the core committee. Enters donations, edits their
- *               details, sends WhatsApp receipts and ticks them off,
- *               sees the totals and the contact sheet.
+ *   committee   the core (executive) committee. Enters donations, edits
+ *               their details, sends WhatsApp receipts and ticks them
+ *               off, sees the totals and the contact sheet, and keeps
+ *               the expense ledger: bills, who paid, who is still owed.
  *   fundraiser  volunteers at a desk. Enters donations, which land
  *               verified with a receipt number, and sees their own
  *               entries. Nothing else.
@@ -56,7 +57,12 @@ export const CAN = {
   verifyDeclared: "admin",
   deleteDonation: "admin",
   exportLedger: "admin",
-  manageExpenses: "admin",
+  // The expense ledger holds who paid from their own pocket and how to
+  // reach them, so it is the executive committee's alone: no fund
+  // raiser or viewer sees any of it. Removing a line is the
+  // administrator's, as with donations.
+  manageExpenses: "committee",
+  deleteExpense: "admin",
   editContent: "admin",
   seeVisits: "admin",
 } as const satisfies Record<string, Role>;

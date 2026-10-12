@@ -43,17 +43,23 @@ export type Donation = {
   updated_by?: string | null;
 };
 
-export type Expense = {
-  id: string;
+/** The committee's full expense row; see src/lib/expenses.ts. Console only. */
+export type { Expense } from "@/lib/expenses";
+
+/**
+ * All that any page outside the console may know about an expense: the
+ * head, the amount and the date. Who paid, how to reach them, the bills
+ * and the repayments stay in the console. getBoard names these three
+ * columns rather than taking the row, so a column added to the table
+ * later cannot leak through it.
+ */
+export type PublicExpense = {
   head: string;
-  description: string | null;
   amount: number;
   spent_on: string | null;
-  vendor: string | null;
-  bill_url: string | null;
-  published: boolean;
-  created_at: string;
 };
+
+const PUBLIC_EXPENSE_COLUMNS = "head,amount,spent_on";
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -147,7 +153,7 @@ export type BoardData = {
   count: number;
   byCategory: Record<string, { total: number; count: number }>;
   spent: number;
-  expenses: Expense[];
+  expenses: PublicExpense[];
   ready: boolean;
 };
 
@@ -192,7 +198,7 @@ export async function getBoard(): Promise<BoardData> {
     allVerified(),
     db()
       .from("expenses")
-      .select("*")
+      .select(PUBLIC_EXPENSE_COLUMNS)
       .eq("published", true)
       .order("spent_on", { ascending: false }),
   ]);
@@ -230,10 +236,10 @@ export async function getBoard(): Promise<BoardData> {
     byCategory[e.category].count += 1;
   }
 
-  const expenses = ((expensesRes.data ?? []) as Expense[]).map((e) => ({
-    ...e,
-    amount: Number(e.amount),
-  }));
+  // Rebuilt field by field rather than spread, for the same reason.
+  const expenses: PublicExpense[] = (
+    (expensesRes.data ?? []) as unknown as { head: string; amount: number | string; spent_on: string | null }[]
+  ).map((e) => ({ head: e.head, amount: Number(e.amount), spent_on: e.spent_on }));
   const spent = expenses.reduce((s, e) => s + e.amount, 0);
 
   return {

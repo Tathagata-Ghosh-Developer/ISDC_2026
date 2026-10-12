@@ -62,7 +62,8 @@ describe("can", () => {
     verifyDeclared:  [false, false, false, true],
     deleteDonation:  [false, false, false, true],
     exportLedger:    [false, false, false, true],
-    manageExpenses:  [false, false, false, true],
+    manageExpenses:  [false, false, true,  true],
+    deleteExpense:   [false, false, false, true],
     editContent:     [false, false, false, true],
     seeVisits:       [false, false, false, true],
   };
@@ -75,6 +76,15 @@ describe("can", () => {
       });
     });
   }
+
+  it("the expense ledger is the executive committee's alone", () => {
+    expect(can("viewer", "manageExpenses")).toBe(false);
+    expect(can("fundraiser", "manageExpenses")).toBe(false);
+    expect(can("committee", "manageExpenses")).toBe(true);
+    expect(can("admin", "manageExpenses")).toBe(true);
+    expect(can("committee", "deleteExpense")).toBe(false);
+    expect(can("admin", "deleteExpense")).toBe(true);
+  });
 
   it("a fund raiser can enter a donation but cannot send or tick a receipt", () => {
     expect(can("fundraiser", "enterDonation")).toBe(true);

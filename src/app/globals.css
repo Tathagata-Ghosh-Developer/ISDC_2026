@@ -774,3 +774,45 @@ body::before {
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
 }
+
+/* ================================================================
+   The expense ledger, on paper, for the auditors
+
+   Only the ledger: the site's footer, the announcement and the guide
+   are left off the page, and the console's own header hides itself.
+   Ink on white whatever theme the screen was in, for the same reason
+   as the receipt above.
+   ================================================================ */
+
+@media print {
+  body:has(.ledger-print) > *:not(main) {
+    display: none !important;
+  }
+
+  .ledger-print {
+    --color-paper: #ffffff;
+    --color-paper-2: #f2f2f2;
+    --color-paper-3: #ffffff;
+    --color-ink: #111111;
+    --color-ink-soft: #333333;
+    --color-ink-faint: #555555;
+    --color-gold: #6b5214;
+    --color-sindoor: #8f1b16;
+    --color-leaf: #2f5d2a;
+    --color-line: rgba(0, 0, 0, 0.25);
+    color: #111111;
+  }
+
+  .ledger-print table {
+    font-size: 8.5pt;
+  }
+
+  .ledger-print tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .ledger-print thead {
+    display: table-header-group;
+  }
+}
