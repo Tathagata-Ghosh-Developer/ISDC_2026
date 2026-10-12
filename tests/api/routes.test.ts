@@ -10,6 +10,7 @@
  * sentence, not a stack trace, on the day the database is down.
  */
 import { describe, expect, it } from "vitest";
+import { TITLE_SPONSOR } from "@/lib/site";
 import { BASE_DB_DOWN, BASE_NO_DB } from "./servers";
 
 /* ---------------------------------------------------------------- */
@@ -687,15 +688,17 @@ describe("the title sponsor", () => {
     const res = await fetch(`${BASE_NO_DB}/`, { headers: headers() });
     const body = await res.text();
     expect(res.status).toBe(200);
-    expect(body).toContain("Powered by Genotypic Technologies");
+    expect(body).toContain(TITLE_SPONSOR.line);
     expect(body).toContain("/media/sponsors/genotypic.png");
+    // and the negative version, white on sky blue, for the night theme
+    expect(body).toMatch(/media(\/|%2F)sponsors(\/|%2F)genotypic-negative\.png/);
   });
 
   it("is in the title of the home page", async () => {
     const res = await fetch(`${BASE_NO_DB}/`, { headers: headers() });
     const body = await res.text();
     const title = /<title>([^<]*)<\/title>/.exec(body)?.[1] ?? "";
-    expect(title).toContain("Powered by Genotypic Technologies");
+    expect(title).toContain(TITLE_SPONSOR.line);
   });
 
   it("marks the title level as taken on the sponsors page", async () => {
@@ -709,6 +712,6 @@ describe("the title sponsor", () => {
     const res = await fetch(`${BASE_NO_DB}/sponsors/proposal`, { headers: headers() });
     const body = await res.text();
     expect(res.status).toBe(200);
-    expect(body).toContain("Genotypic Technologies");
+    expect(body).toContain(`taken for ${TITLE_SPONSOR.year} by ${TITLE_SPONSOR.name}`);
   });
 });

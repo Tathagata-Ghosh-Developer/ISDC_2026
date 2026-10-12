@@ -87,7 +87,7 @@ export function pujaGraph(config: Config, faq: Faq[]) {
         inLanguage: ["bn", "en"],
         location: place(config),
         organizer: { "@id": ORG_ID },
-        sponsor: { "@type": "Organization", name: TITLE_SPONSOR.name, url: "https://genotypic.co.in/" },
+        sponsor: { "@type": "Organization", name: TITLE_SPONSOR.name, url: TITLE_SPONSOR.logos[0].url },
         offers: {
           "@type": "Offer",
           price: 0,

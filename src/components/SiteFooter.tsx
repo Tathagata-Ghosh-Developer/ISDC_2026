@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MapPin, Mail } from "lucide-react";
 import { InstagramIcon, YoutubeIcon, WhatsappIcon } from "./BrandIcons";
-import { SITE, LINKS, CONTACTS, NAV } from "@/lib/site";
+import { SITE, LINKS, CONTACTS, NAV, TITLE_SPONSOR } from "@/lib/site";
 import Logo from "./Logo";
 import { PartnerStrip, TitleSponsorStrip } from "./Sponsors";
 
@@ -161,6 +161,14 @@ export default function SiteFooter() {
             </Link>
           </p>
         </div>
+
+        {/* The title sponsor's trademark notice. Their guidelines ask for
+            it in the footer of anything that carries their name or
+            mark, and the mark is on every page. Ink-soft, not ink-faint:
+            faint falls under 4.5:1 on this band by day. */}
+        <p className="mt-5 max-w-[120ch] text-[0.72rem] leading-relaxed text-ink-soft">
+          {TITLE_SPONSOR.notice}
+        </p>
       </div>
     </footer>
   );

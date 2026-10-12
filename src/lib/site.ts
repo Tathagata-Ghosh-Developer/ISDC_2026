@@ -402,23 +402,50 @@ export const SPONSOR_TIERS = [
  * edit to a JSON field must not be able to take it off the site.
  * Changing it is a commit, with a name against it.
  *
- * The four marks are cut to one size, 1200 by 480 with the artwork
- * centred in a 1040 by 360 box, so they render at the same scale in
- * tiles of the same 5:2 shape. The order is the committee's; keep it.
- * An empty url means there is no link: the tile renders plain, and an
- * address is never guessed. The site is "Powered by" the first of them.
+ * The display name is the two constants just below and nowhere else:
+ * every page, the metadata, the JSON-LD, llms.txt and the FAQ read it
+ * from here, so a change of name is a change of one line.
+ *
+ * The four marks are cut to one size, 1200 by 480, so they render at
+ * the same scale in tiles of the same 5:2 shape. The order is the
+ * committee's; keep it. An empty url means there is no link: the tile
+ * renders plain, and an address is never guessed. The site is "Powered
+ * by" the first of them.
+ *
+ * The first mark follows the sponsor's brand guidelines (December
+ * 2025), which are stricter than the others: never under 150 px wide,
+ * clear space on every side at least the height of the "G", the
+ * full-colour version only on a light ground, and on a dark one the
+ * negative version, white on their sky blue #1F9CD6. So genotypic.png
+ * carries its clear space in the file (the artwork is 750 wide,
+ * centred), and genotypic-negative.png is the negative tile, 500 by
+ * 200 in the same proportions. Both are cut from the master artwork
+ * the sponsor sent; never redraw or recolour them.
  */
+const TITLE_SPONSOR_NAME = "Genotypic Group";
+const TITLE_SPONSOR_NAME_BANGLA = "জেনোটাইপিক গ্রুপ";
+const TITLE_SPONSOR_YEAR = 2026;
+
 export const TITLE_SPONSOR = {
-  name: "Genotypic Technologies",
-  line: "Powered by Genotypic Technologies",
-  lineBangla: "নিবেদনে জেনোটাইপিক টেকনোলজিস",
-  year: 2026,
+  name: TITLE_SPONSOR_NAME,
+  nameBangla: TITLE_SPONSOR_NAME_BANGLA,
+  line: `Powered by ${TITLE_SPONSOR_NAME}`,
+  lineBangla: `নিবেদনে ${TITLE_SPONSOR_NAME_BANGLA}`,
+  year: TITLE_SPONSOR_YEAR,
   tierId: "title",
+  /**
+   * The trademark notice the guidelines ask for in the footer of
+   * anything that carries the name or the logo. Their wording, kept
+   * verbatim (the spelling "GTExprees" is theirs); the company named
+   * in it is the registered one, not the display name above.
+   */
+  notice: `© ${TITLE_SPONSOR_YEAR} An ISO 9001:2015 certified company Genotypic Technology Pvt Ltd. All rights reserved. Genotypic Technology Pvt Ltd, Commander, GTGPU, GTnRich, GTExprees the sky blue, red, green, yellow color and the streaming bases design are trademarks of Genotypic Technology Pvt Ltd. and/or its affiliate(s) in India and/or other countries. All other names, logos, and other trademarks are the property of their respective owners.`,
   logos: [
     {
       id: "genotypic",
-      name: "Genotypic Technologies",
+      name: TITLE_SPONSOR_NAME,
       logo: "/media/sponsors/genotypic.png",
+      logoOnDark: "/media/sponsors/genotypic-negative.png",
       url: "https://genotypic.co.in/",
     },
     {

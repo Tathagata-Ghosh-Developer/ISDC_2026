@@ -208,10 +208,12 @@ export default async function SponsorsPage() {
                     {taken && (
                       <div className="mt-4 flex flex-wrap items-center gap-4">
                         <LogoTile
-                          {...TITLE_SPONSOR.logos[0]}
-                          compact
-                          sizes="12rem"
-                          className="w-full max-w-[12rem]"
+                          name={TITLE_SPONSOR.logos[0].name}
+                          logo={TITLE_SPONSOR.logos[0].logo}
+                          url={TITLE_SPONSOR.logos[0].url}
+                          lead
+                          sizes="16rem"
+                          className="w-full max-w-[16rem]"
                         />
                         <span className="text-[0.8rem] text-ink-soft">
                           {TITLE_SPONSOR.name}

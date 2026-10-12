@@ -134,7 +134,7 @@ export default function Hero({
           transition={{ duration: 1.1, delay: 0.5, ease: EASE }}
           className="mt-4"
         >
-          <PoweredBy size="md" />
+          <PoweredBy className="justify-center" />
         </motion.div>
 
         <motion.p
