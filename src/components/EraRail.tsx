@@ -33,9 +33,9 @@ export default function EraRail({ eras }: { eras: readonly string[] }) {
   return (
     <nav
       aria-label="Eras"
-      className="sticky top-[3.6rem] z-30 border-y border-line bg-paper/90 backdrop-blur-xl"
+      className="sticky top-[var(--header-solid-h)] z-30 border-y border-line bg-paper/90 backdrop-blur-xl"
     >
-      <div className="mx-auto flex max-w-[1180px] gap-1 overflow-x-auto px-4 py-2.5 md:px-8">
+      <div className="mx-auto flex max-w-page gap-1 overflow-x-auto px-4 py-2.5 md:px-8">
         {eras.map((era) => {
           const id = era.toLowerCase();
           const on = active === id || active === era;

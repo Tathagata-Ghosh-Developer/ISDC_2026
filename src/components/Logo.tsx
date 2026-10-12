@@ -25,7 +25,8 @@ export default function Logo({
       height={size}
       priority={priority}
       className={`h-auto w-auto object-contain ${className}`}
-      style={{ width: size, height: "auto" }}
+      // design pixels: the size given, growing with the type on a big screen
+      style={{ width: `calc(${size} * var(--px, 1px))`, height: "auto" }}
     />
   );
 }

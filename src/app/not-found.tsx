@@ -7,7 +7,7 @@ export const metadata = { title: "Not found" };
 
 export default function NotFound() {
   return (
-    <Section className="pt-[7.5rem] sm:pt-[9rem]">
+    <Section className="page-top">
       <Container>
         <div className="mx-auto max-w-[44rem] text-center">
           <p className="eyebrow">৪০৪ Not found</p>

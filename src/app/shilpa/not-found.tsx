@@ -12,7 +12,7 @@ import { ART_FORMS } from "@/lib/content/artforms";
  */
 export default function ShilpaNotFound() {
   return (
-    <Section className="pt-[7.5rem] sm:pt-[9rem]">
+    <Section className="page-top">
       <Container>
         <div className="mx-auto max-w-[70ch]">
           <p className="bangla-display text-[2.618rem] leading-tight text-sindoor">

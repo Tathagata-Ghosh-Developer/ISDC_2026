@@ -45,8 +45,8 @@ export default async function DonatePage() {
           receipt and no entry on the board. Say so before they scan
           anything, not after. */}
       {!dbReady && (
-        <div className="border-b-2 border-sindoor bg-sindoor/10 px-5 py-4">
-          <div className="mx-auto max-w-[1440px]">
+        <div className="page-top border-b-2 border-sindoor bg-sindoor/10 px-5 pb-4">
+          <div className="mx-auto max-w-wide">
             <p className="font-display text-[1.05rem] text-sindoor">
               Please do not send money yet.
             </p>
@@ -60,7 +60,9 @@ export default async function DonatePage() {
           </div>
         </div>
       )}
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      {/* Below the warning, when there is one, the warning has already
+          cleared the masthead. */}
+      <Section className={dbReady ? "page-top" : "!pt-[2.618rem]"}>
         <Container>
           <SectionHeading
             as="h1"

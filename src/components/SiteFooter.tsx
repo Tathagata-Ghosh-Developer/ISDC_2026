@@ -26,7 +26,7 @@ export default function SiteFooter() {
         aria-hidden
       />
 
-      <div className="mx-auto max-w-[1180px] px-5 py-[4.236rem] md:px-8">
+      <div className="mx-auto max-w-page px-4 py-[4.236rem] min-[340px]:px-5 md:px-8">
         <div className="grid gap-[2.618rem] md:grid-cols-[1.618fr_1fr_1fr]">
           <div>
             <Logo size={72} className="mb-6" />

@@ -132,7 +132,7 @@ export default function SponsorshipProposalPage() {
 
   return (
     <>
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
           <Link
             href="/sponsors"

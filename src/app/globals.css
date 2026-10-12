@@ -54,6 +54,12 @@
   --color-line: var(--c-line);
   --color-glow: var(--c-glow);
 
+  /* --- Measures (max-w-page, max-w-wide) ---
+     Written in design pixels, so they hold at 1180 and 1440 on every
+     laptop and grow with the type on a big screen; see --px below. */
+  --container-page: calc(1180 * var(--px));
+  --container-wide: calc(1440 * var(--px));
+
   /* --- Motion --- */
   --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-dhak: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -172,6 +178,72 @@ html {
     keeps a 360px phone and a 27 inch monitor both looking deliberate.
   */
   font-size: clamp(15px, 13.6px + 0.35vw, 19px);
+}
+
+/*
+  Past a 1920 screen the root steps up again, so a 1440p monitor or a
+  television is not shown a miniature of the laptop page. It follows
+  the shorter side, not the width: a 3440 x 1440 ultrawide is a 1440p
+  monitor with more room at the sides, and is set like one, with the
+  measure centred rather than stretched. 22px at 2560 x 1440, 28px at
+  3840 x 2160, and exactly 19px where this takes over from the rule
+  above.
+*/
+@media (min-width: 1921px) {
+  html {
+    font-size: min(28px, max(19px, 10px + min(0.469vw, 0.833vh)));
+  }
+}
+
+:root {
+  /* One design pixel: 1px up to the 19px root, growing with the root
+     on a big screen. For the few widths set in pixels (the measures,
+     the crest, the dialogs) so they scale with the type around them. */
+  --px: calc(max(1rem, 19px) / 19);
+
+  /* The fixed masthead's height at rest, measured, for anything that
+     has to start below it: its padding plus the 44px menu button on a
+     phone; two rows from a laptop up. */
+  --header-h: calc(2rem + 50px);
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+  :root {
+    --header-h: calc(1.25rem + 50px);
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --header-h: calc(7.15rem + 45 * var(--px));
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 940px) {
+  :root {
+    --header-h: calc(5.6rem + 46 * var(--px));
+  }
+}
+
+/* Once scrolled, it is one row: the 44px menu button sets its height
+   until 1280px, where the button goes and the row is the wordmark's. */
+:root {
+  --header-solid-h: calc(1.25rem + 45px);
+}
+
+@media (min-width: 80rem) {
+  :root {
+    --header-solid-h: 3.6rem;
+  }
+}
+
+/* The first section of every inner page: below the masthead (and the
+   status bar, when installed as an app) by a step that follows the
+   height of the screen. A fixed 9rem put the eyebrow against the
+   masthead's rule on a laptop and spent half a landscape phone on
+   empty paper. */
+.page-top {
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top) + clamp(1.25rem, 5svh, 3.5rem));
 }
 
 /* Nothing is allowed to push the page sideways. */

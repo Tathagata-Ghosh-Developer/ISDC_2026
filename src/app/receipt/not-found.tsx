@@ -13,7 +13,7 @@ import { SITE, CONTACTS } from "@/lib/site";
  */
 export default function ReceiptNotFound() {
   return (
-    <Section className="pt-[7.5rem] sm:pt-[9rem]">
+    <Section className="page-top">
       <Container>
         <div className="mx-auto max-w-[60ch] text-center">
           <p className="bangla-display text-[2.618rem] leading-tight text-sindoor">

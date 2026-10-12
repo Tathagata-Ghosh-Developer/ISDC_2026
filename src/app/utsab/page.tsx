@@ -20,7 +20,7 @@ export default async function UtsabPage() {
 
   return (
     <>
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
           <SectionHeading
             as="h1"

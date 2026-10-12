@@ -25,7 +25,7 @@ export default async function BoardPage() {
   // Nobody signed in: no names, no amounts, no database read at all.
   if (!session) {
     return (
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
           <SectionHeading
             as="h1"
@@ -55,7 +55,7 @@ export default async function BoardPage() {
   return (
     <>
       <LiveRefresh seconds={30} />
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
           <SectionHeading
             as="h1"

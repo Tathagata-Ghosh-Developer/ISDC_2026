@@ -70,7 +70,7 @@ export default async function ReceiptPage({
   const rejected = donation.status === "rejected";
 
   return (
-    <div className="min-h-dvh px-4 pb-16 pt-[6rem] sm:pt-[7rem]">
+    <div className="page-top min-h-dvh px-4 pb-16">
       <div className="mx-auto w-full max-w-[46rem]">
         {!issued && (
           <div className="no-print surface mb-6 p-5">

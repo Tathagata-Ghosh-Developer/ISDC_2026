@@ -11,9 +11,14 @@ export function Container({
   className?: string;
   wide?: boolean;
 }) {
+  /* The measure is 1180 (or 1440) design pixels: exactly that on every
+     laptop, and growing with the type on a 1440p screen or a
+     television, where it stays centred rather than stretching. The
+     gutter is a little narrower on the folded cover of a foldable,
+     where every pixel of a 280px screen counts. */
   return (
     <div
-      className={`mx-auto w-full px-5 md:px-8 ${wide ? "max-w-[1440px]" : "max-w-[1180px]"} ${className}`}
+      className={`mx-auto w-full px-4 min-[340px]:px-5 md:px-8 ${wide ? "max-w-wide" : "max-w-page"} ${className}`}
     >
       {children}
     </div>

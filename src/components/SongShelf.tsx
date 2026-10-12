@@ -37,7 +37,7 @@ export default function SongShelf({
   return (
     <div>
       {/* ---- the shelves ---- */}
-      <div className="sticky top-[3.6rem] z-30 -mx-5 mb-8 border-y border-line bg-paper/90 px-5 py-2.5 backdrop-blur-xl md:-mx-8 md:px-8">
+      <div className="sticky top-[var(--header-solid-h)] z-30 -mx-4 mb-8 border-y border-line bg-paper/90 px-4 py-2.5 backdrop-blur-xl min-[340px]:-mx-5 min-[340px]:px-5 md:-mx-8 md:px-8">
         <div className="flex gap-1 overflow-x-auto">
           {collections.map((c) => (
             <button

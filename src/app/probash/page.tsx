@@ -19,7 +19,7 @@ export default async function ProbashPage() {
 
   return (
     <>
-      <Section className="pt-[7.5rem] sm:pt-[9rem]">
+      <Section className="page-top">
         <Container>
           <div className="grid gap-[2.618rem] lg:grid-cols-[1.618fr_1fr] lg:items-end">
             <Reveal>
