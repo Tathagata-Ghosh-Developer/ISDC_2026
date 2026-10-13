@@ -10,6 +10,10 @@ import type { NextConfig } from "next";
  * inlined critical CSS, and on scripts by the theme boot snippet in
  * the layout, which runs before paint to stop a flash of the wrong
  * colour scheme.
+ *
+ * The installed app adds two sources, both this origin: the service
+ * worker (public/sw.js, under worker-src) and the web app manifest
+ * (manifest-src, which would otherwise fall back to default-src).
  */
 const csp = [
   "default-src 'self'",
@@ -23,6 +27,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.youtube.com https://s.ytimg.com",
   "worker-src 'self' blob:",
+  "manifest-src 'self'",
   "connect-src 'self' blob: data:",
   "frame-src 'self' blob: https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com",
   "upgrade-insecure-requests",
@@ -139,6 +144,19 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
           },
+        ],
+      },
+      {
+        /*
+          The service worker. Browsers already skip their HTTP cache for
+          it after a day, but no-cache makes every check reach the
+          server, so a fixed worker is picked up on the next visit
+          rather than the next day. It is a few kilobytes.
+        */
+        source: "/sw.js",
+        headers: [
+          { key: "Cache-Control", value: "no-cache" },
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
         ],
       },
       {
