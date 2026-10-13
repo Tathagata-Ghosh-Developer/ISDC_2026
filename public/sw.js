@@ -43,7 +43,7 @@
    this file on every visit, so that reaches everyone within a day.
    ================================================================ */
 
-const VERSION = "2026-10-13.1";
+const VERSION = "2026-10-13.2";
 const PAGES = `isdc-pages-${VERSION}`;
 const STATIC = `isdc-static-${VERSION}`;
 const IMAGES = `isdc-images-${VERSION}`;
@@ -198,10 +198,19 @@ async function page(event) {
   }
 }
 
-/** The donation page: the network, or the offline page. Never a saved copy. */
+/**
+ * The donation page: the network, or the offline page. Never a saved
+ * copy, neither this worker's nor the browser's own HTTP cache, which
+ * would otherwise answer from a copy kept a minute earlier when the
+ * network is gone. A redirect is handed back for the browser to follow.
+ */
 async function networkOnlyPage(event) {
   try {
-    return await fetch(event.request);
+    return await fetch(event.request.url, {
+      cache: "no-store",
+      credentials: "same-origin",
+      redirect: "manual",
+    });
   } catch {
     return offlinePage();
   }

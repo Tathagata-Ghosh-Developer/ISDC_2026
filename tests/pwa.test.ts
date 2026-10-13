@@ -239,7 +239,7 @@ function sub(path: string, init: Partial<Omit<Req, "headers">> & { headers?: Rec
 function loadWorker() {
   const listeners: Record<string, Listener> = {};
   const caches = new MockCacheStorage();
-  const network = vi.fn<(r: Req | Request | string) => Promise<Response>>();
+  const network = vi.fn<(r: Req | Request | string, init?: RequestInit) => Promise<Response>>();
   const sandbox = {
     self: {
       addEventListener: (type: string, fn: Listener) => (listeners[type] = fn),
@@ -248,7 +248,7 @@ function loadWorker() {
       clients: { claim: vi.fn(async () => {}) },
     },
     caches,
-    fetch: (r: Req | Request | string) => network(r),
+    fetch: (r: Req | Request | string, init?: RequestInit) => network(r, init),
     Request,
     Response,
     Headers,
@@ -428,6 +428,11 @@ describe("the service worker at work", () => {
     w.network.mockResolvedValueOnce(html("LIVE BANK DETAILS"));
     const online = w.fire(nav("/daan"));
     expect(await (await online.responded!).text()).toContain("LIVE BANK DETAILS");
+    // straight to the server, past the browser's own HTTP cache too
+    expect(w.network).toHaveBeenLastCalledWith(
+      expect.stringContaining("/daan"),
+      expect.objectContaining({ cache: "no-store" }),
+    );
     await online.settled();
     expect(w.caches.all().some((u) => u.includes("/daan"))).toBe(false);
 
