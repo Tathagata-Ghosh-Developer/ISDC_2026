@@ -469,15 +469,58 @@ export const TITLE_SPONSOR = {
   ],
 } as const;
 
+/** One mark on the partner strip; see PARTNERS. */
+export type Partner = {
+  id: string;
+  role: string;
+  bangla: string;
+  name: string;
+  logo: string;
+  width: number;
+  height: number;
+  /** Checked by hand; empty when nothing official could be found. */
+  url: string;
+  /** Rupees; 0 means in kind. */
+  contribution: number;
+  note: string;
+  /** The ground the mark was drawn for: the tile keeps it on either theme. */
+  tile: "light" | "dark";
+  /** The sponsorship level it was bought at, when it was one of SPONSOR_TIERS. */
+  tier?: string;
+  /** A second organisation in the same partnership and the same payment. */
+  with?: Omit<Partner, "url" | "contribution" | "note" | "with" | "tier"> & { url: string };
+};
+
 /**
  * The partners after the title sponsor, in the order of what they put
  * in, and given room on the page in that order. `contribution` is in
- * rupees; 0 means in kind. An empty url means no link: nothing about
- * IITxIIM Jewels could be verified online on 12 October 2026, so the
- * tile is the name and the mark and nothing is guessed. Both marks are
- * drawn on black, so their tiles are black on either theme.
+ * rupees; 0 means in kind. An empty url means no link: nothing official
+ * could be found online for IITxIIM Jewels (12 October 2026) or for
+ * Britton Innotech, Swadisht Bhojan Adda and Prakriti Foundation
+ * (14 October 2026), so those tiles are the name and the mark and no
+ * address is guessed. Each tile keeps the ground its mark was drawn
+ * on, light or dark, on either theme.
+ *
+ * Swadisht Bhojan Adda and its NGO, Prakriti Foundation, came in
+ * together with one payment, so they share one tile and one amount.
+ * Britton Innotech's ₹15,000 arrived as ₹14,700 by NEFT on 14 October
+ * 2026: the 2% TDS a company deducts on a sponsorship.
  */
-export const PARTNERS = [
+export const PARTNERS: readonly Partner[] = [
+  {
+    id: "bronze-britton",
+    role: "Bronze Sponsor",
+    bangla: "ব্রোঞ্জ পৃষ্ঠপোষক",
+    name: "Britton Innotech",
+    logo: "/media/sponsors/britton-innotech.png",
+    width: 1200,
+    height: 480,
+    url: "",
+    contribution: 15000,
+    note: "",
+    tile: "light",
+    tier: "bronze",
+  },
   {
     id: "jewellery",
     role: "Jewellery Partner",
@@ -489,6 +532,31 @@ export const PARTNERS = [
     url: "",
     contribution: 15000,
     note: "",
+    tile: "dark",
+  },
+  {
+    id: "food",
+    role: "Food Partner",
+    bangla: "খাদ্য সহযোগী",
+    name: "Swadisht Bhojan Adda",
+    logo: "/media/sponsors/swadisht-bhojan-adda.webp",
+    width: 720,
+    height: 720,
+    url: "",
+    contribution: 15000,
+    note: "Their roll and sweets stall stands by the pandal through the five days, with Bengali rolls, cutlets and sweets, and they come with their NGO, Prakriti Foundation.",
+    tile: "light",
+    with: {
+      id: "ngo",
+      role: "NGO Partner",
+      bangla: "সমাজসেবী সহযোগী",
+      name: "Prakriti Foundation",
+      logo: "/media/sponsors/prakriti-foundation.jpg",
+      width: 629,
+      height: 720,
+      url: "",
+      tile: "dark",
+    },
   },
   {
     id: "merchandise",
@@ -501,8 +569,21 @@ export const PARTNERS = [
     url: "https://www.memetheory.in/",
     contribution: 0,
     note: "A bootstrapped start-up by IISc students. They make, sell and deliver the official T-shirt; no money passes between them and the committee.",
+    tile: "dark",
   },
-] as const;
+];
+
+/**
+ * The food partner's menu card, as they printed it for the stall by the
+ * pandal. Prices are theirs; the card is shown as supplied.
+ */
+export const FOOD_STALL = {
+  partner: "food",
+  menu: "/media/sponsors/swadisht-bhojan-adda-menu.webp",
+  menuWidth: 1066,
+  menuHeight: 1599,
+  where: "The roll and sweets stall beside the pandal, on the TMC Ground",
+} as const;
 
 /**
  * The official merchandise. Sold, paid for and delivered entirely by

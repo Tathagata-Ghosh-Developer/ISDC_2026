@@ -96,6 +96,11 @@ export default async function SponsorsPage() {
                       See the T-shirt
                     </Link>
                   )}
+                  {p.id === "food" && (
+                    <Link href="/thikana#food" className="text-gold underline underline-offset-2 hover:text-sindoor">
+                      See the menu
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -206,6 +211,13 @@ export default async function SponsorsPage() {
                     </p>
 
                     {taken && <PoweredBy className="mt-4" />}
+
+                    {!taken && PARTNERS.some((p) => p.tier === tier.id) && (
+                      <p className="mt-4 text-[0.78rem] text-ink-soft">
+                        <span className="text-[0.62rem] uppercase tracking-[0.22em] text-gold">With us at this level</span>{" "}
+                        {PARTNERS.filter((p) => p.tier === tier.id).map((p) => p.name).join(", ")}
+                      </p>
+                    )}
 
                     <ul className="mt-5 space-y-2.5">
                       {tier.benefits.map((b) => (

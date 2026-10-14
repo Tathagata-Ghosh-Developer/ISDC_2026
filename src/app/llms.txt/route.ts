@@ -1,7 +1,7 @@
 import { getConfig } from "@/lib/config";
 import { pujaFaq } from "@/lib/faq";
 import { istClock, istDate } from "@/lib/season";
-import { MERCH, PARTNERS, SITE, TITLE_SPONSOR } from "@/lib/site";
+import { FOOD_STALL, MERCH, PARTNERS, SITE, TITLE_SPONSOR } from "@/lib/site";
 
 /**
  * llms.txt: the site summarised for AI assistants, in the shape the
@@ -46,7 +46,8 @@ export async function GET() {
     `- Donate: UPI ${config.bank.upiId} (payee ${config.bank.merchantName}), then record the payment at ${SITE.url}/daan for a numbered receipt on WhatsApp.`,
     `- Calendar file with every date: ${SITE.url}/calendar.ics`,
     `- Official T-shirt: ${MERCH.title}, ₹${MERCH.price}, sold by ${MERCH.seller} at ${MERCH.url}. ${MERCH.delivery}`,
-    `- Partners: ${PARTNERS.map((p) => `${p.name} (${p.role})`).join("; ")}`,
+    `- Partners: ${PARTNERS.map((p) => `${p.name} (${p.role})${p.with ? ` with ${p.with.name} (${p.with.role})` : ""}`).join("; ")}`,
+    `- Food: ${FOOD_STALL.where}, run by the food partner. Menu card: ${SITE.url}/thikana#food`,
     `- Contact: ${SITE.email}. Instagram: ${config.links.instagram}`,
     "",
     "## Schedule",

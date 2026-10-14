@@ -14,6 +14,7 @@ import { WhatsappIcon } from "@/components/BrandIcons";
 import { getConfig } from "@/lib/config";
 import CampusMap from "@/components/CampusMap";
 import EnquiryForm from "@/components/EnquiryForm";
+import FoodStall from "@/components/FoodStall";
 
 export const metadata: Metadata = {
   title: "Thikana",
@@ -196,6 +197,20 @@ export default async function ThikanaPage() {
               Instagram for the notice, and come on foot from the nearest gate if
               you can.
             </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ---------------- food by the pandal ---------------- */}
+      <Section id="food">
+        <Container>
+          <SectionHeading
+            eyebrow="খাবার Food at the pandal"
+            title="Rolls, cutlets and Bengali sweets"
+            lede="Our food partner's stall stands beside the pandal through the five days. Here is their menu card, so you know what is on before you join the queue."
+          />
+          <Reveal className="mt-[2.618rem]">
+            <FoodStall />
           </Reveal>
         </Container>
       </Section>

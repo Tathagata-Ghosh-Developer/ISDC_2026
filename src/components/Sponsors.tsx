@@ -237,10 +237,13 @@ export function TakenBadge({ className = "" }: { className?: string }) {
 }
 
 /**
- * The partners after the title sponsor, side by side, each given room
- * in proportion to what they put in: the jewellery partner's tile is
- * the wider one. Both marks are drawn on black, so the tiles are black
- * on either theme, for the same reason the title tiles stay light.
+ * The partners after the title sponsor, each given room by what they
+ * put in: the ₹15,000 partners take a full cell each, and the partner
+ * in kind is drawn smaller. A partnership of two organisations (the
+ * food partner and its NGO) shares one cell, mark beside mark, because
+ * it was one payment. Every mark keeps the ground it was drawn on,
+ * light or dark, on either theme, for the same reason the title tiles
+ * stay light.
  */
 export function PartnerStrip({
   compact = false,
@@ -249,45 +252,73 @@ export function PartnerStrip({
   compact?: boolean;
   heading?: boolean;
 }) {
+  const ground = (t: "light" | "dark") => (t === "light" ? TILE_BACKGROUND : "#000000");
+  const mark = (m: { name: string; logo: string; tile: "light" | "dark" }) => (
+    <span
+      className={`relative block h-full w-full ${compact ? "p-1.5" : "p-2 sm:p-3"}`}
+      style={{ background: ground(m.tile) }}
+    >
+      <span className="relative block h-full w-full">
+        <Image
+          src={m.logo}
+          alt={m.name}
+          fill
+          sizes={compact ? "(max-width: 640px) 45vw, 12rem" : "(max-width: 640px) 50vw, (max-width: 1023px) 45vw, 20rem"}
+          className="object-contain"
+        />
+      </span>
+    </span>
+  );
+
   return (
     <div>
       {heading && <p className="eyebrow">সহযোগী Partners</p>}
       <ul
-        className={`grid grid-cols-[3fr_2fr] ${
-          compact ? "max-w-[26rem] gap-2" : `max-w-[44rem] gap-3 ${heading ? "mt-5" : ""}`
+        className={`grid grid-cols-2 lg:grid-cols-3 ${
+          compact ? "max-w-[40rem] gap-2" : `max-w-[60rem] gap-3 ${heading ? "mt-5" : ""}`
         }`}
       >
         {PARTNERS.map((p) => {
-          const tile = (
-            <span className="relative block h-full w-full">
-              <Image
-                src={p.logo}
-                alt={p.name}
-                fill
-                sizes={compact ? "(max-width: 640px) 45vw, 16rem" : "(max-width: 640px) 60vw, 26rem"}
-                className="object-contain"
-              />
-            </span>
+          const pair = p.with;
+          const label = pair ? `${p.name}, ${p.role}, with ${pair.name}, ${pair.role}` : `${p.name}, ${p.role}`;
+          const shape = `grid aspect-[5/2] overflow-hidden border border-line ${pair ? "grid-cols-2 gap-px bg-line" : ""}`;
+          const tile = pair ? (
+            <>
+              {mark(p)}
+              {mark(pair)}
+            </>
+          ) : (
+            mark(p)
           );
-          const shape = `grid aspect-[5/2] border border-line bg-black ${compact ? "p-1.5" : "p-2 sm:p-3"}`;
           return (
-            <li key={p.id}>
+            <li
+              key={p.id}
+              className={`${pair ? "col-span-2 lg:col-span-1" : ""} ${p.contribution === 0 ? "w-3/4" : ""}`}
+            >
               {p.url ? (
                 <a
                   href={p.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  aria-label={`${p.name}, ${p.role}`}
+                  aria-label={label}
                   className={`${shape} transition-all duration-500 hover:-translate-y-1 hover:border-gold`}
                 >
                   {tile}
                 </a>
               ) : (
-                <div className={shape}>{tile}</div>
+                <div className={shape} role="img" aria-label={label}>
+                  {tile}
+                </div>
               )}
               <p className={`mt-2 uppercase text-ink-soft ${compact ? "text-[0.56rem] tracking-[0.18em]" : "text-[0.62rem] tracking-[0.22em]"}`}>
                 {p.role}
-                {!compact && <span className="bangla ml-1.5 normal-case tracking-normal text-gold">{p.bangla}</span>}
+                {pair && ` · ${pair.role}`}
+                {!compact && (
+                  <span className="bangla ml-1.5 normal-case tracking-normal text-gold">
+                    {p.bangla}
+                    {pair && ` · ${pair.bangla}`}
+                  </span>
+                )}
               </p>
             </li>
           );

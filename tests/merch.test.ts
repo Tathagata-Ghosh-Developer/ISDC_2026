@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-import { MERCH, PARTNERS, PUJA_DATES, TITLE_SPONSOR } from "@/lib/site";
+import { FOOD_STALL, MERCH, PARTNERS, PUJA_DATES, SPONSOR_TIERS, TITLE_SPONSOR } from "@/lib/site";
 import { shouldOffer } from "@/lib/merch";
 import { SCHEDULE } from "@/lib/content/schedule";
 import { BROADCAST_MINUTES, pujaDayAt, seasonNote } from "@/lib/season";
@@ -115,8 +115,30 @@ describe("the partners", () => {
     }
   });
 
+  it("names the bronze sponsor at a real tier, at that tier's price", () => {
+    const britton = PARTNERS.find((p) => p.id === "bronze-britton");
+    expect(britton?.name).toBe("Britton Innotech");
+    expect(britton?.tier).toBe("bronze");
+    const bronze = SPONSOR_TIERS.find((t) => t.id === britton?.tier);
+    expect(bronze?.amount).toBe(britton?.contribution);
+    for (const p of PARTNERS) if (p.tier) expect(SPONSOR_TIERS.some((t) => t.id === p.tier), p.id).toBe(true);
+  });
+
+  it("puts the food partner and its NGO on one tile for one payment, with the menu on disk", () => {
+    const food = PARTNERS.find((p) => p.id === "food");
+    expect(food?.name).toBe("Swadisht Bhojan Adda");
+    expect(food?.contribution).toBe(15000);
+    expect(food?.with?.name).toBe("Prakriti Foundation");
+    expect(existsSync(pub(food!.with!.logo))).toBe(true);
+    expect(PARTNERS.some((p) => p.id === "ngo")).toBe(false); // one partnership, counted once
+    expect(FOOD_STALL.partner).toBe("food");
+    expect(existsSync(pub(FOOD_STALL.menu))).toBe(true);
+  });
+
   it("never invents a link for a partner nobody could verify", () => {
     expect(PARTNERS.find((p) => p.id === "jewellery")?.url).toBe("");
+    for (const id of ["bronze-britton", "food"]) expect(PARTNERS.find((p) => p.id === id)?.url, id).toBe("");
+    expect(PARTNERS.find((p) => p.id === "food")?.with?.url).toBe("");
   });
 });
 
