@@ -614,6 +614,31 @@ export const MERCH = {
   back: "Durga in a half-sun of gold and red, the trishul, দেবী, and the Institute's crest at the collar.",
   delivery: "Free delivery to IISc hostel blocks, or collect at Aryabhatta or NGH. Campus orders only.",
   seller: "Meme Theory Apparel",
+  /**
+   * After the Puja: Meme Theory's festive edit, on sale for its last few
+   * days, from their poster of 27 October 2026. They set the discount
+   * and the end date, so neither is restated here. Set `sale` to null
+   * once it ends, and the banner, the popup line and the poster go.
+   */
+  sale: {
+    line: "Up to 25% off on the Puja special drop",
+    lineBangla: "শেষ কয়েক দিন",
+    detail:
+      "Meme Theory's Durga Puja special drop is on for a few more days, with up to 25% off, and the official T-shirt is still available. Any discount is applied on their site at checkout.",
+    url: "https://www.memetheory.in/",
+    poster: {
+      src: "/media/merch/festive-drop-2026.webp",
+      width: 1131,
+      height: 1600,
+      alt: "Meme Theory's poster, The Festive Edit 2026: Durga Puja special drop, up to 25% off, three Puja T-shirts on a postage-stamp frame with dhunuchi dancers below, and a QR code to memetheory.in.",
+    },
+  } as {
+    line: string;
+    lineBangla: string;
+    detail: string;
+    url: string;
+    poster: { src: string; width: number; height: number; alt: string };
+  } | null,
   support: "support@memetheory.in",
   terms: "https://www.memetheory.in/terms",
   refunds: "https://www.memetheory.in/refund-policy",

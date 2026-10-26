@@ -203,6 +203,7 @@ export default async function MahalayaPage() {
           <Reveal className="mt-[2.618rem]">
             <div className="surface p-6 sm:p-8">
               <Countdown
+                dashami={config.dates.dashami}
                 stages={[
                   {
                     at: config.dates.mahalaya,

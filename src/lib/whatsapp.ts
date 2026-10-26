@@ -1,4 +1,5 @@
 import "server-only";
+import { SITE } from "@/lib/site";
 
 /**
  * Sending the receipt to the donor.
@@ -126,16 +127,19 @@ export function normalisePhone(raw: string): string | null {
   return /^[6-9]\d{9}$/.test(ten) ? ten : null;
 }
 
+/** Written for after the Puja (from 22 October 2026): the greeting is Bijoya now. */
 export function receiptText(m: ReceiptMessage): string {
   return [
     `Namaskar ${clean(m.name)},`,
     "",
-    `Your contribution of ${m.amount} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
+    `Shubho Bijoya from all of us. Your contribution of ${m.amount} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
     "",
     `Receipt ${m.receiptNo}`,
     m.url,
     "",
-    "Your name is now on the donation board. Thank you, and Shubho Sharodiya.",
+    `Your name is on the donation board, which anyone can now see: ${SITE.url}/daan/board`,
+    "",
+    "Thank you for helping bring Ma home to IISc this year. Asche bochor abar hobe!",
     "",
     "IISc Sharodiya Durgotsab Committee",
   ].join("\n");

@@ -110,10 +110,11 @@ export default async function Home() {
             className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
           >
             <p className="text-[0.85rem] text-ink-soft">
-              Five sponsorship levels are still open.
+              Thank you to every sponsor and partner who stood with
+              Sharodiya Durgotsab 2026.
             </p>
             <Link href="/sponsors" className="btn btn-ghost">
-              Sponsor the Puja
+              Our sponsors
             </Link>
           </Reveal>
         </Container>
@@ -130,7 +131,7 @@ export default async function Home() {
             eyebrow="উৎসব The days"
             title="Six tithis, one long exhale"
             bangla="ষষ্ঠী থেকে দশমী"
-            lede="From the waking of the goddess out of season to the mirror in which she is watched leaving. Timings firm up closer to the day; the shape does not change."
+            lede="From the waking of the goddess out of season to the mirror in which she is watched leaving. This year's timings are kept below for the record; the shape does not change."
           />
 
           <Stagger className="mt-[2.618rem] grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -380,7 +381,7 @@ export default async function Home() {
             <Reveal className="relative p-7 sm:p-[2.618rem]">
               <p className="eyebrow">শারদ সম্ভার Official merchandise</p>
               <h2 className="font-display mt-3 text-[2.058rem] font-normal leading-[1.1] text-ink sm:text-[2.618rem]">
-                The Puja T-shirt is here
+                {MERCH.sale ? "Last few days for the Puja T-shirt" : "The Puja T-shirt"}
               </h2>
               <p className="bangla-display mt-3 text-[1.618rem] text-sindoor">
                 {MERCH.lineBangla}
@@ -389,6 +390,12 @@ export default async function Home() {
                 {MERCH.title}: Durga in alpona on the front, দেবী in gold on
                 the back, ₹{MERCH.price}. {MERCH.delivery}
               </p>
+              {MERCH.sale && (
+                <p className="mt-5 max-w-[46ch] border-l-2 border-sindoor pl-3 text-[0.88rem] leading-relaxed text-ink">
+                  <span className="bangla text-sindoor">{MERCH.sale.lineBangla}</span> ·{" "}
+                  {MERCH.sale.detail}
+                </p>
+              )}
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href={MERCH.url}
@@ -404,7 +411,7 @@ export default async function Home() {
               </div>
               <p className="mt-6 text-[0.75rem] leading-relaxed text-ink-faint">
                 Made, sold and delivered by our merchandise partner, Meme
-                Theory. More surprises before Shashthi; watch our{" "}
+                Theory. For next year&apos;s news, follow our{" "}
                 <a
                   href={config.links.instagram}
                   target="_blank"

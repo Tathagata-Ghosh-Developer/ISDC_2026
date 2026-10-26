@@ -42,7 +42,7 @@ export function pujaFaq(config: Config): Faq[] {
     },
     {
       q: `When is the IISc Durga Puja in ${SITE.year}?`,
-      a: `Mahalaya is on ${istDate(broadcast)} ${SITE.year}. The Puja runs from Maha Shashthi on ${shashthi ? `${shashthi.weekday} ${shashthi.date}` : istDate(Date.parse(config.dates.shashthi))} to Bijoya Dashami on ${dashami ? `${dashami.weekday} ${dashami.date}` : istDate(Date.parse(config.dates.dashami))}${arati ? `, with Sandhya Arati and a cultural evening every night at ${arati.time}` : ""}.`,
+      a: `Mahalaya was on ${istDate(broadcast)} ${SITE.year}. The Puja ran from Maha Shashthi on ${shashthi ? `${shashthi.weekday} ${shashthi.date}` : istDate(Date.parse(config.dates.shashthi))} to Bijoya Dashami on ${dashami ? `${dashami.weekday} ${dashami.date}` : istDate(Date.parse(config.dates.dashami))}${arati ? `, with Sandhya Arati and a cultural evening every night at ${arati.time}` : ""}. It is over for this year; next year's dates will be announced on WhatsApp and Instagram.`,
       href: "/utsab",
       cta: "Five days, hour by hour",
     },

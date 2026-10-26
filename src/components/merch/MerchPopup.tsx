@@ -24,6 +24,8 @@ import MerchStage from "./MerchStage";
 const SEEN = "isdc-merch-seen";
 const ARRIVED = "isdc-arrived-putul";
 const PARTNER = PARTNERS.find((p) => p.id === "merchandise");
+/** The partner's post-Puja sale, a line under the price while it lasts. */
+const SALE = MERCH.sale;
 
 /**
  * The off switch: NEXT_PUBLIC_MERCH_POPUP=off in Vercel, then redeploy.
@@ -123,13 +125,19 @@ export default function MerchPopup({ waitForArrival = true }: { waitForArrival?:
           <p className="bangla-display mt-1 text-[1.3rem] text-[#e35b43]">{MERCH.lineBangla}</p>
           <p className="mt-4 text-[0.92rem] leading-relaxed text-[#c9b295]">
             Durga in white alpona on the front, দেবী in gold on the back, in {MERCH.colour.toLowerCase()}. Wear
-            the Puja home from the pandal.
+            the Puja home, and keep it till next year.
           </p>
 
           <div className="mt-6 flex items-baseline gap-3">
             <span className="font-display text-[2rem] leading-none">₹{MERCH.price}</span>
             <span className="text-[0.75rem] text-[#93806c]">{MERCH.fits.join(" or ")} fit</span>
           </div>
+          {SALE && (
+            <p className="mt-3 flex flex-wrap items-baseline gap-x-2 rounded-xl border border-[#d8b45e]/40 bg-[#d8b45e]/[0.08] px-3 py-1.5 text-[0.75rem] leading-snug text-[#d8b45e]">
+              <span className="bangla font-medium">{SALE.lineBangla}</span>
+              <span>{SALE.line}</span>
+            </p>
+          )}
 
           <div className="mt-5">
             <p className="text-[0.62rem] uppercase tracking-[0.22em] text-[#93806c]">Size guide</p>

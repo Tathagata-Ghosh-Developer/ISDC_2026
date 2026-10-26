@@ -27,12 +27,12 @@ export default async function UtsabPage() {
             eyebrow="উৎসব The days"
             title="Five days, and the one that calls them in"
             bangla="বোধন থেকে বিসর্জন"
-            lede="Timings below are the committee's working plan. Ritual timings that depend on the tithi, Sandhi Puja above all, are confirmed by the priest closer to the day and announced on WhatsApp and Instagram."
+            lede="Shubho Bijoya. These are the five days as the committee planned them for 2026, kept here for the record. Ritual timings that depend on the tithi, Sandhi Puja above all, were set by the priest on the day. Next year's dates will be announced on WhatsApp and Instagram."
           />
 
           <Reveal className="mt-[2.618rem]">
             <div className="surface p-6 sm:p-8">
-              <Countdown target={config.dates.arrival} />
+              <Countdown target={config.dates.arrival} dashami={config.dates.dashami} />
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.78rem] text-ink-soft">
                 <a
                   href="/calendar.ics"

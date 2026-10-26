@@ -46,15 +46,15 @@ function plain(m: ReceiptEmail): string {
   return [
     `Namaskar ${m.name},`,
     "",
-    `Your contribution of ${m.amount} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
+    `Shubho Bijoya from all of us. Your contribution of ${m.amount} to IISc Sharodiya Durgotsab 2026 has been verified against our bank statement.`,
     "",
     `Receipt ${m.receiptNo}`,
     m.url,
     "",
     "Open the link to view, print or save the receipt as a PDF.",
-    "Your name is now on the donation board.",
+    `Your name is on the donation board, which anyone can now see: ${SITE.url}/daan/board`,
     "",
-    "Thank you, and Shubho Sharodiya.",
+    "Thank you for helping bring Ma home to IISc this year. Asche bochor abar hobe!",
     "IISc Sharodiya Durgotsab Committee",
   ].join("\n");
 }
@@ -66,7 +66,7 @@ function html(m: ReceiptEmail): string {
   const url = escapeHtml(m.url);
 
   return `<!doctype html>
-<html lang="en"><body style="margin:0;padding:0;background:#f2e7d2;">
+<html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#f2e7d2;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2e7d2;padding:32px 16px;">
     <tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fbf6ea;border:1px solid rgba(23,17,12,.16);">
@@ -76,10 +76,10 @@ function html(m: ReceiptEmail): string {
           <h1 style="margin:0 0 20px;font-size:24px;font-weight:600;">IISc Sharodiya Durgotsab 2026</h1>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.7;">Namaskar ${name},</p>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.7;">
-            Your contribution of <strong>${amount}</strong> has been verified against our bank statement.
+            Shubho Bijoya from all of us. Your contribution of <strong>${amount}</strong> has been verified against our bank statement.
           </p>
           <p style="margin:0 0 24px;font-size:15px;line-height:1.7;">
-            Your name is now on the donation board. The full receipt, which you can print or save as a PDF, is here.
+            Your name is on the <a href="${SITE.url}/daan/board" style="color:#a8842f;">donation board</a>, which anyone can now see. The full receipt, which you can print or save as a PDF, is here.
           </p>
           <p style="margin:0 0 28px;">
             <a href="${url}" style="display:inline-block;background:#c0271a;color:#fbf6ea;text-decoration:none;padding:13px 26px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">View your receipt</a>
@@ -89,7 +89,8 @@ function html(m: ReceiptEmail): string {
             <a href="${url}" style="color:#a8842f;">${url}</a>
           </p>
           <p style="margin:24px 0 0;padding-top:20px;border-top:1px solid rgba(23,17,12,.16);font-size:13px;line-height:1.7;color:#4d3a2a;">
-            Thank you, and Shubho Sharodiya.<br>
+            Thank you for helping bring Ma home to IISc this year.<br>
+            শুভ বিজয়া · Asche bochor abar hobe!<br>
             <strong>IISc Sharodiya Durgotsab Committee</strong>
           </p>
           <p style="margin:16px 0 0;font-size:11px;line-height:1.6;color:#8a7360;">
@@ -111,7 +112,7 @@ export async function sendReceiptEmail(m: ReceiptEmail): Promise<Result> {
   }
 
   const from = process.env.MAIL_FROM!;
-  const subject = `Receipt ${m.receiptNo}, IISc Sharodiya Durgotsab 2026`;
+  const subject = `Shubho Bijoya: receipt ${m.receiptNo}, IISc Sharodiya Durgotsab 2026`;
 
   /**
    * Replies go to a person, not to a sending domain.

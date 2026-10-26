@@ -33,8 +33,16 @@ const DAY = 86_400_000;
 /** Mahishasuramardini runs about ninety minutes from four. */
 export const BROADCAST_MINUTES = 90;
 
-/** How long after Dashami the farewell stays up. */
-const BIJOYA_DAYS = 10;
+/**
+ * The farewell stays up to the end of the year, so the season line does
+ * not go blank in November and leave the site looking abandoned before
+ * next year's committee picks it up: midnight IST on the 1st of January
+ * after Dashami, whichever year that is.
+ */
+function bijoyaUntil(dates: Pick<PujaDates, "dashami">): number {
+  const year = new Date(Date.parse(dates.dashami) + IST_OFFSET).getUTCFullYear();
+  return Date.UTC(year + 1, 0, 1) - IST_OFFSET;
+}
 
 /** How far ahead of Mahalaya the line starts counting it down. */
 const MAHALAYA_LEAD_DAYS = 7;
@@ -120,12 +128,17 @@ function inDays(n: number): string {
  * the broadcast on air, Shubho Mahalaya, Bodhon coming, today at
  * the pandal, Shubho Bijoya.
  */
+/** Midnight IST at the end of Dashami: from here on it is Bijoya. */
+export function bijoyaFrom(dates: Pick<PujaDates, "dashami">): number {
+  return istDayStart(Date.parse(dates.dashami)) + DAY;
+}
+
 export function seasonNote(t: number, dates: PujaDates, names: DayNames = {}): SeasonNote | null {
   const broadcast = Date.parse(dates.mahalaya);
   const offAir = broadcast + BROADCAST_MINUTES * 60_000;
   const mahalayaEnd = istDayStart(broadcast) + DAY;
   const bodhon = Date.parse(dates.arrival);
-  const dashamiEnd = istDayStart(Date.parse(dates.dashami)) + DAY;
+  const dashamiEnd = bijoyaFrom(dates);
 
   if (t < broadcast) {
     const n = istDaysBetween(t, broadcast);
@@ -183,11 +196,11 @@ export function seasonNote(t: number, dates: PujaDates, names: DayNames = {}): S
     };
   }
 
-  if (t < dashamiEnd + BIJOYA_DAYS * DAY) {
+  if (t < bijoyaUntil(dates)) {
     return {
-      text: "Shubho Bijoya. Thank you for coming, and see you next year",
+      text: "Shubho Bijoya. Thank you, everyone who came and gave",
       bangla: "শুভ বিজয়া",
-      href: "/gallery",
+      href: "/daan/board",
       live: false,
     };
   }

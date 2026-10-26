@@ -2,6 +2,7 @@
 
 import { PUJA_DATES } from "@/lib/site";
 import { useNow } from "@/lib/browser";
+import { bijoyaFrom } from "@/lib/season";
 
 const UNITS = [
   { key: "days", label: "Days", bangla: "দিন" },
@@ -44,9 +45,12 @@ function current(stages: Stage[], now: number) {
 export default function Countdown({
   target = PUJA_DATES.countdownTo,
   stages,
+  dashami = PUJA_DATES.dashami,
 }: {
   target?: string;
   stages?: Stage[];
+  /** After this day ends the count gives way to the farewell. */
+  dashami?: string;
 }) {
   const now = useNow(1000);
   const list = stages ?? [{ at: target }];
@@ -76,6 +80,15 @@ export default function Countdown({
       </a>
     ) : (
       body
+    );
+  }
+
+  if (!state.counting && now !== null && now >= bijoyaFrom({ dashami })) {
+    return (
+      <p className="bangla text-center text-[1.272rem] text-gold">
+        আসছে বছর আবার হবে।{" "}
+        <span className="font-body text-ink-soft">She comes again next year.</span>
+      </p>
     );
   }
 

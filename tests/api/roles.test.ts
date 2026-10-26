@@ -277,7 +277,7 @@ describe("fund raisers' phone numbers", () => {
 });
 
 /* ================================================================
-   The donation board needs a login
+   The donation board is public (from 27 October 2026)
    ================================================================ */
 
 describe("the donation board", () => {
@@ -288,32 +288,32 @@ describe("the donation board", () => {
     return { status: res.status, cache: res.headers.get("cache-control") ?? "", html: await res.text() };
   }
 
-  it("shows a stranger the sign-in form and no list", async () => {
+  it("shows a stranger the list, with no sign-in form and no members' code", async () => {
     const { status, html, cache } = await board(null);
     expect(status).toBe(200);
-    expect(html).toContain("The donation board");
-    expect(html).toContain("Sign in");
-    expect(html).not.toContain("Everyone who gave");
-    expect(html).not.toContain("How a name gets here");
-    // A cached copy would be served to the next person to ask.
+    expect(html).toContain("Everyone who gave");
+    expect(html).toContain("How a name gets here");
+    expect(html).not.toContain('type="password"');
+    expect(html.includes("TEST-MEMBER-CODE"), "a stranger sees the members' code").toBe(false);
+    // Rendered per request: the members' note must never be served from a shared cache.
     expect(cache).toMatch(/private|no-store/);
   });
 
   for (const role of ["viewer", "fundraiser", "committee", "admin"] as const) {
-    it(`shows the list to a signed-in ${role}`, async () => {
+    it(`shows the list and the members' code to a signed-in ${role}`, async () => {
       const { status, html, cache } = await board(await session(role));
       expect(status).toBe(200);
       expect(html).toContain("Everyone who gave");
+      expect(html.includes("TEST-MEMBER-CODE"), `a ${role} misses the members' code`).toBe(true);
       expect(cache).toMatch(/private|no-store/);
     });
   }
 
-  it("is not linked from the public pages", async () => {
-    for (const page of ["/", "/daan", "/thikana", "/sponsors/proposal", "/no-such-page"]) {
-      const res = await fetch(`${BASE_ROLES}${page}`, { headers: { "x-forwarded-for": freshIp() } });
-      const html = await res.text();
-      expect(html.includes('href="/daan/board"'), `${page} links to the board`).toBe(false);
-    }
+  it("is linked from the donate page, and still kept out of search", async () => {
+    const res = await fetch(`${BASE_ROLES}/daan`, { headers: { "x-forwarded-for": freshIp() } });
+    expect(await res.text()).toContain('href="/daan/board"');
+    const { html } = await board(null);
+    expect(html).toMatch(/<meta name="robots" content="noindex, ?nofollow"/);
   });
 });
 

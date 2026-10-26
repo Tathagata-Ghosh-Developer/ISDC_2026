@@ -81,7 +81,7 @@ describe("the merchandise", () => {
 
   it("the home page offers the shirt and does not put the 3D library in its HTML", async () => {
     const { body } = await get("/");
-    expect(body).toContain("The Puja T-shirt is here");
+    expect(body).toContain("Puja T-shirt");
     expect(body).not.toMatch(/WebGLRenderer/);
   });
 });

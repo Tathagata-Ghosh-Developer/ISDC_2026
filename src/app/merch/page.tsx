@@ -15,6 +15,9 @@ export const metadata: Metadata = {
 
 const PARTNER = PARTNERS.find((p) => p.id === "merchandise")!;
 
+/** The partner's post-Puja sale; null once it ends, and its callout and poster go with it. */
+const SALE = MERCH.sale;
+
 const product = {
   "@context": "https://schema.org",
   "@type": "Product",
@@ -56,7 +59,7 @@ export default function MerchPage() {
               </h1>
               <p className="bangla-display mt-2 text-[1.618rem] text-sindoor">{MERCH.lineBangla}</p>
               <p className="lede mt-5 max-w-[46ch]">
-                {MERCH.line}, in {MERCH.colour.toLowerCase()}. Wear the Puja home from the pandal.
+                {MERCH.line}, in {MERCH.colour.toLowerCase()}. Wear the Puja home, and keep it till next year.
               </p>
 
               <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[0.9rem]">
@@ -87,6 +90,17 @@ export default function MerchPage() {
                   </tr>
                 </tbody>
               </table>
+
+              {SALE && (
+                <div className="surface mt-6 max-w-[30rem] p-5">
+                  <p className="eyebrow">{SALE.lineBangla} · Last few days</p>
+                  <p className="font-display mt-2 text-[1.272rem] leading-snug text-ink">{SALE.line}</p>
+                  <p className="mt-2 text-[0.84rem] leading-relaxed text-ink-soft">{SALE.detail}</p>
+                  <a href={SALE.url} target="_blank" rel="noopener noreferrer" className="btn btn-ghost mt-4">
+                    Shop the Puja drop <ArrowUpRight size={14} />
+                  </a>
+                </div>
+              )}
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href={MERCH.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
@@ -128,6 +142,44 @@ export default function MerchPage() {
           </div>
         </Container>
       </Section>
+
+      {SALE && (
+        <Section>
+          <Container>
+            {/* The partner's own poster, framed, beside a few lines on it;
+                stacked on a phone, words first. Its QR code is no use on
+                the phone it is shown on, so the caption links the shop too.
+                Kept under a landscape phone's height so it is seen whole. */}
+            <figure className="grid gap-[2.618rem] sm:grid-cols-2 sm:items-center lg:grid-cols-[1.618fr_1fr]">
+              <figcaption>
+                <SectionHeading eyebrow="পুজোর সম্ভার From Meme Theory" title="The Festive Edit" lede={SALE.line} />
+                <Reveal delay={0.08}>
+                  <p className="mt-6 max-w-[52ch] text-[0.88rem] leading-relaxed text-ink-soft">
+                    Meme Theory&apos;s poster for their Durga Puja drop, with the committee&apos;s crest in the corner.
+                    The shirts on it are from their wider Puja range, and the official T-shirt is still on their site.
+                    Which designs are discounted, by how much and until when is theirs to set, and shows at checkout.
+                  </p>
+                  <a href={SALE.url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-[0.78rem] text-gold hover:text-sindoor">
+                    memetheory.in <ArrowUpRight size={11} />
+                  </a>
+                </Reveal>
+              </figcaption>
+              <Reveal delay={0.12} className="mx-auto w-full max-w-[24rem] short:max-w-[14rem]">
+                <div className="surface p-3 sm:p-4">
+                  <Image
+                    src={SALE.poster.src}
+                    alt={SALE.poster.alt}
+                    width={SALE.poster.width}
+                    height={SALE.poster.height}
+                    sizes="(max-width: 640px) 90vw, 420px"
+                    className="h-auto w-full"
+                  />
+                </div>
+              </Reveal>
+            </figure>
+          </Container>
+        </Section>
+      )}
 
       <Section>
         <Container>

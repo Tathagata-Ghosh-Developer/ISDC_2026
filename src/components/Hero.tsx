@@ -11,6 +11,7 @@ import { PoweredBy } from "./Sponsors";
 import SeasonLine from "./SeasonLine";
 import type { Config } from "@/lib/config";
 import type { DayNames } from "@/lib/season";
+import { useNow } from "@/lib/browser";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -29,6 +30,11 @@ export default function Hero({
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  // The "until Ma reaches the campus" line is only true before Bodhon, and
+  // only says anything once the count is on screen. Kept in the layout
+  // (invisible) so the buttons below never jump.
+  const now = useNow(60_000);
+  const counting = now !== null && now < Date.parse(countdownTo);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -164,8 +170,10 @@ export default function Hero({
             className="mt-[1.618rem] w-full short:mt-0 wide-short:mt-4 compact:mt-5"
           >
             <SeasonLine dates={dates} names={dayNames} className="mb-4 short:mb-1 wide-short:mb-2 compact:mb-2" />
-            <Countdown target={countdownTo} />
-            <p className="mt-4 text-[0.7rem] uppercase tracking-[0.28em] text-ink-faint short:mt-1 short:tracking-[0.14em] wide-short:mt-2">
+            <Countdown target={countdownTo} dashami={dates.dashami} />
+            <p
+              className={`mt-4 text-[0.7rem] uppercase tracking-[0.28em] text-ink-faint short:mt-1 short:tracking-[0.14em] wide-short:mt-2 ${counting ? "" : "invisible"}`}
+            >
               {bodhonLabel}
             </p>
           </motion.div>

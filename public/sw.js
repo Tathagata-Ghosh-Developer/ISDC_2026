@@ -43,7 +43,7 @@
    this file on every visit, so that reaches everyone within a day.
    ================================================================ */
 
-const VERSION = "2026-10-13.2";
+const VERSION = "2026-10-27.1";
 const PAGES = `isdc-pages-${VERSION}`;
 const STATIC = `isdc-static-${VERSION}`;
 const IMAGES = `isdc-images-${VERSION}`;

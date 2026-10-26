@@ -3,58 +3,39 @@ import Link from "next/link";
 import { Container, Section, SectionHeading } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import Leaderboard from "@/components/Leaderboard";
-import AdminLogin from "@/components/admin/AdminLogin";
 import LiveRefresh from "@/components/LiveRefresh";
 import { getBoard } from "@/lib/db";
-import { authConfigured, currentSession } from "@/lib/auth";
+import { currentSession } from "@/lib/auth";
+import { MERCH } from "@/lib/site";
+
+/**
+ * Meme Theory's thank-you code for the committee: 20% off, once per
+ * person. Shown only to signed-in members, and kept in the environment
+ * because the repository is public.
+ */
+const MEMBER_CODE = process.env.MEMBER_MERCH_CODE?.trim();
 
 export const metadata: Metadata = {
+  // Open to everyone again from 27 October 2026, at the committee's
+  // decision. Still kept out of search results and the sitemap: the
+  // names are for people who come looking, not for search engines.
   robots: { index: false, follow: false },
   title: "Donation Board",
-  description: "The donation board of the IISc Sharodiya Durgotsab, for signed-in members.",
+  description: "Everyone who gave to the IISc Sharodiya Durgotsab 2026, by name and amount.",
 };
 
-// Behind a login since 25 September 2026, at the committee's decision.
-// Rendered per request, never cached: a cached copy of this page is a
-// copy of every donor's name and amount, served to whoever asks next.
+// Rendered per request so a donation verified a minute ago is already
+// here, and so the members-only note below never lands in a shared cache.
 export const dynamic = "force-dynamic";
 
 export default async function BoardPage() {
   const session = await currentSession();
 
-  // Nobody signed in: no names, no amounts, no database read at all.
-  if (!session) {
-    return (
-      <Section className="page-top">
-        <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="দানপত্র The board"
-            title="The donation board"
-            bangla="দাতাদের নাম"
-            lede="The list of donors is open to the committee and to members with an account. Sign in to see it. If you have given and want to check your own entry, your receipt link has everything, or message a convenor."
-          />
-          <div className="mt-[2.618rem] grid place-items-center">
-            <AdminLogin configured={authConfigured()} />
-          </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/daan" className="btn btn-primary">
-              Donate
-            </Link>
-            <Link href="/thikana#committee" className="btn btn-ghost">
-              Reach the committee
-            </Link>
-          </div>
-        </Container>
-      </Section>
-    );
-  }
-
   const board = await getBoard();
 
   return (
     <>
-      <LiveRefresh seconds={30} />
+      <LiveRefresh seconds={60} />
       <Section className="page-top">
         <Container>
           <SectionHeading
@@ -62,7 +43,7 @@ export default async function BoardPage() {
             eyebrow="দানপত্র The board"
             title="Everyone who gave"
             bangla="দাতাদের নাম"
-            lede="Students, faculty, post-docs, alumni and well-wishers on one list, ranked by what they gave. A name appears here once the treasurer has matched the payment against the bank statement."
+            lede="Shubho Bijoya, and thank you. Students, faculty, post-docs, alumni and well-wishers who made Sharodiya Durgotsab 2026 happen, on one list, ranked by what they gave. A name appears here once the treasurer has matched the payment against the bank statement."
           />
         </Container>
       </Section>
@@ -85,6 +66,33 @@ export default async function BoardPage() {
             </div>
 
             <div className="space-y-5 lg:sticky lg:top-24">
+              {session && MEMBER_CODE && (
+                <Reveal>
+                  <div className="surface border-gold/40 p-6">
+                    <h2 className="eyebrow">For the committee</h2>
+                    <p className="mt-4 text-[0.82rem] leading-relaxed text-ink-soft">
+                      Meme Theory&apos;s thank-you to everyone in the committee:
+                      20% off everything at memetheory.in, the official T-shirt
+                      included.
+                    </p>
+                    <p className="mt-4 font-display text-[1.272rem] tracking-wide text-sindoor">
+                      {MEMBER_CODE}
+                    </p>
+                    <p className="mt-1 text-[0.72rem] text-ink-faint">
+                      Once per person. Please keep it within the committee.
+                    </p>
+                    <a
+                      href={MERCH.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-ghost mt-5 w-full"
+                    >
+                      The T-shirt
+                    </a>
+                  </div>
+                </Reveal>
+              )}
+
               <Reveal>
                 <div className="surface p-6">
                   <h2 className="eyebrow">How a name gets here</h2>
@@ -108,7 +116,7 @@ export default async function BoardPage() {
                       {
                         n: "04",
                         t: "Your name goes up",
-                        d: "Everyone who gives is on this board, by name and amount, for signed-in members to see.",
+                        d: "Everyone who gives is on this board, by name and amount, for anyone to see.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">

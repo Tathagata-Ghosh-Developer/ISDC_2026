@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { FACTS } from "@/lib/content/facts";
 import { ART_FORMS } from "@/lib/content/artforms";
 import { getConfig } from "@/lib/config";
-import { SITE, VOLUNTEER_ROLES } from "@/lib/site";
+import { MERCH, SITE, VOLUNTEER_ROLES } from "@/lib/site";
+import { bijoyaFrom, istDate } from "@/lib/season";
 import { clientKey, rateLimit } from "@/lib/ratelimit";
 import { recordEvent } from "@/lib/analytics";
 import { GUIDE, MONEY, MONEY_REPLY, cacheKey, grounded } from "@/lib/guide";
@@ -20,12 +21,21 @@ async function buildLines(): Promise<string[]> {
 
   const lines: string[] = [
     `VENUE. ${config.venue.address}. The pandal is on the Tata Memorial Club ground, opposite the SBI branch. Walking directions from every campus gate are on the page /thikana.`,
-    `DONATIONS. There is no payment gateway and no minimum amount. Transfer to the committee account, then record it at /daan with name, SR number, email, WhatsApp number, amount and transaction reference. The account details and the UPI QR are printed on that page. The treasurer matches it against the bank statement, a numbered receipt is sent to the donor's WhatsApp, and the name is recorded on the donation board, which only the committee and signed-in members can see.`,
+    `DONATIONS. There is no payment gateway and no minimum amount. Transfer to the committee account, then record it at /daan with name, SR number, email, WhatsApp number, amount and transaction reference. The account details and the UPI QR are printed on that page. The treasurer matches it against the bank statement, a numbered receipt is sent to the donor's WhatsApp, and the name is recorded on the public donation board at /daan/board, which anyone can open.`,
     `MAHALAYA. The recitation of Mahishasuramardini goes on air before dawn. The page /mahalaya carries its history and a player.`,
     `MAGAZINE. Probash is the committee's annual magazine. Back issues can be read at /probash, and the submission and cover competition forms are linked there.`,
     `MUSIC. A listening room of Bengali Puja songs and ambient sound is at /gaan.`,
     `LINKS. Instagram ${config.links.instagram}. YouTube ${config.links.youtube}. WhatsApp group ${config.links.whatsappGroup}.`,
   ];
+
+  // After Dashami the guide must stop talking about the Puja as coming.
+  // First in the list, so it is always among the basics sent.
+  if (Date.now() >= bijoyaFrom(config.dates)) {
+    lines.unshift(
+      `STATUS. The IISc Sharodiya Durgotsab ${SITE.year} is over: it ran from ${istDate(Date.parse(config.dates.shashthi))} to ${istDate(Date.parse(config.dates.dashami))}. It is now Bijoya, so wish people "Shubho Bijoya" and speak of this year's schedule in the past tense. Next year's dates are not announced yet. The donation board at /daan/board is public and lists everyone who gave, by name and amount.` +
+        (MERCH.sale ? ` The official T-shirt is still on sale through /merch, and Meme Theory's Puja special drop is up to 25% off for a few more days.` : ""),
+    );
+  }
 
   for (const d of config.schedule) {
     lines.push(

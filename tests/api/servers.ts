@@ -102,18 +102,23 @@ export async function setup(): Promise<void> {
     SUPABASE_URL: "",
     SUPABASE_SERVICE_ROLE_KEY: "",
     SHEETS_WEBHOOK_URL: "",
+    // Never the real code from .env.local in a test log.
+    MEMBER_MERCH_CODE: "",
   });
   start(PORT_DB_DOWN, {
     // Port 9 is discard. Nothing is listening and nothing is written.
     SUPABASE_URL: "http://127.0.0.1:9",
     SUPABASE_SERVICE_ROLE_KEY: "not-a-real-key-and-nothing-is-listening",
     SHEETS_WEBHOOK_URL: "",
+    // Never the real code from .env.local in a test log.
+    MEMBER_MERCH_CODE: "",
   });
   const a = TEST_ACCOUNTS;
   start(PORT_ROLES, {
     SUPABASE_URL: "http://127.0.0.1:9",
     SUPABASE_SERVICE_ROLE_KEY: "not-a-real-key-and-nothing-is-listening",
     SHEETS_WEBHOOK_URL: "",
+    MEMBER_MERCH_CODE: "TEST-MEMBER-CODE",
     AUTH_SECRET: "test-only-secret-".padEnd(64, "x"),
     ADMIN_USERS: `${a.admin.user}:${a.admin.password}`,
     COMMITTEE_USERS: `${a.committee.user}:${a.committee.password}`,

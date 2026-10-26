@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import { PUJA_DATES } from "@/lib/site";
 import { SCHEDULE } from "@/lib/content/schedule";
 import {
+  bijoyaFrom,
   istClock,
   istDate,
   istDateStamp,
@@ -90,7 +91,14 @@ describe("the season line", () => {
     expect(ashtami?.text).toBe("Today at the TMC Ground: Maha Ashtami");
     expect(ashtami?.href).toBe("/utsab#ashtami");
     expect(note("2026-10-22T09:00:00+05:30")?.bangla).toBe("শুভ বিজয়া");
-    expect(note("2026-11-15T09:00:00+05:30")).toBeNull();
+    // Bijoya stays up to the end of the year and points at the board.
+    expect(note("2026-11-15T09:00:00+05:30")?.href).toBe("/daan/board");
+    expect(note("2026-12-31T23:30:00+05:30")?.bangla).toBe("শুভ বিজয়া");
+    expect(note("2027-01-01T00:30:00+05:30")).toBeNull();
+  });
+
+  it("turns to Bijoya at midnight IST at the end of Dashami", () => {
+    expect(bijoyaFrom(PUJA_DATES)).toBe(at("2026-10-22T00:00:00+05:30"));
   });
 });
 

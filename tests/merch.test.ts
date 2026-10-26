@@ -96,6 +96,42 @@ describe("the merchandise listing", () => {
   });
 });
 
+/** Width and height from a WebP header, without an image library. */
+function webpSize(file: string) {
+  const b = readFileSync(file);
+  expect(b.subarray(0, 4).toString("ascii"), file).toBe("RIFF");
+  expect(b.subarray(8, 12).toString("ascii"), file).toBe("WEBP");
+  const chunk = b.subarray(12, 16).toString("ascii");
+  if (chunk === "VP8 ") return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff };
+  if (chunk === "VP8L") {
+    const bits = b.readUInt32LE(21);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  if (chunk === "VP8X") return { width: b.readUIntLE(24, 3) + 1, height: b.readUIntLE(27, 3) + 1 };
+  throw new Error(`${file}: unknown WebP chunk ${chunk}`);
+}
+
+// Skipped, not passed, once the sale is set to null.
+describe.skipIf(!MERCH.sale)("the post-Puja sale", () => {
+  const sale = MERCH.sale!;
+
+  it("links only to the partner's own site, over https", () => {
+    const url = new URL(sale.url);
+    expect(url.protocol).toBe("https:");
+    expect(url.hostname).toMatch(/^(www\.)?memetheory\.in$/);
+  });
+
+  it("has its poster on disk at the size the page reserves for it", () => {
+    expect(existsSync(pub(sale.poster.src)), sale.poster.src).toBe(true);
+    expect(webpSize(pub(sale.poster.src))).toEqual({ width: sale.poster.width, height: sale.poster.height });
+    expect(sale.poster.alt.length).toBeGreaterThan(20);
+  });
+
+  it("never carries a discount code: the repository is public", () => {
+    expect(JSON.stringify(sale)).not.toMatch(/[A-Z]+-[A-Z]+-\d+/);
+  });
+});
+
 describe("the partners", () => {
   it("are listed in order of what they put in, after a title sponsor that put in more", () => {
     const amounts = PARTNERS.map((p) => p.contribution);

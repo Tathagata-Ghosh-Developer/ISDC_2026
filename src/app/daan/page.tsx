@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import fs from "node:fs";
 import path from "node:path";
 import { Building2, Download, Plus, QrCode, ShieldCheck, Smartphone } from "lucide-react";
@@ -69,7 +70,7 @@ export default async function DonatePage() {
             eyebrow="দান Donate"
             title="Every rupee, on the record"
             bangla="স্বচ্ছ হিসেব, প্রকাশ্য খাতা"
-            lede="No payment gateway, so nothing is lost to fees. Pay the committee's account by UPI, tell us about it below, and we match it against the bank statement and send a numbered receipt to your WhatsApp. Your name and amount go on the donation board, open to the committee and signed-in members."
+            lede="No payment gateway, so nothing is lost to fees. Pay the committee's account by UPI, tell us about it below, and we match it against the bank statement and send a numbered receipt to your WhatsApp. Your name and amount go on the donation board, which anyone can see."
           />
 
         </Container>
@@ -245,7 +246,7 @@ export default async function DonatePage() {
                       {
                         n: "04",
                         t: "Your name goes on the board.",
-                        d: "Everyone who gives is recorded there, by name and amount. The board is open to the committee and signed-in members.",
+                        d: "Everyone who gives is listed there, by name and amount, for anyone to see.",
                       },
                     ].map((s) => (
                       <li key={s.n} className="flex gap-4">
@@ -261,6 +262,9 @@ export default async function DonatePage() {
                       </li>
                     ))}
                   </ol>
+                  <Link href="/daan/board" className="btn btn-ghost mt-7 w-full">
+                    See the donation board
+                  </Link>
                 </div>
               </Reveal>
             </div>

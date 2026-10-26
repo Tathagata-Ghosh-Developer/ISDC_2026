@@ -156,7 +156,7 @@ export async function POST(req: Request) {
     message: text("message").slice(0, 140) || null,
     display_name: text("display_name").slice(0, 80) || null,
     // Being on the board is not optional: an account with names missing
-    // from it is not an account. The board itself needs a login.
+    // from it is not an account. The board is public again from 27 October 2026.
     anonymous: false,
     proof_url: proofUrl,
     status: "pending" as const,

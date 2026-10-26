@@ -75,8 +75,9 @@ export default async function SponsorsPage() {
           <Reveal>
             <TitleSponsorStrip heading />
             <p className="mt-6 max-w-[62ch] text-[0.85rem] text-ink-soft">
-              The title sponsorship for 2026 is taken. The five levels below
-              are open, and so is anything that does not appear on this list.
+              Sponsorship for 2026 has closed. Thank you to every sponsor and
+              partner who made it possible. The levels below are the ones we
+              offered this year; to talk about 2027, write to the committee.
             </p>
           </Reveal>
         </Container>

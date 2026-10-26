@@ -338,9 +338,8 @@ export default function DonateForm({ suggested, note }: Props) {
           <p className="mt-2 text-[0.82rem] leading-relaxed text-ink-soft">
             Everyone who gives goes on the board, by name and amount, once the
             treasurer has matched the payment. An account with names missing
-            from it is not an account. The board is open to the committee and
-            signed-in members, and your email, phone number and SR number never
-            appear on it.
+            from it is not an account. The board is open to everyone, and your
+            email, phone number and SR number never appear on it.
           </p>
 
         </div>
@@ -381,7 +380,7 @@ export default function DonateForm({ suggested, note }: Props) {
             to the committee treasurer so the payment can be matched and a
             receipt sent. A screenshot, if you upload one, is stored privately
             and is visible only to the committee. Nothing is sold, shared or
-            used for anything else. Everyone who gives is recorded on the donation board by name and amount. The board is visible only to the committee and signed-in members, not to the public. If something is wrong with your entry, tell a convenor and it will be corrected.
+            used for anything else. Everyone who gives is listed on the public donation board by name and amount, and nothing else about you appears there. If something is wrong with your entry, tell a convenor and it will be corrected.
           </p>
         </div>
       </fieldset>
